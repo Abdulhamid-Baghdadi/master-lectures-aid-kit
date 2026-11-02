@@ -1,0 +1,35 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (robot kinematics: frames, rotations, DH chains, Jacobians, inverse kinematics, the ABB IRB 120), apart from the design rules' bibliography, which keeps the design principles.",
+  "entries": [
+    {
+      "key": "ajanovic2020",
+      "authors": [
+        "Ajanović, Z."
+      ],
+      "year": 2020,
+      "title": "Industrierobotik / Industrial Robotics (IRB), lecture slides, chapters 01 Introduction, 02 Mathematische Beschreibung der Kinematik von Robotern, 03 Vorwärtskinematik, 04 Geschwindigkeitskinematik, 05 Inverse Kinematik",
+      "venue": "Lecture slides, FH Technikum Wien, winter term 2020 (WS20), based on slides by M. Aburaia. Author, course and term from the title slide of chapter 1 and every slide's footer",
+      "backs": "Every equation of the labs, by chapter and PDF page, and the worked results used as practice questions: ch. 1, pp. 38–39 (Grübler); ch. 2, pp. 16, 34, 35, 38, 46, 48, 52, 59; ch. 3, pp. 3 and 26; ch. 5, pp. 8, 10, 19, 20.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    },
+    {
+      "key": "abb2020",
+      "authors": [
+        "ABB"
+      ],
+      "year": 2020,
+      "title": "Product specification IRB 120, 3HAC035960-001, revision U",
+      "venue": "ABB Robotics, © 2010–2020",
+      "backs": "The IRB 120's dimensions (p. 12), its working-range table of wrist-centre positions (p. 31), its axis ranges (p. 32), its handling capacity of 3 kg and reach of 0.58 m (p. 11).",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    }
+  ]
+}

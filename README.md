@@ -15,6 +15,10 @@ Published at <https://abdulhamid-baghdadi.github.io/master-lectures-aid-kit/>.
 | Lab | Course | After |
 |---|---|---|
 | [Industrial Handling](handling-lab/README.md) | Industrial Handling (IHA, Handhabungstechnik), 3rd semester | Berger (2021) |
+| [Robot Kinematics](robotics-lab/README.md) | Industrieroboter (IRB), 1st semester | the IRB chapters and the ABB IRB 120 spec |
+| [Mobile Robots and Vision](mobile-robots-lab/README.md) | Mobile und Service Robotik (MUS, MUS2), 2nd and 3rd semester | the MUS and MUS2 slides |
+| [Sensor Systems](sensors-lab/README.md) | Advanced Sensor Systems (ASENS), 1st semester | the ASENS slides |
+| [Finite Elements](fem-lab/README.md) | CAE and FEM, 2nd semester | Krach (2018, 2020, 2021) |
 
 Industrial Handling has 11 labs in three parts:
 
@@ -32,7 +36,7 @@ python -m http.server 8772 --bind 127.0.0.1
 ```
 
 then <http://127.0.0.1:8772/>. The labs are ES modules, so opening `index.html` straight from the disk does not work.
-Tests: `node --test` in `kit`, and `node --test "tests/unit/*.test.js"` in `handling-lab`.
+Tests: `node --test` in `kit`, and `node --test "tests/unit/*.test.js"` in each lab folder.
 
 ## Where your data stays
 

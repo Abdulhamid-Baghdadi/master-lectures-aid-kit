@@ -10,12 +10,16 @@ Sources in `H:\My Drive\02_Personal\02_Education\FH\03_FH_Master\`.
   were checked in the browser pane: they load without errors and don't scroll sideways at phone width.
 - Public repository Abdulhamid-Baghdadi/master-lectures-aid-kit since 2 Nov 2026, published with GitHub Pages from main.
 
+- Built overnight 2–3 Nov 2026: `robotics-lab` (8 labs), `mobile-robots-lab` (12), `sensors-lab` (9), `fem-lab` (9).
+  Each lab's README and CLAUDE.md list its source errors and what it leaves out; WORKLOG.md has the night's summary.
+
 ## Open in Industrial Handling
 
 - The VDI 2143 tables (ch. 5, pp. 25–29), the Formelsammlung and the Kap. 4 solutions are images or scans. Read them from
   the page images to add the modified sine and the Kap. 4 drawings' results as practice.
 
-## Next courses (not yet surveyed in depth)
+## Next courses
 
-The 1st to 3rd semester folders hold, among others: Automatisierung and Modellbildung (1st), MECH 1 and 2, ModSim, OPT,
-MMR3 and SOA (robotics algorithms). Survey them before choosing the next lab.
+Surveyed 2 Nov 2026. Left: OPT (optomechatronics, Zemax labs), ROS-Industrial, IMS (digital factory). AAU and BEL
+are covered by the Bachelor kit (Automation, Power engineering); management, controlling, tax and English have no
+equations to animate; MECH 1–2, MMR3 and SOA are your own project work.

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Master lectures aid kit</title>
-<meta name="description" content="Interactive labs for the FH Technikum Wien master's lectures: industrial handling, with linkages, motion laws, cams, indexing and grippers.">
+<meta name="description" content="Interactive labs for the FH Technikum Wien master's lectures: industrial handling, robot kinematics, mobile robots and vision, sensor systems, and finite elements.">
 <script>
   // Before the page draws, so a chosen theme never flashes the other one.
   try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
@@ -38,6 +38,26 @@
       <h2>Industrial Handling Lab</h2>
       <p class="courses">Industrial Handling (IHA, Handhabungstechnik), after Berger (2021)</p>
       <p>The mobility count, Grashof's rule, the transmission angle, instant centres, dead-centre and two-position synthesis, coupler curves, motion laws, the disc cam, the indexing cam, and suction and magnet grippers.</p>
+    </a>
+    <a class="lab" href="robotics-lab/" data-family="handling">
+      <h2>Robot Kinematics Lab</h2>
+      <p class="courses">Industrieroboter (IRB), 1st semester</p>
+      <p>Degrees of freedom, frames and rotations, Euler and roll-pitch-yaw angles, the DH convention, the ABB IRB 120, Jacobians and singularities, inverse kinematics.</p>
+    </a>
+    <a class="lab" href="mobile-robots-lab/" data-family="handling">
+      <h2>Mobile Robots and Vision Lab</h2>
+      <p class="courses">Mobile und Service Robotik (MUS, MUS2), 2nd and 3rd semester</p>
+      <p>Bayes, Kalman, EKF and particle filters for localisation; denoising, thresholding, HSV, edges, a convolution layer, stereo depth and RANSAC.</p>
+    </a>
+    <a class="lab" href="sensors-lab/" data-family="handling">
+      <h2>Sensor Systems Lab</h2>
+      <p class="courses">Advanced Sensor Systems (ASENS), 1st semester</p>
+      <p>Echo ranging, image data rates, the pinhole camera and its calibration, lens distortion, colour, time of flight and stereo depth.</p>
+    </a>
+    <a class="lab" href="fem-lab/" data-family="handling">
+      <h2>Finite Elements Lab</h2>
+      <p class="courses">CAE and FEM, 2nd semester</p>
+      <p>Springs and assembly, the bar and beam under mesh refinement, shape functions, Gauss points, a nonlinear spring by Newton, modes and time steps.</p>
     </a>
   </div>
 </main>

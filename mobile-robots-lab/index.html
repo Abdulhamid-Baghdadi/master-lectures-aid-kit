@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile and Service Robotics</title>
+<meta name="description" content="Twelve ideas of mobile and service robotics: the histogram filter on a corridor, the Kalman filter, odometry, the EKF against sampled motion, Monte Carlo localisation, denoising, thresholds and Otsu, HSV, Sobel and Canny edges, a convolution layer, stereo depth and RANSAC.">
+<script>
+  // Before the page draws, so a chosen theme never flashes the other one.
+  try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+<link rel="stylesheet" href="../kit/style.css">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="src/app.js"></script>
+</head>
+<body>
+<header class="top">
+  <div>
+    <p class="home"><a href="../">← Aid kit home</a></p>
+    <h1><a href="#">Mobile and Service Robotics</a></h1>
+  </div>
+  <button id="theme" type="button">Light or dark</button>
+</header>
+<main></main>
+<footer>
+  <p>After the slides of Wöber (2018–2021), <i>Mobile- und Servicerobotik</i> 1 (MUS) and 2 (MUS2), FH Technikum Wien, with the convolutional networks chapter by Thalhammer (2021), and the MUS 1 cheat sheet.</p>
+  <p>A learning aid: every image is a synthetic example scene and every noise comes from a seeded generator, so a lab looks the same on every visit. Pages are the PDF pages of each slide set; no text of the slides is reproduced. Where the slides contain a slip, the lab says so and uses the corrected form.</p>
+</footer>
+<noscript><p>Mobile and Service Robotics needs JavaScript.</p></noscript>
+</body>
+</html>

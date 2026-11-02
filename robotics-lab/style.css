@@ -1,0 +1,34 @@
+/* This lab's own look, after the kit's (../kit/style.css): its families' frame colours, the robot drawings, frames,
+   matrices and the DH table. */
+[data-family=pose] { --frame: #1E40AF; }
+[data-family=forward] { --frame: #047857; }
+[data-family=velocity] { --frame: #B45309; }
+[data-family=inverse] { --frame: #7E22CE; }
+
+.mech .link { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.mech .link.second { stroke: var(--second); stroke-width: 3.5; stroke-dasharray: 8 5; }
+.mech .link.faint { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; }
+.mech .body { fill: var(--panel); stroke: var(--ink); stroke-width: 2.5; }
+.mech .joint { fill: var(--bg); stroke: var(--ink); stroke-width: 2.5; }
+.mech .joint.second { stroke: var(--second); }
+.series.second { stroke: var(--second); stroke-width: 2.5; }
+.series.faint { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 4; }
+
+/* Frame axes: x, y and z told apart by colour and by their labels. */
+.frame-axis line { stroke-width: 2.5; stroke-linecap: round; }
+.frame-axis.axis-x line, .frame-axis.axis-x polygon { stroke: var(--pos); fill: var(--pos); }
+.frame-axis.axis-y line, .frame-axis.axis-y polygon { stroke: var(--ok); fill: var(--ok); }
+.frame-axis.axis-z line, .frame-axis.axis-z polygon { stroke: var(--neg); fill: var(--neg); }
+.frame-axis.faint line, .frame-axis.faint polygon { stroke: var(--muted); fill: var(--muted); }
+.frame-axis.faint { opacity: 0.6; }
+.frame-axis.speed line, .frame-axis.speed polygon { stroke: var(--accent); fill: var(--accent); }
+
+.matrix, .dh { border-collapse: collapse; font-variant-numeric: tabular-nums; margin: 4px 0 10px; }
+.matrix td { padding: 2px 10px; text-align: right; border-left: 2px solid var(--line); }
+.matrix td + td { border-left: none; }
+.matrix td:last-child { border-right: 2px solid var(--line); }
+.dh th, .dh td { padding: 3px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+.dh th { color: var(--muted); font-weight: 600; }
+
+.top { flex-wrap: wrap; }
+.top > div { min-width: 0; flex: 1 1 240px; }

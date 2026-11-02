@@ -1,0 +1,30 @@
+/* This lab's own look, after the kit's (../kit/style.css): its families' frame colours, the corridor, images and plane. */
+[data-family=filters] { --frame: #1E40AF; }
+[data-family=vision] { --frame: #047857; }
+
+.series.faint { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.series.third { stroke: var(--danger); stroke-width: 2; stroke-dasharray: 2 4; }
+.corridor .door { fill: var(--ink); }
+.corridor .wall { fill: var(--line); }
+.corridor .belief { fill: var(--accent); }
+.corridor .belief.prior { fill: color-mix(in srgb, var(--second) 55%, var(--panel)); }
+.corridor .particle { fill: var(--second); }
+.corridor .robot, .plane .robot { fill: var(--danger); }
+.plane .pt { fill: var(--ink); }
+.plane .pt.sample { fill: var(--muted); opacity: .55; }
+.plane .pt.hot { fill: var(--danger); }
+.plane .pt.inlier { fill: var(--accent); }
+.plane .pt.outlier { fill: none; stroke: var(--danger); stroke-width: 1.5; }
+.plane .ellipse { fill: none; stroke: var(--second); stroke-width: 2.5; }
+
+.pics { display: flex; flex-wrap: wrap; gap: 10px; }
+.pic { margin: 0; flex: 1 1 200px; max-width: 340px; }
+.pic svg.image { width: 100%; height: auto; image-rendering: pixelated; border: 1px solid var(--line); }
+.pic figcaption { font-size: .85rem; color: var(--muted); }
+.swatch.big { width: 100%; height: 60px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 10px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+table.net { font-size: .85rem; margin-top: 6px; }
+table.net td, table.net th { padding: 3px 8px; text-align: left; }
+
+.top { flex-wrap: wrap; }
+.top > div { min-width: 0; flex: 1 1 240px; }

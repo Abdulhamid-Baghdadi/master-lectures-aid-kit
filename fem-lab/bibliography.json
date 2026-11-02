@@ -1,0 +1,52 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (the finite element method in the CAE course), apart from the design rules' bibliography, which keeps the design principles.",
+  "entries": [
+    {
+      "key": "krach2020a",
+      "authors": ["Krach, W."],
+      "year": 2020,
+      "title": "CAE – Finite Elemente: FEM-Einführung (02_FEM-Einfuehrung_2020.pdf)",
+      "venue": "Lecture slides, CAE, master's programme, 2nd semester, FH Technikum Wien, 2020; author from the PDF's metadata and every slide's footer",
+      "backs": "The spring system and [K]{u} = {f} (pp. 29–30), Ku = F and Mü + Cu̇ + Ku = F(t) (pp. 27–28), implicit and explicit solvers (p. 23), the polygon discretisation (pp. 48–49), h- and p-refinement (p. 52), the cost of refinement (p. 54, printed: 8 times the elements, 64 times the time), aluminium's E = 70 000 N/mm² (p. 14) and the bending beam's σ = M/W = 60 MPa (p. 40).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "krach2018",
+      "authors": ["Krach, W."],
+      "year": 2018,
+      "title": "CAE im Entwicklungsprozess: Linear vs. Nichtlinear, Statik vs. Dynamik (03_FEM-Entwicklungsprozess_Nichtlinear_Statik-Dynamik_2018.pdf)",
+      "venue": "Lecture slides, CAE, FH Technikum Wien, dated 2018 in the file name",
+      "backs": "u = F·l³/(3EIy) (p. 20), the kinds of nonlinearity and σ = F/A, ε = u/L (pp. 27–30), transient analysis (pp. 38, 45), the dynamic equation, eigen analysis and ω = √(K/m) (p. 44), keeping natural frequencies away from the operating one (p. 42).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "krach2021",
+      "authors": ["Krach, W."],
+      "year": 2021,
+      "title": "CAE – Finite Elemente: CAD-integrierte vs. stand-alone Lösungen, Integrationspunkte – Extrapolation (04_FEM-LowEnd-HighEnd_Integration_Extrapolation_2021.pdf)",
+      "venue": "Lecture slides, CAE, FH Technikum Wien, 2021",
+      "backs": "The displacement method (pp. 51–52), shape functions and their properties (pp. 55–57), integration points (pp. 53, 58–60), extrapolation and averaging (pp. 61–67), with the sketch of p. 62 (about 80 and 170 from 100 and 150).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "krach2020c",
+      "authors": ["Krach, W."],
+      "year": 2020,
+      "title": "CAE – Finite Elemente: Festigkeitsnachweis, Materialcharakterisierung (05_FEM_Materialeigenschaften_2020.pdf)",
+      "venue": "Lecture slides, CAE, FH Technikum Wien, 2020; Krach on every slide's footer (the PDF's metadata names P. Zebisch as its author)",
+      "backs": "E as the slope of the stress–strain diagram and the moduli of steel (210 000 N/mm²) and aluminium (70 000 N/mm²), p. 9.",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "puhwein2020",
+      "authors": ["Puhwein, A. M."],
+      "year": 2020,
+      "title": "Aufgabenstellung mechatronischer Systeme: Vorlesungsbeispiele mit Lösungen (VO-Aufgaben-mit-Lösungen.pdf)",
+      "venue": "Lecture examples with solutions, ModSim, FH Technikum Wien, 2020; author in every page's header, year from the PDF's creation date",
+      "backs": "The single-mass oscillator's ω0 = √(k/m) and f0 = ω0/2π (pp. 7–8) and the two-mass oscillator's M, K and |K − λM| = 0 with λ = ω² (pp. 27–28).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    }
+  ]
+}

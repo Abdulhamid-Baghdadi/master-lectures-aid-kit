@@ -1,0 +1,10 @@
+/* This lab's own look, after the kit's (../kit/style.css): its families' frame colours and the camera drawings. */
+[data-family=overview] { --frame: #1E40AF; }
+[data-family=camera] { --frame: #B45309; }
+[data-family=colour] { --frame: #BE185D; }
+[data-family=depth] { --frame: #047857; }
+
+.mech .joint { fill: var(--bg); stroke: var(--ink); stroke-width: 2.5; }
+
+.top { flex-wrap: wrap; }
+.top > div { min-width: 0; flex: 1 1 240px; }

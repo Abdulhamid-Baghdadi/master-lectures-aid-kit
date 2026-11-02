@@ -1,0 +1,183 @@
+{
+  "format": "fem-lab labs",
+  "version": 1,
+  "about": "CAE (Computer Aided Engineering), FH Technikum Wien master's programme, 2nd semester, after the slides of Krach: 02_FEM-Einfuehrung_2020.pdf (Krach 2020a), 03_FEM-Entwicklungsprozess_Nichtlinear_Statik-Dynamik_2018.pdf (Krach 2018), 04_FEM-LowEnd-HighEnd_Integration_Extrapolation_2021.pdf (Krach 2021) and 05_FEM_Materialeigenschaften_2020.pdf (Krach 2020c), and the solved ModSim tasks VO-Aufgaben-mit-Lösungen.pdf (Puhwein 2020). Pages are the PDF pages, read in the text layer and, for equations set as pictures, from the page images on 2 Nov 2026. The slides print few numbers (σ = 60 MPa on 02 p. 40, the 8- and 64-fold cost of 02 p. 54, the sketch of 04 p. 62); the rest of the questions were worked by hand from the slides' equations and say so. tests/unit/labs-data.test.js recomputes every answer with the core and fails if they disagree.",
+  "families": [
+    { "id": "basics", "name": "The idea of the method" },
+    { "id": "element", "name": "Inside the element" },
+    { "id": "beyond", "name": "Nonlinear and dynamic" }
+  ],
+  "lectures": [
+    { "number": 1, "pages": "02 FEM-Einführung, pp. 14–54", "title": "Elements, assembly and the mesh", "family": "basics", "labs": ["springs", "polygon", "bar", "beam"] },
+    { "number": 2, "pages": "04 Integration–Extrapolation, pp. 49–67", "title": "Shape functions and integration points", "family": "element", "labs": ["shapes", "extrapolation"] },
+    { "number": 3, "pages": "03 Nichtlinear, Statik–Dynamik, pp. 26–47", "title": "Linear or nonlinear, static or dynamic", "family": "beyond", "labs": ["nonlinear", "modal", "timestep"] }
+  ],
+  "labs": [
+    {
+      "id": "springs",
+      "title": "Springs as finite elements",
+      "idea": "Two nodes held by three springs: write each node's force balance and the system becomes [K]{u} = {f}, the basic equation of the finite element method. Each spring adds its own small matrix to [K].",
+      "law": "[K]{u} = {f}",
+      "lawTex": "[K]\\{u\\} = \\{f\\}",
+      "equations": [
+        { "eq": "k1·u1 + k12·(u1 − u2) = f1;  k2·u2 + k12·(u2 − u1) = f2", "tex": "k_1 u_1 + k_{12}(u_1 - u_2) = f_1,\\quad k_2 u_2 + k_{12}(u_2 - u_1) = f_2", "note": "The force balance of each node", "ref": "02 FEM-Einführung, p. 30" },
+        { "eq": "[k1 + k12, −k12; −k12, k2 + k12]·{u1; u2} = {f1; f2}", "tex": "\\begin{bmatrix} k_1 + k_{12} & -k_{12} \\\\ -k_{12} & k_2 + k_{12} \\end{bmatrix} \\begin{Bmatrix} u_1 \\\\ u_2 \\end{Bmatrix} = \\begin{Bmatrix} f_1 \\\\ f_2 \\end{Bmatrix}", "note": "The same in matrix form: the stiffness matrix", "ref": "02 FEM-Einführung, p. 30" },
+        { "eq": "[K]{u} = {f}", "tex": "[K]\\{u\\} = \\{f\\}", "note": "Basic equation of the FEM; Ku = F for statics", "ref": "02 FEM-Einführung, pp. 16, 27 and 30" },
+        { "eq": "ke = k·[1, −1; −1, 1]", "tex": "k_e = k \\begin{bmatrix} 1 & -1 \\\\ -1 & 1 \\end{bmatrix}", "note": "One spring's element matrix, added into [K] at its two nodes", "ref": "" }
+      ],
+      "practice": [
+        { "question": "k1 = k12 = k2 = 1000 N/mm, f1 = 100 N, f2 = 0. How far does node 1 move, in µm?", "source": "Worked by hand from 02 FEM-Einführung, p. 30", "answer": 66.67, "unit": "µm", "tolerance": 0.01, "solution": "[K] = [2000, −1000; −1000, 2000] N/mm, det = 3·10⁶. u1 = 2000·100/3·10⁶ = 0.0667 mm = 66.7 µm.", "compute": { "law": "springU1", "k1": 1000, "k2": 1000, "k12": 1000, "f1": 100, "f2": 0, "scale": 1000 } },
+        { "question": "Same springs and forces: how far does node 2 move, in µm?", "source": "Worked by hand from 02 FEM-Einführung, p. 30", "answer": 33.33, "unit": "µm", "tolerance": 0.01, "solution": "u2 = 1000·100/3·10⁶ = 0.0333 mm = 33.3 µm: node 2 follows through the joining spring.", "compute": { "law": "springU2", "k1": 1000, "k2": 1000, "k12": 1000, "f1": 100, "f2": 0, "scale": 1000 } }
+      ],
+      "lecture": "Krach (2020a), 02 FEM-Einführung, pp. 27–30"
+    },
+    {
+      "id": "polygon",
+      "title": "Discretising a circle",
+      "idea": "Approximate a circle's perimeter by n chords, one finite element each: the result is the sum of the element lengths, always too short, and the error falls as the elements multiply.",
+      "law": "U ≈ Σ Lij",
+      "lawTex": "U \\approx \\sum L_{ij}",
+      "equations": [
+        { "eq": "U ≈ Σ Lij", "tex": "U \\approx \\sum L_{ij}", "note": "The perimeter as the sum of the elements, each between nodes i and j", "ref": "02 FEM-Einführung, p. 49" },
+        { "eq": "Lij = d·sin(π/n)", "tex": "L_{ij} = d \\sin\\frac{\\pi}{n}", "note": "One chord of n equal chords in a circle of diameter d", "ref": "" },
+        { "eq": "A ≈ n/2 · (d/2)² · sin(2π/n)", "tex": "A \\approx \\frac{n}{2}\\left(\\frac{d}{2}\\right)^2 \\sin\\frac{2\\pi}{n}", "note": "The area of the polygon, for the circle's area of p. 48", "ref": "" }
+      ],
+      "practice": [
+        { "question": "A circle of d = 100 mm by 6 equal elements: what perimeter does the polygon give?", "source": "Worked by hand from 02 FEM-Einführung, p. 49", "answer": 300, "unit": "mm", "tolerance": 0.005, "solution": "Each chord is 100·sin 30° = 50 mm; 6·50 = 300 mm, against π·100 = 314.2 mm.", "compute": { "law": "polygonPerimeter", "n": 6, "d": 100 } },
+        { "question": "With 12 elements, how many per cent short of π·d is the polygon?", "source": "Worked by hand from 02 FEM-Einführung, p. 49", "answer": 1.138, "unit": "%", "tolerance": 0.01, "solution": "12·sin 15° = 3.1058 against π = 3.1416: 1.14 % short, about a quarter of the 4.5 % of 6 elements.", "compute": { "law": "polygonErrorPercent", "n": 12, "d": 100 } }
+      ],
+      "lecture": "Krach (2020a), 02 FEM-Einführung, pp. 48–49"
+    },
+    {
+      "id": "bar",
+      "title": "A bar and mesh refinement",
+      "idea": "A bar held at one end, loaded at its tip and along its length, in n linear elements. The nodes come out exact; each element's stress is constant, so the peak at the support is missed until the elements are small. Finer meshes cost more.",
+      "law": "σ = F/A,  ε = u/L,  k = EA/L",
+      "lawTex": "\\sigma = \\frac{F}{A},\\quad \\varepsilon = \\frac{u}{L},\\quad k = \\frac{EA}{L}",
+      "equations": [
+        { "eq": "σ = F/A,  ε = u/L", "tex": "\\sigma = \\frac{F}{A},\\quad \\varepsilon = \\frac{u}{L}", "note": "Stress, internal resistance per area; strain, deformation per length", "ref": "03 Nichtlinear, p. 30" },
+        { "eq": "E = σ/ε in the linear elastic range", "tex": "E = \\frac{\\sigma}{\\varepsilon}", "note": "The modulus is the slope of the stress–strain diagram; steel 210 000, aluminium 70 000 N/mm²", "ref": "05 Materialeigenschaften, p. 9" },
+        { "eq": "k = EA/h for one element of length h", "tex": "k = \\frac{EA}{h}", "note": "From F = k·u with the two lines above", "ref": "" },
+        { "eq": "u(x) = [F·x + q(Lx − x²/2)]/(EA),  σ(x) = [F + q(L − x)]/A", "tex": "u(x) = \\frac{F x + q\\,(L x - x^2/2)}{EA},\\quad \\sigma(x) = \\frac{F + q\\,(L - x)}{A}", "note": "The exact solution for an end force F and a line load q", "ref": "" },
+        { "eq": "2 × DOF → 4 × time;  h/2 → 8 × elements → 64 × time", "tex": "2\\times\\text{DOF} \\to 4\\times t,\\quad \\tfrac{h}{2} \\to 8\\times n_e \\to 64\\times t", "note": "Cost of refinement in a solid mesh: quadratic in the degrees of freedom", "ref": "02 FEM-Einführung, p. 54" }
+      ],
+      "practice": [
+        { "question": "A steel bar, L = 1000 mm, A = 100 mm², E = 210 000 MPa, with 1000 N at its tip. How far does the tip move, in µm?", "source": "Worked by hand from 03 Nichtlinear, p. 30 and 05 Materialeigenschaften, p. 9", "answer": 47.62, "unit": "µm", "tolerance": 0.01, "solution": "u = F·L/(EA) = 1000·1000/(210 000·100) = 0.0476 mm = 47.6 µm. One element gives it exactly.", "compute": { "law": "barTip", "L": 1000, "A": 100, "E": 210000, "F": 1000, "n": 1, "scale": 1000 } },
+        { "question": "The same bar with a line load q = 2 N/mm and no tip force, in 4 elements. What stress does the first element report?", "source": "Worked by hand: exact σ(0) = qL/A = 20 MPa", "answer": 17.5, "unit": "MPa", "tolerance": 0.01, "solution": "The first element spans 0–250 mm and carries the mean of its stress: q·(L − h/2)/A = 2·875/100 = 17.5 MPa, 12.5 % below the 20 MPa at the support.", "compute": { "law": "barFirstStress", "L": 1000, "A": 100, "E": 210000, "q": 2, "n": 4 } },
+        { "question": "Halving the element length of a solid mesh multiplies the elements by 8. By what factor does the solving time grow?", "source": "Krach (2020a), 02 FEM-Einführung, p. 54, printed: 64", "answer": 64, "unit": "1", "tolerance": 0, "solution": "Time grows with the square of the degrees of freedom: 8² = 64.", "compute": { "law": "costRatio", "factor": 8, "power": 2 } }
+      ],
+      "lecture": "Krach (2020a), 02 FEM-Einführung, pp. 19 and 52–55; Krach (2018), p. 30"
+    },
+    {
+      "id": "beam",
+      "title": "The cantilever: by hand and by elements",
+      "idea": "The course's bending beam, 10 × 10 mm, 100 mm long, 100 N at the tip: σ = M/W = 60 MPa and u = F·l³/(3EIy) by hand. Beam elements reproduce both exactly; under a line load the moment inside each element is only approximate.",
+      "law": "σ = M/W,  u = F·l³/(3EIy)",
+      "lawTex": "\\sigma = \\frac{M_B}{W},\\quad u = \\frac{F l^3}{3 E I_y}",
+      "equations": [
+        { "eq": "σ = M_B/W = 100·100 / (10·10²/6) = 60 MPa", "tex": "\\sigma = \\frac{M_B}{W} = \\frac{100 \\cdot 100}{\\frac{10 \\cdot 10^2}{6}} = 60\\ \\text{MPa}", "note": "The bending stress at the clamp of the course's example", "ref": "02 FEM-Einführung, p. 40" },
+        { "eq": "u = F·l³/(3EIy)", "tex": "u = \\frac{F l^3}{3 E I_y}", "note": "The cantilever's tip deflection, a classic hand formula", "ref": "03 Nichtlinear, p. 20" },
+        { "eq": "Iy = b·t³/12,  W = b·t²/6", "tex": "I_y = \\frac{b t^3}{12},\\quad W = \\frac{b t^2}{6}", "note": "Second moment and section modulus of a rectangle; W as on p. 40", "ref": "02 FEM-Einführung, p. 40 (W)" },
+        { "eq": "u = q·l⁴/(8EIy),  M(x) = F(l − x) + q(l − x)²/2", "tex": "u = \\frac{q l^4}{8 E I_y},\\quad M(x) = F(l - x) + \\frac{q (l - x)^2}{2}", "note": "The line load's tip deflection and the moment along the beam", "ref": "" },
+        { "eq": "ke = EI/h³·[12, 6h, −12, 6h; 6h, 4h², −6h, 2h²; −12, −6h, 12, −6h; 6h, 2h², −6h, 4h²]", "tex": "k_e = \\frac{EI}{h^3}\\begin{bmatrix} 12 & 6h & -12 & 6h \\\\ 6h & 4h^2 & -6h & 2h^2 \\\\ -12 & -6h & 12 & -6h \\\\ 6h & 2h^2 & -6h & 4h^2 \\end{bmatrix}", "note": "The beam element with cubic shape functions: deflection and slope at each node", "ref": "" }
+      ],
+      "practice": [
+        { "question": "The course's beam: 10 × 10 mm, 100 mm long, 100 N at the tip. What is the bending stress at the clamp?", "source": "Krach (2020a), 02 FEM-Einführung, p. 40, printed: 60 MPa", "answer": 60, "unit": "MPa", "tolerance": 0.005, "solution": "M = 100 N · 100 mm = 10 000 N·mm; W = 10·10²/6 = 166.7 mm³; σ = 60 MPa.", "compute": { "law": "bendingStress", "M": 10000, "b": 10, "t": 10 } },
+        { "question": "The same beam in aluminium, E = 70 000 MPa. How far does the tip move?", "source": "Worked by hand from 03 Nichtlinear, p. 20, with E of 02 FEM-Einführung, p. 14", "answer": 0.5714, "unit": "mm", "tolerance": 0.005, "solution": "Iy = 10·10³/12 = 833.3 mm⁴; u = 100·100³/(3·70 000·833.3) = 0.571 mm.", "compute": { "law": "cantileverTip", "L": 100, "b": 10, "t": 10, "E": 70000, "F": 100 } },
+        { "question": "The beam with a line load of 1 N/mm and no tip force, in 2 beam elements: what moment does the first element give at the clamp, in N·mm? (Exact: 5000 N·mm.)", "source": "Worked by hand from the exact nodal deflection and slope at x = 50 mm", "answer": 4791.7, "unit": "N·mm", "tolerance": 0.005, "solution": "The nodes are exact: w(50) = 4 427 083/EI, θ(50) = 145 833/EI. The element's curvature at x = 0 gives M = 6/50²·4 427 083 − 2/50·145 833 = 10 625 − 5 833 = 4 792 N·mm, 4.2 % low.", "compute": { "law": "feRootMoment", "L": 100, "b": 10, "t": 10, "E": 70000, "q": 1, "n": 2 } }
+      ],
+      "lecture": "Krach (2020a), 02 FEM-Einführung, pp. 14 and 40–47; Krach (2018), p. 20"
+    },
+    {
+      "id": "shapes",
+      "title": "Shape functions",
+      "idea": "Inside an element the displacement is built from shape functions, one per node: 1 at its own node, 0 at the others, all summing to 1. Linear elements draw straight lines between nodes, quadratic ones parabolas through a mid-node.",
+      "law": "u(ξ) = Σ Ni(ξ)·ui,  Σ Ni = 1",
+      "lawTex": "u(\\xi) = \\sum_i N_i(\\xi)\\, u_i,\\quad \\sum_i N_i = 1",
+      "equations": [
+        { "eq": "Ni = 1 at node i, 0 at the others; Σ Ni = 1", "tex": "N_i(\\xi_j) = \\delta_{ij},\\quad \\sum_i N_i = 1", "note": "The properties of shape functions: defined on the whole element, equal on shared edges", "ref": "04 Integration–Extrapolation, p. 55" },
+        { "eq": "N1 = 1 − ξ,  N2 = ξ", "tex": "N_1 = 1 - \\xi,\\quad N_2 = \\xi", "note": "Linear, two nodes at ξ = 0 and 1 (drawn on p. 56)", "ref": "04 Integration–Extrapolation, p. 56 (figure)" },
+        { "eq": "N1 = 2(ξ − ½)(ξ − 1),  Nm = −4ξ(ξ − 1),  N2 = 2ξ(ξ − ½)", "tex": "N_1 = 2(\\xi - \\tfrac12)(\\xi - 1),\\quad N_m = -4\\xi(\\xi - 1),\\quad N_2 = 2\\xi(\\xi - \\tfrac12)", "note": "Quadratic, nodes at ξ = 0, ½ and 1 (drawn on p. 56)", "ref": "" },
+        { "eq": "displacement → strain (kinematics) → stress (material law)", "tex": "u \\;\\to\\; \\varepsilon \\;\\to\\; \\sigma = C\\,\\varepsilon", "note": "The displacement method: shape functions first, then strains, then stresses", "ref": "04 Integration–Extrapolation, pp. 51–52" }
+      ],
+      "practice": [
+        { "question": "A quadratic element: what is the mid-node's shape function at ξ = 0.25?", "source": "Worked by hand from 04 Integration–Extrapolation, pp. 55–56", "answer": 0.75, "unit": "1", "tolerance": 0.001, "solution": "Nm = −4·0.25·(0.25 − 1) = 0.75; the two end functions take the remaining 0.25 between them.", "compute": { "law": "shapeValue", "kind": "quadratic", "xi": 0.25, "node": 1 } },
+        { "question": "y = x² on 0–1 by one linear element: what does the element give at x = 0.5? (The curve has 0.25.)", "source": "Worked by hand from 04 Integration–Extrapolation, p. 56", "answer": 0.5, "unit": "1", "tolerance": 0.001, "solution": "The nodes hold 0 and 1; halfway, N1 = N2 = ½, so ½·0 + ½·1 = 0.5. A quadratic element would give 0.25 exactly.", "compute": { "law": "interpolated", "kind": "linear", "m": 1, "x": 0.5 } }
+      ],
+      "lecture": "Krach (2021), 04 Integration–Extrapolation, pp. 49–57"
+    },
+    {
+      "id": "extrapolation",
+      "title": "Integration points and extrapolation",
+      "idea": "Elements compute their stresses at integration (Gauss) points. Plots show nodal values: extrapolated from the points, then averaged across neighbouring elements. Near steep gradients the extrapolation overshoots.",
+      "law": "σ_node = extrapolated from the integration points, averaged over the elements at the node",
+      "lawTex": "\\sigma_\\text{node} = \\frac{1}{n_e} \\sum_{e} \\sigma_e(\\xi_\\text{node})",
+      "equations": [
+        { "eq": "σ_node = (Σ σ_e)/N", "tex": "\\sigma_x = \\frac{\\sum_{i=1}^{N} \\sigma_{x,i}}{N}", "note": "The averaged nodal value from N adjacent elements", "ref": "04 Integration–Extrapolation, pp. 62–63" },
+        { "eq": "ξG = ±1/√3", "tex": "\\xi_G = \\pm \\frac{1}{\\sqrt{3}}", "note": "The two Gauss points of a linear element in natural coordinates", "ref": "" },
+        { "eq": "σ(±1) = (σ1 + σ2)/2 ± √3·(σ2 − σ1)/2", "tex": "\\sigma(\\pm 1) = \\frac{\\sigma_1 + \\sigma_2}{2} \\pm \\frac{\\sqrt{3}}{2}(\\sigma_2 - \\sigma_1)", "note": "Straight-line extrapolation from the two points to the element's nodes", "ref": "" }
+      ],
+      "practice": [
+        { "question": "A linear element has 100 MPa and 150 MPa at its two integration points. What does extrapolation give at the node beyond 150?", "source": "Worked by hand; the sketch of 04 Integration–Extrapolation, p. 62 reads about 170", "answer": 168.3, "unit": "MPa", "tolerance": 0.01, "solution": "Mean 125 MPa, half-difference 25 MPa; the node at ξ = 1 lies √3 times as far out as the point at 1/√3: 125 + 1.732·25 = 168.3 MPa.", "compute": { "law": "extrapolatedNode", "s1": 100, "s2": 150, "node": 1 } },
+        { "question": "Same element: what is the node beyond 100 MPa?", "source": "Worked by hand; the sketch of 04 Integration–Extrapolation, p. 62 reads 80", "answer": 81.7, "unit": "MPa", "tolerance": 0.01, "solution": "125 − 1.732·25 = 81.7 MPa.", "compute": { "law": "extrapolatedNode", "s1": 100, "s2": 150, "node": 0 } }
+      ],
+      "lecture": "Krach (2021), 04 Integration–Extrapolation, pp. 58–67"
+    },
+    {
+      "id": "nonlinear",
+      "title": "A nonlinear spring and Newton's iteration",
+      "idea": "A linear model answers in one solve. When stiffness changes with the displacement (material, geometry, contact), an implicit solver iterates: follow the tangent, check the residual, repeat, in load steps.",
+      "law": "KT(ui)·Δu = P − F(ui),  ui+1 = ui + Δu",
+      "lawTex": "K_T(u_i)\\,\\Delta u = P - F(u_i),\\quad u_{i+1} = u_i + \\Delta u",
+      "equations": [
+        { "eq": "F = k·u (linear: slope k)", "tex": "F = k\\,u", "note": "The linear structural behaviour; nonlinear when material, geometry or contact change", "ref": "03 Nichtlinear, p. 30" },
+        { "eq": "F(u) = k·u + c·u³", "tex": "F(u) = k\\,u + c\\,u^3", "note": "A spring that stiffens (c > 0) or softens (c < 0), standing for any nonlinearity", "ref": "" },
+        { "eq": "KT = dF/du = k + 3c·u²", "tex": "K_T = \\frac{dF}{du} = k + 3c\\,u^2", "note": "The tangent stiffness", "ref": "" },
+        { "eq": "KT(ui)·Δu = P − F(ui)", "tex": "K_T(u_i)\\,\\Delta u = P - F(u_i)", "note": "Newton–Raphson: one linear solve per iteration", "ref": "" }
+      ],
+      "practice": [
+        { "question": "k = 100 N/mm, c = 10 N/mm³, P = 500 N, one load step from u = 0. Where does the first Newton iteration land?", "source": "Worked by hand from the definition", "answer": 5, "unit": "mm", "tolerance": 0.001, "solution": "KT(0) = 100 N/mm and the residual is 500 N: Δu = 5 mm, the linear answer. F(5) = 500 + 1250 = 1750 N overshoots, so the next iteration steps back.", "compute": { "law": "newtonFirst", "k": 100, "c": 10, "P": 500 } },
+        { "question": "Same spring and load: what displacement does the iteration converge to?", "source": "Worked by hand: 100·u + 10·u³ = 500", "answer": 2.8014, "unit": "mm", "tolerance": 0.001, "solution": "Iterates 0, 5, 3.529, 2.912, 2.804, 2.8014; check 280.14 + 10·21.986 = 500 N.", "compute": { "law": "nonlinearU", "k": 100, "c": 10, "P": 500 } }
+      ],
+      "lecture": "Krach (2018), 03 Nichtlinear, Statik–Dynamik, pp. 26–35; Krach (2020a), 02 FEM-Einführung, pp. 58–59"
+    },
+    {
+      "id": "modal",
+      "title": "Natural frequencies and mode shapes",
+      "idea": "Without load and damping, [M]{ẍ} + [K]{x} = 0: mass and stiffness alone set the natural frequencies. Each degree of freedom has one frequency and one mode shape, a shape without size.",
+      "law": "det([K] − ω²[M]) = 0",
+      "lawTex": "\\det\\left([K] - \\omega^2 [M]\\right) = 0",
+      "equations": [
+        { "eq": "[M]{ẍ} + [C]{ẋ} + [K]{x} = {f(t)}", "tex": "[M]\\{\\ddot x\\} + [C]\\{\\dot x\\} + [K]\\{x\\} = \\{f(t)\\}", "note": "The dynamic equation; Mü + Cu̇ + Ku = F(t)", "ref": "03 Nichtlinear, p. 44; 02 FEM-Einführung, p. 27" },
+        { "eq": "[M]{ẍ} + [K]{x} = 0", "tex": "[M]\\{\\ddot x\\} + [K]\\{x\\} = 0", "note": "No damping, no load: the equation of eigen analysis", "ref": "03 Nichtlinear, p. 44" },
+        { "eq": "ω = √(K/m),  f0 = ω0/2π", "tex": "\\omega = \\sqrt{K/m},\\quad f_0 = \\frac{\\omega_0}{2\\pi}", "note": "One mass on one spring", "ref": "03 Nichtlinear, p. 44; ModSim VO-Aufgaben, pp. 7–8" },
+        { "eq": "M = [m1, 0; 0, m2],  K = [k1 + k2, −k2; −k2, k2]", "tex": "M = \\begin{bmatrix} m_1 & 0 \\\\ 0 & m_2 \\end{bmatrix},\\quad K = \\begin{bmatrix} k_1 + k_2 & -k_2 \\\\ -k_2 & k_2 \\end{bmatrix}", "note": "The two-mass oscillator (dampers left out)", "ref": "ModSim VO-Aufgaben, p. 28" },
+        { "eq": "|K − λM| = 0, λ = ω²", "tex": "\\left|K - \\lambda M\\right| = 0,\\quad \\lambda = \\omega^2", "note": "The eigenvalues are the squared natural angular frequencies; the eigenvectors the mode shapes", "ref": "ModSim VO-Aufgaben, p. 28" }
+      ],
+      "practice": [
+        { "question": "One mass of 1 kg on a spring of 100 N/m: what is its natural frequency?", "source": "Worked by hand from 03 Nichtlinear, p. 44 and ModSim VO-Aufgaben, p. 8", "answer": 1.5915, "unit": "Hz", "tolerance": 0.005, "solution": "ω = √(100/1) = 10 s⁻¹; f = 10/2π = 1.59 Hz.", "compute": { "law": "sdofF", "k": 100, "m": 1 } },
+        { "question": "The two-mass oscillator with m1 = m2 = 1 kg and k1 = k2 = 100 N/m: what is the higher natural frequency?", "source": "Worked by hand from ModSim VO-Aufgaben, p. 28", "answer": 2.575, "unit": "Hz", "tolerance": 0.005, "solution": "det = λ² − 300λ + 10 000 = 0, λ = (300 ± 223.6)/2 = 38.2 or 261.8 s⁻². ω2 = 16.18 s⁻¹, f2 = 2.575 Hz (and f1 = 0.984 Hz).", "compute": { "law": "twoMassF", "m1": 1, "m2": 1, "k1": 100, "k2": 100, "mode": 1 } }
+      ],
+      "lecture": "Krach (2018), 03 Nichtlinear, Statik–Dynamik, pp. 39–47; Puhwein (2020), ModSim VO-Aufgaben, pp. 27–28"
+    },
+    {
+      "id": "timestep",
+      "title": "Explicit or implicit time steps",
+      "idea": "A transient analysis steps the equation of motion through time. An explicit solver only evaluates and is cheap per step, but its step must stay below a limit; an implicit solver solves an equation each step and stays stable at any step.",
+      "law": "Mü + Ku = F(t);  explicit: Δt < 2/ω",
+      "lawTex": "M\\ddot u + K u = F(t),\\qquad \\Delta t_\\text{explicit} < \\frac{2}{\\omega}",
+      "equations": [
+        { "eq": "Mü + Cu̇ + Ku = F(t)", "tex": "M\\ddot u + C\\dot u + K u = F(t)", "note": "The equation of motion of elastodynamics", "ref": "02 FEM-Einführung, p. 27" },
+        { "eq": "Implicit: invert the stiffness matrix; explicit: many time increments", "tex": "\\text{implicit: } K^{-1},\\qquad \\text{explicit: many } \\Delta t", "note": "The two kinds of solver", "ref": "02 FEM-Einführung, p. 23" },
+        { "eq": "un+1 = 2un − un−1 − Δt²ω²un", "tex": "u_{n+1} = 2u_n - u_{n-1} - \\Delta t^2 \\omega^2 u_n", "note": "The explicit central difference for one mass", "ref": "" },
+        { "eq": "Δt_crit = 2/ω", "tex": "\\Delta t_\\text{crit} = \\frac{2}{\\omega}", "note": "The central difference's stability limit", "ref": "" },
+        { "eq": "(1 + Δt²ω²/4)·un+1 = un + Δt·vn + Δt²/4·an", "tex": "\\left(1 + \\tfrac{\\Delta t^2 \\omega^2}{4}\\right) u_{n+1} = u_n + \\Delta t\\, v_n + \\tfrac{\\Delta t^2}{4} a_n", "note": "The implicit average-acceleration rule (Newmark, γ = ½, β = ¼), one equation per step", "ref": "" }
+      ],
+      "practice": [
+        { "question": "A mass of 1 kg on 400 N/m: what is the largest stable step of the central difference, in ms?", "source": "Worked by hand: Δt = 2/ω", "answer": 100, "unit": "ms", "tolerance": 0.005, "solution": "ω = √400 = 20 s⁻¹; Δt = 2/20 = 0.1 s = 100 ms.", "compute": { "law": "criticalStep", "k": 400, "m": 1, "scale": 1000 } },
+        { "question": "A stiffer element: 1 kg on 4·10⁶ N/m. How many explicit steps does 50 ms of simulated time need at least?", "source": "Worked by hand: Δt = 2/ω", "answer": 50, "unit": "1", "tolerance": 0, "solution": "ω = 2000 s⁻¹, Δt = 1 ms; 50 ms/1 ms = 50 steps. Stiffer or lighter elements, as in a finer mesh, shrink the step.", "compute": { "law": "stepsNeeded", "k": 4000000, "m": 1, "duration": 0.05 } }
+      ],
+      "lecture": "Krach (2020a), 02 FEM-Einführung, pp. 23 and 27; Krach (2018), 03 Nichtlinear, Statik–Dynamik, pp. 38 and 45"
+    }
+  ]
+}

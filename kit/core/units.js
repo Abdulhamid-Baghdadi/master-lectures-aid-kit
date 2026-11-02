@@ -2,10 +2,15 @@
 
 const PREFIXES = [[1e9, "G"], [1e6, "M"], [1e3, "k"], [1, ""], [1e-3, "m"], [1e-6, "µ"], [1e-9, "n"], [1e-12, "p"]];
 
+const PLAIN = new Set(["", "1", "°", "%", "rpm"]);
+
 /** 4700, "Ω" → "4.7 kΩ"; three significant figures, trailing zeros dropped. */
 export function si(value, unit, digits = 3) {
   if (!Number.isFinite(value)) return value > 0 ? `∞ ${unit}` : `— ${unit}`;
   if (value === 0) return `0 ${unit}`;
+  // A pure number, an angle, a speed in rpm, an inverse unit or a unit that already has its prefix takes no prefix.
+  if (PLAIN.has(unit ?? "") || /⁻/.test(unit) || /^[GMkmµnp](m|s|bar|N|Pa|g|A|V|W|Hz|Ω)(?![a-z])/.test(unit))
+    return `${Number(value.toPrecision(digits))}${unit && unit !== "1" ? ` ${unit}` : ""}`;
   const [scale, prefix] = PREFIXES.find(([s]) => Math.abs(value) >= s * 0.9995) ?? PREFIXES.at(-1);
   return `${Number((value / scale).toPrecision(digits))} ${prefix}${unit}`.trimEnd();
 }

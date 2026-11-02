@@ -1,0 +1,786 @@
+{
+  "format": "mobile-robots-lab labs",
+  "version": 1,
+  "about": "Mobile- und Servicerobotik 1 (MUS, 2nd semester) and 2 (MUS2, 3rd semester), FH Technikum Wien master's programme, after the slides of Wöber (2018, 2019, 2019a, 2021), the MUS 1 cheat sheet (Wöber 2020) and the convolutional networks slides of Thalhammer (2021). Pages are the PDF pages of each slide file, read in their text layer with pdftotext on 2 Nov 2026; equations shown only as images (the algorithm boxes after Thrun et al. 2006, the HSV and CNN examples) were read from page renderings. The course prints no worked numerical results except the network summary of the CNN slides (p. 10), so those counts are the only printed answers; the MUS Theoriefragen and the 2018 quizzes are questions in words. Every other answer was worked by hand from the course's equations and says so. tests/unit/labs-data.test.js recomputes every answer with the core and fails if they disagree.",
+  "families": [
+    { "id": "filters", "name": "Localisation and filters (MUS)" },
+    { "id": "vision", "name": "Robot vision (MUS2)" }
+  ],
+  "lectures": [
+    {
+      "number": 1,
+      "pages": "MUS, 2nd semester",
+      "title": "The Bayes filter and its family",
+      "family": "filters",
+      "labs": ["histogram", "kalman", "odometry", "ekf", "particles"]
+    },
+    {
+      "number": 2,
+      "pages": "MUS2, 3rd semester",
+      "title": "Robot vision: from pixels to pose",
+      "family": "vision",
+      "labs": ["denoise", "threshold", "hsv", "edges", "cnn", "stereo", "ransac"]
+    }
+  ],
+  "labs": [
+    {
+      "id": "histogram",
+      "title": "Where am I? The Bayes filter on a corridor",
+      "idea": "Hold a belief over every place the robot could be. Moving blurs it, a reading sharpens it: Bayes' rule in every cell, normalised so it sums to one.",
+      "law": "bel(xt) = η·p(zt|xt)·Σ p(xt|ut, xt−1)·bel(xt−1)",
+      "lawTex": "\\mathrm{bel}(x_t) = \\eta\\, p(z_t \\mid x_t) \\sum_{x_{t-1}} p(x_t \\mid u_t, x_{t-1})\\, \\mathrm{bel}(x_{t-1})",
+      "equations": [
+        {
+          "eq": "p(a|b) = p(b|a)·p(a) / p(b)",
+          "tex": "p(a \\mid b) = \\frac{p(b \\mid a)\\, p(a)}{p(b)}",
+          "note": "Bayes' rule",
+          "ref": "Basics.pdf, p. 9, eq. 5; MuS1_Cheatsheet.pdf, p. 2, eq. 4"
+        },
+        {
+          "eq": "p(d|s) = p(s|d)p(d) / (p(s|d)p(d) + p(s|¬d)p(¬d))",
+          "tex": "p(d \\mid s) = \\frac{p(s \\mid d)\\, p(d)}{p(s \\mid d)\\, p(d) + p(s \\mid \\neg d)\\, p(\\neg d)}",
+          "note": "The door estimated from one sensor reading",
+          "ref": "Basics.pdf, p. 10"
+        },
+        {
+          "eq": "bel̄(xt) = Σ p(xt|ut, xt−1)·bel(xt−1)",
+          "tex": "\\overline{\\mathrm{bel}}(x_t) = \\sum_{x_{t-1}} p(x_t \\mid u_t, x_{t-1})\\, \\mathrm{bel}(x_{t-1})",
+          "note": "Prediction: the motion model; the integral becomes a sum for countable states (p. 9)",
+          "ref": "Basics.pdf, p. 21, line 3 (after Thrun et al. 2006)"
+        },
+        {
+          "eq": "bel(xt) = η·p(zt|xt)·bel̄(xt)",
+          "tex": "\\mathrm{bel}(x_t) = \\eta\\, p(z_t \\mid x_t)\\, \\overline{\\mathrm{bel}}(x_t)",
+          "note": "Correction: the sensor model; η normalises",
+          "ref": "Basics.pdf, p. 21, line 4; p. 7, eq. 2"
+        },
+        {
+          "eq": "p(xt|u1:t, z1:t) = p(xt|ut, zt)",
+          "tex": "p(x_t \\mid u_{1:t}, z_{1:t}) = p(x_t \\mid u_t, z_t)",
+          "note": "Markov assumption: everything needed is in the last state",
+          "ref": "MuS1_Cheatsheet.pdf, p. 2, eq. 8; Basics.pdf, p. 13"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A door sensor sees a door in front of a door with p(s|d) = 0.6 and in front of a wall with p(s|¬d) = 0.3; before reading, door and wall are equally likely. It reports a door. How likely is it a door now?",
+          "source": "Worked by hand from Basics.pdf, p. 10 (the numbers are an example, not the course's)",
+          "answer": 0.6667,
+          "unit": "1",
+          "tolerance": 0.005,
+          "solution": "p(d|s) = 0.6·0.5/(0.6·0.5 + 0.3·0.5) = 0.30/0.45 = 2/3.",
+          "compute": { "law": "door", "hit": 0.6, "falseHit": 0.3, "prior": 0.5 }
+        },
+        {
+          "question": "A corridor of 20 cells has doors in 4 of them. Starting with a flat belief, the same sensor (0.6 and 0.3) reports a door. What is the belief in one door cell now?",
+          "source": "Worked by hand from Basics.pdf, p. 21, line 4",
+          "answer": 0.08333,
+          "unit": "1",
+          "tolerance": 0.005,
+          "solution": "Each door cell gets 0.6/20, each wall cell 0.3/20; the sum is (4·0.6 + 16·0.3)/20 = 7.2/20. Normalised, a door cell holds 0.6/7.2 = 0.0833.",
+          "compute": { "law": "corridorDoor", "n": 20, "doors": 4, "hit": 0.6, "falseHit": 0.3 }
+        }
+      ],
+      "lecture": "Wöber (2018), MuS 1 Basics, pp. 7–21 (Basics.pdf); Wöber (2020), MuS 1 cheat sheet (MuS1_Cheatsheet.pdf)"
+    },
+    {
+      "id": "kalman",
+      "title": "The Kalman filter: trust the model or the sensor?",
+      "idea": "With Gaussians everywhere and a linear model, the Bayes filter becomes the Kalman filter: a mean and a variance, predicted by the motion and corrected by the measurement, weighed by the Kalman gain.",
+      "law": "Kt = Σ̄t·Cᵀ(C·Σ̄t·Cᵀ + Q)⁻¹",
+      "lawTex": "K_t = \\bar\\Sigma_t C_t^{\\mathsf T} \\left(C_t \\bar\\Sigma_t C_t^{\\mathsf T} + Q_t\\right)^{-1}",
+      "equations": [
+        {
+          "eq": "μ̄t = At·μt−1 + Bt·ut",
+          "tex": "\\bar\\mu_t = A_t\\,\\mu_{t-1} + B_t\\,u_t",
+          "note": "Prediction of the mean (the slide's p. 6 writes Axt−1 − But; eq. 2 on p. 7 and the algorithm have +)",
+          "ref": "Gaussianfilters.pdf, p. 7, eq. 2; p. 11, line 2"
+        },
+        {
+          "eq": "Σ̄t = At·Σt−1·Atᵀ + Rt",
+          "tex": "\\bar\\Sigma_t = A_t\\,\\Sigma_{t-1} A_t^{\\mathsf T} + R_t",
+          "note": "Prediction of the covariance: the + R makes it grow",
+          "ref": "Gaussianfilters.pdf, p. 11, line 3"
+        },
+        {
+          "eq": "Kt = Σ̄t·Cᵀ(C·Σ̄t·Cᵀ + Q)⁻¹",
+          "tex": "K_t = \\bar\\Sigma_t C_t^{\\mathsf T} \\left(C_t \\bar\\Sigma_t C_t^{\\mathsf T} + Q_t\\right)^{-1}",
+          "note": "The Kalman gain: a large sensor noise Q makes it small",
+          "ref": "Gaussianfilters.pdf, p. 12, line 4"
+        },
+        {
+          "eq": "μt = μ̄t + Kt(zt − Ct·μ̄t)",
+          "tex": "\\mu_t = \\bar\\mu_t + K_t\\,(z_t - C_t\\,\\bar\\mu_t)",
+          "note": "Correction of the mean by the innovation",
+          "ref": "Gaussianfilters.pdf, p. 13, line 5"
+        },
+        {
+          "eq": "Σt = (I − Kt·Ct)·Σ̄t",
+          "tex": "\\Sigma_t = (I - K_t C_t)\\,\\bar\\Sigma_t",
+          "note": "Correction of the covariance",
+          "ref": "Gaussianfilters.pdf, p. 13, line 6"
+        },
+        {
+          "eq": "xt = A·xt−1 + B·ut + εt, zt = C·xt + δt",
+          "tex": "x_t = A x_{t-1} + B u_t + \\varepsilon_t,\\quad z_t = C x_t + \\delta_t",
+          "note": "εt ∼ N(0, R) the process noise, δt ∼ N(0, Q) the sensor noise",
+          "ref": "Gaussianfilters.pdf, p. 6 and p. 8"
+        }
+      ],
+      "practice": [
+        {
+          "question": "One step of a scalar Kalman filter, A = B = C = 1: μ = 0, Σ = 1, u = 1, R = 0.5, Q = 1, z = 1.2. What is the Kalman gain K?",
+          "source": "Worked by hand from Gaussianfilters.pdf, pp. 11–13",
+          "answer": 0.6,
+          "unit": "1",
+          "tolerance": 0.005,
+          "solution": "Σ̄ = 1 + 0.5 = 1.5; K = 1.5/(1.5 + 1) = 0.6.",
+          "compute": { "law": "kalmanGain", "mu": 0, "sigma2": 1, "u": 1, "z": 1.2, "R": 0.5, "Q": 1 }
+        },
+        {
+          "question": "Same step: what is the corrected mean μ?",
+          "source": "Worked by hand from Gaussianfilters.pdf, p. 13, line 5",
+          "answer": 1.12,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "μ̄ = 0 + 1 = 1; μ = 1 + 0.6·(1.2 − 1) = 1.12.",
+          "compute": { "law": "kalmanMu", "mu": 0, "sigma2": 1, "u": 1, "z": 1.2, "R": 0.5, "Q": 1 }
+        },
+        {
+          "question": "Same step: what is the corrected variance Σ?",
+          "source": "Worked by hand from Gaussianfilters.pdf, p. 13, line 6",
+          "answer": 0.6,
+          "unit": "m²",
+          "tolerance": 0.005,
+          "solution": "Σ = (1 − 0.6)·1.5 = 0.6: smaller than both Σ̄ = 1.5 and Q = 1.",
+          "compute": { "law": "kalmanSigma", "mu": 0, "sigma2": 1, "u": 1, "z": 1.2, "R": 0.5, "Q": 1 }
+        }
+      ],
+      "lecture": "Wöber (2018), MuS 1 Kalman Filter, pp. 3–16 (Gaussianfilters.pdf); EKF Localization, p. 7 (EKFLoc.pdf)"
+    },
+    {
+      "id": "odometry",
+      "title": "Odometry: from wheel turns to a path",
+      "idea": "Count the turns of the two wheels of a differential drive and the robot's step follows: half their sum gives the distance, their difference over the track gives the turn.",
+      "law": "δd = (Δφl + Δφr)·r/2, δθ = (Δφr − Δφl)·r/b",
+      "lawTex": "\\delta_d = \\frac{(\\Delta\\varphi_l + \\Delta\\varphi_r)\\,r}{2},\\qquad \\delta_\\theta = \\frac{(\\Delta\\varphi_r - \\Delta\\varphi_l)\\,r}{b}",
+      "equations": [
+        {
+          "eq": "δd = (Δφl + Δφr)·r/2",
+          "tex": "\\delta_d = \\frac{(\\Delta\\varphi_l + \\Delta\\varphi_r)\\,r}{2}",
+          "note": "Distance of one step, r the wheel radius",
+          "ref": "EKF.pdf, p. 3, footnote 1"
+        },
+        {
+          "eq": "δθ = (Δφr − Δφl)·r/b",
+          "tex": "\\delta_\\theta = \\frac{(\\Delta\\varphi_r - \\Delta\\varphi_l)\\,r}{b}",
+          "note": "Turn of one step, b the track width (baseline)",
+          "ref": "EKF.pdf, p. 3, footnote 1"
+        },
+        {
+          "eq": "(X, Y, θ)t = (X, Y, θ)t−1 + (δd·cos(θt−1 + δθ), δd·sin(θt−1 + δθ), δθ)",
+          "tex": "\\begin{pmatrix} X_t \\\\ Y_t \\\\ \\theta_t \\end{pmatrix} = \\begin{pmatrix} X_{t-1} \\\\ Y_{t-1} \\\\ \\theta_{t-1} \\end{pmatrix} + \\begin{pmatrix} \\delta_d \\cos(\\theta_{t-1} + \\delta_\\theta) \\\\ \\delta_d \\sin(\\theta_{t-1} + \\delta_\\theta) \\\\ \\delta_\\theta \\end{pmatrix}",
+          "note": "The pose moved by one step: not linear in θ, hence the EKF",
+          "ref": "EKF.pdf, p. 3, eq. 1"
+        },
+        {
+          "eq": "ICR = (x − L·sin θ, y + L·cos θ)",
+          "tex": "\\mathrm{ICR} = \\begin{pmatrix} x - L \\sin\\theta \\\\ y + L \\cos\\theta \\end{pmatrix}",
+          "note": "The instantaneous centre of rotation, L from the robot's centre",
+          "ref": "MR_Kinematik.pdf, p. 24, eq. 15"
+        },
+        {
+          "eq": "L = δd/δθ",
+          "tex": "L = \\frac{\\delta_d}{\\delta_\\theta}",
+          "note": "Turning radius, speed over turn rate; worked here, not on the slides",
+          "ref": ""
+        }
+      ],
+      "practice": [
+        {
+          "question": "Wheels of radius 5 cm on a track of 30 cm turn by Δφl = 10 rad and Δφr = 12 rad. How far does the robot move, δd?",
+          "source": "Worked by hand from EKF.pdf, p. 3, footnote 1",
+          "answer": 0.55,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "δd = (10 + 12)·0.05/2 = 0.55 m.",
+          "compute": { "law": "odometryD", "dPhiL": 10, "dPhiR": 12, "r": 0.05, "b": 0.3 }
+        },
+        {
+          "question": "Same wheels: by how much does it turn, δθ?",
+          "source": "Worked by hand from EKF.pdf, p. 3, footnote 1",
+          "answer": 0.3333,
+          "unit": "rad",
+          "tolerance": 0.005,
+          "solution": "δθ = (12 − 10)·0.05/0.3 = 1/3 rad, about 19.1°.",
+          "compute": { "law": "odometryTheta", "dPhiL": 10, "dPhiR": 12, "r": 0.05, "b": 0.3 }
+        },
+        {
+          "question": "A robot at X = 1 m, Y = 2 m, θ = 0 makes a step with δd = 0.5 m and δθ = 30° (0.5236 rad). Where is X afterwards?",
+          "source": "Worked by hand from EKF.pdf, p. 3, eq. 1",
+          "answer": 1.433,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "X = 1 + 0.5·cos(0 + 30°) = 1 + 0.433 = 1.433 m.",
+          "compute": { "law": "moveX", "x": 1, "y": 2, "th": 0, "dd": 0.5, "dth": 0.5235987756 }
+        }
+      ],
+      "lecture": "Wöber (2018), MuS 1 Extended Kalman Filter, p. 3 (EKF.pdf); Wöber (2019), MOR Vorwärtskinematik, pp. 3–25 (MR_Kinematik.pdf, Modul 0)"
+    },
+    {
+      "id": "ekf",
+      "title": "The EKF: an ellipse for a banana",
+      "idea": "The motion bends, a Gaussian cannot: the EKF linearises the motion at the mean with its Jacobian and gets an ellipse, while sampled poses spread into a curved cloud.",
+      "law": "Σ̄t = Gt·Σt−1·Gtᵀ + Rt",
+      "lawTex": "\\bar\\Sigma_t = G_t\\,\\Sigma_{t-1} G_t^{\\mathsf T} + R_t",
+      "equations": [
+        {
+          "eq": "xt = g(ut, xt−1) + εt, zt = h(xt) + δt",
+          "tex": "x_t = g(u_t, x_{t-1}) + \\varepsilon_t,\\quad z_t = h(x_t) + \\delta_t",
+          "note": "A and B replaced by g(.), C by h(.)",
+          "ref": "EKF.pdf, p. 6"
+        },
+        {
+          "eq": "g(ut, xt−1) ≈ g(ut, μt−1) + Gt(xt−1 − μt−1)",
+          "tex": "g(u_t, x_{t-1}) \\approx g(u_t, \\mu_{t-1}) + G_t\\,(x_{t-1} - \\mu_{t-1})",
+          "note": "First-order Taylor series at the mean; Gt the Jacobian",
+          "ref": "EKF.pdf, p. 8, eqs. 4–5; p. 9"
+        },
+        {
+          "eq": "μ̄t = g(ut, μt−1), Σ̄t = Gt·Σt−1·Gtᵀ + Rt",
+          "tex": "\\bar\\mu_t = g(u_t, \\mu_{t-1}),\\quad \\bar\\Sigma_t = G_t\\,\\Sigma_{t-1} G_t^{\\mathsf T} + R_t",
+          "note": "The EKF's prediction",
+          "ref": "EKF.pdf, p. 12 (after Thrun et al. 2006)"
+        },
+        {
+          "eq": "G = [1, 0, −δd·sin(θ + δθ); 0, 1, δd·cos(θ + δθ); 0, 0, 1]",
+          "tex": "G_t = \\begin{pmatrix} 1 & 0 & -\\delta_d \\sin(\\theta + \\delta_\\theta) \\\\ 0 & 1 & \\delta_d \\cos(\\theta + \\delta_\\theta) \\\\ 0 & 0 & 1 \\end{pmatrix}",
+          "note": "The Jacobian of the odometry step, worked here from EKF.pdf, p. 3, eq. 1",
+          "ref": ""
+        },
+        {
+          "eq": "R = V·diag(σd², σθ²)·Vᵀ, V = ∂g/∂(δd, δθ)",
+          "tex": "R_t = V_t \\begin{pmatrix} \\sigma_d^2 & 0 \\\\ 0 & \\sigma_\\theta^2 \\end{pmatrix} V_t^{\\mathsf T},\\quad V_t = \\frac{\\partial g}{\\partial(\\delta_d, \\delta_\\theta)}",
+          "note": "The noise of δd and δθ carried into x, y, θ; worked here so the EKF and the samples share one noise",
+          "ref": ""
+        }
+      ],
+      "practice": [
+        {
+          "question": "At θ = 0, a step with δd = 0.5 m and δθ = 30°: what is the entry G13 = ∂x/∂θ of the Jacobian?",
+          "source": "Worked by hand from EKF.pdf, p. 3, eq. 1",
+          "answer": -0.25,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "∂x/∂θ = −δd·sin(θ + δθ) = −0.5·sin 30° = −0.25 m per radian.",
+          "compute": { "law": "jacobian13", "th": 0, "dd": 0.5, "dth": 0.5235987756 }
+        },
+        {
+          "question": "Heading north (θ = 90°, 1.5708 rad), the robot drives 1 m straight on. What is G13 now?",
+          "source": "Worked by hand from EKF.pdf, p. 3, eq. 1",
+          "answer": -1,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "−1·sin 90° = −1: an error in the heading moves the robot sideways in x by the full distance driven.",
+          "compute": { "law": "jacobian13", "th": 1.5707963268, "dd": 1, "dth": 0 }
+        }
+      ],
+      "lecture": "Wöber (2018), MuS 1 Extended Kalman Filter, pp. 3–12 (EKF.pdf); Wöber (2021), MuS 1 Partikelfilter, pp. 5 and 20 (MCMC.pdf)"
+    },
+    {
+      "id": "particles",
+      "title": "Monte Carlo localisation: many guesses at once",
+      "idea": "Let hundreds of particles each guess where the robot is. Move them with noise, weight them by how well each explains the reading, and redraw them in proportion to their weights: the guesses that fit survive.",
+      "law": "wt[m] = p(zt | xt[m]); draw M particles with probability ∝ wt[m]",
+      "lawTex": "w_t^{[m]} = p\\left(z_t \\mid x_t^{[m]}\\right)",
+      "equations": [
+        {
+          "eq": "E[f] = ∫ f(z)·p(z)/q(z)·q(z) dz ≈ (1/L)·Σ rl·f(z(l))",
+          "tex": "E[f] = \\int f(z)\\,\\frac{p(z)}{q(z)}\\,q(z)\\,dz \\approx \\frac{1}{L} \\sum_{l} r_l\\, f\\left(z^{(l)}\\right)",
+          "note": "Sampling from a proposal q and weighting by rl = p/q",
+          "ref": "MCMC.pdf, p. 13, eqs. 2–3"
+        },
+        {
+          "eq": "xt[m] ∼ p(xt | ut, xt−1[m])",
+          "tex": "x_t^{[m]} \\sim p\\left(x_t \\mid u_t, x_{t-1}^{[m]}\\right)",
+          "note": "Prediction: sample each particle's move from the motion model",
+          "ref": "MCMC.pdf, p. 15; p. 18, line 4"
+        },
+        {
+          "eq": "wt[m] = p(zt | xt[m])",
+          "tex": "w_t^{[m]} = p\\left(z_t \\mid x_t^{[m]}\\right)",
+          "note": "Weight by the sensor model",
+          "ref": "MCMC.pdf, p. 15; p. 18, line 5"
+        },
+        {
+          "eq": "draw i with probability ∝ wt[i], with replacement, M times",
+          "tex": "P(\\text{draw } i) = \\frac{w_t^{[i]}}{\\sum_m w_t^{[m]}}",
+          "note": "Resampling, the correction step",
+          "ref": "MCMC.pdf, p. 16; p. 18, lines 8–11"
+        },
+        {
+          "eq": "p(z|x) ∝ exp(−(z − ẑ)²/(2σ²))",
+          "tex": "p(z \\mid x) \\propto \\exp\\left(-\\frac{(z - \\hat z)^2}{2\\sigma^2}\\right)",
+          "note": "A normal distribution as sensor model, ẑ the reading the particle expects",
+          "ref": "MCMC.pdf, p. 19; Basics.pdf, p. 14, eq. 9 in one dimension"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A range sensor with σ = 1 m reads z = 3 m. A particle expects ẑ = 1 m. What is its unnormalised weight exp(−(z − ẑ)²/(2σ²))?",
+          "source": "Worked by hand from MCMC.pdf, p. 19",
+          "answer": 0.1353,
+          "unit": "1",
+          "tolerance": 0.005,
+          "solution": "exp(−2²/2) = e⁻² = 0.135: two standard deviations off, against 1 for a particle that expects exactly 3 m.",
+          "compute": { "law": "weight", "z": 3, "zHat": 1, "sd": 1 }
+        },
+        {
+          "question": "Same reading, σ = 0.5 m, a particle expecting ẑ = 2.5 m: its weight?",
+          "source": "Worked by hand from MCMC.pdf, p. 19",
+          "answer": 0.6065,
+          "unit": "1",
+          "tolerance": 0.005,
+          "solution": "exp(−0.5²/(2·0.25)) = e^−0.5 = 0.607: one standard deviation off.",
+          "compute": { "law": "weight", "z": 3, "zHat": 2.5, "sd": 0.5 }
+        }
+      ],
+      "lecture": "Wöber (2021), MuS 1 Partikelfilter, pp. 3–24 (MCMC.pdf)"
+    },
+    {
+      "id": "denoise",
+      "title": "Denoising: box, median and Gaussian",
+      "idea": "Slide a small window over the image and replace each pixel by its window's mean, weighted mean or median: noise falls, and edges blur unless the median keeps them.",
+      "law": "g(i, j) = Σk,l I(i + k, j + l)·h(k, l)",
+      "lawTex": "g(i, j) = \\sum_{k,l} I(i + k,\\, j + l)\\, h(k, l)",
+      "equations": [
+        {
+          "eq": "g(i, j) = Σk,l I(i + k, j + l)·h(k, l)",
+          "tex": "g(i, j) = \\sum_{k,l} I(i + k,\\, j + l)\\, h(k, l)",
+          "note": "The kernel slid over the image (the slide calls it convolution; written this way it is a correlation, the same for symmetric kernels)",
+          "ref": "1_Entrauschen.pdf, p. 6, eq. 1"
+        },
+        {
+          "eq": "K = 1/(Kw·Kh)·[1 … 1; …; 1 … 1]",
+          "tex": "K = \\frac{1}{K_w K_h} \\begin{pmatrix} 1 & \\cdots & 1 \\\\ \\vdots & & \\vdots \\\\ 1 & \\cdots & 1 \\end{pmatrix}",
+          "note": "The normalised box filter",
+          "ref": "1_Entrauschen.pdf, p. 7, eq. 2"
+        },
+        {
+          "eq": "p̃ = p(n+1)/2 for n odd, (pn/2 + p1+n/2)/2 for n even",
+          "tex": "\\tilde p = \\begin{cases} p_{(n+1)/2} & n \\text{ odd} \\\\ \\tfrac12\\left(p_{n/2} + p_{1+n/2}\\right) & n \\text{ even} \\end{cases}",
+          "note": "The median of the sorted window",
+          "ref": "1_Entrauschen.pdf, p. 8, eq. 3"
+        },
+        {
+          "eq": "h(k, l) ∝ exp(−(k² + l²)/(2σ²))",
+          "tex": "h(k, l) \\propto \\exp\\left(-\\frac{k^2 + l^2}{2\\sigma^2}\\right)",
+          "note": "The Gaussian filter, a box weighted by the Gauss bell, normalised to sum to one",
+          "ref": "1_Entrauschen.pdf, p. 9; the bell from Basics.pdf, p. 14, eq. 9"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A 3 × 3 window holds 12, 200, 15 / 14, 255, 13 / 16, 0, 15. What does the median filter put in its centre?",
+          "source": "Worked by hand from 1_Entrauschen.pdf, p. 8, eq. 3",
+          "answer": 15,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "Sorted: 0, 12, 13, 14, 15, 15, 16, 200, 255; n = 9, the 5th value is 15. The stuck pixels 0 and 255 have no effect.",
+          "compute": { "law": "median", "values": [12, 200, 15, 14, 255, 13, 16, 0, 15] }
+        },
+        {
+          "question": "The same window through the 3 × 3 box filter: what is the centre value?",
+          "source": "Worked by hand from 1_Entrauschen.pdf, p. 7, eq. 2",
+          "answer": 60,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "(12 + 200 + 15 + 14 + 255 + 13 + 16 + 0 + 15)/9 = 540/9 = 60: the stuck pixels pull it far from the 15 around it.",
+          "compute": { "law": "box", "patch": [[12, 200, 15], [14, 255, 13], [16, 0, 15]] }
+        },
+        {
+          "question": "The median of the four values 10, 40, 20, 30?",
+          "source": "Worked by hand from 1_Entrauschen.pdf, p. 8, eq. 3",
+          "answer": 25,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "Sorted 10, 20, 30, 40; n even: (20 + 30)/2 = 25.",
+          "compute": { "law": "median", "values": [10, 40, 20, 30] }
+        }
+      ],
+      "lecture": "Wöber (2019a), MuS2 Image Denoising, pp. 3–10 (1_Entrauschen.pdf)"
+    },
+    {
+      "id": "threshold",
+      "title": "Thresholds, colour indices and Otsu",
+      "idea": "Cut an image into object and background with a threshold. A colour index makes the object stand out first; Otsu's idea lets the image choose the threshold that separates two classes of grey values best.",
+      "law": "J(TH) = (μ1 − μ2)² / (σ1² + σ2²)",
+      "lawTex": "J(T_H) = \\frac{(\\mu_1 - \\mu_2)^2}{\\sigma_1^2 + \\sigma_2^2}",
+      "equations": [
+        {
+          "eq": "class(p) = 255 if p ≥ TH, else 0",
+          "tex": "\\mathrm{class}(p_{r,c}) = \\begin{cases} 255 & p_{r,c} \\ge T_H \\\\ 0 & \\text{else} \\end{cases}",
+          "note": "A fixed threshold",
+          "ref": "2_Segmentation.pdf, p. 12, eq. 4; p. 6, eq. 2"
+        },
+        {
+          "eq": "IExGreen = 2·Ig − Ir − Ib",
+          "tex": "I_{\\mathrm{ExGreen}} = 2 I_g - I_r - I_b",
+          "note": "The excess colour index; p. 11 uses 2Ib − Ir − Ig for blue",
+          "ref": "2_Segmentation.pdf, p. 10, eq. 3; p. 11"
+        },
+        {
+          "eq": "J(TH) = (μ1 − μ2)²/(σ1² + σ2²)",
+          "tex": "J(T_H) = \\frac{(\\mu_1 - \\mu_2)^2}{\\sigma_1^2 + \\sigma_2^2}",
+          "note": "The criterion the slide gives for Otsu's method (Fisher's discriminant); the best TH maximises it",
+          "ref": "2_Segmentation.pdf, p. 14, eq. 5"
+        },
+        {
+          "eq": "pj ∈ C1 if pj ≤ TH, C2 if pj > TH",
+          "tex": "p_j \\in \\begin{cases} C_1 & p_j \\le T_H \\\\ C_2 & p_j > T_H \\end{cases}",
+          "note": "The two classes, TH tried from 0 to 255",
+          "ref": "2_Segmentation.pdf, p. 15, eq. 6"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A pixel of the blue box reads R = 40, G = 70, B = 190. What is its excess blue 2B − R − G?",
+          "source": "Worked by hand from 2_Segmentation.pdf, p. 11",
+          "answer": 270,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "2·190 − 40 − 70 = 270. A white pixel, 255 everywhere, gives 0.",
+          "compute": { "law": "excess", "main": 190, "o1": 40, "o2": 70 }
+        },
+        {
+          "question": "Eight pixels: 50, 50, 60, 60, 200, 210, 200, 210. What is J for TH = 100?",
+          "source": "Worked by hand from 2_Segmentation.pdf, p. 14, eq. 5",
+          "answer": 450,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "C1 = {50, 50, 60, 60}: μ1 = 55, σ1² = 25; C2 = {200, 210, 200, 210}: μ2 = 205, σ2² = 25. J = 150²/50 = 450.",
+          "compute": { "law": "fisherJ", "values": [50, 50, 60, 60, 200, 210, 200, 210], "th": 100 }
+        }
+      ],
+      "lecture": "Wöber (2019a), MuS2 Image Segmentation, pp. 3–19 (2_Segmentation.pdf)"
+    },
+    {
+      "id": "hsv",
+      "title": "HSV: colour as hue, saturation and value",
+      "idea": "Turn red, green and blue into a hue angle, a saturation and a brightness, and a colour is found by its hue alone, whatever the lighting does to the three channels.",
+      "law": "H = 60°·(4 + (Ir − Ig)/Δ) if Cmax = Ib",
+      "lawTex": "H = \\begin{cases} 60^\\circ\\,\\frac{I_g - I_b}{\\Delta} & C_{\\max} = I_r \\\\ 60^\\circ\\left(2 + \\frac{I_b - I_r}{\\Delta}\\right) & C_{\\max} = I_g \\\\ 60^\\circ\\left(4 + \\frac{I_r - I_g}{\\Delta}\\right) & C_{\\max} = I_b \\end{cases}",
+      "equations": [
+        {
+          "eq": "Cmax = max(Ir, Ig, Ib), Cmin = min(…), Δ = Cmax − Cmin",
+          "tex": "C_{\\max} = \\max(I_r, I_g, I_b),\\quad C_{\\min} = \\min(I_r, I_g, I_b),\\quad \\Delta = C_{\\max} - C_{\\min}",
+          "note": "The extremes",
+          "ref": "2_Segmentation.pdf, p. 24, eqs. 8–10"
+        },
+        {
+          "eq": "H = 0 if Δ = 0; 60°·(Ig − Ib)/Δ if Cmax = Ir; 60°·(2 + (Ib − Ir)/Δ) if Cmax = Ig; 60°·(4 + (Ir − Ig)/Δ) if Cmax = Ib",
+          "tex": "H = \\begin{cases} 0 & \\Delta = 0 \\\\ 60^\\circ\\,\\frac{I_g - I_b}{\\Delta} & C_{\\max} = I_r \\\\ 60^\\circ\\left(2 + \\frac{I_b - I_r}{\\Delta}\\right) & C_{\\max} = I_g \\\\ 60^\\circ\\left(4 + \\frac{I_r - I_g}{\\Delta}\\right) & C_{\\max} = I_b \\end{cases}",
+          "note": "Hue, then brought into 0°–360°",
+          "ref": "2_Segmentation.pdf, p. 25, eq. 11"
+        },
+        {
+          "eq": "S = Δ/Cmax (0 if Cmax = 0), V = Cmax",
+          "tex": "S = \\frac{\\Delta}{C_{\\max}},\\quad V = C_{\\max}",
+          "note": "Saturation and value",
+          "ref": "2_Segmentation.pdf, p. 26, eqs. 12–13"
+        },
+        {
+          "eq": "h = ⌊H/60°⌋, f = H/60° − h, p = V(1 − S), q = V(1 − Sf), t = V(1 − S(1 − f))",
+          "tex": "h = \\left\\lfloor \\frac{H}{60^\\circ} \\right\\rfloor,\\ f = \\frac{H}{60^\\circ} - h,\\ p = V(1 - S),\\ q = V(1 - Sf),\\ t = V(1 - S(1 - f))",
+          "note": "Back to RGB: the sector and the helper values",
+          "ref": "2_Segmentation.pdf, pp. 29–30, eqs. 14–18"
+        },
+        {
+          "eq": "(R, G, B) = (V, t, p), (q, V, p), (p, V, t), (p, q, V), (t, p, V), (V, p, q) for h = 0 … 5",
+          "tex": "(R, G, B) = (V,t,p),\\ (q,V,p),\\ (p,V,t),\\ (p,q,V),\\ (t,p,V),\\ (V,p,q)",
+          "note": "For h = 0 to 5; the slide prints (q, V, t) for h = 2, a slip: R must be p there",
+          "ref": "2_Segmentation.pdf, p. 31, eq. 19 (corrected)"
+        }
+      ],
+      "practice": [
+        {
+          "question": "R = 0.2, G = 0.4, B = 0.8 (scaled to 0–1). What is the hue H?",
+          "source": "Worked by hand from 2_Segmentation.pdf, p. 25, eq. 11",
+          "answer": 220,
+          "unit": "°",
+          "tolerance": 0.002,
+          "solution": "Cmax = B = 0.8, Δ = 0.6: H = 60°·(4 + (0.2 − 0.4)/0.6) = 60°·3.667 = 220°.",
+          "compute": { "law": "hue", "r": 0.2, "g": 0.4, "b": 0.8 }
+        },
+        {
+          "question": "Same colour: its saturation S?",
+          "source": "Worked by hand from 2_Segmentation.pdf, p. 26, eq. 12",
+          "answer": 0.75,
+          "unit": "1",
+          "tolerance": 0.002,
+          "solution": "S = Δ/Cmax = 0.6/0.8 = 0.75.",
+          "compute": { "law": "saturation", "r": 0.2, "g": 0.4, "b": 0.8 }
+        },
+        {
+          "question": "R = 0, G = 1, B = 0.5, a green turning cyan: its hue?",
+          "source": "Worked by hand from 2_Segmentation.pdf, p. 25, eq. 11",
+          "answer": 150,
+          "unit": "°",
+          "tolerance": 0.002,
+          "solution": "Cmax = G, Δ = 1: H = 60°·(2 + (0.5 − 0)/1) = 150°, in sector h = 2, the one eq. 19 misprints.",
+          "compute": { "law": "hue", "r": 0, "g": 1, "b": 0.5 }
+        }
+      ],
+      "lecture": "Wöber (2019a), MuS2 Image Segmentation, pp. 20–31 (2_Segmentation.pdf)"
+    },
+    {
+      "id": "edges",
+      "title": "Edges: Sobel and Canny",
+      "idea": "An edge is where the grey value changes fast. Sobel kernels measure the change in x and y; Canny smooths first, thins each edge to one pixel and keeps weak edges only when they join strong ones.",
+      "law": "|∇f| = √(fx² + fy²), Gx = Kx ∗ I, Gy = Ky ∗ I",
+      "lawTex": "|\\nabla f(x, y)| = \\sqrt{(f'_x)^2 + (f'_y)^2}",
+      "equations": [
+        {
+          "eq": "∇f(x, y) = (∂f/∂x, ∂f/∂y) = (fx, fy)",
+          "tex": "\\nabla f(x, y) = \\begin{pmatrix} \\partial f / \\partial x \\\\ \\partial f / \\partial y \\end{pmatrix} = \\begin{pmatrix} f'_x \\\\ f'_y \\end{pmatrix}",
+          "note": "The image gradient",
+          "ref": "4.Edges.pdf, p. 7, eq. 1"
+        },
+        {
+          "eq": "|∇f| = √(fx² + fy²), θ = atan2(fy, fx)",
+          "tex": "|\\nabla f| = \\sqrt{(f'_x)^2 + (f'_y)^2},\\quad \\theta = \\operatorname{atan2}(f'_y, f'_x)",
+          "note": "Size and direction; the slide writes atan2(fx, fy), the lab measures θ from the x axis",
+          "ref": "4.Edges.pdf, p. 7, eqs. 2–3"
+        },
+        {
+          "eq": "∂f/∂x ≈ f(x + 1) − f(x − 1)",
+          "tex": "\\frac{\\partial f}{\\partial x} \\approx f(x + 1) - f(x - 1)",
+          "note": "The central difference, one pixel the smallest step",
+          "ref": "4.Edges.pdf, p. 8"
+        },
+        {
+          "eq": "Kx = [−1 0 1; −2 0 2; −1 0 1], Ky = [−1 −2 −1; 0 0 0; 1 2 1]",
+          "tex": "K_x = \\begin{pmatrix} -1 & 0 & 1 \\\\ -2 & 0 & 2 \\\\ -1 & 0 & 1 \\end{pmatrix},\\quad K_y = \\begin{pmatrix} -1 & -2 & -1 \\\\ 0 & 0 & 0 \\\\ 1 & 2 & 1 \\end{pmatrix}",
+          "note": "The Sobel kernels; Gx = Kx ∗ I, Gy = Ky ∗ I",
+          "ref": "4.Edges.pdf, p. 9, eq. 5"
+        },
+        {
+          "eq": "G := (G − min)/(max − min)·255",
+          "tex": "G_{x/y}(r, c) := \\frac{G_{x/y}(r, c) - \\min}{\\max - \\min} \\cdot 255",
+          "note": "Scaling a gradient image to show it: a gradient of 0 becomes mid grey",
+          "ref": "4.Edges.pdf, p. 9, eq. 6"
+        },
+        {
+          "eq": "Ismoothed = Kgauss ∗ I",
+          "tex": "I_{\\mathrm{smoothed}} = K_{\\mathrm{gauss}} * I",
+          "note": "Canny's first step, then Sobel, non-maximum suppression (p. 13) and two thresholds (p. 14)",
+          "ref": "4.Edges.pdf, pp. 11–14, eq. 7"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A 3 × 3 patch reads 10, 10, 50 in every row. What is Gx = Kx ∗ I at its centre?",
+          "source": "Worked by hand from 4.Edges.pdf, p. 9, eq. 5",
+          "answer": 160,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "Each row gives 50 − 10 = 40, weighted 1, 2, 1: 40 + 80 + 40 = 160.",
+          "compute": { "law": "sobelX", "patch": [[10, 10, 50], [10, 10, 50], [10, 10, 50]] }
+        },
+        {
+          "question": "A corner patch 0, 0, 0 / 0, 0, 90 / 0, 90, 90. What is the gradient's size |∇f| at its centre?",
+          "source": "Worked by hand from 4.Edges.pdf, pp. 7 and 9",
+          "answer": 381.8,
+          "unit": "1",
+          "tolerance": 0.002,
+          "solution": "Gx = 2·90 + 90 = 270, Gy = 90·2 + 90 = 270; |∇f| = √(270² + 270²) = 381.8, pointing at 45°.",
+          "compute": { "law": "sobelMag", "patch": [[0, 0, 0], [0, 0, 90], [0, 90, 90]] }
+        }
+      ],
+      "lecture": "Wöber (2019a), MuS2 Edge Detection and Analysis, pp. 3–18 (4.Edges.pdf)"
+    },
+    {
+      "id": "cnn",
+      "title": "A convolution layer, counted",
+      "idea": "A convolution layer slides the same small kernels over the whole image, adds a bias, and passes the result through ReLU and pooling: few weights, shared everywhere. Count them, and the output's size, the way the network summary does.",
+      "law": "weights = ((m·n·d) + 1)·k",
+      "lawTex": "\\#\\text{weights} = \\left((m \\cdot n \\cdot d) + 1\\right) \\cdot k",
+      "equations": [
+        {
+          "eq": "conv: ((m·n·d) + 1)·k",
+          "tex": "\\left((m \\cdot n \\cdot d) + 1\\right) \\cdot k",
+          "note": "Weights of a convolution layer: m × n kernel, d the depth before, k kernels (k is not named on the slide)",
+          "ref": "10_MuS2_CNN.pdf, p. 7"
+        },
+        {
+          "eq": "dense: (nL−1 + 1)·nL",
+          "tex": "(n_{L-1} + 1) \\cdot n_L",
+          "note": "Weights of a dense layer, one bias per node; the slide prints nL−1·nL + 1",
+          "ref": "10_MuS2_CNN.pdf, p. 7 (corrected)"
+        },
+        {
+          "eq": "out = ⌊(n + 2p − m)/s⌋ + 1",
+          "tex": "n_{\\text{out}} = \\left\\lfloor \\frac{n + 2p - m}{s} \\right\\rfloor + 1",
+          "note": "Output size along one axis, p the padding and s the stride; worked here and checked against the shapes printed on p. 10",
+          "ref": ""
+        },
+        {
+          "eq": "ReLU(x) = max(0, x)",
+          "tex": "\\mathrm{ReLU}(x) = \\max(0, x)",
+          "note": "An activation, which makes the stack of linear maps non-linear",
+          "ref": "10_MuS2_CNN.pdf, p. 9"
+        },
+        {
+          "eq": "wni := wni − gni·lr",
+          "tex": "w_{ni} := w_{ni} - g_{ni} \\cdot lr",
+          "note": "A step of stochastic gradient descent, g the gradient, lr the learning rate",
+          "ref": "10_MuS2_CNN.pdf, p. 17"
+        }
+      ],
+      "practice": [
+        {
+          "question": "The first layer of the summary: 7 × 7 kernels over an RGB image (d = 3), 64 of them. How many weights?",
+          "source": "Thalhammer (2021), 10_MuS2_CNN.pdf, p. 10, printed: conv1_conv 9472",
+          "answer": 9472,
+          "unit": "1",
+          "tolerance": 0.0001,
+          "solution": "((7·7·3) + 1)·64 = 148·64 = 9472.",
+          "compute": { "law": "convParams", "m": 7, "n": 7, "d": 3, "k": 64 }
+        },
+        {
+          "question": "A 3 × 3 convolution with 64 kernels on 64 channels?",
+          "source": "Thalhammer (2021), 10_MuS2_CNN.pdf, p. 10, printed: conv2_block1_2_conv 36928",
+          "answer": 36928,
+          "unit": "1",
+          "tolerance": 0.0001,
+          "solution": "((3·3·64) + 1)·64 = 577·64 = 36928.",
+          "compute": { "law": "convParams", "m": 3, "n": 3, "d": 64, "k": 64 }
+        },
+        {
+          "question": "The padded image is 486 pixels high; a 7-high kernel moves with stride 2, no more padding. How high is the output?",
+          "source": "Thalhammer (2021), 10_MuS2_CNN.pdf, p. 10, printed: 486 → 240",
+          "answer": 240,
+          "unit": "px",
+          "tolerance": 0.0001,
+          "solution": "⌊(486 − 7)/2⌋ + 1 = 239 + 1 = 240.",
+          "compute": { "law": "outSize", "size": 486, "m": 7, "s": 2, "p": 0 }
+        },
+        {
+          "question": "A dense layer maps 128 features to 10 classes. How many weights, one bias per node?",
+          "source": "Worked by hand from 10_MuS2_CNN.pdf, p. 7 (with one bias per node)",
+          "answer": 1290,
+          "unit": "1",
+          "tolerance": 0.0001,
+          "solution": "(128 + 1)·10 = 1290; the slide's nL−1·nL + 1 would give 1281.",
+          "compute": { "law": "denseParams", "nPrev": 128, "nL": 10 }
+        }
+      ],
+      "lecture": "Thalhammer (2021), MuS2 Convolutional Neural Networks, pp. 6–17 (10_MuS2_CNN.pdf)"
+    },
+    {
+      "id": "stereo",
+      "title": "Depth from a stereo pair",
+      "idea": "Two cameras a baseline apart see a point at different columns. The nearer the point, the bigger the shift, the disparity: depth is baseline times focal length over disparity.",
+      "law": "Z = B·f/D",
+      "lawTex": "Z = \\frac{B \\cdot f}{D}",
+      "equations": [
+        {
+          "eq": "Z = B·f/D",
+          "tex": "Z = \\frac{B \\cdot f}{D}",
+          "note": "Depth from disparity D, B the baseline, f the focal length; similar triangles",
+          "ref": "11_Pose-Estimation.pdf, p. 10, eq. 3; p. 16"
+        },
+        {
+          "eq": "u = fx·xc/zc + cx, v = fy·yc/zc + cy",
+          "tex": "\\begin{pmatrix} u \\\\ v \\end{pmatrix} = \\begin{pmatrix} c_x \\\\ c_y \\end{pmatrix} + \\frac{1}{z_c} \\begin{pmatrix} f_x\\, x_c \\\\ f_y\\, y_c \\end{pmatrix}",
+          "note": "The pinhole camera with the chip's offset",
+          "ref": "11_Pose-Estimation.pdf, p. 23, eqs. 5–6"
+        },
+        {
+          "eq": "s·(u, v, 1)ᵀ = K·[R | t]·(X, Y, Z, 1)ᵀ",
+          "tex": "s \\begin{pmatrix} u \\\\ v \\\\ 1 \\end{pmatrix} = K \\left[\\, R \\mid t \\,\\right] \\begin{pmatrix} X \\\\ Y \\\\ Z \\\\ 1 \\end{pmatrix}",
+          "note": "Projection with the pose of the object in the camera's frame, the unknown of pose estimation",
+          "ref": "11_Pose-Estimation.pdf, p. 24, eq. 7"
+        },
+        {
+          "eq": "width in image / f = real width / Z",
+          "tex": "\\frac{\\text{width}_{\\text{image}}}{f} = \\frac{\\text{width}_{\\text{real}}}{Z}",
+          "note": "A flat object parallel to the chip",
+          "ref": "11_Pose-Estimation.pdf, p. 28, eq. 12"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A stereo camera with 12 cm baseline and f = 700 px sees a point with a disparity of 42 px. How far is it?",
+          "source": "Worked by hand from 11_Pose-Estimation.pdf, p. 10, eq. 3",
+          "answer": 2,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "Z = 0.12·700/42 = 2.0 m.",
+          "compute": { "law": "depth", "B": 0.12, "f": 700, "D": 42 }
+        },
+        {
+          "question": "A point at x = 0.3 m, y = 0, z = 2.5 m in the camera's frame; fx = fy = 700 px, cx = 320 px, cy = 240 px. In which column u does it appear?",
+          "source": "Worked by hand from 11_Pose-Estimation.pdf, p. 23, eq. 5",
+          "answer": 404,
+          "unit": "px",
+          "tolerance": 0.002,
+          "solution": "u = 320 + 700·0.3/2.5 = 320 + 84 = 404 px.",
+          "compute": { "law": "projectU", "x": 0.3, "y": 0, "z": 2.5, "fx": 700, "fy": 700, "cx": 320, "cy": 240 }
+        },
+        {
+          "question": "A flat label 10 cm wide, parallel to the chip, appears 35 px wide with f = 700 px. How far away is it?",
+          "source": "Worked by hand from 11_Pose-Estimation.pdf, p. 28",
+          "answer": 2,
+          "unit": "m",
+          "tolerance": 0.005,
+          "solution": "Z = 0.10·700/35 = 2.0 m.",
+          "compute": { "law": "flatDepth", "real": 0.1, "image": 35, "f": 700 }
+        }
+      ],
+      "lecture": "Wöber (2019a), MuS2 Pose Estimation, pp. 6–28 (11_Pose-Estimation.pdf)"
+    },
+    {
+      "id": "ransac",
+      "title": "RANSAC: fit what most points agree on",
+      "idea": "Least squares listens to every point, outliers too. RANSAC fits the fewest points a model needs, again and again, keeps the model most points agree with, and only then fits it to those.",
+      "law": "Θ = (XᵀX)⁻¹XᵀY on the inliers of the best two-point line",
+      "lawTex": "\\Theta = (X^{\\mathsf T} X)^{-1} X^{\\mathsf T} Y",
+      "equations": [
+        {
+          "eq": "Θ = (XᵀX)⁻¹XᵀY",
+          "tex": "\\Theta = (X^{\\mathsf T} X)^{-1} X^{\\mathsf T} Y",
+          "note": "Least squares, here for a line y = kx + d; in pose estimation the direct linear transform",
+          "ref": "11_Pose-Estimation.pdf, p. 34, eq. 15"
+        },
+        {
+          "eq": "per cycle: 2 random points, fit, count inliers within ε, stop when inliers/n > τ",
+          "tex": "\\frac{\\#\\{\\,i : |y_i - (k x_i + d)| \\le \\varepsilon\\,\\}}{n} > \\tau \\;\\Rightarrow\\; \\text{stop}",
+          "note": "The RANSAC loop for a line; after the stop or N cycles, refit with all inliers",
+          "ref": "11_Pose-Estimation.pdf, pp. 36–38"
+        }
+      ],
+      "practice": [
+        {
+          "question": "Four points (0, 1), (1, 2), (2, 3) and (3, 10). What slope k does least squares give over all four?",
+          "source": "Worked by hand from 11_Pose-Estimation.pdf, p. 34, eq. 15",
+          "answer": 2.8,
+          "unit": "1",
+          "tolerance": 0.002,
+          "solution": "n = 4, Σx = 6, Σy = 16, Σx² = 14, Σxy = 38: k = (4·38 − 6·16)/(4·14 − 36) = 56/20 = 2.8. The one outlier almost triples the slope.",
+          "compute": { "law": "lsqSlope", "points": [[0, 1], [1, 2], [2, 3], [3, 10]] }
+        },
+        {
+          "question": "RANSAC with a small tolerance keeps the three points that agree. The slope of the refit?",
+          "source": "Worked by hand from 11_Pose-Estimation.pdf, p. 38",
+          "answer": 1,
+          "unit": "1",
+          "tolerance": 0.002,
+          "solution": "(0, 1), (1, 2), (2, 3) lie on y = x + 1: k = 1.",
+          "compute": { "law": "lsqSlope", "points": [[0, 1], [1, 2], [2, 3]] }
+        }
+      ],
+      "lecture": "Wöber (2019a), MuS2 Pose Estimation, pp. 32–42 (11_Pose-Estimation.pdf)"
+    }
+  ]
+}

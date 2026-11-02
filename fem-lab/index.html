@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finite Elements</title>
+<meta name="description" content="Nine ideas of the finite element method: springs as elements and the stiffness matrix, discretising a circle, a bar under mesh refinement, the cantilever by hand and by beam elements, shape functions, integration points and extrapolation, a nonlinear spring under Newton iteration, natural frequencies and mode shapes, and explicit against implicit time steps.">
+<script>
+  // Before the page draws, so a chosen theme never flashes the other one.
+  try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+<link rel="stylesheet" href="../kit/style.css">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="src/app.js"></script>
+</head>
+<body>
+<header class="top">
+  <div>
+    <p class="home"><a href="../">← Aid kit home</a></p>
+    <h1><a href="#">Finite Elements</a></h1>
+  </div>
+  <button id="theme" type="button">Light or dark</button>
+</header>
+<main></main>
+<footer>
+  <p>After the slides of Krach (2018, 2020a, 2021), <i>CAE – Finite Elemente</i>, FH Technikum Wien, 2nd semester, and the solved ModSim tasks of Puhwein (2020).</p>
+  <p>A learning aid: linear elastic springs, bars and beams in N, mm and MPa, small dense solvers, every result worked out the same way on every visit. Pages are the PDF pages of each slide set; no text of the slides is reproduced. Where the slides only name a method and the lab computes it, the lab says so.</p>
+</footer>
+<noscript><p>Finite Elements needs JavaScript.</p></noscript>
+</body>
+</html>

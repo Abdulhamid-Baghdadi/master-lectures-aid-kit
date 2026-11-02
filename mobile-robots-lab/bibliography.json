@@ -1,0 +1,70 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (mobile robots: Bayes, Kalman and particle filters, kinematics; robot vision: denoising, segmentation, edges, convolutional networks, pose estimation), apart from the design rules' bibliography, which keeps the design principles. Years are the © line of each slide set's footer, or the date on its title page. Read in full text on 2 Nov 2026; equations printed only as images (the algorithm boxes, eqs. 11 and 19 of Segmentation, eq. 3 of Edges, pp. 7, 15 and 16 of the CNN slides) were read from page renderings. Thrun et al. (2006) is cited as the slides print it; the book itself was not opened.",
+  "entries": [
+    {
+      "key": "woeber2018",
+      "authors": ["Wöber, W."],
+      "year": 2018,
+      "title": "MuS 1: Basics; Kalman Filter; Extended Kalman Filter; EKF Localization",
+      "venue": "Slides, Mobile- und Servicerobotik 1, FH Technikum Wien; files Basics.pdf, Gaussianfilters.pdf, EKF.pdf and EKFLoc.pdf of the MUS course folder (Modul 1 to 3), footer © 2018",
+      "backs": "Bayes' rule and the door example (Basics, pp. 9–10), the Bayes filter (Basics, pp. 17–21), the Kalman filter (Gaussianfilters, pp. 6–13), the odometry model and the EKF (EKF, pp. 3–12), the growing uncertainty without landmarks (EKFLoc, p. 7).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "woeber2019",
+      "authors": ["Wöber, W."],
+      "year": 2019,
+      "title": "MOR: Vorwärtskinematik",
+      "venue": "Slides, refresher module (Modul 0) of Mobile- und Servicerobotik 1, FH Technikum Wien; file MR_Kinematik.pdf, footer © 2019",
+      "backs": "The rolling and sliding constraints and the instantaneous centre of rotation, eq. 15 (p. 24).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "woeber2019a",
+      "authors": ["Wöber, W."],
+      "year": 2019,
+      "title": "MuS2: Image Denoising; Image Segmentation; Edge Detection and Analysis; Pose Estimation",
+      "venue": "Slides, Mobile- und Servicerobotik 2, FH Technikum Wien; files 1_Entrauschen.pdf, 2_Segmentation.pdf, 4.Edges.pdf and 11_Pose-Estimation.pdf, footer © 2019",
+      "backs": "The kernel filters and the median (Entrauschen, pp. 6–9), thresholds, the excess colour index, Otsu's criterion and HSV (Segmentation, pp. 6–31), Sobel and Canny (Edges, pp. 7–14), stereo depth, the pinhole camera, least squares and RANSAC (Pose estimation, pp. 10–38).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "woeber2020",
+      "authors": ["Wöber, W."],
+      "year": 2020,
+      "title": "Mobile- und Servicerobotik 1: Cheatsheet",
+      "venue": "Course notes, FH Technikum Wien, December 2020; file MuS1_Cheatsheet.pdf",
+      "backs": "Bayes' rule (eq. 4) and the Markov assumption (eq. 8).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "woeber2021",
+      "authors": ["Wöber, W."],
+      "year": 2021,
+      "title": "MuS 1: Partikelfilter",
+      "venue": "Slides, Mobile- und Servicerobotik 1, FH Technikum Wien; file MCMC.pdf (Modul 4), footer © 2021",
+      "backs": "Sampling with a proposal distribution (p. 13), the particle filter's prediction, weighting and resampling (pp. 14–18), the sampled odometry motion model and the Gaussian sensor model (pp. 19–20).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "thalhammer2021",
+      "authors": ["Thalhammer, S."],
+      "year": 2021,
+      "title": "MuS2: Convolutional Neural Networks",
+      "venue": "Slides, Mobile- und Servicerobotik 2, FH Technikum Wien; file 10_MuS2_CNN.pdf, created November 2021 (PDF metadata)",
+      "backs": "The weight counts of dense and convolution layers (p. 7), ReLU and pooling (pp. 8–9), the network summary whose printed counts and shapes are the practice answers (p. 10), and the SGD update (p. 17).",
+      "checked": { "how": "full text", "date": "2026-11-02" }
+    },
+    {
+      "key": "thrun2006",
+      "authors": ["Thrun, S.", "Burgard, W.", "Fox, D."],
+      "year": 2006,
+      "title": "Probabilistic Robotics",
+      "venue": "The course's textbook, as cited in Basics.pdf, p. 22; the algorithm boxes of the Bayes, Kalman, extended Kalman and particle filters on the slides are taken from it",
+      "backs": "Nothing directly: cited because the slides' algorithms are reproduced from it; the lab was checked against the slides, not the book.",
+      "checked": { "how": "record", "date": "2026-11-02" }
+    }
+  ]
+}

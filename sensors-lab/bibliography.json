@@ -1,0 +1,49 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (sensors for autonomous driving: ranging, the camera model, colour, time of flight, stereo), apart from the design rules' bibliography, which keeps the design principles.",
+  "entries": [
+    {
+      "key": "kubinger2020",
+      "authors": [
+        "Kubinger, W."
+      ],
+      "year": 2020,
+      "title": "Advanced Sensor Systems (ASENS), lecture slides, WS2020",
+      "venue": "Lecture slides, FH Technikum Wien, winter term 2020 (ASENS_WS2020_Folien_v1_2Seiten.pdf, 99 PDF pages, two slides to a page). Author, course and term from every slide's footer",
+      "backs": "Every equation of the labs, by PDF page and slide, and the printed numbers used in tests and practice: c0 = 331.6 m/s (p. 9), ca. 290 Mbit/s (p. 35), the HDL32's 120 m and 5 ns (p. 73), λmod = 15 m (p. 78; its 20 kHz is a slip for 20 MHz) and the stereo table (p. 87; its depths need a 7.68 µm pixel, not the stated 6 µm). Checked by hand on 2 Nov 2026.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    },
+    {
+      "key": "kubinger2018",
+      "authors": [
+        "Kubinger, W."
+      ],
+      "year": 2018,
+      "title": "MMR1-BB-ASENS, WS2018, Fernlehre Kontrollfragen, Teil 1 and Teil 2",
+      "venue": "Multiple-choice control questions, FH Technikum Wien, 17 and 30 Oct 2018 (MC2.pdf is Teil 1, MC1.pdf is Teil 2; Fragenkatalog.pdf repeats Teil 1). Signed WK in the header",
+      "backs": "The questions the labs follow: image size (Teil 1, Frage 2), the pinhole and camera parameters (Fragen 3–10), ToF and stereo (Teil 2, Fragen 11–20). The ticks of the filled copies are not in the text layer, so no answer is taken from them.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    },
+    {
+      "key": "intel2018",
+      "authors": [
+        "Intel"
+      ],
+      "year": 2018,
+      "title": "Intel RealSense D400 Series Product Family Datasheet, revision 003, document 337029-003",
+      "venue": "Datasheet, Intel Corporation, July 2018; the ASENS lab's manual (Manual.pdf)",
+      "backs": "The invalid depth band (section 4.7, p. 57), the D415's 55 mm baseline (table 3-11, p. 32) and the stereo depth overview (section 2.3, p. 12).",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    }
+  ]
+}

@@ -1,0 +1,192 @@
+{
+  "format": "robotics-lab labs",
+  "version": 1,
+  "about": "Industrierobotik (IRB, robot kinematics), FH Technikum Wien master's programme, winter term 2020, after the lecture slides of Ajanović (2020), based on slides by M. Aburaia, chapters 01–05, and the ABB IRB 120 product specification 3HAC035960-001, revision U (ABB 2020). Pages are the PDF pages of each file, read in their text layer and, where the formulas had no text, from the page images, on 2 Nov 2026; the slide numbers printed on the slides run one to three ahead of the PDF pages. The slides have worked examples but no separate exercise sheet; their printed results are used where they exist (ch. 1, pp. 38–39; ch. 2, pp. 16, 34, 35, 38, 46, 48, 52; ch. 3, pp. 3, 26; ch. 5, pp. 8, 10, 19, 20; ABB p. 31); the rest were worked by hand from the slides' equations and say so. tests/unit/labs-data.test.js recomputes every answer with the core and fails if they disagree.",
+  "families": [
+    { "id": "pose", "name": "Describing pose" },
+    { "id": "forward", "name": "Forward kinematics" },
+    { "id": "velocity", "name": "Velocity kinematics" },
+    { "id": "inverse", "name": "Inverse kinematics" }
+  ],
+  "lectures": [
+    { "number": 1, "pages": "ch. 1", "title": "Introduction: links, joints and freedoms", "family": "pose", "labs": ["dof"] },
+    { "number": 2, "pages": "ch. 2", "title": "Mathematical description: frames and rotations", "family": "pose", "labs": ["frames2d", "rotations"] },
+    { "number": 3, "pages": "ch. 2–3, ABB spec", "title": "Forward kinematics", "family": "forward", "labs": ["planar", "dh", "irb120"] },
+    { "number": 4, "pages": "ch. 4", "title": "Velocity kinematics", "family": "velocity", "labs": ["jacobian"] },
+    { "number": 5, "pages": "ch. 5", "title": "Inverse kinematics", "family": "inverse", "labs": ["ik"] }
+  ],
+  "labs": [
+    {
+      "id": "dof",
+      "title": "How many drives? Grübler's count",
+      "idea": "Count the links and joints of a robot and the count says how many drives set its pose: each free body has three freedoms in the plane, six in space, and each joint takes away all but its own.",
+      "law": "DOF = T(n − 1 − g) + Σ fi",
+      "lawTex": "\\mathrm{DOF} = T\\,(n - 1 - g) + \\sum_{i=1}^{g} f_i",
+      "equations": [
+        { "eq": "DOF = T(n − 1) − Σ (T − fi)", "tex": "\\mathrm{DOF} = T\\,(n-1) - \\sum_{i=1}^{g} (T - f_i)", "note": "Freedoms of the n − 1 moving links less the constraints of the g joints; n counts the base", "ref": "ch. 1, p. 37" },
+        { "eq": "DOF = T(n − 1 − g) + Σ fi", "tex": "\\mathrm{DOF} = T\\,(n - 1 - g) + \\sum_{i=1}^{g} f_i", "note": "Grübler's formula; T = 3 for plane or spherical mechanisms, 6 for spatial ones", "ref": "ch. 1, p. 37" },
+        { "eq": "f = 1 turning or sliding, 2 cylindrical or universal, 3 ball joint", "tex": "f_\\text{R} = f_\\text{T} = 1,\\quad f_\\text{cyl} = f_\\text{univ} = 2,\\quad f_\\text{ball} = 3", "note": "The freedoms of the common joints", "ref": "ch. 1, pp. 23–25" }
+      ],
+      "practice": [
+        { "question": "A 3R arm in the plane: T = 3, n = 4 links with the base, g = 3 turning joints. How many degrees of freedom?", "source": "Ajanović (2020), ch. 1, p. 38, printed", "answer": 3, "unit": "1", "tolerance": 0, "solution": "DOF = 3(4 − 1 − 3) + 3 = 3.", "compute": { "law": "dof", "T": 3, "n": 4, "g": 3, "f": 3 } },
+        { "question": "A four-bar linkage: T = 3, n = 4, g = 4 turning joints. Its degrees of freedom?", "source": "Ajanović (2020), ch. 1, p. 38, printed", "answer": 1, "unit": "1", "tolerance": 0, "solution": "DOF = 3(4 − 1 − 4) + 4 = −3 + 4 = 1: one drive moves it.", "compute": { "law": "dof", "T": 3, "n": 4, "g": 4, "f": 4 } },
+        { "question": "The ABB IRB 120: six turning axes in a row in space, base and six moving links. Its degrees of freedom?", "source": "Worked by hand from ch. 1, p. 37, with the six axes of ABB (2020), p. 32", "answer": 6, "unit": "1", "tolerance": 0, "solution": "T = 6, n = 7, g = 6, each f = 1: DOF = 6(7 − 1 − 6) + 6 = 6.", "compute": { "law": "dof", "T": 6, "n": 7, "g": 6, "f": 6 } }
+      ],
+      "lecture": "Ajanović (2020), ch. 1 Introduction, pp. 21–25 and 37–39"
+    },
+    {
+      "id": "frames2d",
+      "title": "One point, two frames: the homogeneous transform",
+      "idea": "A point has different coordinates in a frame that is turned and moved. One 3 × 3 matrix holds the turn and the move together, and its inverse brings the point back.",
+      "law": "Rp = RTG · Gp, RTG = [R(θ) p; 0 1]",
+      "lawTex": "{}^{R}\\mathbf{p} = {}^{R}\\mathbf{T}_{G}\\,{}^{G}\\mathbf{p},\\qquad {}^{R}\\mathbf{T}_{G} = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta & p_x \\\\ \\sin\\theta & \\cos\\theta & p_y \\\\ 0 & 0 & 1 \\end{pmatrix}",
+      "equations": [
+        { "eq": "Rp = Gp + r", "tex": "{}^{R}\\mathbf{p} = {}^{G}\\mathbf{p} + \\mathbf{r}", "note": "A frame moved by r: the coordinates add", "ref": "ch. 2, p. 15" },
+        { "eq": "R(θ) = [cos θ −sin θ; sin θ cos θ]", "tex": "\\mathbf{R}(\\theta) = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}", "note": "The plane rotation; orthonormal, so its transpose is its inverse and R(θ)ᵀ = R(−θ)", "ref": "ch. 2, p. 24" },
+        { "eq": "RT = [R p; 0 1]", "tex": "{}^{R}\\mathbf{T}_{G} = \\begin{pmatrix} \\mathbf{R} & \\mathbf{p} \\\\ \\mathbf{0} & 1 \\end{pmatrix}", "note": "Homogeneous transform: turn and move in one product; its columns are G's axes and origin in R", "ref": "ch. 2, pp. 29, 32–33" },
+        { "eq": "T⁻¹ = [Rᵀ −Rᵀp; 0 1]", "tex": "\\mathbf{T}^{-1} = \\begin{pmatrix} \\mathbf{R}^\\mathsf{T} & -\\mathbf{R}^\\mathsf{T}\\mathbf{p} \\\\ \\mathbf{0} & 1 \\end{pmatrix}", "note": "The way back; T⁻¹ is not Tᵀ", "ref": "ch. 2, p. 32" },
+        { "eq": "0T2 = 0T1 · 1T2", "tex": "{}^{0}\\mathbf{T}_{2} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2}", "note": "Frames in a chain multiply", "ref": "ch. 2, pp. 36 and 54" }
+      ],
+      "practice": [
+        { "question": "Frame G is turned 40° and its origin lies at (2, 3) in R. The point (5, 2) in G: what is its x in R?", "source": "Ajanović (2020), ch. 2, p. 34, printed", "answer": 4.54, "unit": "1", "solution": "x = 5 cos 40° − 2 sin 40° + 2 = 3.830 − 1.286 + 2 = 4.54; y = 5 sin 40° + 2 cos 40° + 3 = 7.74.", "compute": { "law": "toParent2", "t": 40, "p": [2, 3], "point": [5, 2], "out": "x" } },
+        { "question": "The same point: its y in R?", "source": "Ajanović (2020), ch. 2, p. 34, printed", "answer": 7.74, "unit": "1", "solution": "y = 5 sin 40° + 2 cos 40° + 3 = 3.214 + 1.532 + 3 = 7.74.", "compute": { "law": "toParent2", "t": 40, "p": [2, 3], "point": [5, 2], "out": "y" } },
+        { "question": "Same frames; now the point (4, 8) is given in R. Its x in G?", "source": "Ajanović (2020), ch. 2, p. 35, printed", "answer": 4.74, "unit": "1", "solution": "Subtract the origin: (2, 5). Turn back by Rᵀ: x = 2 cos 40° + 5 sin 40° = 4.74; y = −2 sin 40° + 5 cos 40° = 2.54.", "compute": { "law": "toChild2", "t": 40, "p": [2, 3], "point": [4, 8], "out": "x" } },
+        { "question": "And its y in G?", "source": "Ajanović (2020), ch. 2, p. 35, printed", "answer": 2.54, "unit": "1", "solution": "y = −2 sin 40° + 5 cos 40° = −1.286 + 3.830 = 2.54.", "compute": { "law": "toChild2", "t": 40, "p": [2, 3], "point": [4, 8], "out": "y" } },
+        { "question": "A frame moved by r = (2, 3), not turned; the point (1, 3) in it. Its y in the base frame?", "source": "Ajanović (2020), ch. 2, p. 16, printed", "answer": 6, "unit": "1", "solution": "Add: (1, 3) + (2, 3) = (3, 6).", "compute": { "law": "translate", "p": [2, 3], "point": [1, 3], "out": "y" } },
+        { "question": "A link l = 4 m at θ = 30°: the x of its tip?", "source": "Worked by hand from ch. 2, p. 11 (the slide gives x = l cos θ)", "answer": 3.464, "unit": "m", "solution": "x = 4 cos 30° = 3.464 m; y = 4 sin 30° = 2 m.", "compute": { "law": "polarX", "l": 4, "t": 30 } },
+        { "question": "The way back: the tip at (4, 3) on a link l = 5 m. Its angle θ?", "source": "Worked by hand from ch. 2, p. 11 (the slide gives θ = sin⁻¹(y/l))", "answer": 36.87, "unit": "°", "solution": "θ = sin⁻¹(3/5) = 36.87°.", "compute": { "law": "polarAngle", "y": 3, "l": 5 } }
+      ],
+      "lecture": "Ajanović (2020), ch. 2 Mathematische Beschreibung der Kinematik von Robotern, pp. 11–36"
+    },
+    {
+      "id": "rotations",
+      "title": "Turning in space: Euler angles and gimbal lock",
+      "idea": "Three turns, each about an axis that the turns before have already moved, set any orientation. The order matters, the same matrix comes from more than one set of angles, and when the middle turn lines up the first and third axes one freedom is lost.",
+      "law": "R = Rz(α) Ry′(β) Rx″(γ)",
+      "lawTex": "\\mathbf{R}_{ZY'X''} = \\mathbf{R}_z(\\alpha)\\,\\mathbf{R}_{y'}(\\beta)\\,\\mathbf{R}_{x''}(\\gamma)",
+      "equations": [
+        { "eq": "Rx(α) = [1 0 0; 0 cos α −sin α; 0 sin α cos α]", "tex": "\\mathbf{R}_x(\\alpha) = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & \\cos\\alpha & -\\sin\\alpha \\\\ 0 & \\sin\\alpha & \\cos\\alpha \\end{pmatrix}", "note": "Turn about x", "ref": "ch. 2, p. 41" },
+        { "eq": "Ry(β) = [cos β 0 sin β; 0 1 0; −sin β 0 cos β]", "tex": "\\mathbf{R}_y(\\beta) = \\begin{pmatrix} \\cos\\beta & 0 & \\sin\\beta \\\\ 0 & 1 & 0 \\\\ -\\sin\\beta & 0 & \\cos\\beta \\end{pmatrix}", "note": "Turn about y", "ref": "ch. 2, p. 42" },
+        { "eq": "Rz(γ) = [cos γ −sin γ 0; sin γ cos γ 0; 0 0 1]", "tex": "\\mathbf{R}_z(\\gamma) = \\begin{pmatrix} \\cos\\gamma & -\\sin\\gamma & 0 \\\\ \\sin\\gamma & \\cos\\gamma & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}", "note": "Turn about z", "ref": "ch. 2, p. 43" },
+        { "eq": "Rᵀ = R⁻¹, det R = 1", "tex": "\\mathbf{R}^\\mathsf{T} = \\mathbf{R}^{-1},\\quad \\det\\mathbf{R} = 1", "note": "A rotation matrix is orthonormal", "ref": "ch. 2, pp. 24 and 53" },
+        { "eq": "ZY′X″ about moving axes = XYZ about fixed axes", "tex": "\\mathbf{R}_{ZY'X''} = \\mathbf{R}_z\\,\\mathbf{R}_{y'}\\,\\mathbf{R}_{x''} = \\mathbf{R}_{XYZ,\\,\\text{fixed}}", "note": "Turning about the fixed axes in the reverse order gives the same orientation", "ref": "ch. 2, pp. 44–45" },
+        { "eq": "R = Rz(yaw) Ry(pitch) Rx(roll)", "tex": "\\mathbf{R} = \\mathbf{R}_z(\\text{yaw})\\,\\mathbf{R}_{y}(\\text{pitch})\\,\\mathbf{R}_{x}(\\text{roll})", "note": "Roll-pitch-yaw: roll about x, pitch about y, yaw about z, all fixed; the same as ZY′X″", "ref": "ch. 2, p. 50" },
+        { "eq": "X(α) Y(−90°) Z(γ) depends only on α + γ", "tex": "\\mathbf{R}_{XYZ}(\\alpha, -90^\\circ, \\gamma) = \\begin{pmatrix} 0 & -\\sin(\\alpha+\\gamma) & -\\cos(\\alpha+\\gamma) \\\\ 0 & \\cos(\\alpha+\\gamma) & -\\sin(\\alpha+\\gamma) \\\\ 1 & 0 & 0 \\end{pmatrix}", "note": "Gimbal lock: the first and third turns share one axis, a freedom is lost", "ref": "ch. 2, pp. 56–59" }
+      ],
+      "practice": [
+        { "question": "Z(0°) Y′(90°) X″(0°): the entry in row 3, column 1 of the rotation matrix?", "source": "Ajanović (2020), ch. 2, p. 46, printed", "answer": -1, "unit": "1", "tolerance": 0.001, "solution": "Only Ry(90°) is left: its row 3 is (−sin 90°, 0, cos 90°) = (−1, 0, 0).", "compute": { "law": "eulerEntry", "seq": "ZYX", "angles": [0, 90, 0], "row": 3, "col": 1 } },
+        { "question": "Z(90°) Y′(90°) X″(90°): the entry in row 1, column 3?", "source": "Ajanović (2020), ch. 2, p. 48, printed", "answer": 1, "unit": "1", "tolerance": 0.001, "solution": "The product is [0 0 1; 0 1 0; −1 0 0], the same matrix as Z(0°) Y′(90°) X″(0°): at Y′ = 90° the angles are not unique.", "compute": { "law": "eulerEntry", "seq": "ZYX", "angles": [90, 90, 90], "row": 1, "col": 3 } },
+        { "question": "Z(90°) Y′(90°) Z″(90°): the entry in row 1, column 1?", "source": "Ajanović (2020), ch. 2, p. 52, printed", "answer": -1, "unit": "1", "tolerance": 0.001, "solution": "The product is [−1 0 0; 0 0 1; 0 1 0].", "compute": { "law": "eulerEntry", "seq": "ZYZ", "angles": [90, 90, 90], "row": 1, "col": 1 } },
+        { "question": "Z(90°) X′(−90°) Z″(−180°): the entry in row 2, column 1? (The slide finds these angles from the matrix.)", "source": "Ajanović (2020), ch. 5, p. 8, printed (row 3 of the table)", "answer": -1, "unit": "1", "tolerance": 0.001, "solution": "The target is [0 0 −1; −1 0 0; 0 1 0]; row 2, column 1 is −1. Rows 1 and 2 of the slide's table (θ2 = 270°) give sin θ2 cos θ3 = 0, not 1, so they do not reach it.", "compute": { "law": "eulerEntry", "seq": "ZXZ", "angles": [90, -90, -180], "row": 2, "col": 1 } }
+      ],
+      "lecture": "Ajanović (2020), ch. 2, pp. 39–61, and ch. 5, p. 8"
+    },
+    {
+      "id": "planar",
+      "title": "Where is the tip? Forward kinematics of a planar arm",
+      "idea": "Turn each joint and move along each link: multiplying one homogeneous transform per joint gives where the tip is and how it is turned. For every set of joint angles there is exactly one answer.",
+      "law": "x = l1 cos θ1 + l2 cos(θ1 + θ2), y = l1 sin θ1 + l2 sin(θ1 + θ2)",
+      "lawTex": "x = l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2),\\quad y = l_1\\sin\\theta_1 + l_2\\sin(\\theta_1+\\theta_2)",
+      "equations": [
+        { "eq": "x = l1 cos θ1 + l2 cos(θ1 + θ2)", "tex": "x = l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2)", "note": "Tip, x", "ref": "ch. 2, p. 38" },
+        { "eq": "y = l1 sin θ1 + l2 sin(θ1 + θ2)", "tex": "y = l_1\\sin\\theta_1 + l_2\\sin(\\theta_1+\\theta_2)", "note": "Tip, y", "ref": "ch. 2, p. 38" },
+        { "eq": "φ = θ1 + θ2", "tex": "\\varphi = \\theta_1 + \\theta_2", "note": "The tip's turn", "ref": "ch. 2, p. 38" },
+        { "eq": "0T2 = 0T1 · 1T2, iTj = [cos θ −sin θ l cos θ; sin θ cos θ l sin θ; 0 0 1]", "tex": "{}^{0}\\mathbf{T}_{2} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2},\\quad {}^{i-1}\\mathbf{T}_{i} = \\begin{pmatrix} \\cos\\theta_i & -\\sin\\theta_i & l_i\\cos\\theta_i \\\\ \\sin\\theta_i & \\cos\\theta_i & l_i\\sin\\theta_i \\\\ 0 & 0 & 1 \\end{pmatrix}", "note": "The same by transforms", "ref": "ch. 2, p. 38" },
+        { "eq": "x = k cos(α + θ1), y = l1 + k sin(α + θ1)", "tex": "x = k\\cos(\\alpha+\\theta_1),\\quad y = l_1 + k\\sin(\\alpha+\\theta_1),\\quad k = \\sqrt{(l_2 + l_3\\cos 45^\\circ)^2 + (l_4 + l_3\\sin 45^\\circ)^2}", "note": "The bent arm: one turning joint, two fixed 135° bends", "ref": "ch. 3, p. 3" }
+      ],
+      "practice": [
+        { "question": "l1 = 5, l2 = 3, θ1 = 20°, θ2 = 64°: the tip's x?", "source": "Ajanović (2020), ch. 2, p. 38, printed", "answer": 5.012, "unit": "1", "solution": "x = 5 cos 20° + 3 cos 84° = 4.698 + 0.314 = 5.012.", "compute": { "law": "planar2r", "l1": 5, "l2": 3, "t1": 20, "t2": 64, "out": "x" } },
+        { "question": "The same arm: the tip's y?", "source": "Ajanović (2020), ch. 2, p. 38, printed as 4.693 (4.6937 cut, not rounded)", "answer": 4.693, "unit": "1", "solution": "y = 5 sin 20° + 3 sin 84° = 1.710 + 2.984 = 4.694; the slide cuts it to 4.693.", "compute": { "law": "planar2r", "l1": 5, "l2": 3, "t1": 20, "t2": 64, "out": "y" } },
+        { "question": "The same arm: the tip's turn φ?", "source": "Worked by hand from ch. 2, p. 38", "answer": 84, "unit": "°", "solution": "φ = θ1 + θ2 = 84°; cos 84° = 0.105 is the matrix's first entry.", "compute": { "law": "planar2r", "l1": 5, "l2": 3, "t1": 20, "t2": 64, "out": "phi" } },
+        { "question": "The bent arm, l1…l4 = 1, 2, 3, 4, at θ1 = 90°: the tip's x?", "source": "Ajanović (2020), ch. 3, p. 3, printed", "answer": -6.12, "unit": "1", "solution": "k = √(4.121² + 6.121²) = 7.379, α = sin⁻¹(6.121/7.379) = 56.05°; x = k cos(146.05°) = −6.12, y = 1 + k sin(146.05°) = 5.12.", "compute": { "law": "bentArm", "l": [1, 2, 3, 4], "t1": 90, "out": "x" } },
+        { "question": "The bent arm at θ1 = 0°: the tip's y?", "source": "Ajanović (2020), ch. 3, p. 3, printed", "answer": 7.12, "unit": "1", "solution": "y = l1 + l3 sin 45° + l4 = 1 + 2.121 + 4 = 7.12; x = l2 + l3 cos 45° = 4.12.", "compute": { "law": "bentArm", "l": [1, 2, 3, 4], "t1": 0, "out": "y" } }
+      ],
+      "lecture": "Ajanović (2020), ch. 2, p. 38, and ch. 3 Vorwärtskinematik, pp. 2–3"
+    },
+    {
+      "id": "dh",
+      "title": "Four numbers per joint: the Denavit–Hartenberg chain",
+      "idea": "Put a frame on every link by four rules, and each step from one frame to the next needs only four numbers: θ, d, a and α. Multiply the steps and the chain gives the pose of its last frame.",
+      "law": "i−1Ti = Rot(z, θi) Trans(z, di) Trans(x, ai) Rot(x, αi)",
+      "lawTex": "{}^{i-1}\\mathbf{T}_{i} = \\mathrm{Rot}(z,\\theta_i)\\,\\mathrm{Trans}(z,d_i)\\,\\mathrm{Trans}(x,a_i)\\,\\mathrm{Rot}(x,\\alpha_i)",
+      "equations": [
+        { "eq": "zi along joint i + 1's axis; xi ⟂ zi−1 and meets zi−1; yi completes a right-handed frame", "tex": "z_i \\parallel \\text{axis}_{i+1},\\quad x_i \\perp z_{i-1},\\quad x_i \\cap z_{i-1} \\neq \\emptyset", "note": "The four DH rules for placing the frames", "ref": "ch. 3, pp. 7–8" },
+        { "eq": "θi about zi−1, di along zi−1, ai along xi, αi about xi", "tex": "\\theta_i: x_{i-1}\\to x_i \\text{ about } z_{i-1},\\; d_i \\text{ along } z_{i-1},\\; a_i \\text{ along } x_i,\\; \\alpha_i: z_{i-1}\\to z_i \\text{ about } x_i", "note": "The four parameters; θ is the variable of a turning joint, d of a sliding one", "ref": "ch. 3, p. 18" },
+        { "eq": "i−1Ti = [cθ −sθcα sθsα a cθ; sθ cθcα −cθsα a sθ; 0 sα cα d; 0 0 0 1]", "tex": "{}^{i-1}\\mathbf{T}_{i} = \\begin{pmatrix} \\cos\\theta_i & -\\sin\\theta_i\\cos\\alpha_i & \\sin\\theta_i\\sin\\alpha_i & a_i\\cos\\theta_i \\\\ \\sin\\theta_i & \\cos\\theta_i\\cos\\alpha_i & -\\cos\\theta_i\\sin\\alpha_i & a_i\\sin\\theta_i \\\\ 0 & \\sin\\alpha_i & \\cos\\alpha_i & d_i \\\\ 0 & 0 & 0 & 1 \\end{pmatrix}", "note": "One DH step", "ref": "ch. 3, p. 20" },
+        { "eq": "0Tn = 0T1 1T2 … n−1Tn", "tex": "{}^{0}\\mathbf{T}_{n} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2}\\cdots{}^{n-1}\\mathbf{T}_{n}", "note": "The chain", "ref": "ch. 3, p. 21" },
+        { "eq": "RRT: (θ1*, 90°, l3, l1 + l2), (90° + θ2*, 90°, 0, 0), (0, 0, 0, l4 + l5*)", "tex": "(\\theta, \\alpha, a, d):\\; (\\theta_1^*, 90^\\circ, l_3, l_1+l_2),\\; (90^\\circ+\\theta_2^*, 90^\\circ, 0, 0),\\; (0, 0, 0, l_4+l_5^*)", "note": "The slides' RRT robot", "ref": "ch. 3, p. 24" }
+      ],
+      "practice": [
+        { "question": "The RRT robot with l1…l4 = 1, 2, 3, 4 and l5* = 5, at θ1 = 0°, θ2 = 0°: the x of frame 3?", "source": "Ajanović (2020), ch. 3, p. 26, printed", "answer": 12, "unit": "1", "solution": "⁰T₃ = [0 0 1 12; 0 −1 0 0; 1 0 0 3; 0 0 0 1]: x = l3 + l4 + l5 = 3 + 4 + 5 = 12.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 0, "t2": 0, "l5": 5, "out": "x" } },
+        { "question": "At θ1 = 0°, θ2 = 90°: the z of frame 3?", "source": "Ajanović (2020), ch. 3, p. 26, printed", "answer": 12, "unit": "1", "solution": "The arm points up: z = l1 + l2 + l4 + l5 = 12, x = l3 = 3.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 0, "t2": 90, "l5": 5, "out": "z" } },
+        { "question": "At θ1 = 90°, θ2 = 90°: the y of frame 3?", "source": "Ajanović (2020), ch. 3, p. 26, printed", "answer": 3, "unit": "1", "solution": "The first joint turns the offset l3 onto y: (0, 3, 12).", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 90, "t2": 90, "l5": 5, "out": "y" } },
+        { "question": "At θ1 = 0°, θ2 = 0° with the stroke drawn in to l5* = 2: the x of frame 3?", "source": "Worked by hand from ch. 3, p. 25 (the slide's ⁰T₃)", "answer": 9, "unit": "1", "solution": "x = (l4 + l5) cos θ2 cos θ1 + l3 cos θ1 = 6 + 3 = 9.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 0, "t2": 0, "l5": 2, "out": "x" } }
+      ],
+      "lecture": "Ajanović (2020), ch. 3 Vorwärtskinematik, pp. 5–27"
+    },
+    {
+      "id": "irb120",
+      "title": "A real arm: the ABB IRB 120",
+      "idea": "The IRB 120's six axes as a DH chain built from the dimensions in its product specification. Set axes 2 and 3 to a row of the specification's working-range table and the chain puts the wrist centre where the table does.",
+      "law": "0T6 = 0T1(θ1) 1T2(θ2) … 5T6(θ6)",
+      "lawTex": "{}^{0}\\mathbf{T}_{6} = \\prod_{i=1}^{6} {}^{i-1}\\mathbf{T}_{i}(\\theta_i)",
+      "equations": [
+        { "eq": "(θ, α, a, d): (θ1, −90°, 0, 290), (θ2 − 90°, 0, 270, 0), (θ3, −90°, 70, 0), (θ4, 90°, 0, 302), (θ5, −90°, 0, 0), (θ6, 0, 0, 72)", "tex": "\\begin{array}{c|cccc} i & \\theta_i & \\alpha_i & a_i & d_i \\\\ \\hline 1 & \\theta_1 & -90^\\circ & 0 & 290 \\\\ 2 & \\theta_2 - 90^\\circ & 0 & 270 & 0 \\\\ 3 & \\theta_3 & -90^\\circ & 70 & 0 \\\\ 4 & \\theta_4 & 90^\\circ & 0 & 302 \\\\ 5 & \\theta_5 & -90^\\circ & 0 & 0 \\\\ 6 & \\theta_6 & 0 & 0 & 72 \\end{array}", "note": "The DH table, built here from the dimensions in mm; checked against the working-range table", "ref": "" },
+        { "eq": "290, 270, 70, 302, 72 mm", "tex": "290,\\ 270,\\ 70,\\ 302,\\ 72\\ \\mathrm{mm}", "note": "Base to axis 2, upper arm, step to the forearm, forearm, flange", "ref": "ABB (2020), p. 12" },
+        { "eq": "Axis 1 ±165°, 2 ±110°, 3 +70°…−110°, 4 ±160°, 5 ±120°, 6 ±400°", "tex": "\\theta_1 \\in \\pm165^\\circ,\\ \\theta_2 \\in \\pm110^\\circ,\\ \\theta_3 \\in [-110^\\circ, 70^\\circ],\\ \\theta_4 \\in \\pm160^\\circ,\\ \\theta_5 \\in \\pm120^\\circ,\\ \\theta_6 \\in \\pm400^\\circ", "note": "Working ranges", "ref": "ABB (2020), p. 32" },
+        { "eq": "J = [z × (p6 − pi−1); z] per turning joint", "tex": "\\mathbf{J}_i = \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\times ({}^{0}\\mathbf{t}_6 - {}^{0}\\mathbf{t}_{i-1}) \\\\ {}^{0}\\mathbf{z}_{i-1} \\end{pmatrix}", "note": "The geometric Jacobian of the arm; det J = 0 where it loses a freedom, here when axis 5 is at 0°", "ref": "ch. 4, p. 15" }
+      ],
+      "practice": [
+        { "question": "Axis 2 at 0°, axis 3 at −77°: the wrist centre's height Z?", "source": "ABB (2020), p. 31, row B, printed", "answer": 870, "unit": "mm", "solution": "The forearm stands upright: 290 + 270 + √(70² + 302²) = 290 + 270 + 310 = 870 mm; tan⁻¹(70/302) = 13° is why axis 3 must turn 77°, not 90°.", "compute": { "law": "irbWrist", "axis2": 0, "axis3": -77, "out": "z" } },
+        { "question": "Axis 2 at 0°, axis 3 at +70°: the wrist centre's reach X?", "source": "ABB (2020), p. 31, row C, printed", "answer": 169, "unit": "mm", "solution": "X = 302 cos 70° + 70 sin 70° = 103.3 + 65.8 = 169 mm; Z = 560 − 302 sin 70° + 70 cos 70° = 300 mm.", "compute": { "law": "irbWrist", "axis2": 0, "axis3": 70, "out": "x" } },
+        { "question": "Axis 2 at +110°, axis 3 at −77°: the wrist centre's reach X?", "source": "ABB (2020), p. 31, row E, printed", "answer": 545, "unit": "mm", "solution": "Upper arm and forearm in line, 270 + 310 = 580 mm long, tilted 110° from upright: X = 580 sin 110° = 545 mm, Z = 290 + 580 cos 110° = 91 mm.", "compute": { "law": "irbWrist", "axis2": 110, "axis3": -77, "out": "x" } },
+        { "question": "Axis 2 at −110°, axis 3 at −110°: the wrist centre's height Z?", "source": "ABB (2020), p. 31, row F, printed", "answer": -50, "unit": "mm", "tolerance": 0.03, "solution": "Elbow at (−253.7, 197.7) mm; the forearm turned a further −110° reaches 247.8 mm down: Z = −50 mm.", "compute": { "law": "irbWrist", "axis2": -110, "axis3": -110, "out": "z" } },
+        { "question": "Axis 2 at +90°, axis 3 at −77°: the wrist centre's reach X (the arm's 0.58 m reach)?", "source": "ABB (2020), p. 31, row D, printed (its Z of 270 mm reads 290 mm by this chain)", "answer": 580, "unit": "mm", "solution": "Arm and forearm in line and level: X = 270 + 310 = 580 mm, at the shoulder's height of 290 mm.", "compute": { "law": "irbWrist", "axis2": 90, "axis3": -77, "out": "x" } }
+      ],
+      "lecture": "ABB (2020), IRB 120 product specification, pp. 11–12 and 31–32; Ajanović (2020), ch. 3, pp. 18–21, and ch. 4, p. 15"
+    },
+    {
+      "id": "jacobian",
+      "title": "How fast is the tip? The Jacobian and singular poses",
+      "idea": "The Jacobian turns joint speeds into the tip's speed. Its columns are what each joint alone does to the tip; where its determinant is zero the arm cannot move its tip one way at all, however fast the joints turn.",
+      "law": "v = J(q) q̇",
+      "lawTex": "\\begin{pmatrix} \\mathbf{v} \\\\ \\boldsymbol{\\omega} \\end{pmatrix} = \\mathbf{J}(\\mathbf{q})\\,\\dot{\\mathbf{q}}",
+      "equations": [
+        { "eq": "v = J(q) q̇, q̇ = J⁻¹(q) v", "tex": "\\mathbf{v} = \\mathbf{J}(\\mathbf{q})\\,\\dot{\\mathbf{q}},\\qquad \\dot{\\mathbf{q}} = \\mathbf{J}^{-1}(\\mathbf{q})\\,\\mathbf{v}", "note": "Joint speeds to tip speed and back; the inverse exists only where det J ≠ 0", "ref": "ch. 4, pp. 11–12" },
+        { "eq": "J = ∂(x, y, z, …)/∂(q1 … qn)", "tex": "\\mathbf{J}_v = \\begin{pmatrix} \\partial x/\\partial q_1 & \\cdots & \\partial x/\\partial q_n \\\\ \\partial y/\\partial q_1 & \\cdots & \\partial y/\\partial q_n \\\\ \\partial z/\\partial q_1 & \\cdots & \\partial z/\\partial q_n \\end{pmatrix}", "note": "The linear part by partial derivatives of the forward kinematics", "ref": "ch. 4, p. 11" },
+        { "eq": "Sliding joint: [z; 0]; turning joint: [z × (tn − ti−1); z]", "tex": "\\text{T: } \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\\\ \\mathbf{0} \\end{pmatrix},\\quad \\text{R: } \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\times ({}^{0}\\mathbf{t}_n - {}^{0}\\mathbf{t}_{i-1}) \\\\ {}^{0}\\mathbf{z}_{i-1} \\end{pmatrix}", "note": "The geometric schema, from a DH chain", "ref": "ch. 4, p. 15" },
+        { "eq": "RT robot: ẋ = −(l1 + l2) sin θ1 θ̇1 + cos θ1 l̇2, ẏ = (l1 + l2) cos θ1 θ̇1 + sin θ1 l̇2, ωz = θ̇1", "tex": "\\dot{x} = -(l_1+l_2)\\sin\\theta_1\\,\\dot{\\theta}_1 + \\cos\\theta_1\\,\\dot{l}_2,\\quad \\dot{y} = (l_1+l_2)\\cos\\theta_1\\,\\dot{\\theta}_1 + \\sin\\theta_1\\,\\dot{l}_2,\\quad \\omega_z = \\dot{\\theta}_1", "note": "A turning then a sliding joint", "ref": "ch. 4, p. 18" },
+        { "eq": "J = [−l1 s1 − l2 s12, −l2 s12; l1 c1 + l2 c12, l2 c12]", "tex": "\\mathbf{J}_v = \\begin{pmatrix} -l_1\\sin\\theta_1 - l_2\\sin(\\theta_1+\\theta_2) & -l_2\\sin(\\theta_1+\\theta_2) \\\\ l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2) & l_2\\cos(\\theta_1+\\theta_2) \\end{pmatrix}", "note": "The planar two-link arm", "ref": "ch. 4, p. 20" },
+        { "eq": "det J = l1 l2 sin θ2", "tex": "\\det\\mathbf{J}_v = l_1 l_2 \\sin\\theta_2", "note": "Worked here from the matrix above: zero when the arm is stretched or folded", "ref": "" }
+      ],
+      "practice": [
+        { "question": "The RT robot with l1 = 1, θ1 = 60°, stroke l2 = 2, turning at θ̇1 = 2 rad/s while the stroke grows at l̇2 = 0.5 per s: the tip's ẋ?", "source": "Worked by hand from ch. 4, p. 18", "answer": -4.946, "unit": "1", "solution": "ẋ = −(1 + 2) sin 60° · 2 + cos 60° · 0.5 = −5.196 + 0.25 = −4.946 per s.", "compute": { "law": "rtVel", "l1": 1, "t1": 60, "l2": 2, "w1": 2, "v2": 0.5, "out": "x" } },
+        { "question": "The same robot: the tip's ẏ?", "source": "Worked by hand from ch. 4, p. 18", "answer": 3.433, "unit": "1", "solution": "ẏ = (1 + 2) cos 60° · 2 + sin 60° · 0.5 = 3 + 0.433 = 3.433 per s.", "compute": { "law": "rtVel", "l1": 1, "t1": 60, "l2": 2, "w1": 2, "v2": 0.5, "out": "y" } },
+        { "question": "The two-link arm l1 = 5, l2 = 3 at θ1 = 20°, θ2 = 64°: det J?", "source": "Worked by hand from ch. 4, p. 20", "answer": 13.48, "unit": "1", "solution": "det J = l1 l2 sin θ2 = 15 sin 64° = 13.48. It is largest, 15, at θ2 = ±90°, and zero at 0° and 180°.", "compute": { "law": "det2r", "l1": 5, "l2": 3, "t1": 20, "t2": 64 } }
+      ],
+      "lecture": "Ajanović (2020), ch. 4 Geschwindigkeitskinematik, pp. 7–20"
+    },
+    {
+      "id": "ik",
+      "title": "Which angles reach the target? Inverse kinematics of a two-link arm",
+      "idea": "Given the tip, find the joints. The two-link arm reaches a point in its ring of reach two ways, elbow one side or the other; on the ring's edge one way; outside it not at all. Obstacles and joint ranges decide which to take.",
+      "law": "cos θ2 = (x² + y² − l1² − l2²)/(2 l1 l2)",
+      "lawTex": "\\cos\\theta_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}",
+      "equations": [
+        { "eq": "θ2 = atan2(±√(1 − c2²), c2)", "tex": "\\theta_2 = \\operatorname{atan2}\\!\\left(\\pm\\sqrt{1 - c_2^2},\\; c_2\\right),\\quad c_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}", "note": "Two elbow solutions", "ref": "ch. 5, pp. 16–18" },
+        { "eq": "θ1 = atan2(y, x) − atan2(l2 sin θ2, l1 + l2 cos θ2)", "tex": "\\theta_1 = \\operatorname{atan2}(y, x) - \\operatorname{atan2}(l_2\\sin\\theta_2,\\; l_1 + l_2\\cos\\theta_2)", "note": "The shoulder for each elbow", "ref": "ch. 5, pp. 17–18" },
+        { "eq": "(l1 − l2)² ≤ x² + y² ≤ (l1 + l2)²", "tex": "(l_1 - l_2)^2 \\le x^2 + y^2 \\le (l_1 + l_2)^2", "note": "A solution exists only in the ring of reach", "ref": "ch. 5, p. 17" },
+        { "eq": "θ2 = 180° − arccos((c² − l1² − l2²)/(−2 l1 l2)), θ1 = arctan(y/x) − arccos((l2² − c² − l1²)/(−2 l1 c))", "tex": "\\theta_2 = 180^\\circ - \\arccos\\frac{c^2 - l_1^2 - l_2^2}{-2 l_1 l_2},\\quad \\theta_1 = \\arctan\\frac{y}{x} - \\arccos\\frac{l_2^2 - c^2 - l_1^2}{-2 l_1 c}", "note": "The same by the cosine rule in the triangle l1, l2, c = √(x² + y²)", "ref": "ch. 5, p. 13" },
+        { "eq": "θ1 = atan2(y, x), θ2 = atan2(z − l1, √(x² + y²))", "tex": "\\theta_1 = \\operatorname{atan2}(y, x),\\quad \\theta_2 = \\operatorname{atan2}\\!\\left(z - l_1,\\; \\sqrt{x^2 + y^2}\\right)", "note": "A post turning about its axis with a tilting arm on top: top view, then side view", "ref": "ch. 5, p. 21" }
+      ],
+      "practice": [
+        { "question": "l1 = 3, l2 = 4, tip at (4, 3): θ1 of the solution with θ2 = +90°?", "source": "Ajanović (2020), ch. 5, p. 10, printed", "answer": -16.26, "unit": "°", "solution": "c2 = (25 − 9 − 16)/24 = 0, θ2 = ±90°. For +90°: θ1 = atan2(3, 4) − atan2(4, 3) = 36.87° − 53.13° = −16.26°. The other: θ1 = 90°, θ2 = −90°.", "compute": { "law": "ik2r", "l1": 3, "l2": 4, "x": 4, "y": 3, "sign": 1, "out": "t1" } },
+        { "question": "l1 = 5, l2 = 4, tip at (6, 5.93): the elbow angle θ2 of the positive solution?", "source": "Ajanović (2020), ch. 5, p. 20, printed", "answer": 41.05, "unit": "°", "solution": "c2 = (36 + 35.16 − 25 − 16)/40 = 0.754, θ2 = ±41.05°.", "compute": { "law": "ik2r", "l1": 5, "l2": 4, "x": 6, "y": 5.93, "sign": 1, "out": "t2" } },
+        { "question": "The same: θ1 for θ2 = +41.05°?", "source": "Ajanović (2020), ch. 5, p. 20, printed as 44.66 ± 18.14", "answer": 26.52, "unit": "°", "solution": "θ1 = atan2(5.93, 6) − atan2(4 sin 41.05°, 5 + 4 cos 41.05°) = 44.66° − 18.14° = 26.52°; the other solution has 62.80°.", "compute": { "law": "ik2r", "l1": 5, "l2": 4, "x": 6, "y": 5.93, "sign": 1, "out": "t1" } },
+        { "question": "l1 = 4, l2 = 1, tip at (2, 1): x² + y², to set against (l1 − l2)² = 9 and (l1 + l2)² = 25?", "source": "Ajanović (2020), ch. 5, p. 19, printed: 9 ≤ 5 ≤ 25 fails, no solution", "answer": 5, "unit": "1", "solution": "x² + y² = 4 + 1 = 5 < 9: the tip is inside the inner circle, which the arm cannot reach.", "compute": { "law": "reach", "x": 2, "y": 1 } },
+        { "question": "The turning post of ch. 5, p. 21 with l1 = 2, l2 = 3 and the tip at (1.5, 2.598, 2): the turn θ1?", "source": "Worked by hand from ch. 5, p. 21", "answer": 60, "unit": "°", "tolerance": 0.005, "solution": "θ1 = atan2(2.598, 1.5) = 60°; l2xy = 3, θ2 = atan2(0, 3) = 0°: the arm lies level.", "compute": { "law": "turnTilt", "l1": 2, "l2": 3, "p": [1.5, 2.598, 2], "out": "t1" } }
+      ],
+      "lecture": "Ajanović (2020), ch. 5 Inverse Kinematik, pp. 2–21"
+    }
+  ]
+}

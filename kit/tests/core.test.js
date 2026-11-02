@@ -13,6 +13,10 @@ test("an answer within 2 % is right; one outside is not; tolerance 0 asks for th
 
 test("SI prefixes: 4700 Ω reads 4.7 kΩ and back", () => {
   assert.equal(si(4700, "Ω"), "4.7 kΩ");
+  // Reported by the robotics and FEM builders on 3 Nov 2026: a pure number, an angle or a unit that already carries
+  // a prefix took a second prefix ("104 m1", "66.7 mmm"). These are written plainly.
+  assert.equal(si(0.104, "1"), "0.104"); assert.equal(si(-1, "1"), "-1"); assert.equal(si(0.5, "°"), "0.5 °");
+  assert.equal(si(0.0667, "mm"), "0.0667 mm"); assert.equal(si(1500, "rpm"), "1500 rpm");
   assert.equal(parseSi("4.7k"), 4700);
 });
 
