@@ -1,0 +1,650 @@
+{
+  "format": "handling-lab labs",
+  "version": 1,
+  "about": "Industrial Handling (IHA), FH Technikum Wien master's programme, winter term 2021, after the lecture notes of Berger (2021), chapters 1–6, and the Übungsskript and solved Übungen 5_1, 5_2 and 5_3 (Berger 2021a). Pages are the PDF pages of each chapter's file, read in their text layer on 2 Nov 2026; Blatt numbers where the footer was readable. The printed solutions are used where they exist (chapter 3, p. 113; chapter 6, p. 19; the Übungen 5_1–5_3); the rest were worked by hand from the course's equations and say so. tests/unit/labs-data.test.js recomputes every answer with the core and fails if they disagree.",
+  "families": [
+    {
+      "id": "linkages",
+      "name": "Linkages"
+    },
+    {
+      "id": "motion",
+      "name": "Motion design and cams"
+    },
+    {
+      "id": "grippers",
+      "name": "Grippers"
+    }
+  ],
+  "lectures": [
+    {
+      "number": 1,
+      "pages": "ch. 3–4",
+      "title": "Linkages: analysis and synthesis",
+      "family": "linkages",
+      "labs": [
+        "mobility",
+        "grashof",
+        "transmission",
+        "poles",
+        "deadcentre",
+        "twoposition",
+        "coupler"
+      ]
+    },
+    {
+      "number": 2,
+      "pages": "ch. 5–6",
+      "title": "Motion design, cams and indexing",
+      "family": "motion",
+      "labs": [
+        "motionlaws",
+        "cam",
+        "indexing"
+      ]
+    },
+    {
+      "number": 3,
+      "pages": "ch. 3",
+      "title": "Grippers",
+      "family": "grippers",
+      "labs": [
+        "gripper"
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "id": "mobility",
+      "title": "How many drives? The mobility count",
+      "idea": "Count the links and joints of a plane mechanism and the count says how many drives it needs: one freedom, one drive, and it moves as driven; none, and it is a structure.",
+      "law": "F = 3(n − 1) − 2g1 − g2",
+      "lawTex": "F = 3(n-1) - 2g_1 - g_2",
+      "equations": [
+        {
+          "eq": "F = 3(n − 1) − 2g1 − g2",
+          "tex": "F = 3(n-1) - 2g_1 - g_2",
+          "note": "Plane and spherical mechanisms (b = 3): n links with the frame, g1 joints with one freedom, g2 with two",
+          "ref": "ch. 4, p. 23 (Blatt 27); ch. 3, p. 28"
+        },
+        {
+          "eq": "F = number of drives > 0",
+          "tex": "F = \\text{number of drives} > 0",
+          "note": "Constrained motion (Zwanglauf); F = 0 a determinate structure, F < 0 an indeterminate one",
+          "ref": "ch. 4, p. 23"
+        }
+      ],
+      "practice": [
+        {
+          "question": "The cam mechanism of chapter 3 has n = 5 links, g1 = 4 and g2 = 2. How many drives does it need?",
+          "source": "Berger (2021), ch. 3, p. 113, printed: F = 2",
+          "answer": 2,
+          "unit": "1",
+          "tolerance": 0,
+          "solution": "F = 3·(5 − 1) − 2·4 − 2 = 12 − 8 − 2 = 2: in principle two drives.",
+          "compute": {
+            "law": "mobility",
+            "n": 5,
+            "g1": 4,
+            "g2": 2
+          }
+        },
+        {
+          "question": "A Watt six-bar has 6 links (frame included) and 7 hinges. What is F?",
+          "source": "Worked by hand from ch. 4, p. 23",
+          "answer": 1,
+          "unit": "1",
+          "tolerance": 0,
+          "solution": "F = 3·5 − 2·7 = 15 − 14 = 1: one drive.",
+          "compute": {
+            "law": "mobility",
+            "n": 6,
+            "g1": 7,
+            "g2": 0
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 4, section 4.1, and chapter 3"
+    },
+    {
+      "id": "grashof",
+      "title": "Which link turns? Grashof's rule",
+      "idea": "If the shortest and longest links together are shorter than the other two, some link can turn fully; which mechanism you get depends on where the shortest link sits.",
+      "law": "lmin + lmax < l′ + l″: rotating",
+      "lawTex": "l_{\\min} + l_{\\max} < l' + l''",
+      "equations": [
+        {
+          "eq": "lmin + lmax < l′ + l″ rotating; = change point; > rocking",
+          "tex": "l_{\\min} + l_{\\max} \\lesseqqgtr l' + l''",
+          "note": "Four-hinge chain (4D): umlaufend, durchschlagend, nicht umlaufend",
+          "ref": "ch. 4, p. 26 (Blatt 30)"
+        },
+        {
+          "eq": "e < lmax − lmin rotating",
+          "tex": "e < l_{\\max} - l_{\\min}",
+          "note": "Slider-crank chain with offset e, crank and coupler the two links",
+          "ref": "ch. 3, p. 81"
+        }
+      ],
+      "practice": [
+        {
+          "question": "Frame 100 mm, crank 30 mm, coupler 90 mm, rocker 70 mm. By how many mm is lmin + lmax shorter than l′ + l″?",
+          "source": "Worked by hand from ch. 4, p. 26",
+          "answer": 30,
+          "unit": "mm",
+          "solution": "30 + 100 = 130 against 70 + 90 = 160: 30 mm shorter, so the chain rotates; the shortest link is the crank beside the frame, a crank-rocker.",
+          "compute": {
+            "law": "grashofMargin",
+            "lengths": [
+              100,
+              30,
+              90,
+              70
+            ]
+          }
+        },
+        {
+          "question": "A slider-crank has crank 30 mm and coupler 100 mm. Up to which offset e does the crank still turn fully?",
+          "source": "Worked by hand from ch. 3, p. 81",
+          "answer": 70,
+          "unit": "mm",
+          "solution": "e < lmax − lmin = 100 − 30 = 70 mm.",
+          "compute": {
+            "law": "sliderGap",
+            "r": 30,
+            "l": 100
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 4, and chapter 3 for the slider-crank chain"
+    },
+    {
+      "id": "transmission",
+      "title": "The transmission angle",
+      "idea": "The coupler pushes the rocker well only when it meets it near a right angle; the smallest such angle over a turn tells you whether the mechanism runs smoothly.",
+      "law": "μ = acute angle between coupler and rocker at B, μ ≤ 90°",
+      "lawTex": "\\mu = \\angle(AB, B_0B), \\quad \\mu \\le 90^\\circ",
+      "equations": [
+        {
+          "eq": "μ ≤ 90°, the acute angle between absolute and relative path tangents at B",
+          "tex": "\\mu \\le 90^\\circ",
+          "note": "Definition; the least values lie where crank and frame are folded or stretched",
+          "ref": "ch. 4, p. 38 (Blatt 43)"
+        },
+        {
+          "eq": "cos γ = (l² + c² − AB0²)/(2lc), μ = min(γ, 180° − γ)",
+          "tex": "\\cos\\gamma = \\frac{l^2 + c^2 - \\overline{AB_0}^{\\,2}}{2lc}, \\quad \\mu = \\min(\\gamma, 180^\\circ - \\gamma)",
+          "note": "The cosine rule in triangle A B B0, worked from the definition; the course draws it",
+          "ref": ""
+        }
+      ],
+      "practice": [],
+      "lecture": "Berger (2021), chapter 4"
+    },
+    {
+      "id": "poles",
+      "title": "Instant centres and the speed ratio",
+      "idea": "Every two links of a mechanism turn, for a moment, about a common pole; the pole of crank and rocker tells you how fast the rocker turns for a turn of the crank.",
+      "law": "z = n(n − 1)/2; ω3/ω1 = A0P13/B0P13",
+      "lawTex": "z = \\frac{n(n-1)}{2}, \\qquad \\frac{\\omega_3}{\\omega_1} = \\frac{\\overline{A_0P_{13}}}{\\overline{B_0P_{13}}}",
+      "equations": [
+        {
+          "eq": "z = n(n − 1)/2",
+          "tex": "z = \\binom{n}{2} = \\frac{n(n-1)}{2}",
+          "note": "The number of poles of n links",
+          "ref": "ch. 4, p. 47 (Blatt 52)"
+        },
+        {
+          "eq": "ω3/ω1 = A0P13/B0P13",
+          "tex": "\\omega_1\\,\\overline{A_0P_{13}} = \\omega_3\\,\\overline{B_0P_{13}}",
+          "note": "P13 has the same speed as a point of crank and of rocker; worked from the pole's definition",
+          "ref": ""
+        }
+      ],
+      "practice": [
+        {
+          "question": "How many poles has a six-link mechanism?",
+          "source": "Worked by hand from ch. 4, p. 47",
+          "answer": 15,
+          "unit": "1",
+          "tolerance": 0,
+          "solution": "z = 6·5/2 = 15.",
+          "compute": {
+            "law": "poleCount",
+            "n": 6
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 4"
+    },
+    {
+      "id": "deadcentre",
+      "title": "Dead-centre synthesis of the crank-rocker",
+      "idea": "Say where the rocker should stop at each end of its swing, and the crank and coupler follow, because at the dead centres crank and coupler lie in one line.",
+      "law": "|A0Ba| = l + r, |A0Bi| = l − r",
+      "lawTex": "\\overline{A_0B_a} = l + r, \\qquad \\overline{A_0B_i} = l - r",
+      "equations": [
+        {
+          "eq": "φ0, ψ0 measured in the same sense from the inner to the outer dead centre",
+          "tex": "\\varphi_0,\\ \\psi_0",
+          "note": "The course's construction: angles φ0/2 and ψ0/2 at A0B0 give the pole P, circles ka, kb carry Aa, Ba",
+          "ref": "ch. 4, pp. 97–102"
+        },
+        {
+          "eq": "r = (|A0Ba| − |A0Bi|)/2, l = (|A0Ba| + |A0Bi|)/2",
+          "tex": "r = \\tfrac12(\\overline{A_0B_a} - \\overline{A_0B_i}), \\quad l = \\tfrac12(\\overline{A_0B_a} + \\overline{A_0B_i})",
+          "note": "From the stretched and folded positions",
+          "ref": ""
+        },
+        {
+          "eq": "time ratio = φ0 : (360° − φ0)",
+          "tex": "\\frac{t_{\\text{work}}}{t_{\\text{return}}} = \\frac{\\varphi_0}{360^\\circ - \\varphi_0}",
+          "note": "At constant crank speed",
+          "ref": ""
+        }
+      ],
+      "practice": [
+        {
+          "question": "Kap. 4 Aufgabe 5 asks for φ0 = 160°. What is the ratio of working to return time at constant crank speed?",
+          "source": "Worked by hand; data from the Übungsskript, Kap. 4 Aufgabe 5",
+          "answer": 0.8,
+          "unit": "1",
+          "solution": "160/(360 − 160) = 160/200 = 0.8: the working stroke is the quicker one.",
+          "compute": {
+            "law": "ratio",
+            "phi0": 160
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 4, section 4.3.4.1; Übungsskript Kap. 4"
+    },
+    {
+      "id": "twoposition",
+      "title": "Two-position synthesis: the pole P12",
+      "idea": "Any move of a body in the plane from one position to another is one turn about a single point, the pole, found where the perpendicular bisectors of two of its points meet.",
+      "law": "P12 = a12 ∩ b12",
+      "lawTex": "P_{12} = a_{12} \\cap b_{12}",
+      "equations": [
+        {
+          "eq": "P12 where the bisectors of A1A2 and B1B2 meet; φ12 halved by them",
+          "tex": "P_{12} = a_{12} \\cap b_{12}",
+          "note": "The turn φ12 about P12 is directed",
+          "ref": "ch. 4, p. 68"
+        }
+      ],
+      "practice": [
+        {
+          "question": "A bar moves from A1(30; 0), B1(60; 0) to A2(−30; 0), B2(−30; 30). What is the y coordinate of the pole P12 in mm?",
+          "source": "Worked by hand; data from the Übungsskript, Kap. 4 Aufgabe 1",
+          "answer": -30,
+          "unit": "mm",
+          "solution": "The bisector of A1A2 is x = 0. B1B2 has its middle at (15; 15) and runs along (−90; 30); its bisector −90x + 30y = −900 meets x = 0 at y = −30.",
+          "compute": {
+            "law": "poleY",
+            "A1": [
+              30,
+              0
+            ],
+            "A2": [
+              -30,
+              0
+            ],
+            "B1": [
+              60,
+              0
+            ],
+            "B2": [
+              -30,
+              30
+            ]
+          }
+        },
+        {
+          "question": "By how many degrees does the bar turn about P12?",
+          "source": "Worked by hand; data from the Übungsskript, Kap. 4 Aufgabe 1",
+          "answer": 90,
+          "unit": "°",
+          "solution": "A1 − P12 = (30; 30) at 45°, A2 − P12 = (−30; 30) at 135°: a quarter turn, counter-clockwise.",
+          "compute": {
+            "law": "poleAngle",
+            "A1": [
+              30,
+              0
+            ],
+            "A2": [
+              -30,
+              0
+            ],
+            "B1": [
+              60,
+              0
+            ],
+            "B2": [
+              -30,
+              30
+            ]
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 4, section 4.2.2; Übungsskript Kap. 4"
+    },
+    {
+      "id": "coupler",
+      "title": "Coupler curves and their cognates",
+      "idea": "A point on the coupler draws a curve, and two more four-bars draw exactly the same curve: if one linkage sits badly, a cognate may fit.",
+      "law": "Roberts–Chebyshev: three four-bars, one coupler curve",
+      "lawTex": "F_0 = A_0 + k\\,(B_0 - A_0), \\quad k = \\frac{C - A}{B - A}",
+      "equations": [
+        {
+          "eq": "Every coupler curve of A0ABB0 is also drawn by A0A′F′F0 and B0B′FF0",
+          "tex": "k_C(A_0ABB_0) = k_C(A_0A'F'F_0) = k_C(B_0B'FF_0)",
+          "note": "Roberts–Chebyshev theorem",
+          "ref": "ch. 4, p. 113"
+        },
+        {
+          "eq": "F0 = A0 + k(B0 − A0)",
+          "tex": "F_0 = A_0 + k\\,(B_0 - A_0)",
+          "note": "The third pivot: A0B0F0 similar to ABC; k a complex ratio",
+          "ref": ""
+        }
+      ],
+      "practice": [],
+      "lecture": "Berger (2021), chapter 4"
+    },
+    {
+      "id": "motionlaws",
+      "title": "Motion laws and their characteristic values",
+      "idea": "A normalised law f(z) says how the output moves over its stroke; four numbers taken from it, Cv, Ca, Cj and CM, scale its peak speed, acceleration, jerk and torque.",
+      "law": "y = yH·f(x/xP); max|y′| = Cv·yH/xP",
+      "lawTex": "y = y_H\\,f\\!\\left(\\frac{x}{x_P}\\right), \\qquad \\max|y'| = C_v\\,\\frac{y_H}{x_P}",
+      "equations": [
+        {
+          "eq": "y = yH·f(z), z = x/xP",
+          "tex": "y = y_H\\,f(z), \\quad z = x/x_P",
+          "note": "Normalised law, rising",
+          "ref": "ch. 5, p. 23 (Blatt 25)"
+        },
+        {
+          "eq": "ẏ = y′ẋ, ÿ = y″ẋ² + y′ẍ",
+          "tex": "\\dot y = y'\\dot x, \\quad \\ddot y = y''\\dot x^2 + y'\\ddot x",
+          "note": "From the drive angle to time",
+          "ref": "ch. 5, p. 21 (Blatt 23)"
+        },
+        {
+          "eq": "Cv = max|f′|, Ca = max|f″|, Cj = max|f‴|, CM = max|f′f″|",
+          "tex": "C_v = \\max|f'|,\\ C_a = \\max|f''|,\\ C_j = \\max|f'''|,\\ C_M = \\max|f'f''|",
+          "note": "Characteristic values",
+          "ref": "ch. 5, p. 30 (Blatt 32)"
+        },
+        {
+          "eq": "max|y″| = Ca·yH/xP²",
+          "tex": "\\max|y''| = C_a\\,\\frac{y_H}{x_P^2}",
+          "note": "Peak acceleration over the drive angle",
+          "ref": "ch. 5, p. 30 (Blatt 32)"
+        },
+        {
+          "eq": "f = a1z + a2z² + a3z³ + a4z⁴ + a5z⁵",
+          "tex": "\\begin{aligned} a_3 &= 10f(1) - 6f'(0) - 4f'(1) - \\tfrac32 f''(0) + \\tfrac12 f''(1)\\\\ a_4 &= -15f(1) + 8f'(0) + 7f'(1) + \\tfrac32 f''(0) - f''(1)\\\\ a_5 &= 6f(1) - 3[f'(0) + f'(1)] - \\tfrac12[f''(0) - f''(1)] \\end{aligned}",
+          "note": "5th-order polynomial from boundary values; a1 = f′(0), a2 = f″(0)/2",
+          "ref": "ch. 5, pp. 34–35 (Blatt 36–37)"
+        },
+        {
+          "eq": "f = 35z⁴ − 84z⁵ + 70z⁶ − 20z⁷",
+          "tex": "f(z) = 35z^4 - 84z^5 + 70z^6 - 20z^7",
+          "note": "7th power",
+          "ref": "ch. 5, p. 32 (Blatt 34)"
+        }
+      ],
+      "practice": [
+        {
+          "question": "Übung 5_1: rest, then constant speed, so f′(1) = 2 and f″(1) = 0. What is the coefficient a3?",
+          "source": "Berger (2021a), Übung 5_1, printed: f = 2z³ − z⁴",
+          "answer": 2,
+          "unit": "1",
+          "solution": "a3 = 10·1 − 6·0 − 4·2 − 0 + 0 = 2; a4 = −15 + 14 = −1; a5 = 6 − 6 = 0.",
+          "compute": {
+            "law": "quinticA3",
+            "f1": 1,
+            "v1": 2
+          }
+        },
+        {
+          "question": "For that law, f = 2z³ − z⁴, what is the torque value CM?",
+          "source": "Berger (2021a), Übung 5_1, printed: CM = 3.961 at z = 0.68377",
+          "answer": 3.961,
+          "unit": "1",
+          "tolerance": 0.001,
+          "solution": "f′f″ = (6z² − 4z³)(12z − 12z²) peaks at z = 0.68377 with 3.961.",
+          "compute": {
+            "law": "CM",
+            "f1": 1,
+            "v1": 2
+          }
+        },
+        {
+          "question": "Übung 5_2: f′(1) = 2/3, f″(1) = −32/9. What is Cv?",
+          "source": "Berger (2021a), Übung 5_2, printed: Cv = 1.587 at z = 0.62",
+          "answer": 1.587,
+          "unit": "1",
+          "tolerance": 0.002,
+          "solution": "f = 50/9 z³ − 61/9 z⁴ + 20/9 z⁵; f′ is largest at z = 0.62 with 1.587.",
+          "compute": {
+            "law": "Cv",
+            "f1": 1,
+            "v1": 0.6666666666666666,
+            "a1": -3.5555555555555554
+          }
+        },
+        {
+          "question": "Übung 5_3: f = 3z² − 2z³, the drive turns 60° at 50 rpm while the output swings 40°. What is the peak angular acceleration of the output in s⁻²?",
+          "source": "Berger (2021a), Übung 5_3; its printed 117.23 s⁻² uses ω = 5.54 s⁻¹, but 2π·50/60 = 5.236 s⁻¹ (checked by hand)",
+          "answer": 104.7,
+          "unit": "s⁻²",
+          "tolerance": 0.005,
+          "solution": "Ca = 6; ψ̈max = Ca·ψH/φP²·ω² = 6·0.698/1.047²·5.236² = 104.7 s⁻².",
+          "compute": {
+            "law": "peakAccel",
+            "motion": "cubic",
+            "yHDeg": 40,
+            "xPDeg": 60,
+            "rpm": 50
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 5; Übungen 5_1–5_3 (Berger 2021a)"
+    },
+    {
+      "id": "cam",
+      "title": "The disc cam: base circle and roller",
+      "idea": "Wrap a motion law round a circle and you have a cam; a small base circle makes it compact but the follower is pushed sideways, and a big roller cannot follow a tight curve.",
+      "law": "rR ≤ 0.7·ρmin; vBmax = sH·Cv/φP·ω",
+      "lawTex": "r_R \\le 0.7\\,\\rho_{\\min}, \\qquad v_{B\\max} = \\frac{s_H\\,C_v}{\\varphi_P}\\,\\omega",
+      "equations": [
+        {
+          "eq": "vBmax = sH·Cv/φP",
+          "tex": "v_{B\\max} = \\frac{s_H\\,C_v}{\\varphi_P}",
+          "note": "Peak follower speed per unit drive speed (Flocke method)",
+          "ref": "ch. 6, p. 35"
+        },
+        {
+          "eq": "ρA = ρB ± rR",
+          "tex": "\\rho_A = \\rho_B \\pm r_R",
+          "note": "Working profile from the pitch curve: + inner, − outer cam",
+          "ref": "ch. 6, p. 41"
+        },
+        {
+          "eq": "rR ≤ 0.7·ρmin B",
+          "tex": "r_R \\le 0.7\\,\\rho_{\\min B}",
+          "note": "Advice; rR = ρmin gives a point, more loses lift",
+          "ref": "ch. 6, p. 42"
+        },
+        {
+          "eq": "tan α = s′/(rG + rR + s), μ = 90° − |α|",
+          "tex": "\\tan\\alpha = \\frac{s'}{r_G + r_R + s}, \\quad \\mu = 90^\\circ - |\\alpha|",
+          "note": "Centred translating roller follower, worked from the definition of μ",
+          "ref": ""
+        }
+      ],
+      "practice": [
+        {
+          "question": "Kap. 6 Aufgabe 3: stroke 60 mm over a rise of 90°. With the 5th-power law (Cv = 1.875), what is the peak follower slope s′ in mm per radian?",
+          "source": "Worked by hand; data from the Übungsskript, Kap. 6 Aufgabe 3",
+          "answer": 71.6,
+          "unit": "mm",
+          "tolerance": 0.005,
+          "solution": "s′max = sH·Cv/φP = 60·1.875/(π/2) = 71.6 mm/rad.",
+          "compute": {
+            "law": "camSlope",
+            "motion": "quintic",
+            "sH": 60,
+            "phiPDeg": 90
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 6; Übungsskript Kap. 6"
+    },
+    {
+      "id": "indexing",
+      "title": "The indexing cam: steps and rollers",
+      "idea": "A cam turning steadily moves a round table on one station at a time and holds it still in between; the number of stations sets the step and, with the cam's threads, the rollers.",
+      "law": "φS = 360°/n; nR = 360°·ga/φS",
+      "lawTex": "\\varphi_S = \\frac{360^\\circ}{n}, \\qquad n_R = \\frac{360^\\circ\\,g_a}{\\varphi_S}",
+      "equations": [
+        {
+          "eq": "φS = 2π/n",
+          "tex": "\\varphi_S = \\frac{2\\pi}{n}",
+          "note": "Step angle at the output, n stations",
+          "ref": "ch. 6, p. 16"
+        },
+        {
+          "eq": "nR = 360°·ga/φS",
+          "tex": "n_R = \\frac{360^\\circ\\,g_a}{\\varphi_S}",
+          "note": "Rollers per plane, ga the cam's threads (Gängigkeit)",
+          "ref": "ch. 6, p. 16"
+        },
+        {
+          "eq": "L = (360° − φ)·(π/180)·rRolle",
+          "tex": "L = (360^\\circ - \\varphi)\\,\\frac{\\pi}{180^\\circ}\\,r_{\\text{Rolle}}",
+          "note": "Friction-wheel feed length",
+          "ref": "ch. 2, p. 29 (Blatt 29)"
+        }
+      ],
+      "practice": [
+        {
+          "question": "Two stations and a two-thread cam: how many rollers per plane?",
+          "source": "Berger (2021), ch. 6, p. 19, printed: nR = 4",
+          "answer": 4,
+          "unit": "1",
+          "tolerance": 0,
+          "solution": "φS = 360°/2 = 180°; nR = 360·2/180 = 4.",
+          "compute": {
+            "law": "rollers",
+            "stations": 2,
+            "ga": 2
+          }
+        },
+        {
+          "question": "What step angle does a table with 12 stations need?",
+          "source": "Worked by hand from ch. 6, p. 16",
+          "answer": 30,
+          "unit": "°",
+          "tolerance": 0,
+          "solution": "360°/12 = 30°, the course's smallest listed step.",
+          "compute": {
+            "law": "stepAngle",
+            "stations": 12,
+            "ga": 1
+          }
+        },
+        {
+          "question": "A feed roller of radius 20 mm has a flat of 90°. How far does it feed per turn?",
+          "source": "Worked by hand from ch. 2, p. 29",
+          "answer": 94.2,
+          "unit": "mm",
+          "tolerance": 0.005,
+          "solution": "L = (360 − 90)·π/180·20 = 270·0.01745·20 = 94.2 mm.",
+          "compute": {
+            "law": "feed",
+            "phiDeg": 90,
+            "r": 20
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 6, section 6.3.3.2, and chapter 2"
+    },
+    {
+      "id": "gripper",
+      "title": "Suction and magnet grippers",
+      "idea": "A suction cup is held by the air outside pressing harder than the air inside; the force grows with the cup's area and the vacuum, and the safety factor takes a share for shocks and wear.",
+      "law": "F = (po − pu)·A·n3·η·z/S",
+      "lawTex": "F = \\frac{(p_o - p_u)\\,A\\,n_3\\,\\eta\\,z}{S}",
+      "equations": [
+        {
+          "eq": "F = (po − pu)·A·n3·η·z·S⁻¹",
+          "tex": "F = (p_o - p_u)\\,A\\,n_3\\,\\eta\\,z\\,S^{-1}",
+          "note": "n3 deformation factor 0.9 to 0.6, η efficiency, z cups, S safety 2 to 3",
+          "ref": "ch. 3, p. 62"
+        },
+        {
+          "eq": "po falls 12.5 mbar per 100 m from 1013 mbar",
+          "tex": "p_o(h) = 1013\\,\\text{mbar} - 12.5\\,\\text{mbar}\\cdot\\frac{h}{100\\,\\text{m}}",
+          "note": "Outside air with height",
+          "ref": "ch. 3, p. 60"
+        },
+        {
+          "eq": "Fh = A·B²/(2μ0)·(1 − 1/μr)",
+          "tex": "F_h = \\frac{A\\,B^2}{2\\mu_0}\\left(1 - \\frac{1}{\\mu_r}\\right)",
+          "note": "Magnet holding force; B in tesla (the slide prints henry)",
+          "ref": "ch. 3, p. 69"
+        }
+      ],
+      "practice": [
+        {
+          "question": "What is the air pressure at 2000 m, in mbar?",
+          "source": "Berger (2021), ch. 3, p. 60, printed: 763 mbar",
+          "answer": 763,
+          "unit": "mbar",
+          "tolerance": 0.001,
+          "solution": "1013 − 20·12.5 = 763 mbar.",
+          "compute": {
+            "law": "altitude",
+            "h": 2000
+          }
+        },
+        {
+          "question": "Four cups of 40 mm, vacuum 0.7 bar, n3 = 0.8, η = 0.9, S = 2. What load may the gripper lift, in N?",
+          "source": "Worked by hand from ch. 3, p. 62",
+          "answer": 126.7,
+          "unit": "N",
+          "tolerance": 0.005,
+          "solution": "A = π·0.04²/4 = 1.257·10⁻³ m²; F = 70 000·1.257·10⁻³·0.8·0.9·4/2 = 126.7 N, about 12.9 kg.",
+          "compute": {
+            "law": "suction",
+            "po": 170000,
+            "pu": 100000,
+            "d": 0.04,
+            "n3": 0.8,
+            "eta": 0.9,
+            "z": 4,
+            "S": 2
+          }
+        },
+        {
+          "question": "A magnet with a pole area of 4 cm², B = 1 T and μr = 1000: what holding force, in N?",
+          "source": "Worked by hand from ch. 3, p. 69",
+          "answer": 159,
+          "unit": "N",
+          "tolerance": 0.005,
+          "solution": "Fh = 4·10⁻⁴·1²/(2·4π·10⁻⁷)·(1 − 0.001) = 159.2·0.999 = 159 N.",
+          "compute": {
+            "law": "magnet",
+            "A": 0.0004,
+            "B": 1,
+            "mur": 1000
+          }
+        }
+      ],
+      "lecture": "Berger (2021), chapter 3, section 3.4.5"
+    }
+  ]
+}

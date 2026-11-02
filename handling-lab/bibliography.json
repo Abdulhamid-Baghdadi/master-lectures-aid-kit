@@ -1,0 +1,35 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (industrial handling: linkages, motion design, cams, grippers), apart from the design rules' bibliography, which keeps the design principles.",
+  "entries": [
+    {
+      "key": "berger2021",
+      "authors": [
+        "Berger, M."
+      ],
+      "year": 2021,
+      "title": "Industrial Handling (IHA), Vorlesungsreihe, Kapitel 1–6",
+      "venue": "Lecture notes, FH Technikum Wien, winter term 2021; the author holds the chair of Montage- und Handhabungstechnik at TU Chemnitz. Author, course and term from the title sheet of chapter 1 and every page's footer",
+      "backs": "Every equation of the labs, by chapter and PDF page (Blatt where readable), and the worked examples of ch. 3, p. 113 (F = 2) and ch. 6, p. 19 (nR = 4), and the 763 mbar of ch. 3, p. 60, used as practice questions.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    },
+    {
+      "key": "berger2021a",
+      "authors": [
+        "Berger, M."
+      ],
+      "year": 2021,
+      "title": "IHA Übungsskript 2021, and Übungen 5_1, 5_2 and 5_3 with solutions",
+      "venue": "Exercise script and solved exercises of the course above, FH Technikum Wien, 2021",
+      "backs": "The tasks the labs follow (Kap. 4 Aufgaben 1 and 5, Kap. 6 Aufgabe 3) and the printed results of Übungen 5_1 (f = 2z³ − z⁴, Ca = 3, CM = 3.961), 5_2 (Cv = 1.587) and 5_3 (Cv = 1.5, Ca = 6; its ω = 5.54 s⁻¹ for 50 rpm is a slip for 5.236 s⁻¹, checked by hand on 2 Nov 2026).",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-02"
+      }
+    }
+  ]
+}

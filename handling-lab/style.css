@@ -1,0 +1,15 @@
+/* This lab's own look, after the kit's (../kit/style.css): its families' frame colours and the mechanism drawings. */
+[data-family=linkages] { --frame: #1E40AF; }
+[data-family=motion] { --frame: #B45309; }
+[data-family=grippers] { --frame: #047857; }
+
+.mech .link { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.mech .link.second { stroke: var(--second); stroke-width: 3.5; stroke-dasharray: 8 5; }
+.mech .link.faint { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; }
+.mech .body { fill: var(--panel); stroke: var(--ink); stroke-width: 2.5; }
+.mech .body.cam { fill: color-mix(in srgb, var(--accent) 18%, var(--panel)); stroke: var(--accent); }
+.mech .joint { fill: var(--bg); stroke: var(--ink); stroke-width: 2.5; }
+.series.third { stroke: var(--danger); stroke-width: 2.5; stroke-dasharray: 2 4; }
+
+.top { flex-wrap: wrap; }
+.top > div { min-width: 0; flex: 1 1 240px; }
