@@ -97,6 +97,7 @@
           "ref": "Gaussianfilters.pdf, p. 7, eq. 2; p. 11, line 2"
         },
         {
+          "explore": true,
           "eq": "Σ̄t = At·Σt−1·Atᵀ + Rt",
           "tex": "\\bar\\Sigma_t = A_t\\,\\Sigma_{t-1} A_t^{\\mathsf T} + R_t",
           "note": "Prediction of the covariance: the + R makes it grow",
@@ -109,12 +110,14 @@
           "ref": "Gaussianfilters.pdf, p. 12, line 4"
         },
         {
+          "explore": true,
           "eq": "μt = μ̄t + Kt(zt − Ct·μ̄t)",
           "tex": "\\mu_t = \\bar\\mu_t + K_t\\,(z_t - C_t\\,\\bar\\mu_t)",
           "note": "Correction of the mean by the innovation",
           "ref": "Gaussianfilters.pdf, p. 13, line 5"
         },
         {
+          "explore": true,
           "eq": "Σt = (I − Kt·Ct)·Σ̄t",
           "tex": "\\Sigma_t = (I - K_t C_t)\\,\\bar\\Sigma_t",
           "note": "Correction of the covariance",
@@ -178,6 +181,7 @@
           "ref": "EKF.pdf, p. 3, footnote 1"
         },
         {
+          "explore": true,
           "eq": "(X, Y, θ)t = (X, Y, θ)t−1 + (δd·cos(θt−1 + δθ), δd·sin(θt−1 + δθ), δθ)",
           "tex": "\\begin{pmatrix} X_t \\\\ Y_t \\\\ \\theta_t \\end{pmatrix} = \\begin{pmatrix} X_{t-1} \\\\ Y_{t-1} \\\\ \\theta_{t-1} \\end{pmatrix} + \\begin{pmatrix} \\delta_d \\cos(\\theta_{t-1} + \\delta_\\theta) \\\\ \\delta_d \\sin(\\theta_{t-1} + \\delta_\\theta) \\\\ \\delta_\\theta \\end{pmatrix}",
           "note": "The pose moved by one step: not linear in θ, hence the EKF",
@@ -190,6 +194,7 @@
           "ref": "MR_Kinematik.pdf, p. 24, eq. 15"
         },
         {
+          "explore": true,
           "eq": "L = δd/δθ",
           "tex": "L = \\frac{\\delta_d}{\\delta_\\theta}",
           "note": "Turning radius, speed over turn rate; worked here, not on the slides",
@@ -247,12 +252,14 @@
           "ref": "EKF.pdf, p. 8, eqs. 4–5; p. 9"
         },
         {
+          "explore": true,
           "eq": "μ̄t = g(ut, μt−1), Σ̄t = Gt·Σt−1·Gtᵀ + Rt",
           "tex": "\\bar\\mu_t = g(u_t, \\mu_{t-1}),\\quad \\bar\\Sigma_t = G_t\\,\\Sigma_{t-1} G_t^{\\mathsf T} + R_t",
           "note": "The EKF's prediction",
           "ref": "EKF.pdf, p. 12 (after Thrun et al. 2006)"
         },
         {
+          "explore": true,
           "eq": "G = [1, 0, −δd·sin(θ + δθ); 0, 1, δd·cos(θ + δθ); 0, 0, 1]",
           "tex": "G_t = \\begin{pmatrix} 1 & 0 & -\\delta_d \\sin(\\theta + \\delta_\\theta) \\\\ 0 & 1 & \\delta_d \\cos(\\theta + \\delta_\\theta) \\\\ 0 & 0 & 1 \\end{pmatrix}",
           "note": "The Jacobian of the odometry step, worked here from EKF.pdf, p. 3, eq. 1",
@@ -301,6 +308,7 @@
           "ref": "MCMC.pdf, p. 13, eqs. 2–3"
         },
         {
+          "explore": true,
           "eq": "xt[m] ∼ p(xt | ut, xt−1[m])",
           "tex": "x_t^{[m]} \\sim p\\left(x_t \\mid u_t, x_{t-1}^{[m]}\\right)",
           "note": "Prediction: sample each particle's move from the motion model",
@@ -313,6 +321,7 @@
           "ref": "MCMC.pdf, p. 15; p. 18, line 5"
         },
         {
+          "explore": true,
           "eq": "draw i with probability ∝ wt[i], with replacement, M times",
           "tex": "P(\\text{draw } i) = \\frac{w_t^{[i]}}{\\sum_m w_t^{[m]}}",
           "note": "Resampling, the correction step",
@@ -418,6 +427,7 @@
       "lawTex": "J(T_H) = \\frac{(\\mu_1 - \\mu_2)^2}{\\sigma_1^2 + \\sigma_2^2}",
       "equations": [
         {
+          "explore": true,
           "eq": "class(p) = 255 if p ≥ TH, else 0",
           "tex": "\\mathrm{class}(p_{r,c}) = \\begin{cases} 255 & p_{r,c} \\ge T_H \\\\ 0 & \\text{else} \\end{cases}",
           "note": "A fixed threshold",
@@ -484,18 +494,21 @@
           "ref": "2_Segmentation.pdf, p. 25, eq. 11"
         },
         {
+          "explore": true,
           "eq": "S = Δ/Cmax (0 if Cmax = 0), V = Cmax",
           "tex": "S = \\frac{\\Delta}{C_{\\max}},\\quad V = C_{\\max}",
           "note": "Saturation and value",
           "ref": "2_Segmentation.pdf, p. 26, eqs. 12–13"
         },
         {
+          "explore": true,
           "eq": "h = ⌊H/60°⌋, f = H/60° − h, p = V(1 − S), q = V(1 − Sf), t = V(1 − S(1 − f))",
           "tex": "h = \\left\\lfloor \\frac{H}{60^\\circ} \\right\\rfloor,\\ f = \\frac{H}{60^\\circ} - h,\\ p = V(1 - S),\\ q = V(1 - Sf),\\ t = V(1 - S(1 - f))",
           "note": "Back to RGB: the sector and the helper values",
           "ref": "2_Segmentation.pdf, pp. 29–30, eqs. 14–18"
         },
         {
+          "explore": true,
           "eq": "(R, G, B) = (V, t, p), (q, V, p), (p, V, t), (p, q, V), (t, p, V), (V, p, q) for h = 0 … 5",
           "tex": "(R, G, B) = (V,t,p),\\ (q,V,p),\\ (p,V,t),\\ (p,q,V),\\ (t,p,V),\\ (V,p,q)",
           "note": "For h = 0 to 5; the slide prints (q, V, t) for h = 2, a slip: R must be p there",
@@ -619,6 +632,7 @@
           "ref": "10_MuS2_CNN.pdf, p. 7 (corrected)"
         },
         {
+          "explore": true,
           "eq": "out = ⌊(n + 2p − m)/s⌋ + 1",
           "tex": "n_{\\text{out}} = \\left\\lfloor \\frac{n + 2p - m}{s} \\right\\rfloor + 1",
           "note": "Output size along one axis, p the padding and s the stride; worked here and checked against the shapes printed on p. 10",
@@ -691,6 +705,7 @@
           "ref": "11_Pose-Estimation.pdf, p. 10, eq. 3; p. 16"
         },
         {
+          "explore": true,
           "eq": "u = fx·xc/zc + cx, v = fy·yc/zc + cy",
           "tex": "\\begin{pmatrix} u \\\\ v \\end{pmatrix} = \\begin{pmatrix} c_x \\\\ c_y \\end{pmatrix} + \\frac{1}{z_c} \\begin{pmatrix} f_x\\, x_c \\\\ f_y\\, y_c \\end{pmatrix}",
           "note": "The pinhole camera with the chip's offset",
@@ -754,6 +769,7 @@
           "ref": "11_Pose-Estimation.pdf, p. 34, eq. 15"
         },
         {
+          "explore": true,
           "eq": "per cycle: 2 random points, fit, count inliers within ε, stop when inliers/n > τ",
           "tex": "\\frac{\\#\\{\\,i : |y_i - (k x_i + d)| \\le \\varepsilon\\,\\}}{n} > \\tau \\;\\Rightarrow\\; \\text{stop}",
           "note": "The RANSAC loop for a line; after the stop or N cycles, refit with all inliers",

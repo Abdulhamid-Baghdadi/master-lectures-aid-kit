@@ -234,13 +234,15 @@
           "eq": "r = (|A0Ba| − |A0Bi|)/2, l = (|A0Ba| + |A0Bi|)/2",
           "tex": "r = \\tfrac12(\\overline{A_0B_a} - \\overline{A_0B_i}), \\quad l = \\tfrac12(\\overline{A_0B_a} + \\overline{A_0B_i})",
           "note": "From the stretched and folded positions",
-          "ref": ""
+          "ref": "",
+          "explore": true
         },
         {
           "eq": "time ratio = φ0 : (360° − φ0)",
           "tex": "\\frac{t_{\\text{work}}}{t_{\\text{return}}} = \\frac{\\varphi_0}{360^\\circ - \\varphi_0}",
           "note": "At constant crank speed",
-          "ref": ""
+          "ref": "",
+          "explore": true
         }
       ],
       "practice": [
@@ -368,19 +370,22 @@
           "eq": "ẏ = y′ẋ, ÿ = y″ẋ² + y′ẍ",
           "tex": "\\dot y = y'\\dot x, \\quad \\ddot y = y''\\dot x^2 + y'\\ddot x",
           "note": "From the drive angle to time",
-          "ref": "ch. 5, p. 21 (Blatt 23)"
+          "ref": "ch. 5, p. 21 (Blatt 23)",
+          "explore": true
         },
         {
           "eq": "Cv = max|f′|, Ca = max|f″|, Cj = max|f‴|, CM = max|f′f″|",
           "tex": "C_v = \\max|f'|,\\ C_a = \\max|f''|,\\ C_j = \\max|f'''|,\\ C_M = \\max|f'f''|",
           "note": "Characteristic values",
-          "ref": "ch. 5, p. 30 (Blatt 32)"
+          "ref": "ch. 5, p. 30 (Blatt 32)",
+          "explore": true
         },
         {
           "eq": "max|y″| = Ca·yH/xP²",
           "tex": "\\max|y''| = C_a\\,\\frac{y_H}{x_P^2}",
           "note": "Peak acceleration over the drive angle",
-          "ref": "ch. 5, p. 30 (Blatt 32)"
+          "ref": "ch. 5, p. 30 (Blatt 32)",
+          "explore": true
         },
         {
           "eq": "f = a1z + a2z² + a3z³ + a4z⁴ + a5z⁵",
@@ -482,7 +487,8 @@
           "eq": "tan α = s′/(rG + rR + s), μ = 90° − |α|",
           "tex": "\\tan\\alpha = \\frac{s'}{r_G + r_R + s}, \\quad \\mu = 90^\\circ - |\\alpha|",
           "note": "Centred translating roller follower, worked from the definition of μ",
-          "ref": ""
+          "ref": "",
+          "explore": true
         }
       ],
       "practice": [
@@ -526,7 +532,8 @@
           "eq": "L = (360° − φ)·(π/180)·rRolle",
           "tex": "L = (360^\\circ - \\varphi)\\,\\frac{\\pi}{180^\\circ}\\,r_{\\text{Rolle}}",
           "note": "Friction-wheel feed length",
-          "ref": "ch. 2, p. 29 (Blatt 29)"
+          "ref": "ch. 2, p. 29 (Blatt 29)",
+          "explore": true
         }
       ],
       "practice": [
@@ -589,13 +596,15 @@
           "eq": "po falls 12.5 mbar per 100 m from 1013 mbar",
           "tex": "p_o(h) = 1013\\,\\text{mbar} - 12.5\\,\\text{mbar}\\cdot\\frac{h}{100\\,\\text{m}}",
           "note": "Outside air with height",
-          "ref": "ch. 3, p. 60"
+          "ref": "ch. 3, p. 60",
+          "explore": true
         },
         {
           "eq": "Fh = A·B²/(2μ0)·(1 − 1/μr)",
           "tex": "F_h = \\frac{A\\,B^2}{2\\mu_0}\\left(1 - \\frac{1}{\\mu_r}\\right)",
           "note": "Magnet holding force; B in tesla (the slide prints henry)",
-          "ref": "ch. 3, p. 69"
+          "ref": "ch. 3, p. 69",
+          "explore": true
         }
       ],
       "practice": [

@@ -55,7 +55,7 @@
       "law": "rate = w·h·bytes·fps·8",
       "lawTex": "R = w\\,h\\,n_\\mathrm{B}\\,f_\\mathrm{img}\\cdot 8",
       "equations": [
-        { "eq": "size = w·h·nB", "tex": "N = w\\,h\\,n_\\mathrm{B}", "note": "Bytes per image: width × height pixels × bytes per pixel (1 for 8-bit grey, 3 for 8-bit colour)", "ref": "MC2.pdf (MC Teil 1), Frage 2; slides p. 35 (slide 70)" },
+        { "explore": true, "eq": "size = w·h·nB", "tex": "N = w\\,h\\,n_\\mathrm{B}", "note": "Bytes per image: width × height pixels × bytes per pixel (1 for 8-bit grey, 3 for 8-bit colour)", "ref": "MC2.pdf (MC Teil 1), Frage 2; slides p. 35 (slide 70)" },
         { "eq": "R = N·fimg·8", "tex": "R = 8\\,N f_\\mathrm{img}", "note": "Bits per second for fimg images per second. The slides' example: 800 × 600 colour, ca. 1.5 MB per image, 25 per second, ca. 290 Mbit/s", "ref": "Slides p. 35 (slide 70)" }
       ],
       "practice": [
@@ -188,11 +188,11 @@
       "law": "I = (R + G + B)/3,  S = 1 − min(R,G,B)/I",
       "lawTex": "I = \\frac{R+G+B}{3},\\quad S = 1 - \\frac{\\min(R,G,B)}{I}",
       "equations": [
-        { "eq": "H = 1/(2π)·arccos(((R−G)+(R−B))/(2√((R−G)²+(R−B)(G−B)))); H = 1 − H if B > G", "tex": "H = \\frac{1}{2\\pi}\\arccos\\frac{(R-G)+(R-B)}{2\\sqrt{(R-G)^2+(R-B)(G-B)}},\\quad H \\to 1-H \\text{ if } B>G", "note": "HSI hue as a fraction of a turn; undefined when S = 0 or undefined", "ref": "Slides p. 63 (slide 126)" },
+        { "explore": true, "eq": "H = 1/(2π)·arccos(((R−G)+(R−B))/(2√((R−G)²+(R−B)(G−B)))); H = 1 − H if B > G", "tex": "H = \\frac{1}{2\\pi}\\arccos\\frac{(R-G)+(R-B)}{2\\sqrt{(R-G)^2+(R-B)(G-B)}},\\quad H \\to 1-H \\text{ if } B>G", "note": "HSI hue as a fraction of a turn; undefined when S = 0 or undefined", "ref": "Slides p. 63 (slide 126)" },
         { "eq": "I = (R+G+B)/3, S = 1 − min(R,G,B)/I", "tex": "I = \\frac{R+G+B}{3},\\quad S = 1 - \\frac{\\min(R,G,B)}{I}", "note": "HSI intensity and saturation; S undefined when I = 0", "ref": "Slides p. 63 (slide 126)" },
         { "eq": "V = max, Δ = V − min, S = Δ/V", "tex": "V = \\max(R,G,B),\\quad \\Delta = V - \\min(R,G,B),\\quad S = \\frac{\\Delta}{V}", "note": "HSV value and saturation", "ref": "Slides p. 64 (slide 128)" },
-        { "eq": "H = (G−B)/(6Δ) | ((B−R)/Δ + 2)/6 | ((R−G)/Δ + 4)/6, +1 if < 0", "tex": "H = \\begin{cases}\\frac{1}{6}\\frac{G-B}{\\Delta} & R = V\\\\ \\frac{1}{6}\\left(\\frac{B-R}{\\Delta}+2\\right) & G = V\\\\ \\frac{1}{6}\\left(\\frac{R-G}{\\Delta}+4\\right) & B = V\\end{cases}", "note": "HSV hue, by which channel is largest; 1 added when negative. Much faster than HSI", "ref": "Slides p. 64 (slide 128)" },
-        { "eq": "Y = 0.299R + 0.587G + 0.114B", "tex": "Y = 0.299\\,R + 0.587\\,G + 0.114\\,B", "note": "Grey with more weight on green; or I = (R+G+B)/3 with all alike", "ref": "Slides p. 65 (slide 130)" },
+        { "explore": true, "eq": "H = (G−B)/(6Δ) | ((B−R)/Δ + 2)/6 | ((R−G)/Δ + 4)/6, +1 if < 0", "tex": "H = \\begin{cases}\\frac{1}{6}\\frac{G-B}{\\Delta} & R = V\\\\ \\frac{1}{6}\\left(\\frac{B-R}{\\Delta}+2\\right) & G = V\\\\ \\frac{1}{6}\\left(\\frac{R-G}{\\Delta}+4\\right) & B = V\\end{cases}", "note": "HSV hue, by which channel is largest; 1 added when negative. Much faster than HSI", "ref": "Slides p. 64 (slide 128)" },
+        { "explore": true, "eq": "Y = 0.299R + 0.587G + 0.114B", "tex": "Y = 0.299\\,R + 0.587\\,G + 0.114\\,B", "note": "Grey with more weight on green; or I = (R+G+B)/3 with all alike", "ref": "Slides p. 65 (slide 130)" },
         { "eq": "R = R(u,v), G = ½(G(u+1,v) + G(u,v+1)), B = B(u+1,v+1)", "tex": "R = R_{u,v},\\quad G = \\tfrac{1}{2}\\left(G_{u+1,v} + G_{u,v+1}\\right),\\quad B = B_{u+1,v+1}", "note": "The primary Bayer pattern turned into colour, one 2 × 2 cell", "ref": "Slides p. 58 (slide 116)" },
         { "eq": "R = YE − ½(G+G), G = ½(G+G), B = CY − ½(G+G)", "tex": "R = YE - \\tfrac{1}{2}(G + G'),\\quad G = \\tfrac{1}{2}(G + G'),\\quad B = CY - \\tfrac{1}{2}(G + G')", "note": "The complementary pattern, with CY = G + B and YE = R + G", "ref": "Slides p. 59 (slide 117); p. 57 (slide 114)" }
       ],
@@ -234,9 +234,9 @@
       "law": "d = c·φ/(4π·fmod)",
       "lawTex": "d = \\frac{c\\,\\varphi}{4\\pi f_\\mathrm{mod}}",
       "equations": [
-        { "eq": "φ = arctan((A1 − A3)/(A2 − A4))", "tex": "\\varphi = \\arctan\\frac{A_1 - A_3}{A_2 - A_4}", "note": "Phase from four samples of the returned light; the lab takes the signs of both differences into account, so φ covers a full turn", "ref": "Slides p. 77 (slide 154)" },
+        { "explore": true, "eq": "φ = arctan((A1 − A3)/(A2 − A4))", "tex": "\\varphi = \\arctan\\frac{A_1 - A_3}{A_2 - A_4}", "note": "Phase from four samples of the returned light; the lab takes the signs of both differences into account, so φ covers a full turn", "ref": "Slides p. 77 (slide 154)" },
         { "eq": "d = c·φ/(4π·fmod)", "tex": "d = \\frac{c\\,\\varphi}{4\\pi f_\\mathrm{mod}}", "note": "Distance from the phase", "ref": "Slides p. 77 (slide 154)" },
-        { "eq": "dmax = λmod/2, λmod = c/fmod", "tex": "d_\\mathrm{max} = \\frac{\\lambda_\\mathrm{mod}}{2},\\quad \\lambda_\\mathrm{mod} = \\frac{c}{f_\\mathrm{mod}}", "note": "The unambiguous range. The slide's example, λmod = 15 m at fmod = 20 kHz, holds for 20 MHz; λmod = c/fmod is worked here from that pair", "ref": "Slides p. 78 (slide 156)" }
+        { "explore": true, "eq": "dmax = λmod/2, λmod = c/fmod", "tex": "d_\\mathrm{max} = \\frac{\\lambda_\\mathrm{mod}}{2},\\quad \\lambda_\\mathrm{mod} = \\frac{c}{f_\\mathrm{mod}}", "note": "The unambiguous range. The slide's example, λmod = 15 m at fmod = 20 kHz, holds for 20 MHz; λmod = c/fmod is worked here from that pair", "ref": "Slides p. 78 (slide 156)" }
       ],
       "practice": [
         {
@@ -279,8 +279,8 @@
         { "eq": "zc = b·f/d", "tex": "z_c = \\frac{b\\,f}{d}", "note": "Depth from the baseline b, focal length f and disparity d (f and d in the same unit, e.g. pixels)", "ref": "Slides p. 86 (slide 171)" },
         { "eq": "z ∼ 1/d", "tex": "z \\sim \\frac{1}{d}", "note": "So the depth resolution worsens with distance", "ref": "Slides p. 85 (slide 169)" },
         { "eq": "(xc, yc, zc) = K⁻¹·(u·zc, v·zc, zc)", "tex": "\\begin{pmatrix}x_c\\\\y_c\\\\z_c\\end{pmatrix} = K^{-1}\\begin{pmatrix}u\\,z_c\\\\v\\,z_c\\\\z_c\\end{pmatrix}", "note": "The other two coordinates once zc is known", "ref": "Slides p. 86 (slide 171)" },
-        { "eq": "Δz = b·f/(d − 1) − b·f/d", "tex": "\\Delta z = \\frac{b\\,f}{d-1} - \\frac{b\\,f}{d} \\approx \\frac{z^2}{b\\,f}", "note": "The depth one pixel of disparity spans, worked from zc = b·f/d", "ref": "" },
-        { "eq": "FOV = 2·arctan(n·p/(2f))", "tex": "\\mathrm{FOV} = 2\\arctan\\frac{n\\,p}{2f}", "note": "Field of view across n pixels of pitch p, worked from the pinhole; it reproduces the table's FOVh and FOVv", "ref": "" },
+        { "explore": true, "eq": "Δz = b·f/(d − 1) − b·f/d", "tex": "\\Delta z = \\frac{b\\,f}{d-1} - \\frac{b\\,f}{d} \\approx \\frac{z^2}{b\\,f}", "note": "The depth one pixel of disparity spans, worked from zc = b·f/d", "ref": "" },
+        { "explore": true, "eq": "FOV = 2·arctan(n·p/(2f))", "tex": "\\mathrm{FOV} = 2\\arctan\\frac{n\\,p}{2f}", "note": "Field of view across n pixels of pitch p, worked from the pinhole; it reproduces the table's FOVh and FOVv", "ref": "" },
         { "eq": "DBR = B/(2·Z·tan(HFOV/2)), band = HRes·DBR = B·F/Z", "tex": "\\mathrm{DBR} = \\frac{B}{2Z\\tan(\\mathrm{HFOV}/2)},\\quad n_\\mathrm{band} = \\frac{B\\,F}{Z}", "note": "The invalid depth band at the left edge of a stereo module, seen by the left camera only", "ref": "Intel (2018), Manual.pdf p. 57, section 4.7" }
       ],
       "practice": [
@@ -339,9 +339,9 @@
       "law": "c_SAD = Σ|I1 − I2|",
       "lawTex": "c_\\mathrm{SAD}(I_1, I_2) = \\sum_u \\sum_v \\left|I_1(u,v) - I_2(u,v)\\right|",
       "equations": [
-        { "eq": "c_SSD = ΣΣ(I1 − I2)²", "tex": "c_\\mathrm{SSD}(I_1, I_2) = \\sum_u \\sum_v \\left(I_1(u,v) - I_2(u,v)\\right)^2", "note": "Sum of squared differences; the smaller, the better the match", "ref": "Slides p. 87 (slide 174)" },
+        { "explore": true, "eq": "c_SSD = ΣΣ(I1 − I2)²", "tex": "c_\\mathrm{SSD}(I_1, I_2) = \\sum_u \\sum_v \\left(I_1(u,v) - I_2(u,v)\\right)^2", "note": "Sum of squared differences; the smaller, the better the match", "ref": "Slides p. 87 (slide 174)" },
         { "eq": "c_SAD = ΣΣ|I1 − I2|", "tex": "c_\\mathrm{SAD}(I_1, I_2) = \\sum_u \\sum_v \\left|I_1(u,v) - I_2(u,v)\\right|", "note": "Sum of absolute differences; the smaller, the better", "ref": "Slides p. 87 (slide 174)" },
-        { "eq": "d* = argmin over d of c(L(x), R(x − d))", "tex": "d^* = \\arg\\min_d \\; c\\big(L(x),\\, R(x-d)\\big)", "note": "The disparity chosen, searched along one row because rectified images put corresponding points on the same row", "ref": "" }
+        { "explore": true, "eq": "d* = argmin over d of c(L(x), R(x − d))", "tex": "d^* = \\arg\\min_d \\; c\\big(L(x),\\, R(x-d)\\big)", "note": "The disparity chosen, searched along one row because rectified images put corresponding points on the same row", "ref": "" }
       ],
       "practice": [
         {
