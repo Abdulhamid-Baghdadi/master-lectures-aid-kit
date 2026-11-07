@@ -85,7 +85,7 @@ _fig.suptitle("Lab: " + _VIEW + " (" + (_lab["charts"][0].get("label") or "") + 
 _fig.savefig(_PNG_LAB, dpi=80); _plt.close("all")
 _res = dict(python={_n: _stats(_t, _y) for _n, _t, _y in _series}, python_own_plot=_own,
             lab={f"{_c.get('label','')} / {_l.get('name') or _j}": _stats(_l["x"], _l["y"]) for _c in _lab["charts"] for _j, _l in enumerate(_c["lines"]) if not _l.get("noTip")})
-open(_OUT_JSON, "w").write(_json.dumps(_res, indent=1))
+open(_OUT_JSON, "w", encoding="utf-8", newline="\n").write(_json.dumps(_res, indent=1))
 `;
 
 const tmp = mkdtempSync(join(tmpdir(), "python-plots-")), report = [];
