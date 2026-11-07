@@ -1,0 +1,39 @@
+{
+ "python": {
+  "y[:, 0]": {
+   "peak": 0.44084066360343094,
+   "t_peak": 0.006052141527001862,
+   "final": 0.312500000000014,
+   "settling": 0.0260707635009311,
+   "t_end": 0.25,
+   "n": 538
+  },
+  "y[:, 1]": {
+   "peak": 1.0,
+   "t_peak": 0.0,
+   "final": -4.440892098500626e-16,
+   "settling": 0.2132216014897579,
+   "t_end": 0.25,
+   "n": 538
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Both outputs after a 1 V step of the input / ub": {
+   "peak": 0.4401775441748018,
+   "t_peak": 0.00625,
+   "final": 0.31250000000000006,
+   "settling": 0.02625,
+   "t_end": 0.25,
+   "n": 401
+  },
+  "Both outputs after a 1 V step of the input / uc": {
+   "peak": 1.0,
+   "t_peak": 0.0,
+   "final": -2.220446049250313e-16,
+   "settling": 0.213125,
+   "t_end": 0.25,
+   "n": 401
+  }
+ }
+}

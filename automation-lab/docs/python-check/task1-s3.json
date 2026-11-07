@@ -1,0 +1,39 @@
+{
+ "python": {
+  "y": {
+   "peak": 2593.3292114336728,
+   "t_peak": 0.20205983528870117,
+   "final": 2496.8942070510484,
+   "settling": 0.26718655905943955,
+   "t_end": 0.4313949651480535,
+   "n": 776
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Speed before and after the defect, and the observer's estimate after it / before": {
+   "peak": 2522.4713755103885,
+   "t_peak": 0.07806666666666667,
+   "final": 2500.4939310237382,
+   "settling": 0.055400000000000005,
+   "t_end": 0.13333333333333333,
+   "n": 2001
+  },
+  "Speed before and after the defect, and the observer's estimate after it / after: true": {
+   "peak": 2593.328923978841,
+   "t_peak": 0.20186666666666667,
+   "final": 2499.7092818269484,
+   "settling": 0.264,
+   "t_end": 0.5333333333333333,
+   "n": 2001
+  },
+  "Speed before and after the defect, and the observer's estimate after it / after: estimate": {
+   "peak": 2583.674863577036,
+   "t_peak": 0.20346666666666668,
+   "final": 2499.7213218489255,
+   "settling": 0.2592,
+   "t_end": 0.5333333333333333,
+   "n": 2001
+  }
+ }
+}

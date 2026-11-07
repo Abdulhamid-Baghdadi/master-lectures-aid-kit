@@ -20,7 +20,9 @@ const pyHead = `${Py.HEAD}\n\nR_1 = 2.75\nR_2 = 1.99\nL_1 = 125e-3\nC_2 = 234e-6
 export function design({ s, w, k = 3, target = 2500, defect = 1 }) {
   const m = circuit20(P, 500), plant = circuit20({ ...P, C2: P.C2 * defect }, 500), p = [[s, w], [s, -w]];
   const r = ackermann(m.A, m.b, p), Kf = prefilter(m.A, m.b, m.c, r), l = observerGain(m.A, m.c, p.map(([re, im]) => [k * re, k * im]));
-  const T = Math.min(0.2, 8 / Math.abs(s));
+  // A larger C2 slows the loop: the run after the defect gets more time, so its last value is the steady one
+  // (python-check, 7 Nov 2026: at the healthy span it was still rising).
+  const T = Math.min(0.2, 8 / Math.abs(s)) * (defect > 1 ? 4 : 1);
   const lin = runLoop(m, { r, Kf, w: target, T, n: 2000 });
   const sat = runLoop(m, { r, Kf, w: target, T, n: 2000, umax: UMAX });
   const obs = runLoop(m, { r, Kf, l, w: target, T, n: 2000, umax: UMAX, plant });

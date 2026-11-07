@@ -1,0 +1,31 @@
+{
+ "python": {
+  "y[:, 0]": {
+   "peak": 40.4174664705465,
+   "t_peak": 1.5,
+   "final": 40.4174664705465,
+   "settling": 1.1675,
+   "t_end": 1.5,
+   "n": 601
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Speed and current with the load torque from 0.8 s / n": {
+   "peak": 2425.472115273136,
+   "t_peak": 1.5,
+   "final": 2425.472115273136,
+   "settling": 1.165,
+   "t_end": 1.5,
+   "n": 601
+  },
+  "Speed and current with the load torque from 0.8 s / 100\u00b7iA": {
+   "peak": 1477.3181523583519,
+   "t_peak": 0.315,
+   "final": 430.241721259849,
+   "settling": 1.435,
+   "t_end": 1.5,
+   "n": 601
+  }
+ }
+}

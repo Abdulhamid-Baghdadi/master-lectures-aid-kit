@@ -1,0 +1,47 @@
+{
+ "python": {
+  "sol.y[0]": {
+   "peak": 0.999998213699725,
+   "t_peak": 1.5,
+   "final": 0.999998213699725,
+   "settling": 0.518328721007158,
+   "t_end": 1.5,
+   "n": 80
+  },
+  "sol.y[1]": {
+   "peak": 0.002506469897300277,
+   "t_peak": 0.7579403996341052,
+   "final": 0.002499308109277897,
+   "settling": 0.5357480365106092,
+   "t_end": 1.5,
+   "n": 80
+  },
+  "sol.y[2]": {
+   "peak": 0.029642658842382145,
+   "t_peak": 0.04652545373258967,
+   "final": 1.3712172789741615e-05,
+   "settling": 1.5,
+   "t_end": 1.5,
+   "n": 80
+  }
+ },
+ "python_own_plot": true,
+ "lab": {
+  "Coil current i_S without and with the back-EMF / sheet (uncoupled)": {
+   "peak": 0.9999938557876468,
+   "t_peak": 1.5,
+   "final": 0.9999938557876468,
+   "settling": 0.489,
+   "t_end": 1.5,
+   "n": 3001
+  },
+  "Coil current i_S without and with the back-EMF / with back-EMF": {
+   "peak": 0.9999982420971011,
+   "t_peak": 1.499,
+   "final": 0.9999982303177327,
+   "settling": 0.5,
+   "t_end": 1.5,
+   "n": 3001
+  }
+ }
+}

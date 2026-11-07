@@ -1,0 +1,47 @@
+{
+ "python": {
+  "y": {
+   "peak": 5.038709955102761,
+   "t_peak": 0.08140452348968848,
+   "final": 5.008328000784753,
+   "settling": 0.05814608820692034,
+   "t_end": 0.11512925464970228,
+   "n": 100
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Speed after the step, linear and with u limited to \u00b110 V / linear": {
+   "peak": 2522.4713755103885,
+   "t_peak": 0.07806666666666667,
+   "final": 2500.4939310237382,
+   "settling": 0.055400000000000005,
+   "t_end": 0.13333333333333333,
+   "n": 2001
+  },
+  "Speed after the step, linear and with u limited to \u00b110 V / u limited": {
+   "peak": 2522.4713755103885,
+   "t_peak": 0.07806666666666667,
+   "final": 2500.4939310237382,
+   "settling": 0.055400000000000005,
+   "t_end": 0.13333333333333333,
+   "n": 2001
+  },
+  "The input u and the \u00b110 V limit / u, linear": {
+   "peak": 5.038730113440205,
+   "t_peak": 0.08093333333333334,
+   "final": 5.001333412608954,
+   "settling": 0.05746666666666667,
+   "t_end": 0.13333333333333333,
+   "n": 2001
+  },
+  "The input u and the \u00b110 V limit / u limited": {
+   "peak": 5.038730113440205,
+   "t_peak": 0.08093333333333334,
+   "final": 5.001333412608954,
+   "settling": 0.05746666666666667,
+   "t_end": 0.13333333333333333,
+   "n": 2001
+  }
+ }
+}

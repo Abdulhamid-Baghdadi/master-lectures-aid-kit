@@ -1,0 +1,31 @@
+{
+ "python": {
+  "y": {
+   "peak": -18.362871045389983,
+   "t_peak": 0.73,
+   "final": 1.0014112348514381,
+   "settling": 3.22,
+   "t_end": 4.0,
+   "n": 401
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "x1 and its estimate in the closed loop, the plant starting at x0 = (0.3, \u22120.2), the observer at 0 / x1": {
+   "peak": -18.36287197992996,
+   "t_peak": 0.73,
+   "final": 1.0014112344164467,
+   "settling": 3.22,
+   "t_end": 4.0,
+   "n": 401
+  },
+  "x1 and its estimate in the closed loop, the plant starting at x0 = (0.3, \u22120.2), the observer at 0 / x\u03021": {
+   "peak": -18.32967635805705,
+   "t_peak": 0.73,
+   "final": 1.0014112345189385,
+   "settling": 3.22,
+   "t_end": 4.0,
+   "n": 401
+  }
+ }
+}

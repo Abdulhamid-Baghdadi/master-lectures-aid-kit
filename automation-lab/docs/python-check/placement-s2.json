@@ -1,0 +1,31 @@
+{
+ "python": {
+  "y": {
+   "peak": 1.3602298197199199,
+   "t_peak": 1.1164048935728745,
+   "final": 0.9997354090096076,
+   "settling": 3.628315904111842,
+   "t_end": 6.907755278982162,
+   "n": 100
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Step response with prefilter and the input u / v": {
+   "peak": 1.3601331374386392,
+   "t_peak": 1.125,
+   "final": 0.9994610524245583,
+   "settling": 3.63,
+   "t_end": 6.0,
+   "n": 401
+  },
+  "Step response with prefilter and the input u / u": {
+   "peak": 3.7024555746855734,
+   "t_peak": 0.78,
+   "final": 2.222947345440365,
+   "settling": 4.14,
+   "t_end": 6.0,
+   "n": 401
+  }
+ }
+}

@@ -1,0 +1,31 @@
+{
+ "python": {
+  "y": {
+   "peak": 0.04263554237500932,
+   "t_peak": 60.0,
+   "final": 0.04263554237500932,
+   "settling": 58.477157360406096,
+   "t_end": 60.0,
+   "n": 395
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Position x and swing \u03c6 during the move / x [m]": {
+   "peak": 0.10658885593753735,
+   "t_peak": 60.0,
+   "final": 0.10658885593753735,
+   "settling": 58.44,
+   "t_end": 60.0,
+   "n": 1501
+  },
+  "Position x and swing \u03c6 during the move / \u03c6 [\u00b0]": {
+   "peak": -0.037449542282203804,
+   "t_peak": 1.56,
+   "final": 4.4229585232647844e-06,
+   "settling": 40.480000000000004,
+   "t_end": 60.0,
+   "n": 1501
+  }
+ }
+}

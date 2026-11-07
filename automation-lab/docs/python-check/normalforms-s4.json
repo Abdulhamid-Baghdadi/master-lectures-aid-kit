@@ -1,0 +1,31 @@
+{
+ "python": {
+  "y": {
+   "peak": 0.9059025861504517,
+   "t_peak": 0.42424242424242425,
+   "final": 0.4981872761283803,
+   "settling": 3.6363636363636367,
+   "t_end": 6.0,
+   "n": 100
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Step responses of the normal forms, drawn over each other / RNF": {
+   "peak": 0.9070329605060675,
+   "t_peak": 0.44,
+   "final": 0.49818727598704715,
+   "settling": 3.6,
+   "t_end": 6.0,
+   "n": 301
+  },
+  "Step responses of the normal forms, drawn over each other / BNF": {
+   "peak": 0.9070329605060675,
+   "t_peak": 0.44,
+   "final": 0.498187275987047,
+   "settling": 3.6,
+   "t_end": 6.0,
+   "n": 301
+  }
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "python": {
+  "y": {
+   "peak": 0.9978639679321426,
+   "t_peak": 2.3025850929916,
+   "final": 0.9978639679321426,
+   "settling": 1.703912968813784,
+   "t_end": 2.3025850929916,
+   "n": 101
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Step response of the loop with observer / v": {
+   "peak": 1.0000825152788808,
+   "t_peak": 3.2,
+   "final": 1.000021542878339,
+   "settling": 1.73,
+   "t_end": 4.0,
+   "n": 401
+  }
+ }
+}

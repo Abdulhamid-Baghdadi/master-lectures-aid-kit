@@ -1,0 +1,23 @@
+{
+ "python": {
+  "y": {
+   "peak": -712.9868783597362,
+   "t_peak": 1.0,
+   "final": -712.9868783597362,
+   "settling": 1.0,
+   "t_end": 1.0,
+   "n": 100
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "The outputs after a unit step on the first input over 1 s / v": {
+   "peak": -712.9867780504372,
+   "t_peak": 1.0,
+   "final": -712.9867780504372,
+   "settling": 1.0,
+   "t_end": 1.0,
+   "n": 301
+  }
+ }
+}

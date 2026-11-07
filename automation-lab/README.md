@@ -56,6 +56,13 @@ The student's own lab scripts were the model for the MATLAB style, not for their
   real axis; they belong at π/8 and 3π/8 (slides p. 32, 2n = 8 equal parts). With the correct angles and the script's
   radius 0.98 the load swings 3.2°, over the ±2.5° limit; the lab starts there so the limit shows.
 
+A slip of the lab's own, found by drawing each view's Python beside the lab's chart (`docs/python-check`, 7 Nov 2026):
+
+- **Task 1, step 3 (defect):** the run after C2 grew tenfold stopped at the healthy loop's 0.133 s, while the slower
+  loop was still rising (2385 rpm), so "Steady error" read −115 rpm. python-control's step of the same loop settles at
+  2500 rpm (peak 2593 rpm at 0.20 s). The defect run now lasts four times longer and ends at 2500 rpm, no steady error;
+  `tests/unit/python-check.test.js` holds it.
+
 ## MATLAB facts the code relies on
 
 Read on the MathWorks reference pages on 7 Nov 2026 (bibliography.json, MathWorks 2026): `stepinfo` defaults to a

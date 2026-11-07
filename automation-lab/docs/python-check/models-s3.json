@@ -1,0 +1,31 @@
+{
+ "python": {
+  "y": {
+   "peak": 2360.736831161488,
+   "t_peak": 1.0,
+   "final": 2360.736831161488,
+   "settling": 1.0,
+   "t_end": 1.0,
+   "n": 301
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "The states moving freely from x1 = 1 over 1 s / x1": {
+   "peak": 2360.7364992362836,
+   "t_peak": 1.0,
+   "final": 2360.7364992362836,
+   "settling": 1.0,
+   "t_end": 1.0,
+   "n": 301
+  },
+  "The states moving freely from x1 = 1 over 1 s / x2": {
+   "peak": 9999.957926609006,
+   "t_peak": 1.0,
+   "final": 9999.957926609006,
+   "settling": 1.0,
+   "t_end": 1.0,
+   "n": 301
+  }
+ }
+}

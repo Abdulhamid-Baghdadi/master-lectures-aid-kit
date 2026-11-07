@@ -1,0 +1,39 @@
+{
+ "python": {
+  "sol.y[0]": {
+   "peak": 0.1967682085231811,
+   "t_peak": 3.019664688545955,
+   "final": 0.17249269134676248,
+   "settling": 4.0,
+   "t_end": 4.0,
+   "n": 64
+  },
+  "sol.y[1]": {
+   "peak": -1.3320270462607646,
+   "t_peak": 0.34854239802593856,
+   "final": -0.8731461280069677,
+   "settling": 4.0,
+   "t_end": 4.0,
+   "n": 64
+  }
+ },
+ "python_own_plot": true,
+ "lab": {
+  "Angle \u03c6\u2081 from the horizontal, released at 0 / lab": {
+   "peak": 11.279563882320074,
+   "t_peak": 3.948,
+   "final": 9.947220330229062,
+   "settling": 3.996,
+   "t_end": 4.0,
+   "n": 2001
+  },
+  "Angle \u03c6\u2081 from the horizontal, released at 0 / sheet p. 21": {
+   "peak": 5.625603313996448,
+   "t_peak": 2.128,
+   "final": 0.02964004624776976,
+   "settling": 4.0,
+   "t_end": 4.0,
+   "n": 2001
+  }
+ }
+}

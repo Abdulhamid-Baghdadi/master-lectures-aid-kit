@@ -1,0 +1,23 @@
+{
+ "python": {
+  "y": {
+   "peak": 0.9979415290086487,
+   "t_peak": 5.0,
+   "final": 0.9979415290086487,
+   "settling": 3.5353535353535355,
+   "t_end": 5.0,
+   "n": 100
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Step response of controller 1: s = \u22122 (triple) / v": {
+   "peak": 0.997941529004878,
+   "t_peak": 5.0,
+   "final": 0.997941529004878,
+   "settling": 3.525,
+   "t_end": 5.0,
+   "n": 601
+  }
+ }
+}

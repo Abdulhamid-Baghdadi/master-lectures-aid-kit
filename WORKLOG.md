@@ -158,3 +158,29 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
   lsim check is at 1e-3: the lab's 200 Runge–Kutta steps on a pole near 10.7 are 1.6e-4 off the exact solution.
 - Checked at 375 px, light and dark: automation `#placement`, modsim `#zweimasse`; no sideways scroll, no console
   errors. Server stopped. Nothing committed.
+
+## 7 Nov 2026, evening: faster Python run tests (kit runner)
+
+- `kit/tests/code-views.js` runChecks now runs the snippets on long-lived workers (`kit/tests/py-worker.py`, six at
+  a time): the lab's modules are imported once per worker, each snippet runs in fresh globals with its own stdout,
+  stderr and temporary folder; figures, numpy print options and the working folder are reset after each. Per-snippet
+  timeout (120 s, from the worker's ready line) kills a hanging worker; failures still name the view and the snippet.
+  Checks and tolerances unchanged. The labs pass `preload` (automation: numpy, control; modsim: numpy, scipy, sympy,
+  control; robotics: numpy).
+- New `kit/tests/py-worker.test.js` (by definition): a name, numpy print option or file of one snippet is not seen
+  by the next; a NameError is reported and the next snippet runs; a hang is stopped at the timeout.
+- `python-run.test.js` timed on this PC (busy: python-control's import took up to 30 s), before (HEAD 800375a, a
+  clean worktree) and after: automation 150 s to 26 s, modsim 72 s to 41 s, robotics 5 s to 2 s. All suites pass
+  (kit 34, automation 109, modsim 64, robotics 88). Nothing committed.
+
+## 7 Nov 2026, evening: Python plots beside the labs' charts
+
+- New `kit/scripts/python-plots.mjs`: per stepped view with a line chart, runs the view's Python (defaults, p = 1)
+  on a temp copy with `python -P` and Agg, and draws the lab's own series (caught from `lineChart` by a loader hook)
+  in matplotlib; PNGs and numbers in `<lab>/docs/python-check/`, verdict tables in each README there.
+- Automation: all agree except task1 step 3, where the defect run stopped at 0.133 s while still rising ("steady
+  error −115 rpm"); fixed (defect run 4× longer, ends at 2500 rpm), test `tests/unit/python-check.test.js`, note in
+  the README's source notes. task2 step 3 differs by design (nonlinear crane vs the snippet's linear step).
+- ModSim: all agree; doppel s2 is chaotic, doppel s3 plots ode45-style energy drift (2.1 J at rtol 1e-3) vs the lab's
+  conserved K + V: left for a decision. Robotics: no Python curve to compare (IK and J checked by numbers).
+- Automation tests 109/109. Browser screenshots not used (lab series rendered instead). Nothing committed.

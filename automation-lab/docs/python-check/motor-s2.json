@@ -1,0 +1,23 @@
+{
+ "python": {
+  "y[:, 0]": {
+   "peak": 48.19421204703976,
+   "t_peak": 1.5,
+   "final": 48.19421204703976,
+   "settling": 1.3800000000000001,
+   "t_end": 1.5,
+   "n": 601
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Speed after switching UA on / n": {
+   "peak": 2891.652722819449,
+   "t_peak": 1.5,
+   "final": 2891.652722819449,
+   "settling": 1.3800000000000001,
+   "t_end": 1.5,
+   "n": 601
+  }
+ }
+}

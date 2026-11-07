@@ -1,0 +1,39 @@
+{
+ "python": {
+  "y1": {
+   "peak": -1.7683085351495125,
+   "t_peak": 1.11642163989747,
+   "final": -1.2996578293638104,
+   "settling": 3.6283703296667777,
+   "t_end": 6.907858896865595,
+   "n": 100
+  },
+  "y2": {
+   "peak": 1.3602359744930617,
+   "t_peak": 1.11642163989747,
+   "final": 0.9997357920815251,
+   "settling": 3.6283703296667777,
+   "t_end": 6.907858896865595,
+   "n": 100
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "Step response without and with the prefilter Kf / Kf = 1": {
+   "peak": -1.7682882320609348,
+   "t_peak": 1.12,
+   "final": -1.2992993670331028,
+   "settling": 3.62,
+   "t_end": 6.0,
+   "n": 301
+  },
+  "Step response without and with the prefilter Kf / Kf = \u22120.769": {
+   "peak": 1.3602217169699475,
+   "t_peak": 1.12,
+   "final": 0.9994610515639238,
+   "settling": 3.62,
+   "t_end": 6.0,
+   "n": 301
+  }
+ }
+}

@@ -1,0 +1,71 @@
+{
+ "python": {
+  "y[:, 0]": {
+   "peak": -44.185316431213636,
+   "t_peak": 2.0,
+   "final": -44.185316431213636,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  },
+  "y[:, 1]": {
+   "peak": -68.43107894094919,
+   "t_peak": 2.0,
+   "final": -68.43107894094919,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  },
+  "y[:, 2]": {
+   "peak": -44.18230499184599,
+   "t_peak": 2.0,
+   "final": -44.18230499184599,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  },
+  "y[:, 3]": {
+   "peak": -68.42600049533253,
+   "t_peak": 2.0,
+   "final": -68.42600049533253,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  }
+ },
+ "python_own_plot": false,
+ "lab": {
+  "True states (solid) and the observer's estimates (dashed), from x0 = (0.5, \u22120.5) and x\u03020 = 0 / x1": {
+   "peak": -44.185316245348865,
+   "t_peak": 2.0,
+   "final": -44.185316245348865,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  },
+  "True states (solid) and the observer's estimates (dashed), from x0 = (0.5, \u22120.5) and x\u03020 = 0 / x\u03021": {
+   "peak": -44.18230480642527,
+   "t_peak": 2.0,
+   "final": -44.18230480642527,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  },
+  "True states (solid) and the observer's estimates (dashed), from x0 = (0.5, \u22120.5) and x\u03020 = 0 / x2": {
+   "peak": -68.4310786531499,
+   "t_peak": 2.0,
+   "final": -68.4310786531499,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  },
+  "True states (solid) and the observer's estimates (dashed), from x0 = (0.5, \u22120.5) and x\u03020 = 0 / x\u03022": {
+   "peak": -68.4260002083461,
+   "t_peak": 2.0,
+   "final": -68.4260002083461,
+   "settling": 1.9933333333333334,
+   "t_end": 2.0,
+   "n": 301
+  }
+ }
+}

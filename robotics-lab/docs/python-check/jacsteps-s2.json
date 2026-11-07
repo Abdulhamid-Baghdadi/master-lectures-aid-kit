@@ -1,0 +1,14 @@
+{
+ "python": {},
+ "python_own_plot": false,
+ "lab": {
+  "det J over the elbow angle \u03b82 / l1 l2 sin \u03b82": {
+   "peak": -15.0,
+   "t_peak": -90.0,
+   "final": 1.83697019872103e-15,
+   "settling": 180.0,
+   "t_end": 180.0,
+   "n": 181
+  }
+ }
+}
