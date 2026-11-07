@@ -7,6 +7,7 @@ import { shaker, run, VALUES } from "../core/index.js";
 import { massChain, bars } from "./pics.js";
 import { reveal, memo, sliders, caption, at } from "./view.js";
 import { ode, stateSpace, assign } from "./matlab.js";
+import * as Py from "./python.js";
 
 const T = 1.5;
 const sims = memo(v => ({ off: run(shaker(v), [0, 0, 0], T, 3000), on: run(shaker({ ...v, backEmf: true }), [0, 0, 0], T, 3000) }));
@@ -28,6 +29,12 @@ export default {
           reveal(["U_S = R_S i_S + L_S di_S/dt   (back-EMF left out)", "F_S = h_S i_S   (h_S: the shaker constant, from l·B_S)", "m_S ẍ + d_S ẋ + k_S x = h_S i_S"], p)],
         sheet: [{ source: "VO p. 43", sheet: "U_S = R_S i_S + L_S di_S/dt, m_S ẍ + d_S ẋ + k_S x = F_S = h_S i_S", lab: "the same; step 4 adds the back-EMF −h_S ẋ", agree: true }],
         code: ["syms i_S(t) x(t) R_S L_S h_S m_S d_S k_S U_S", "eq1 = L_S*diff(i_S,t) == U_S - R_S*i_S", "eq2 = m_S*diff(x,t,2) + d_S*diff(x,t) + k_S*x == h_S*i_S", "[Vf,S] = odeToVectorField(eq1,eq2)"].join("\n"),
+        python: [Py.HEAD_SYM, "", "t = symbols('t')", "R_S, L_S, h_S, m_S, d_S, k_S, U_S = symbols('R_S L_S h_S m_S d_S k_S U_S')", "i_S = Function('i_S')(t)", "x = Function('x')(t)",
+          "eq1 = Eq(L_S*diff(i_S, t), U_S - R_S*i_S)", "eq2 = Eq(m_S*diff(x, t, 2) + d_S*diff(x, t) + k_S*x, h_S*i_S)",
+          "acc = solve([eq1, eq2], [diff(i_S, t), diff(x, t, 2)], dict=True)[0]   # sympy has no odeToVectorField", "print(acc)",
+          `at = {i_S: 0.5, x: 0.001, R_S: ${Py.num(st.RS)}, L_S: ${Py.num(st.LS)}, h_S: ${Py.num(st.hS)}, m_S: ${Py.num(st.mS)}, d_S: ${Py.num(st.dS)}, k_S: ${Py.num(st.kS)}, U_S: ${Py.num(st.US)}}   # a test state`,
+          "a = [float(acc[d].subs({diff(x, t): 0.02}).subs(at)) for d in (diff(i_S, t), diff(x, t, 2))]", "print(a)"].join("\n"),
+        pyCheck: ["a", (([di, , dv]) => [di, dv])(shaker(st).f(0, [0.5, 0.001, 0.02])), 1e-9],
       }) },
       { name: "Transfer functions in series", draw: p => ({
         figure: reveal(["U_S → [1/(R_S + sL_S)] → i_S → [h_S/(m_S s² + d_S s + k_S)] → x",
@@ -35,6 +42,9 @@ export default {
           "third order, not sprungfähig: no direct path from U_S to x"], p),
         sheet: [{ source: "VO p. 44", sheet: "\"G_Ux(s) = x/U_S = s²/(R_S + sL_S) · h_S/(…)\"", lab: "with s² it is G_Ua = a/U_S (p. 43 defines it so)", agree: false }],
         code: [assign(P(st)), "s = tf('s');", "G_Ux = 1/(R_S + s*L_S) * h_S/(m_S*s^2 + d_S*s + k_S)", "G_Ua = s^2*G_Ux;", "bode(G_Ux)", "step(U_S*G_Ux)   % x after the voltage step"].join("\n"),
+        python: [Py.HEAD_SS, "import control as ct", "", Py.assign(P(st)), "s = tf('s')", "G_Ux = 1/(R_S + s*L_S) * h_S/(m_S*s**2 + d_S*s + k_S)", "G_Ua = s**2*G_Ux",
+          "ct.bode_plot(G_Ux)   # MATLAB's bode(G_Ux)", "y, t = step(U_S*G_Ux)   # x after the voltage step", "print(U_S*ct.dcgain(G_Ux))   # x at rest"].join("\n"),
+        pyCheck: ["U_S*ct.dcgain(G_Ux)", shaker(st).xInf],
       }) },
       { name: "State space, with and without back-EMF", draw: p => {
         const off = shaker(st), on = shaker({ ...st, backEmf: true }), cells = Math.floor(p * 13);
@@ -45,6 +55,8 @@ export default {
           sheet: [{ source: "VO p. 44", sheet: "A = [−R_S/L_S 0 0; 0 0 1; h_S/m_S −k_S/m_S −d_S/m_S], B = [1/L_S; 0; 0]", lab: "the same", agree: true }],
           code: stateSpace({ params: P(st).slice(0, 6), A: "[-R_S/L_S 0 -h_S/L_S; 0 0 1; h_S/m_S -k_S/m_S -d_S/m_S]", B: "[1/L_S; 0; 0]", C: "[1 0 0; 0 1 0]", D: "[0; 0]",
             then: ["eig(A)", "step(sys)   % current and displacement, coupled"] }).replace("A = [-R_S/L_S 0 -h_S/L_S;", "% the sheet's A has 0 where -h_S/L_S stands: the back-EMF\nA = [-R_S/L_S 0 -h_S/L_S;"),
+          python: Py.stateSpace({ params: P(st).slice(0, 6), A: "[-R_S/L_S 0 -h_S/L_S; 0 0 1; h_S/m_S -k_S/m_S -d_S/m_S]", B: "[1/L_S; 0; 0]", C: "[1 0 0; 0 1 0]", D: "[0; 0]" }).replace("A = np.array", "# the sheet's A has 0 where -h_S/L_S stands: the back-EMF\nA = np.array"),
+          pyCheck: ["A", on.A],
         };
       } },
       { name: "The current: coupled and uncoupled", draw: p => {
@@ -57,6 +69,7 @@ export default {
           notes: [["At rest", `i_S = U_S/R_S = ${fmt(s.iInf)} A, x = h_S U_S/(R_S k_S) = ${fmt(1000 * s.xInf)} mm`, "", "the same with and without coupling: the plate stands still"]],
           sheet: [{ source: "VO p. 45, plot read by eye", sheet: "coupled Simscape model: current with a shoulder, reaching the end value later (≈ 12–14 s against ≈ 6 s)", lab: "with back-EMF the current dips while the plate moves, then meets the uncoupled one", agree: true }],
           code: ode({ params: P(st), rows: ["(U_S - R_S*x(1) - h_S*x(3))/L_S", "x(3)", "(h_S*x(1) - k_S*x(2) - d_S*x(3))/m_S"], x0: [0, 0, 0], T, plot: "plot(t,x(:,1))   % drop h_S*x(3) in row 1 for the sheet's model" }),
+          python: Py.ode({ params: P(st), rows: ["(U_S - R_S*x(1) - h_S*x(3))/L_S", "x(3)", "(h_S*x(1) - k_S*x(2) - d_S*x(3))/m_S"], x0: [0, 0, 0], T, plot: "plt.plot(sol.t, sol.y[0])   # drop h_S*x[2] in row 1 for the sheet's model" }), pyCheck: Py.odeCheck(r.on),
         };
       } },
     ];

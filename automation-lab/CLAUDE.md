@@ -10,4 +10,6 @@ the Rechenbeispiele `Beispiele 2017\AAU_SS2021_Rechenbeispiele_v1.pdf` (Beispiel
 `AAU_SS2021_Aufgabenstellung_Bsp1.pdf`, `Lab_3\AAU_SS2021_Aufgabenstellung_Bsp2_v1.pdf`. The student's scripts
 `Lab_2\Bsp2.m` and `Lab_3\AAU_Bsp3_Baghdadi.m` set the MATLAB style; their slips are listed in the README. Use the
 course's names: ẋ = A x + b u, v = cᵀx + d u, E, u = −rᵀx + K_F·w, Q_S, Q_B, ℓ. Check MATLAB behaviour on the MathWorks
-reference pages before showing a call, and cite file and page for every value. Part of `../PLAN.md`; not published.
+reference pages before showing a call; every view also returns `python` (src/labs/python.js, python-control's MATLAB
+layer and numpy) and a `pyCheck`, run by `tests/unit/python-run.test.js`: check a Python call on its
+python-control.readthedocs.io page and in the installed Python first, and cite file and page for every value. Part of `../PLAN.md`; not published.

@@ -6,11 +6,13 @@ import { circuit20, ctrb, obsv, det, stepRun, poles } from "../core/index.js";
 import { stepper, fmt, fmtC } from "./view.js";
 import { circuitSvg, grow, mtx } from "./pics.js";
 import { model, checks } from "./matlab.js";
+import * as Py from "./python.js";
 
 // Kubinger (2021a), Beispiel 20, p. 21.
 const P = { R1: 4.53, L1: 123e-3, R2: 0.8, C2: 321e-6 };
 const parts = { top: [["R", "R1"], ["L", "L1"]], shunt: [["R", "R2"], ["C", "C2"]], inLabel: "Us", outs: ["Uh"] };
 const code = m => `R1 = 4.53; L1 = 123e-3; R2 = 0.8; C2 = 321e-6;\nA = [-(R1+R2)/L1 -1/L1; 1/C2 0];\nb = [1/L1; 0];\ncT = [R2 1];\nd = 0;\nSYS = ss(A,b,cT,d);`;
+const pyCode = `${Py.HEAD}\n\nR1 = 4.53\nL1 = 123e-3\nR2 = 0.8\nC2 = 321e-6\nA = np.array([[-(R1+R2)/L1, -1/L1], [1/C2, 0]])\nb = np.array([[1/L1], [0]])\ncT = np.array([[R2, 1]])\nd = 0\nSYS = ss(A, b, cT, d)`;
 
 export default {
   id: "circuit",
@@ -26,7 +28,7 @@ export default {
         notes: [["States", "x1 = iL, x2 = uC", "", "one per energy store: the coil's current and the capacitor's voltage"],
           ["Mesh", "L1·diL/dt = Us − (R1 + R2)·iL − uC", "", "and C2·duC/dt = iL; Uh = R2·iL + uC with the output open"]],
         sheet: [{ source: "S1, pp. 26–27", sheet: "A = [−(R1+R2)/L −1/L; 1/C 0], b = [1/L; 0], cᵀ = [R2 1]", lab: `A = [${fmt(m.A[0][0])} ${fmt(m.A[0][1])}; ${fmt(m.A[1][0])} 0]`, agree: true }],
-        code: code(m), hint: "Kubinger (2021a) gives R1 = 4.53 Ω, L1 = 123 mH, R2 = 0.8 Ω, C2 = 321 µF.",
+        code: code(m), python: pyCode, pyCheck: ["A", m.A], hint: "Kubinger (2021a) gives R1 = 4.53 Ω, L1 = 123 mH, R2 = 0.8 Ω, C2 = 321 µF.",
       }) },
       { name: "Controllable, observable?", draw: () => {
         const qs = det(ctrb(m.A, m.b)), qb = det(obsv(m.A, m.c));
@@ -35,7 +37,7 @@ export default {
           notes: [["det Q_S = 1/(L1²·C2)", fmt(qs, 4), "", "not zero: controllable"], ["det Q_B = R1·R2/L1 − 1/C2", fmt(qb, 4), "", "not zero: observable"],
             ["Measurable?", "Uh only", "warn", "iL and uC sit inside the housing; an observer has to estimate them"]],
           sheet: [{ source: "S1, p. 27", sheet: "det Q_S ≈ 205.9 k, det Q_B ≈ −3.1 k", lab: `${fmt(qs, 4)} and ${fmt(qb, 3)}`, agree: Math.abs(qs - 205.9e3) < 100 && Math.abs(qb + 3.1e3) < 50 }],
-          code: `${code(m)}\n${checks()}`,
+          code: `${code(m)}\n${checks()}`, python: `${pyCode}\n${Py.checks()}`, pyCheck: [["np.linalg.det(QS)", qs], ["np.linalg.det(QB)", qb]],
           hint: "S2, p. 9 writes another expression for det Q_B; S1's matches the matrices (see the README's source notes).",
         };
       } },
@@ -46,6 +48,7 @@ export default {
             grow({ p, label: "iL, uC and Uh after a 1 V step of Us", xLabel: "t [s]", yLabel: "iL [A], uC, Uh [V]",
               lines: [{ x: r.t, y: r.x.map(x => x[0]), name: "iL" }, { x: r.t, y: r.x.map(x => x[1]), name: "uC", cls: "second" }, { x: r.t, y: r.y, name: "Uh", cls: "third" }] })],
           notes: [["Poles", poles(m.A).map(fmtC).join(", "), "", "a damped swing between coil and capacitor"]],
+          python: `${pyCode}\ny, t, x = step(SYS, 0.12, return_x=True)   # y, t, x as MATLAB's [y,t,x]`, pyCheck: [Py.PY_POLES("A"), Py.polesKey(poles(m.A))],
           code: `${code(m)}\n[y,t,x] = step(SYS, 0.12);\nplot(t, x, t, y)`,
         };
       } },

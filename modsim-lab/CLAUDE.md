@@ -11,4 +11,8 @@ the two-mass values), and the group's work in `Teams - General\` (`docs/sources/
 MATLAB style; its slips are listed in the README. Keep the source's German symbols (k, c, k_D, c_D, φ, L₁, h_S …),
 label in English with the German term once. Check MATLAB behaviour on the MathWorks reference pages before showing a
 call, and cite the PDF page for every value. MATLAB is not installed: snippets are checked for undefined names, not run.
+Every view also returns `python` (src/labs/python.js; sympy, solve_ivp, scipy.linalg.eig, python-control) and a
+`pyCheck`; `tests/unit/python-run.test.js` runs them. Check a Python call on its docs.scipy.org, docs.sympy.org or
+python-control.readthedocs.io page and in the installed Python before showing it; Simulink and Simscape views stay
+comments in Python.
 Part of `../PLAN.md`; not published.

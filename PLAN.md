@@ -19,6 +19,12 @@ Sources in `H:\My Drive\02_Personal\02_Education\FH\03_FH_Master\`.
   why); MATLAB/Octave not installed, so snippets are checked for undefined names, not run; the MathWorks pages were
   summarised by a helper agent, not re-read word for word; no .slx model opened; most values are example values,
   since the lecture gives none.
+- 7 Nov 2026: Python beside the MATLAB on every step of `automation-lab` (44 views, python-control's MATLAB layer and
+  numpy) and `modsim-lab` (47 views, sympy, solve_ivp, scipy.linalg.eig, python-control); the Python panel moved from
+  `robotics-lab` into the kit's step player (`kit/ui/python.js`, `kit/tests/code-views.js`). Every snippet is scanned
+  for undefined names; 44 + 41 are run and print the lab's numbers. Open: Simulink and Simscape views have no Python
+  counterpart (comments only); pidtune is not reproduced; acker's 1-D return in python-control 0.10.2 differs from its
+  page.
 - 7 Nov 2026: `robotics-lab` extended to 12 labs: four exercises in 2–3 animated steps (the RRT robot's DH table row by
   row and ⁰T₃ entry by entry, ch. 3; the IRB 120 at the student's joint values against his script and ABB p. 31; the
   Jacobian's columns as z × (p − pᵢ) and det J towards the singularity, ch. 4; both elbows of ch. 5, p. 20, a 3R wrist

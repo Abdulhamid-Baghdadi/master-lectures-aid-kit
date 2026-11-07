@@ -8,7 +8,7 @@ import { lineChart } from "../../../kit/ui/chart.js";
 import { stepper, mtx, fmt } from "../../../kit/ui/steps.js";
 import { chain, jacobian, jacobian2r, det, posOf, rad, deg } from "../core/index.js";
 import { view, link, joint, ground, label, arrow, angleSlider, lengthSlider } from "./draw.js";
-import { twin, matlabTree, PY_HEAD, pyAngles, num } from "./code.js";
+import { matlabTree, PY_HEAD, pyAngles, num } from "./code.js";
 
 const rows = st => [{ theta: st.t1, alpha: 0, a: st.l1, d: 0 }, { theta: st.t2, alpha: 0, a: st.l2, d: 0 }];
 /** The 2 × 2 position Jacobian by the schema (rows vx, vy of the 6 × n matrix). */
@@ -71,8 +71,6 @@ export default {
         };
       } },
     ];
-    const { steps: s2, panel } = twin(steps);
-    Object.assign(ui, stepper(root, s2, { controls }));
-    root.append(panel);
+    Object.assign(ui, stepper(root, steps, { controls }));
   },
 };

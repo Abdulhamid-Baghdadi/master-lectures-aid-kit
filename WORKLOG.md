@@ -138,3 +138,23 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
   limits, `chains.js` comment updated. robotics 88, kit 29 pass.
 - GIFs not recorded: headless Edge did not open its DevTools port from this session (a probe was refused).
   `robotics-lab/scripts/record-steps.mjs` is ready to run by hand. Server stopped. Nothing committed.
+
+## 7 Nov 2026: Python beside the MATLAB in automation-lab and modsim-lab
+
+- Kit: the step player shows a second panel, "In Python", when a view returns `python`; `pyCheck` (what it should
+  print) rides on the panel's `data-check`. `kit/ui/python.js` writes numpy input with the MATLAB writer's digits
+  (test `kit/tests/python.test.js`, failed first). `kit/tests/code-views.js` (Python name scanner, now splitting `;`
+  and knowing `lambda`; view player; parallel runner with `python -P` on a temp copy) and `kit/tests/fake-dom.js`
+  (moved from robotics and modsim, one copy). robotics-lab moved onto it: `twin()` removed.
+- automation-lab: `src/labs/python.js`; all 44 views, all run and checked (gains, Kf, l, determinants, poles, lsim
+  end states, stepinfo rise times to 3 %). modsim-lab: `src/labs/python.js`; 47 views, 41 run (Lagrange accelerations
+  at a test state against the lab's f, eigenfrequencies, poles, matrices, solve_ivp end states to 5 % of the run's
+  largest value); 6 scan only (5 Simulink views, the chaotic double pendulum).
+- New tests `python-defined.test.js` and `python-run.test.js` in both labs failed before the panels existed. The run
+  takes about 65 s (automation) and 45 s (modsim): importing python-control takes 4 s, six snippets run at a time.
+- Differences found by running: python-control's `acker` returns 1-D (its page: 2-D); scipy's `place_poles` refuses
+  Butterworth poles that are not exact conjugates (rounded with `np.round(p, 12)`); `scipy.linalg.eig` returned the
+  larger eigenvalue first; the old `bode` return is deprecated (FutureWarning), so `frequency_response`. The ctrbobsv
+  lsim check is at 1e-3: the lab's 200 Runge–Kutta steps on a pole near 10.7 are 1.6e-4 off the exact solution.
+- Checked at 375 px, light and dark: automation `#placement`, modsim `#zweimasse`; no sideways scroll, no console
+  errors. Server stopped. Nothing committed.

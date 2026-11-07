@@ -6,14 +6,14 @@
 // position; rigidBodyTree('DataFormat','row') takes a row of joint positions; getTransform(robot,q,body) gives the
 // body's frame in the base; geometricJacobian lists the angular speeds in rows 1–3, the linear in rows 4–6;
 // inverseKinematics weighs orientation in the first three weights, position in the last three.
-// Also the second code panel: the kit's step player shows one (MATLAB); twin() adds the Python one beside it.
-import { h } from "../../../kit/ui/kit.js";
+// The kit's step player shows both panels: a view returns code (MATLAB), python and pyCheck.
 import { num, mat } from "../../../kit/ui/matlab.js";
+import { arr } from "../../../kit/ui/python.js";
 export { num, mat };
 
 /** A number as Python input (the same digits as the MATLAB writer). */
 export const py = num;
-export const pyMat = M => `np.array([${M.map(r => `[${r.map(num).join(", ")}]`).join(",\n              ")}])`;
+export const pyMat = arr;
 
 /** The head of every Python snippet: numpy and the DH matrix, as the student's script writes it (ch. 3, p. 21). */
 export const PY_HEAD = ["import numpy as np", "from numpy import cos, sin, pi", "",
@@ -38,26 +38,4 @@ export function matlabTree(rows) {
       `body${k}.Joint = jnt${k};`, `addBody(robot,body${k},'${i ? `body${i}` : "base"}');`);
   });
   return lines.join("\n");
-}
-
-/** Wraps a lab's steps so each view's `python` (and the variable its result is in, `pyCheck`) fills a second panel;
- *  the kit's player shows `code` as the MATLAB. Returns { steps, panel } — append panel after the player. */
-export function twin(steps) {
-  const pre = h("pre", { class: "matlab-code python-code", tabindex: "0" });
-  const copied = h("span", { class: "copied", role: "status" });
-  const copy = h("button", { type: "button" }, "Copy");
-  copy.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(pre.textContent); copied.textContent = "Copied."; }
-    catch { copied.textContent = "The browser did not allow copying: select the code and press Ctrl+C."; }
-  });
-  const wrapped = steps.map(s => ({ ...s, draw: p => {
-    const out = s.draw(p);
-    pre.textContent = out.python ?? "";
-    // The variable and value the Python should end with, for tests/unit/python-run.test.js.
-    pre.setAttribute("data-check", JSON.stringify(out.pyCheck ?? null));
-    return out;
-  } }));
-  const panel = h("section", { class: "matlab", "aria-label": "Python" },
-    h("div", { class: "matlab-head" }, h("h3", {}, "In Python (numpy)"), copy, copied), pre);
-  return { steps: wrapped, panel };
 }

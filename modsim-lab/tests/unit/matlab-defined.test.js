@@ -4,7 +4,7 @@
 // undefined name). The same check as the Advanced Automation lab's, taught syms, @(t,x) and strings.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { install } from "./fake-dom.js";
+import { install } from "../../../kit/tests/fake-dom.js";
 
 const BUILTIN = new Set(("syms sym diff ode45 plot ss eig step bode initial lsim tf damp linspace logspace sin cos sqrt pi "
   + "odeToVectorField matlabFunction subs simplify solve jacobian zeros eye inv diag abs xlabel ylabel legend trace det "
@@ -51,7 +51,7 @@ test("every view of every lab draws at its start, middle and end, and its MATLAB
   const { labs } = await import("../../src/labs/index.js");
   let views = 0;
   for (const lab of labs) {
-    const root = new (await import("./fake-dom.js")).El("div");
+    const root = new (await import("../../../kit/tests/fake-dom.js")).El("div");
     lab.mount(root);
     const els = [...root.walk()];
     const pre = els.find(e => e.attrs.class === "matlab-code");

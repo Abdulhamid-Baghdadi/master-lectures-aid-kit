@@ -131,6 +131,9 @@
         "how": "full text",
         "date": "2026-11-07"
       }
-    }
+    },
+    {"key": "scipy2026", "authors": ["SciPy developers"], "year": 2026, "title": "SciPy 1.18 reference pages: scipy.integrate.solve_ivp, scipy.linalg.eig", "venue": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html, .../scipy.linalg.eig.html; read 7 Nov 2026", "backs": "solve_ivp(fun, t_span, y0, method='RK45') with rtol 1e-3 and atol 1e-6 by default, sol.y of shape (n, n_points); eig(a, b) solves a v = w b v, w complex, no order promised (the installed version returned 3000 before 500 for the TM3 note's K and M, so the snippets sort).", "checked": {"how": "full text", "date": "2026-11-07"}},
+    {"key": "sympy2026", "authors": ["SymPy developers"], "year": 2026, "title": "SymPy reference: solvers (solve), Function, diff", "venue": "https://docs.sympy.org/latest/modules/solvers/solvers.html; read 7 Nov 2026", "backs": "solve([eqs], [symbols], dict=True) returns a list of solution dicts; used to get the accelerations from the Lagrange equations (sympy has no odeToVectorField). diff by a derivative, diff(L, diff(x, t)), was checked by running it in the installed SymPy 1.14.", "checked": {"how": "full text", "date": "2026-11-07"}},
+    {"key": "pythoncontrol2026", "authors": ["Python Control Systems Library developers"], "year": 2026, "title": "python-control 0.10.2 reference pages: control.matlab.step, ss, tf, frequency_response", "venue": "https://python-control.readthedocs.io/en/0.10.2/generated/control.matlab.step.html and the module index; read 7 Nov 2026", "checked": {"how": "full text", "date": "2026-11-07"}, "backs": "ss, step (returns y, t as MATLAB's [y,t]), tf('s'), dcgain and frequency_response in src/labs/python.js; bode's old return of mag, phase, omega is deprecated in 0.10.2 (a FutureWarning when run), so the snippets use frequency_response."}
   ]
 }

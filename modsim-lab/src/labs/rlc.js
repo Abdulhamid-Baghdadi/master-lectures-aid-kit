@@ -7,6 +7,7 @@ import { rlc, run, eig2, VALUES } from "../core/index.js";
 import { loop, bars, blocks, blockCount } from "./pics.js";
 import { reveal, memo, sliders, caption, at } from "./view.js";
 import { ode, stateSpace, simulink } from "./matlab.js";
+import * as Py from "./python.js";
 
 const T = v => Math.min(0.5, 10 / Math.max(rlc(v).delta, 1));
 const sim = memo(v => run(rlc(v), [0, 0], T(v), 2000));
@@ -31,11 +32,16 @@ export default {
         notes: [["ω₀ = 1/√(LC)", `${fmt(rlc(st).w0)} rad/s`], ["Like the single mass", "L ↔ m, R ↔ c, 1/C ↔ k, q ↔ x", "", "the same ODE in other letters"]],
         sheet: [{ source: "VO pp. 25–26", sheet: "q̈ = (1/L)[u − (1/C)q − Rq̇], ω₀ = 1/√(LC)", lab: "the same", agree: true }],
         code: ["syms q(t) R L C u", "eq = L*diff(q,t,2) + R*diff(q,t) + q/C == u   % the mesh rule with i = dq/dt", "[Vf,S] = odeToVectorField(eq)   % S: Y[1] = q, Y[2] = dq/dt"].join("\n"),
+        python: [Py.HEAD_SYM, "", "t = symbols('t')", "R, L, C, u = symbols('R L C u')", "q = Function('q')(t)", "eq = Eq(L*diff(q, t, 2) + R*diff(q, t) + q/C, u)   # the mesh rule with i = dq/dt",
+          "acc = solve(eq, diff(q, t, 2))[0]   # q'' alone: sympy has no odeToVectorField", "print(acc)",
+          `a = float(acc.subs({diff(q, t): 0.01}).subs({q: 1e-4, R: ${Py.num(st.R)}, L: ${Py.num(st.L)}, C: ${Py.num(st.C)}, u: ${Py.num(st.U)}}))   # at a test state`, "print(a)"].join("\n"),
+        pyCheck: ["a", rlc(st).f(0, [1e-4, 0.01])[1], 1e-9],
       }) },
       { name: "The ODE as Simulink blocks", draw: p => ({
         figure: blocks([ROW], { show: Math.ceil(p * blockCount([ROW])), label: "u into a Sum, Gain 1/L, two Integrators to i and q, R and 1/C fed back" }),
         sheet: [{ source: "VO p. 26", sheet: "u_in → Sum → Gain 1/L → q_pp → 1/s → q_p → 1/s → q; Gains R and 1/C back", lab: "the same", agree: true }],
         code: simulink({ params: P(st), rows: [{ ...ROW, input: "Step U" }], simscape: "DC Voltage Source, Resistor, Inductor, Capacitor in series, Current Sensor, Voltage Sensor across C, Electrical Reference, Solver Configuration (VO p. 26)" }),
+        python: Py.simulink({ params: P(st), rows: [{ ...ROW, input: "Step U" }], simscape: "DC Voltage Source, Resistor, Inductor, Capacitor (VO p. 26)" }),
       }) },
       { name: "State space: A, B, C fill in", draw: p => {
         const c = rlc(st), cells = Math.floor(p * 8);
@@ -44,6 +50,7 @@ export default {
           notes: [["States", "x₁ = q, x₂ = i = q̇"], ["Poles, eig(A)", eig2(c.A).map(fmtC).join(", ")]],
           sheet: [{ source: "VO p. 26", sheet: "u_C = x₁, then (1/C) x₁ in ẋ₂", lab: "x₁ = q: (1/C)·q is the capacitor's voltage; with x₁ = u_C the term would be x₁ alone", agree: false }],
           code: stateSpace({ params: P(st).slice(0, 3), A: "[0 1; -1/(L*C) -R/L]", B: "[0; 1/L]", C: "[0 R]", then: ["eig(A)", "step(sys)   % u_R after a 1 V step"] }),
+          python: Py.stateSpace({ params: P(st).slice(0, 3), A: "[0 1; -1/(L*C) -R/L]", B: "[0; 1/L]", C: "[0 R]" }), pyCheck: [Py.PY_POLES("A"), Py.polesKey(eig2(c.A))],
         };
       } },
       { name: "Energy between coil and capacitor", draw: p => {
@@ -60,6 +67,7 @@ export default {
           notes: [["Balance", `${fmt(given, 3)} J = ${fmt(e.electric + e.magnetic + lost, 3)} J`, "", "given = stored + lost, to the integrator's accuracy"],
             ["At the end", "C·U²/2 stored, as much lost", "", "charging a capacitor through a resistor always loses half"]],
           code: ode({ params: P(st), rows: ["x(2)", "(U - x(1)/C - R*x(2))/L"], x0: [0, 0], T: T(st), plot: "plot(t,x(:,1)/C, t,R*x(:,2)), legend('u_C','u_R')" }),
+          python: Py.ode({ params: P(st), rows: ["x(2)", "(U - x(1)/C - R*x(2))/L"], x0: [0, 0], T: T(st), plot: "plt.plot(sol.t, sol.y[0]/C, sol.t, R*sol.y[1]); plt.legend(['u_C', 'u_R'])" }), pyCheck: Py.odeCheck(r),
         };
       } },
     ];

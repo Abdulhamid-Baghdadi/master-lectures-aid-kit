@@ -7,7 +7,7 @@ import * as a from "../../../kit/ui/art.js";
 import { stepper, mtx, fmt, same } from "../../../kit/ui/steps.js";
 import { irb120, irb120Student, IRB120, STUDENT_ROWS, WRIST_TABLE, posOf, rad, deg } from "../core/index.js";
 import { view, link, joint, ground, dot, label, frameAxes, angleSlider, project } from "./draw.js";
-import { twin, matlabTree, PY_HEAD, pyAngles, num } from "./code.js";
+import { matlabTree, PY_HEAD, pyAngles, num } from "./code.js";
 
 // The student's notebook output for the home position (forward_kinematics(jupyter).ipynb, cell 1).
 const STUDENT_HOME = [[0, 0, 1, 374], [0, -1, 0, 0], [1, 0, 0, 630], [0, 0, 0, 1]];
@@ -85,8 +85,6 @@ export default {
         };
       } },
     ];
-    const { steps: s2, panel } = twin(steps);
-    Object.assign(ui, stepper(root, s2, { controls: sliders.map(s => s.el) }));
-    root.append(panel);
+    Object.assign(ui, stepper(root, steps, { controls: sliders.map(s => s.el) }));
   },
 };

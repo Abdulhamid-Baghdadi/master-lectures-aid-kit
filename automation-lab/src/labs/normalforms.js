@@ -8,6 +8,7 @@ import { stepper, fmt, fmtC, same } from "./view.js";
 import { mtx, grow } from "./pics.js";
 import { SISO } from "./systems.js";
 import { model, normalForm, vec } from "./matlab.js";
+import * as Py from "./python.js";
 
 const poly = (c, x = "s") => c.map((v, k) => [v, c.length - 1 - k]).filter(([v]) => Math.abs(v) > 1e-12)
   .map(([v, p], k) => `${v < 0 ? (k ? " − " : "−") : k ? " + " : ""}${Math.abs(v) === 1 && p ? "" : fmt(Math.abs(v))}${p ? (p > 1 ? `${x}${"⁰¹²³⁴"[p]}` : x) : ""}`).join("");
@@ -44,6 +45,8 @@ export default {
             h("div", { class: "mtx-row" }, items.map(([name, v], i) => h("span", { class: i === k ? "coef hot" : i < k || p >= 1 ? "coef" : "coef wait" }, `${name} = ${fmt(v)}`)))),
           notes: [["Order", `n = ${n}`, "", "a_i and b_i are numbered from the constant term, with det(sE − A) made monic"]],
           sheet: C.sheet.G ? [{ source: C.sheet.source, sheet: `G(s) = ${C.sheet.G}`, lab: `G(s) = (${poly(G.num.slice(1))})/(${poly(G.den)})`, agree: same(G.num.slice(1), [1, -13]) && same(G.den, [1, -8, -29]) }] : [],
+          python: C.sys ? `${Py.model(C.sys)}\nG = tf(SYS)\nprint(G)` : `${Py.HEAD}\n\nnum = ${Py.list(C.num)}\nden = ${Py.list(C.den)}\nG = tf(num, den)\nprint(G)`,
+          pyCheck: ["G.den[0][0]", G.den],
           code: C.sys ? `${model(C.sys)}\nG = tf(SYS)` : `num = ${vec(C.num, false)};\nden = ${vec(C.den, false)};\nG = tf(num,den)`,
           hint: C.sys ? "G(s) = cᵀ(sE − A)⁻¹b + d (slides p. 9): the adjugate's first row times b gives the numerator." : "The equation's coefficients are G's: Laplace turns each derivative into a power of s.",
         };
@@ -56,7 +59,7 @@ export default {
           figure: h("div", { class: "fly" }, h("div", { class: "mtx-row" }, mtx("A_RNF", rnf.A, f), mtx("b_RNF", rnf.b, { cells: p >= 1 ? 9 : 0 }),
             mtx("cᵀ_RNF", rnf.c, { row: true, cells: p >= 1 ? 9 : 0 }), mtx("d", [rnf.d], { cells: p >= 1 ? 1 : 0 }))),
           notes: [["Pattern", "ones above the diagonal, −a_i in the last row", "", "b = [0 … 0 1]ᵀ, cᵀ = [b0 … b_(n−1)] (slides p. 8)"]],
-          sheet, code: normalForm(G.num, G.den, "RNF"),
+          sheet, code: normalForm(G.num, G.den, "RNF"), python: Py.normalForm(G.num, G.den, "RNF"), pyCheck: [["ARNF", rnf.A], ["cTRNF", [rnf.c]]],
           hint: "MATLAB's tf2ss returns the companion form with −a in the first row and b = [1 0 … 0]ᵀ; reversing the order of the states (P = fliplr(eye(n))) gives the course's RNF.",
         };
       } },
@@ -68,7 +71,7 @@ export default {
           figure: h("div", { class: "fly" }, h("div", { class: "mtx-row" }, mtx("A_BNF", bnf.A, f), mtx("b_BNF", bnf.b, { cells: p >= 1 ? 9 : 0 }),
             mtx("cᵀ_BNF", bnf.c, { row: true, cells: p >= 1 ? 9 : 0 }), mtx("d", [bnf.d], { cells: p >= 1 ? 1 : 0 }))),
           notes: [["Pattern", "ones below the diagonal, −a_i in the last column", "", "b = [b0 … b_(n−1)]ᵀ, cᵀ = [0 … 0 1] (slides p. 9): the RNF transposed, b and c swapped"]],
-          sheet, code: normalForm(G.num, G.den, "BNF"),
+          sheet, code: normalForm(G.num, G.den, "BNF"), python: Py.normalForm(G.num, G.den, "BNF"), pyCheck: [["ABNF", bnf.A], ["bBNF", bnf.b.map(v => [v])]],
         };
       } },
       { name: "Same G, same step", draw: p => {
@@ -80,6 +83,7 @@ export default {
           figure: grow({ p, lines: runs, label: "Step responses of the normal forms, drawn over each other", xLabel: "t [s]", yLabel: "v", yMax: unstable ? 50 : undefined, yMin: unstable ? -50 : undefined }),
           notes: [["Poles", pl.map(fmtC).join(", "), unstable ? "danger" : "", unstable ? "a pole in the right half: unstable (slides p. 10)" : "all in the left half: stable"]],
           sheet: key === "B5" ? [{ source: "S1, p. 7", sheet: "s1 ≈ 10.7, s2 ≈ −2.7: unstable", lab: pl.map(fmtC).join(", "), agree: true }] : [],
+          python: `${Py.normalForm(G.num, G.den, "RNF")}\nprint(pole(SYS))\ny, t = step(SYS, ${T})`, pyCheck: [Py.PY_POLES("ARNF"), Py.polesKey(pl)],
           code: `${normalForm(G.num, G.den, "RNF")}\npole(SYS)\nstep(SYS, ${T})`,
           hint: "The forms differ only in the choice of states: G(s), the poles and the step response stay the same.",
         };

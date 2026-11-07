@@ -7,6 +7,7 @@ import { pendel, pendelRest, run, eig2, classify, VALUES } from "../core/index.j
 import { linkage, blocks, blockCount } from "./pics.js";
 import { reveal, memo, sliders, caption, at, deg, rad } from "./view.js";
 import { lagrange, ode, stateSpace, simulink, assign, num } from "./matlab.js";
+import * as Py from "./python.js";
 
 const swing = memo((v, lin) => run(pendel({ ...v, linear: lin }), [rad(v.phi0), 0], 8, 1600));
 const P = v => [["m", v.m, "kg"], ["L_1", v.L1, "m"], ["g", 9.80665, "m/s^2"], ["k_D", v.kD, "N*m/rad"], ["c_D", v.cD, "N*m*s/rad"]];
@@ -34,6 +35,7 @@ export default {
           { source: "VO p. 13", sheet: "φ̈ = [−M₁ − m g L₁ sin φ − k_D(φ − φ₀) − c_D(φ̇ − φ̇₀)]/(m L₁²)", lab: "the same (φ₀ = 0)", agree: true }],
         code: lagrange({ q: ["phi"], names: ["m", "L_1", "g", "k_D", "c_D", "M_1"], T: "1/2*m*L_1^2*diff(phi,t)^2",
           V: "m*g*L_1*(1 - cos(phi)) + 1/2*k_D*phi^2", D: "1/2*c_D*diff(phi,t)^2", Q: ["-M_1"] }),
+        ...(() => { const st0 = [0.4, -0.3], L = Py.lagrange({ q: ["phi"], names: ["m", "L_1", "g", "k_D", "c_D", "M_1"], T: "1/2*m*L_1^2*diff(phi,t)^2", V: "m*g*L_1*(1 - cos(phi)) + 1/2*k_D*phi^2", D: "1/2*c_D*diff(phi,t)^2", Q: ["-M_1"], check: { values: { m: st.m, L_1: st.L1, g: 9.80665, k_D: st.kD, c_D: st.cD, M_1: pendel(st).M1(0) }, state: st0 } }), n = st0.length / 2; return { python: L.code, pyCheck: [L.expr, pendel(st).f(0, st0).slice(n), 1e-9] }; })(),
         hint: "The sheet's sin-form of V_G belongs to a φ measured from the horizontal (as in example 3); its final equation is right.",
       }) },
       { name: "Nonlinear against linear", draw: p => {
@@ -47,6 +49,9 @@ export default {
             ["Start angle", `${fmt(st.phi0)}°`, st.phi0 > 30 ? "warn" : "", st.phi0 > 30 ? "beyond about 30° the two drift apart: sin φ is no longer φ" : "small: the two agree"]],
           code: ode({ params: [...P(st), ["M_1", 0, "free swing"]], rows: ["x(2)", "(-M_1 - m*g*L_1*sin(x(1)) - k_D*x(1) - c_D*x(2))/(m*L_1^2)"], x0: [rad(st.phi0), 0], T: 8,
             plot: `fl = @(t,x) [x(2); (-M_1 - m*g*L_1*x(1) - k_D*x(1) - c_D*x(2))/(m*L_1^2)];   % sin(phi) ~ phi\n[tl,xl] = ode45(fl,[0 8],${"[" + num(rad(st.phi0)) + "; 0]"});\nplot(t,x(:,1)*180/pi, tl,xl(:,1)*180/pi), legend('nonlinear','linear')` }),
+          python: Py.ode({ params: [...P(st), ["M_1", 0, "free swing"]], rows: ["x(2)", "(-M_1 - m*g*L_1*sin(x(1)) - k_D*x(1) - c_D*x(2))/(m*L_1^2)"], x0: [rad(st.phi0), 0], T: 8,
+            plot: `fl = lambda t, x: [x[1], (-M_1 - m*g*L_1*x[0] - k_D*x[0] - c_D*x[1])/(m*L_1**2)]   # sin(phi) ~ phi\nsol_l = solve_ivp(fl, [0, 8], [${num(rad(st.phi0))}, 0])\nplt.plot(sol.t, np.rad2deg(sol.y[0]), sol_l.t, np.rad2deg(sol_l.y[0])); plt.legend(['nonlinear', 'linear'])` }),
+          pyCheck: Py.odeCheck(r),
         };
       } },
       { name: "Rest angles and their stability", draw: p => {
@@ -61,6 +66,9 @@ export default {
             { source: "VO p. 13", sheet: "rest at sin φ = 0 (the torsion spring left out)", lab: st.kD > 0 ? `with k_D = ${fmt(st.kD)}: ${rest.length} rest angle(s)` : "the same with k_D = 0", agree: st.kD > 0 ? false : true }],
           code: [assign(P(st)), "syms x1 x2", "f = [x2; -g/L_1*sin(x1) - k_D/(m*L_1^2)*x1 - c_D/(m*L_1^2)*x2];   % the state equations, M_1 = 0",
             "J = jacobian(f,[x1 x2])", `J0 = double(subs(J,[x1 x2],[${num(rest[k])} 0]))`, "eig(J0)", "[trace(J0) det(J0)]   % tr < 0 and det > 0: stable"].join("\n"),
+          python: [Py.HEAD_SYM, "import numpy as np", "", Py.assign(P(st)), "x1, x2 = symbols('x1 x2')", "f = sp.Matrix([x2, -g/L_1*sin(x1) - k_D/(m*L_1**2)*x1 - c_D/(m*L_1**2)*x2])   # the state equations, M_1 = 0",
+            "J = f.jacobian([x1, x2])", `J0 = np.array(J.subs({x1: ${num(rest[k])}, x2: 0}), dtype=float)`, "print(np.linalg.eigvals(J0), np.trace(J0), np.linalg.det(J0))   # tr < 0 and det > 0: stable"].join("\n"),
+          pyCheck: ["J0", J],
         };
       } },
       { name: "Simulink chain and state space", draw: p => {
@@ -76,6 +84,9 @@ export default {
           code: simulink({ params: P(st), rows: [{ ...row, input: "Clock -> Fcn M0*cos(Om*u)", gain: "1/(m*L_1^2)", feedback: [{ from: 1, gain: "c_D" }, { from: 2, gain: "Fcn m*g*L_1*sin(u) + k_D*u" }] }],
             simscape: "Multibody: World Frame, Mechanism Configuration, Solver Configuration -> Rigid Transform (Pivot) -> Revolute Joint (torque from a Simulink-PS Converter, angle sensed) -> Link (VO p. 18)" })
             + "\n" + stateSpace({ params: [], A: "[0 1; -k_D/(m*L_1^2)-g/L_1 -c_D/(m*L_1^2)]", B: "[0; -1/(m*L_1^2)]", C: "[1 0]", then: ["eig(A)"] }),
+          python: Py.simulink({ params: P(st), rows: [{ ...row, gain: "1/(m*L_1^2)" }], simscape: "Multibody: World Frame, Revolute Joint, Link (VO p. 18)" })
+            + "\n" + Py.stateSpace({ params: [], A: "[0 1; -k_D/(m*L_1^2)-g/L_1 -c_D/(m*L_1^2)]", B: "[0; -1/(m*L_1^2)]", C: "[1 0]", step: false }),
+          pyCheck: ["A", pp.A],
         };
       } },
     ];

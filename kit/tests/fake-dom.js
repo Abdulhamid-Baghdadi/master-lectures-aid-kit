@@ -1,5 +1,5 @@
-// A page just large enough for the kit's h(), s(), sliders, readouts and step player, so the tests can mount every lab
-// in Node and play every step without a browser. Not a test itself (no .test.js): views.test.js imports it.
+// A page just large enough for the kit's h(), s(), sliders, readouts and step player, so the labs' tests can mount every lab
+// in Node and play every step without a browser. Not a test itself (no .test.js): code-views.js and the labs' tests import it (one copy since 7 Nov 2026).
 
 export class Node {}
 class Text extends Node {

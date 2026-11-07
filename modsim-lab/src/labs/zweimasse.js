@@ -8,6 +8,7 @@ import { twoMass, receptance, run, VALUES } from "../core/index.js";
 import { massChain, blocks, blockCount } from "./pics.js";
 import { reveal, memo, sliders, caption, at } from "./view.js";
 import { ode, simulink, eigKM, assign } from "./matlab.js";
+import * as Py from "./python.js";
 
 const forced = memo(v => run(twoMass(v), [0, 0, 0, 0], 4, 4000));
 const P = v => [["m1", v.m1, "kg"], ["m2", v.m2, "kg"], ["k1", v.k1, "N/m"], ["k2", v.k2, "N/m"], ["c1", v.c1, "N*s/m"], ["c2", v.c2, "N*s/m"]];
@@ -36,6 +37,8 @@ export default {
             h("div", { class: "mtx-row" }, mtx("M", t.M, { cells: n }), mtx("C", t.Cd, { cells: n - 4 }), mtx("K", t.K, { cells: n - 8 }))],
           sheet: [{ source: "VO p. 28", sheet: "M = [m₁ 0; 0 m₂], C = [c₁+c₂ −c₂; −c₂ c₂], K = [k₁+k₂ −k₂; −k₂ k₂]", lab: "the same", agree: true }],
           code: [assign(P(st)), "M = [m1 0; 0 m2];", "C = [c1+c2 -c2; -c2 c2];", "K = [k1+k2 -k2; -k2 k2];   % TM3 note p. 1"].join("\n"),
+          python: ["import numpy as np", "", Py.assign(P(st)), "M = np.array([[m1, 0], [0, m2]])", "C = np.array([[c1+c2, -c2], [-c2, c2]])", "K = np.array([[k1+k2, -k2], [-k2, k2]])   # TM3 note p. 1"].join("\n"),
+          pyCheck: [["M", t.M], ["C", t.Cd], ["K", t.K]],
         };
       } },
       { name: "Two Simulink rows", draw: p => ({
@@ -45,6 +48,7 @@ export default {
           rows: [{ ...ROWS[0], input: "Clock -> Fcn F1*sin(2*pi*u)", feedback: [{ from: 1, gain: "c1 (and c2 on v2-v1)" }, { from: 2, gain: "k1 (and k2 on x2-x1)" }] },
             { ...ROWS[1], input: "Clock -> Fcn F2*sin(2*pi*u)", feedback: [{ from: 1, gain: "c2 on v2-v1" }, { from: 2, gain: "k2 on x2-x1" }] }],
           simscape: "wall -> Translational Spring 1 || Translational Damper 1 -> Mass 1 -> Spring 2 || Damper 2 -> Mass 2; an Ideal Force Source on each mass; Solver Configuration (VO p. 31)" }),
+        python: Py.simulink({ params: [...P(st), ["F1", st.F1, "N"], ["F2", st.F2, "N"]], rows: ROWS, simscape: "Translational Springs, Dampers, Masses and Ideal Force Sources (VO p. 31)" }),
       }) },
       { name: "det(K − λM) = 0: the eigenmodes", draw: p => {
         const t = twoMass(st), j = p < 0.5 ? 0 : 1, md = t.modes[j], ph = Math.sin(2 * Math.PI * 3 * ((p % 0.5) * 2));
@@ -58,6 +62,8 @@ export default {
             { source: "VO p. 29", sheet: "Jacobi matrix [(k₁+k₂)/m₁ −k₂/m₁; −k₂/m₂ k₂/m₂]", lab: "that is M⁻¹K; ∂f/∂x is its negative (VO p. 30 has the right sign)", agree: false },
             { source: "VO p. 28", sheet: "stable if all Re(λ) < 0, with λ = ω²", lab: "λ = ω² > 0; Re < 0 is the test for eig(A) of the state space", agree: false }],
           code: eigKM({ params: P(st).slice(0, 4), K: "[k1+k2 -k2; -k2 k2]", M: "[m1 0; 0 m2]" }) + "\nlam = trace(M\\K)/2 + [-1; 1]*sqrt((trace(M\\K)/2)^2 - det(M\\K))   % the trace route",
+          python: Py.eigKM({ params: P(st).slice(0, 4), K: "[k1+k2 -k2; -k2 k2]", M: "[m1 0; 0 m2]" }) + "\nMK = np.linalg.solve(M, K)   # MATLAB's M\\K\nlam_tr = np.trace(MK)/2 + np.array([-1, 1])*np.sqrt((np.trace(MK)/2)**2 - np.linalg.det(MK))   # the trace route",
+          pyCheck: [["f0", t.modes.map(m => m.f)], ["lam_tr", t.modes.map(m => m.lambda)]],
         };
       } },
       { name: "Driven: the masses and the frequency response", draw: p => {
@@ -75,6 +81,11 @@ export default {
             "A = [0 0 1 0; 0 0 0 1; -(k1+k2)/m1 k2/m1 -(c1+c2)/m1 c2/m1; k2/m2 -k2/m2 c2/m2 -c2/m2];   % VO p. 30",
             "sys1 = ss(A,[0; 0; 1/m1; 0],[1 0 0 0],0);",
             "[mag,phase,om] = bode(sys1,logspace(-1,2,2000));", "plot(om/(2*pi), squeeze(mag))   % mag is a ratio, 1x1xN"].join("\n"),
+          python: [Py.ode({ params: [...P(st), ["F1", st.F1], ["F2", st.F2]], rows: ["x(3)", "x(4)", "(F1*sin(2*pi*t) - c1*x(3) - k1*x(1) + c2*(x(4)-x(3)) + k2*(x(2)-x(1)))/m1", "(F2*sin(2*pi*t) - c2*(x(4)-x(3)) - k2*(x(2)-x(1)))/m2"], x0: [0, 0, 0, 0], T: 4, plot: "plt.plot(sol.t, sol.y[0], sol.t, sol.y[1])" }),
+            "import control as ct", "A = np.array([[0, 0, 1, 0], [0, 0, 0, 1], [-(k1+k2)/m1, k2/m1, -(c1+c2)/m1, c2/m1], [k2/m2, -k2/m2, c2/m2, -c2/m2]])   # VO p. 30",
+            "sys1 = ct.ss(A, [[0], [0], [1/m1], [0]], [[1, 0, 0, 0]], 0)", "resp = ct.frequency_response(sys1, np.logspace(-1, 2, 2000))   # MATLAB's [mag,phase,om] = bode(...)",
+            "plt.plot(resp.omega/(2*np.pi), resp.magnitude)   # a ratio, as MATLAB's mag; plt.show() above already drew the first figure"].join("\n"),
+          pyCheck: Py.odeCheck(r),
         };
       } },
     ];

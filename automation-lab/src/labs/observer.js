@@ -8,6 +8,7 @@ import { stepper, fmt, fmtC, fmtVec, same } from "./view.js";
 import { splane, grow, mtx } from "./pics.js";
 import { SISO } from "./systems.js";
 import { model, observerBnf, poleVec } from "./matlab.js";
+import * as Py from "./python.js";
 
 const CASES = {
   B17: { title: "Beispiel 17: System 5, s = −4 ± j4", sys: SISO.S5, poles: [[-4, 4], [-4, -4]], sheet: { source: "S1, p. 22", l: [39, 8] } },
@@ -52,7 +53,7 @@ export default {
               mtx("ℓ_BNF = p − a", o.lBnf, { cells: k >= 2 ? 9 : 0 }))],
           notes: [["ℓ_BNF", fmtVec(o.lBnf), "", "ℓ_i = p_(i−1) − a_(i−1): in the BNF, A − ℓcᵀ changes only the last column (slides p. 26)"]],
           sheet: C.sheet ? [{ source: C.sheet.source, sheet: `ℓ_BNF = (${C.sheet.l.join("; ")})`, lab: fmtVec(o.lBnf), agree: same(o.lBnf, C.sheet.l) }] : [],
-          code: `${model(S)}\n${observerBnf(o.a, o.p)}`,
+          code: `${model(S)}\n${observerBnf(o.a, o.p)}`, python: `${Py.model(S)}\n${Py.observerBnf(o.a, o.p)}\nprint(l)`, pyCheck: ["l", o.l.map(v => [v])],
           hint: "The observer is the controller's mirror: Aᵀ, c take the place of A, b, and the BNF that of the RNF.",
         };
       } },
@@ -64,6 +65,8 @@ export default {
               { x: r.t, y: r.x.map(x => x[1]), name: "x2", cls: "second" }, { x: r.t, y: r.xh.map(x => x[1]), name: "x̂2", cls: "third" }] }),
           notes: [["Error poles eig(A − ℓcᵀ)", poles(lAc(S.A, o.l, S.c)).map(fmtC).join(", "), "", "the error dies away at their pace, whatever the plant does"],
             ["Plant poles", poles(S.A).map(fmtC).join(", "), poles(S.A).some(([re]) => re > 0) ? "warn" : "", poles(S.A).some(([re]) => re > 0) ? "unstable: the states grow, yet the estimate still catches them" : ""]],
+          python: `${Py.model(S)}\npB = ${Py.poleList(wanted)}\nl = place(A.T, cT.T, pB).T   # MATLAB: l = place(A',cT',pB)'\nAo = np.block([[A, np.zeros((2, 2))], [l @ cT, A - l @ cT]])   # plant and observer, u = 0\nSYSo = ss(Ao, np.zeros((4, 1)), np.eye(4), 0)\nt = np.linspace(0, 2, 301)\ny, t, x = lsim(SYSo, np.zeros(len(t)), t, [0.5, -0.5, 0, 0])`,
+          pyCheck: [["l", o.l.map(v => [v])], ["x[-1]", [...r.x.at(-1), ...r.xh.at(-1)], 1e-4]],
           code: `${model(S)}\npB = ${poleVec(wanted)};\nl = place(A',cT',pB)';\nAo = [A zeros(2); l*cT A-l*cT];   % plant and observer, u = 0\nSYSo = ss(Ao, zeros(4,1), eye(4), 0);\nt = linspace(0,2,301);\n[y,t,x] = lsim(SYSo, zeros(size(t)), t, [0.5; -0.5; 0; 0]);\nplot(t, x)`,
           hint: "Move the observer poles left: the estimate catches up sooner, but ℓ grows and so would the noise it amplifies.",
         };
@@ -75,6 +78,7 @@ export default {
             mtx("place(A',cT',p)'", pl, { cells: p >= 1 ? 9 : 0 }))),
           notes: [["x_BNF = S·x", "S = Q_B,BNF⁻¹ · Q_B", "", "since Q_B,BNF = Q_B·S⁻¹; it exists because the plant is observable"], ["place gives the same", same(pl, o.l) ? "yes" : "no", same(pl, o.l) ? "" : "danger"]],
           sheet: CASES[key].sheet ? [{ source: CASES[key].sheet.source, sheet: "ℓ in BNF coordinates only", lab: `ℓ = ${fmtVec(o.l)} in the plant's states`, agree: undefined }] : [],
+          python: `${Py.model(S)}\n${Py.observerBnf(o.a, o.p)}\nl_check = place(A.T, cT.T, ${Py.poleList(wanted)}).T   # the same l\nprint(l, l_check)`, pyCheck: [["l", o.l.map(v => [v])], ["l_check", pl.map(v => [v])]],
           code: `${model(S)}\n${observerBnf(o.a, o.p)}\nl_check = place(A',cT',${poleVec(wanted)})'   % the same l`,
           hint: "Beispiel 18's A is already a BNF (S = E), so there both agree with the sheet directly.",
         };

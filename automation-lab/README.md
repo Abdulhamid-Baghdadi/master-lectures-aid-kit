@@ -65,6 +65,24 @@ start state fourth; `feedback(G,1)` is negative unity feedback; `pidtune(sys,'PI
 `tf2ss` puts −a in the first row, so the lab reverses the states to get the course's RNF. `acker` has no current
 reference page; the labs use `place`, and `acker` only for repeated poles.
 
+## Python beside the MATLAB
+
+Every view also shows the same steps in Python, beside the MATLAB: numpy for the matrices and python-control's MATLAB
+layer (`from control.matlab import ss, step, place, acker, lqr, ctrb, obsv, stepinfo, lsim, tf2ss`), in the course's
+names. The Python panels run without a MATLAB licence (Python 3, numpy, scipy, python-control 0.10.2). Every snippet is
+run by `tests/unit/python-run.test.js` and prints the lab's own gains, poles, determinants, end states and stepinfo
+values; `python-defined.test.js` checks every view for names used before they are bound. What differs from MATLAB, as
+the snippets say where it matters (python-control 0.10.2 pages and the installed version, 7 Nov 2026):
+
+- `place` makes eig(A − BK) = p as MATLAB's does, but scipy's `place_poles` beneath it wants exactly conjugate pairs,
+  so computed Butterworth poles are rounded (`np.round(p, 12)`) first; MATLAB takes the rounding.
+- `acker` returns a 1-D array in 0.10.2 (its page says 2-D): `np.atleast_2d` makes it the row MATLAB gives.
+- `lqr` returns K, S and E, the closed-loop poles (MATLAB: K, S, P); u = −Kx in both.
+- `step` and `lsim` return y, t (and x) in MATLAB's order; `stepinfo` takes MATLAB's names as keywords,
+  `SettlingTimeThreshold` and `RiseTimeLimits`, with the same defaults.
+- `pidtune` has no python-control counterpart: lab task 2's PI loop takes kp and Tn from the sliders.
+- Simulink has no Python counterpart; this lab uses none.
+
 ## Open it
 
 Serve the repository's root and open `/automation-lab/`:

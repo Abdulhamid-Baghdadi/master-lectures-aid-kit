@@ -8,6 +8,7 @@ import { stepper, fmt, fmtC, fmtVec, same } from "./view.js";
 import { splane, grow, mtx } from "./pics.js";
 import { SISO } from "./systems.js";
 import { model, placement, placementRnf, vec } from "./matlab.js";
+import * as Py from "./python.js";
 
 export const CASES = {
   B13: { title: "Beispiel 13: System A, s = −1 ± j3", sys: SISO.A, poles: [[-1, 3], [-1, -3]], sheet: { source: "S1, pp. 16–17", rRnf: [39, 10], Kf: -10 / 13, KfText: "−10/13" } },
@@ -56,6 +57,7 @@ export default {
           notes: [["rᵀ_RNF", fmtVec(rRnf), "", "r_i = p_(i−1) − a_(i−1), read straight off the last rows (slides p. 13)"], ["Plant poles", open.map(fmtC).join(", ")]],
           sheet: C.sheet.rRnf ? [{ source: C.sheet.source, sheet: `rᵀ_RNF = (${C.sheet.rRnf.join(" ")})`, lab: fmtVec(rRnf), agree: same(rRnf, C.sheet.rRnf) }] : [],
           code: `${model(S)}\n${pr ? placementRnf(pr.a, pr.p) : `rT = ${vec(C.r, false)};`}`,
+          python: `${Py.model(S)}\n${pr ? Py.placementRnf(pr.a, pr.p) : `rT = ${Py.row(C.r)}`}`, pyCheck: ["rT", [r]],
           hint: "In the RNF, A − b rᵀ is again an RNF, so each coefficient of the closed loop is a_i + r_(i+1): set it to the wanted p_i.",
         };
       } },
@@ -67,6 +69,8 @@ export default {
             lines: [{ x: run.t, y: run.y, name: "v" }, { x: run.t, y: u, name: "u", cls: "second" }] })],
           notes: [["rᵀ", fmtVec(r)], ["Rise time (10–90 %)", `${fmt(info.RiseTime, 3)} s`], ["Settling time (2 %)", `${fmt(info.SettlingTime, 3)} s`],
             ["Overshoot", `${fmt(info.Overshoot, 3)} %`], ["Largest |u|", fmt(Math.max(...u.map(Math.abs)), 3), "", "faster poles need a larger input"]],
+          python: `${Py.model(S)}\n${C.r ? `${Py.gainLoop(C.r)}\ny, t = step(SYSrKf)` : Py.placement(wanted)}\n${Py.stepinfoCall("SYSrKf")}\nprint(S)`,
+          pyCheck: [["rT", [r]], ["Kf", [[Kf]]], ["S['RiseTime']", info.RiseTime, 0.03]],
           code: `${model(S)}\n${C.r ? `rT = ${vec(C.r, false)};\nAr = A - b*rT;\nKf = inv(cT*inv(-A+b*rT)*b);\nSYSrKf = ss(Ar,b*Kf,cT,d);\nstep(SYSrKf)` : placement(wanted)}\nS = stepinfo(SYSrKf)`,
           hint: C.r ? "Beispiel 16 gives rᵀ, so its poles are fixed: pick another exercise to move them." : "Move the poles left: the response gets faster, the input larger. A pair further from the real axis swings more.",
         };
@@ -80,6 +84,7 @@ export default {
             ...(ack ? [["acker gives the same", same(ack, r) ? "yes" : "no", same(ack, r) ? "" : "danger"]] : [])],
           sheet: C.sheet.rRnf ? [{ source: C.sheet.source, sheet: "rᵀ in RNF coordinates only; no back-transformation on the sheet", lab: `rᵀ = ${fmtVec(r)} in the plant's states`, agree: undefined }] : [],
           code: `${model(S)}\n${C.r ? `rT = ${vec(C.r, false)};` : placementRnf(placeByRnf(S.A, S.b, S.c, wanted).a, placeByRnf(S.A, S.b, S.c, wanted).p)}\n% check: rT equals acker(A,b,p) in the plant's own states`,
+          python: `${Py.model(S)}\n${C.r ? `rT = ${Py.row(C.r)}` : `${Py.placementRnf(placeByRnf(S.A, S.b, S.c, wanted).a, placeByRnf(S.A, S.b, S.c, wanted).p)}\nprint(rT, acker(A, b, ${Py.poleList(wanted)}))   # the same rT in the plant's own states`}`, pyCheck: ["rT", [r]],
           hint: "The sheets stop at rᵀ_RNF; that gain only fits the plant if its states are the RNF's. With u = −rᵀx on the real states, use rᵀ_RNF·S.",
         };
       } },
@@ -93,6 +98,7 @@ export default {
             ["Steady v without Kf", fmt(finalValue(closedLoop(S.A, S.b, r), S.b, S.c, 0), 4)]],
           sheet: C.sheet.Kf !== undefined ? [{ source: C.sheet.source, sheet: `Gf = ${C.sheet.KfText}`, lab: fmt(Kf), agree: Math.abs(Kf - C.sheet.Kf) < 1e-6 * Math.abs(C.sheet.Kf) + 1e-9 }] : [],
           code: `${model(S)}\nrT = ${vec(r, false)};\nAr = A - b*rT;\nKf = inv(cT*inv(-A+b*rT)*b);\nSYSrKf = ss(Ar,b*Kf,cT,d);\nstep(ss(Ar,b,cT,d), SYSrKf)`,
+          python: `${Py.model(S)}\n${Py.gainLoop(r)}\ny1, t1 = step(ss(Ar, b, cT, d))\ny2, t2 = step(SYSrKf)\nprint(Kf)`, pyCheck: ["Kf", [[Kf]]],
           hint: "A negative Kf is no mistake: the closed loop's G(0) is negative, so the reference must enter with the other sign.",
         };
       } },

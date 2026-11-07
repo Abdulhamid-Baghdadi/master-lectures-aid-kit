@@ -9,7 +9,8 @@ layer, so read those from page images (`pdftoppm -r 55 -f N -l N -png`). Pages c
 numbers run one to three ahead. There is no exercise sheet with solutions in the folder; the slides' worked examples are
 the printed results. The folder's `Presentation-Baghdadi` and `project` are the user's own student project: not a source for facts, but
 the four stepped exercise labs (`*steps.js`, 7 Nov 2026) compare with it and write their Python in its style. Each view
-of those labs shows MATLAB and Python (`src/labs/code.js`); check MATLAB calls on the MathWorks pages first. The Python
+of those labs shows MATLAB and Python (`src/labs/code.js`; the Python panel is the kit's step player's, shared with
+the Automation and ModSim labs since 7 Nov 2026); check MATLAB calls on the MathWorks pages first. The Python
 runs in `tests/unit/python-run.test.js` when numpy is installed.
 Known slips: ch. 2, p. 61 (the non-uniqueness example is wrong), ch. 5, p. 8 (rows 1–2 of the ZX′Z″ table do not reach
 the target), ABB p. 31 rows D and H (Z 270 mm, the geometry gives 290 mm). Check every equation against the slides and

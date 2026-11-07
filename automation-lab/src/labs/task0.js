@@ -6,6 +6,7 @@ import { ctrb, verdict, poles, ackermann, lqr, butterworth, prefilter, closedLoo
 import { stepper, fmt, fmtC, fmtVec } from "./view.js";
 import { splane, grow } from "./pics.js";
 import { model, placement, stepinfoCall, num } from "./matlab.js";
+import * as Py from "./python.js";
 
 // Kubinger (2021b), task 0, p. 1.
 export const PLANT = { A: [[-7.1, -8.7, 3.15], [2.3, 0, 3.0], [2.3, 2.5, -1]], b: [2, -3.45, 1.75], c: [-0.78, -1.2, -2.0], d: 0 };
@@ -29,6 +30,10 @@ export function controllers({ lambda = 1, own = [[-3, 2], [-3, -2], [-4, 0]] } =
 const codeFor = (C, lambda) => C.lq ? `lambda = ${num(lambda)};\nQ = lambda*(cT'*cT); R = 1;   % slides p. 15\nrT = lqr(A,b,Q,R);\nAr = A - b*rT;\nKf = inv(cT*inv(-A+b*rT)*b);\nSYSrKf = ss(Ar,b*Kf,cT,d);`
   : C.bw ? `n = 3; k = 1:n; r0 = 2;\np = (r0*exp(1j*(pi/2 + (2*k-1)*pi/(2*n)))).';   % Butterworth: 2n equal parts of the circle\nrT = place(A,b,p);\nAr = A - b*rT;\nKf = inv(cT*inv(-A+b*rT)*b);\nSYSrKf = ss(Ar,b*Kf,cT,d);`
   : placement(C.poles).replace("\nstep(SYSrKf)", "");
+const pyLoop = ["Ar = A - b @ rT", "Kf = np.linalg.inv(cT @ np.linalg.inv(-A + b @ rT) @ b)", "SYSrKf = ss(Ar, b @ Kf, cT, d)"].join("\n");
+const pyFor = (C, lambda) => C.lq ? `lam = ${num(lambda)}   # lambda is a Python keyword\nQ = lam*(cT.T @ cT)   # slides p. 15\nR = 1\nrT, _, _ = lqr(A, b, Q, R)   # K, S, E: E the closed-loop poles (MATLAB: K, S, P); u = -rT x\n${pyLoop}`
+  : C.bw ? `n = 3\nk = np.arange(1, n+1)\nr0 = 2\np = r0*np.exp(1j*(np.pi/2 + (2*k-1)*np.pi/(2*n)))   # Butterworth: 2n equal parts of the circle\np = np.round(p, 12)   # scipy's place_poles wants exact conjugate pairs; MATLAB's place takes the rounding\nrT = place(A, b, p)\n${pyLoop}`
+  : Py.placement(C.poles).replace(/\ny, t = step\(SYSrKf\)[^\n]*/, "");
 
 export default {
   id: "task0",
@@ -50,6 +55,7 @@ export default {
         return {
           figure: splane(poles(PLANT.A), { label: "The plant's poles" }),
           notes: [["det Q_S", fmt(v.det, 5)], ["rank Q_S", `${v.rank} of 3`, "", v.full ? "full: every pole can be placed" : "not full"], ["Plant poles", poles(PLANT.A).map(fmtC).join(", ")]],
+          python: `${Py.model(PLANT)}\nUncontrollable_states = len(A) - np.linalg.matrix_rank(ctrb(A, b))   # slides p. 18\nprint(Uncontrollable_states)`, pyCheck: [["Uncontrollable_states", 0], ["np.linalg.det(ctrb(A, b))", v.det]],
           code: `${model(PLANT)}\nUncontrollable_states = length(A) - rank(ctrb(A,b))   % slides p. 18`,
           hint: "The plant is stable but slow; the controllers below move its poles.",
         };
@@ -61,6 +67,7 @@ export default {
             grow({ p, label: `Step response of controller ${C.name}`, xLabel: "t [s]", yLabel: "v", lines: [{ x: run.t, y: run.y, name: "v" }] })],
           notes: [["rᵀ", fmtVec(C.r)], ["Kf", fmt(C.Kf)], ["Poles", C.cl.map(fmtC).join(", ")]],
           code: `${model(PLANT)}\n${codeFor(C, lambda)}\nstep(SYSrKf, ${T})`,
+          python: `${Py.model(PLANT)}\n${pyFor(C, lambda)}\ny, t = step(SYSrKf, ${T})\nprint(rT, Kf)`, pyCheck: [["rT", [C.r], 1e-5], ["Kf", [[C.Kf]], 1e-5]],
           hint: C.name.startsWith("1") ? "place refuses a pole repeated more often than rank(b) = 1: the triple pole needs acker (MathWorks, place)." : "",
         };
       } },
@@ -73,6 +80,9 @@ export default {
           figure: grow({ p, label: "The six step responses", xLabel: "t [s]", yLabel: "v", yMax: 1.6, yMin: -0.6, lines: runs }),
           notes: runs.map((r, i) => [`Controller ${all[i].name}`, `tr ${fmt(r.info.RiseTime, 3)} s, ts ${fmt(r.info.SettlingTime, 3)} s, ${fmt(r.info.Overshoot, 3)} %`, "",
             Number.isFinite(r.info.SettlingTime) ? "" : "not settled within the time span"]),
+          python: `${Py.model(PLANT)}\n${all.map((C, i) => `# Controller ${i + 1}\n${pyFor(C, lambda)}\nSYS${i + 1} = SYSrKf\n${Py.stepinfoCall(`SYS${i + 1}`, undefined, undefined, `S${i + 1}`)}`).join("\n")}\ny, t = step(SYS1, ${T})   # one system at a time: control.matlab.step takes one`,
+          // Only the responses that settle within the span: stepinfo here sees the whole response, the lab only its span.
+          pyCheck: runs.map((r, i) => [i, r.info.RiseTime, r.info.SettlingTime]).filter(([, v, s]) => Number.isFinite(v) && Number.isFinite(s)).map(([i, v]) => [`S${i + 1}["RiseTime"]`, v, 0.03]),
           code: `${model(PLANT)}\n${all.map((C, i) => `% Controller ${i + 1}\n${codeFor(C, lambda)}\nSYS${i + 1} = SYSrKf;\n${stepinfoCall(`SYS${i + 1}`)}`).join("\n")}\nstep(SYS1,SYS2,SYS3,SYS4,SYS5,SYS6, ${T})`,
           hint: "Anregelzeit, Ausregelzeit and Überschwingweite as stepinfo reports them with its defaults (10–90 % rise, 2 % band); the task names no other limits.",
         };

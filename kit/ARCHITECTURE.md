@@ -7,7 +7,7 @@ architecture.json name its layers, bottom first:
 |---|---|---|---|
 | vendor | `vendor/*.mjs` | nothing | Temml, `vendor/temml.mjs`, imported only by `ui/math.js` |
 | kit-core | `core/**` | nothing | `core/index.js` |
-| kit | `ui/**` | kit-core, vendor | `ui/kit.js`, `ui/chart.js`, `ui/field.js`, `ui/art.js`, `ui/math.js`, `ui/steps.js`, `ui/matlab.js` |
+| kit | `ui/**` | kit-core, vendor | `ui/kit.js`, `ui/chart.js`, `ui/field.js`, `ui/art.js`, `ui/math.js`, `ui/steps.js`, `ui/matlab.js`, `ui/python.js` |
 
 Tests: `node --test "kit/tests/*.test.js"` from the repository root. The layering of each lab, the kit within it, is
 checked by `scripts/check-architecture.js`, run from every lab's `tests/unit/architecture.test.js`.
@@ -17,6 +17,10 @@ checked by `scripts/check-architecture.js`, run from every lab's `tests/unit/arc
 `ui/steps.js` (the exercise in animated steps, with the source beside the lab and the MATLAB panel; look in
 `steps.css`), `ui/matlab.js` (numbers and matrices as MATLAB input) and `core/ode.js` (fixed-step Runge–Kutta) came
 from the Advanced Automation lab on 7 Nov 2026, when the ModSim lab needed the same: one copy, imported by both.
+Later that day the step player took the Robotics lab's Python panel: a view that returns `python` (and `pyCheck`, what
+the snippet should print) gets a second panel beside the MATLAB, `ui/python.js` writes numpy input with the MATLAB
+writer's digits, and `tests/code-views.js` and `tests/fake-dom.js` (not tests themselves) hold the Python name scanner,
+the view player and the runner the three labs' Python tests share.
 
 ## The one library: Temml
 

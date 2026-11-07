@@ -8,6 +8,7 @@ import { cartPendulum, run, VALUES } from "../core/index.js";
 import { linkage } from "./pics.js";
 import { reveal, memo, sliders, caption, at, deg } from "./view.js";
 import { lagrange, ode, eigKM, assign } from "./matlab.js";
+import * as Py from "./python.js";
 
 const NOTE = "No solution sheet; worked here.";
 
@@ -23,6 +24,8 @@ function make(id, dir) {
   const rows = v ? ["x(3)", "x(4)", "Ms(x) \\ [F_01*cos(Om*t) + mg*g - k*x(1) - c*x(3) + ms*l_1*x(4)^2*cos(x(2)); M_01*cos(Om*t) - ms*g*l_1*sin(x(2)) - k_T*x(2) - c_T*x(4)]"]
     : ["x(3)", "x(4)", "Ms(x) \\ [F_01*cos(Om*t) - k*x(1) - c*x(3) + ms*l_1*x(4)^2*sin(x(2)); M_01*cos(Om*t) - ms*g*l_1*sin(x(2)) - k_T*x(2) - c_T*x(4)]"];
   const Ms = v ? "Ms = @(x) [mg -ms*l_1*sin(x(2)); -ms*l_1*sin(x(2)) I];" : "Ms = @(x) [mg ms*l_1*cos(x(2)); ms*l_1*cos(x(2)) I];";
+  const pyRows = ["x[2]", "x[3]", `*np.linalg.solve(Ms(x), [${v ? "F_01*np.cos(Om*t) + mg*g - k*x[0] - c*x[2] + ms*l_1*x[3]**2*np.cos(x[1])" : "F_01*np.cos(Om*t) - k*x[0] - c*x[2] + ms*l_1*x[3]**2*np.sin(x[1])"}, M_01*np.cos(Om*t) - ms*g*l_1*np.sin(x[1]) - k_T*x[1] - c_T*x[3]])`];
+  const pyMs = v ? "Ms = lambda x: np.array([[mg, -ms*l_1*np.sin(x[1])], [-ms*l_1*np.sin(x[1]), I]])   # the mass matrix; MATLAB's Ms(x) \ [...] is np.linalg.solve(Ms(x), [...])" : "Ms = lambda x: np.array([[mg, ms*l_1*np.cos(x[1])], [ms*l_1*np.cos(x[1]), I]])   # the mass matrix; MATLAB's Ms(x) \ [...] is np.linalg.solve(Ms(x), [...])";
   const figure = (px, th, label) => linkage({ links: [{ angle: th, len: 120, kind: "rod", bob: 11 }], base: v ? [0, 70 + px] : [px, 20],
     block: "m₂", guide: dir, label, pivot: v ? [260, 20] : [260, 60] });
   return {
@@ -53,6 +56,13 @@ function make(id, dir) {
             { source: "group's Jacobian.mlx", sheet: "ÿ with −m_s l₁(ẏ² cos φ − φ̈ sin φ)", lab: "+m_s l₁(θ̇² cos θ + θ̈ sin θ): θ̇, not ẏ, and the sign", agree: false }] : [],
           code: lagrange({ q: [s, "theta"], names: ["m_1", "m_2", "m_3", "l_1", "g", "k", "c", "k_T", "c_T", "F_1", "M_1"], T: T_, V: V_,
             D: `1/2*c*diff(${s},t)^2 + 1/2*c_T*diff(theta,t)^2`, Q: ["F_1", "M_1"] }),
+          ...(() => {
+            const st0 = [v ? cartPendulum({ ...st, dir }).rest + 0.01 : 0.01, 0.2, -0.1, 0.3];
+            const L = Py.lagrange({ q: [s, "theta"], names: ["m_1", "m_2", "m_3", "l_1", "g", "k", "c", "k_T", "c_T", "F_1", "M_1"], T: T_, V: V_,
+              D: `1/2*c*diff(${s},t)^2 + 1/2*c_T*diff(theta,t)^2`, Q: ["F_1", "M_1"],
+              check: { values: { m_1: st.m1, m_2: st.m2, m_3: st.m3, l_1: st.l1, g: 9.80665, k: st.k, c: st.c, k_T: st.kT, c_T: st.cT, F_1: st.F01, M_1: st.M01 }, state: st0 } });
+            return { python: L.code, pyCheck: [L.expr, cartPendulum({ ...st, dir }).f(0, st0).slice(2), 1e-6] };   // the rest y* printed to six figures
+          })(),
         }) },
         { name: "The motion under F₁ and M₁", draw: p => {
           const m = cartPendulum({ ...st, dir }), r = sim(st), k = at(r, p), off = v ? m.rest : 0;
@@ -65,6 +75,9 @@ function make(id, dir) {
             notes: [[v ? "Rest y* = m_ges g/k" : "Rest", v ? `${fmt(1000 * m.rest)} mm` : "x = 0, θ = 0"]],
             code: [assign(P(st)), "mg = m_1+m_2+m_3; ms = m_1/2+m_3; I = l_1^2*(m_1/3+m_3);", Ms,
               ode({ params: [], rows, x0: [v ? m.rest : 0, 0, 0, 0], T, plot: `plot(t,x(:,1), t,x(:,2))   % ${s} and theta` }).replace(/^\n/, "")].join("\n"),
+            python: Py.ode({ params: P(st), pre: ["mg = m_1+m_2+m_3", "ms = m_1/2+m_3", "I = l_1**2*(m_1/3+m_3)", pyMs], rows: pyRows, x0: [v ? m.rest : 0, 0, 0, 0], T,
+              plot: `plt.plot(sol.t, sol.y[0], sol.t, sol.y[1])   # ${s} and theta` }),
+            pyCheck: Py.odeCheck(r),
           };
         } },
         { name: "Linearise: M, K and the eigenfrequencies", draw: p => {
@@ -77,6 +90,8 @@ function make(id, dir) {
             sheet: v ? [{ source: "group report p. 8", sheet: "rest at y = m_ges g/k, θ = 0", lab: `y* = ${fmt(1000 * m.rest)} mm`, agree: true },
               { source: "group report p. 9", sheet: "linearised at y = 0, keeping θ̈·θ and ÿ·θ", lab: "at y* = m_ges g/k; products of small terms dropped: M constant, K diagonal", agree: false }] : [],
             code: eigKM({ params: P(st).slice(0, 8), K: "[k 0; 0 (m_1/2+m_3)*g*l_1+k_T]", M: v ? "[m_1+m_2+m_3 0; 0 l_1^2*(m_1/3+m_3)]" : "[m_1+m_2+m_3 (m_1/2+m_3)*l_1; (m_1/2+m_3)*l_1 l_1^2*(m_1/3+m_3)]" }),
+            python: Py.eigKM({ params: P(st).slice(0, 8), K: "[k 0; 0 (m_1/2+m_3)*g*l_1+k_T]", M: v ? "[m_1+m_2+m_3 0; 0 l_1^2*(m_1/3+m_3)]" : "[m_1+m_2+m_3 (m_1/2+m_3)*l_1; (m_1/2+m_3)*l_1 l_1^2*(m_1/3+m_3)]" }),
+            pyCheck: ["f0", m.modes.map(q => q.f)],
             hint: v ? "Hanging, the coupling term vanishes at θ = 0: block and pendulum swing apart." : "On the floor the block and the pendulum stay coupled through m_s l₁ in M.",
           };
         } },

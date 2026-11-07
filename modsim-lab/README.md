@@ -97,6 +97,22 @@ block takes one sign per input, the Integrator's initial condition defaults to 0
 a helper agent and not re-read word for word. **MATLAB and Octave are not installed here**: the snippets are checked for
 names used before they are assigned (every view of every lab, tests/unit/matlab-defined.test.js), not run.
 
+## Python beside the MATLAB
+
+Every view also shows the same steps in Python, beside the MATLAB, and the Python panels run without a MATLAB licence
+(Python 3 with numpy, scipy, sympy, matplotlib and python-control 0.10.2): sympy for the Lagrange recipe (`symbols`,
+`Function`, `diff`, `solve`), `solve_ivp(f, t_span, x0)` with `f = lambda t, x: [...]` for ode45's `@(t,x) [...]`,
+`scipy.linalg.eig(K, M)` for `eig(K,M)`, python-control for `ss`, `step`, `tf` and the frequency response.
+`tests/unit/python-run.test.js` runs 41 of the 47 snippets and compares what they print with the lab: the
+accelerations of the Lagrange equations at a test state, eigenfrequencies, poles, matrices, and solve_ivp's end state.
+What Python cannot do: **Simulink and Simscape have no Python counterpart**, so those views give the parameters and
+the blocks as comments and point to the ODE the motion view integrates; they and the chaotic double pendulum, which
+only plots, are checked for undefined names only. Differences the snippets state (scipy and sympy pages, 7 Nov 2026):
+`solve_ivp` defaults to RK45 with rtol 1e-3 and atol 1e-6 (ode45's RelTol and AbsTol defaults) and returns one row per
+state where ode45 returns one row per time; `scipy.linalg.eig` returns complex eigenvalues in no promised order, so
+they are sorted; sympy has no `odeToVectorField`, so `solve` gives the accelerations; MATLAB's `\` is
+`np.linalg.solve`.
+
 ## Open it
 
 Serve the repository's root and open `/modsim-lab/`:

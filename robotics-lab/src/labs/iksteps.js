@@ -7,7 +7,7 @@ import * as a from "../../../kit/ui/art.js";
 import { stepper, fmt, same } from "../../../kit/ui/steps.js";
 import { ik2r, ik3r, ikIrb120, irb120, planar2r, posOf, rad, deg } from "../core/index.js";
 import { view, link, joint, ground, label, ring, dot, angleSlider, lengthSlider, project, frameAxes } from "./draw.js";
-import { twin, matlabTree, PY_HEAD, pyMat, num } from "./code.js";
+import { matlabTree, PY_HEAD, pyMat, num } from "./code.js";
 import { IRB120 } from "../core/index.js";
 
 const f2 = t => `${fmt(deg(t), 4)}°`;
@@ -108,8 +108,6 @@ export default {
         };
       } },
     ];
-    const { steps: s2, panel } = twin(steps);
-    Object.assign(ui, stepper(root, s2, { controls }));
-    root.append(panel);
+    Object.assign(ui, stepper(root, steps, { controls }));
   },
 };

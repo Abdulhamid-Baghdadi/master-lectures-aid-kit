@@ -5,11 +5,15 @@ import * as a from "../../../kit/ui/art.js";
 import { motor21, ctrb, obsv, det, simulate, matVec, poles } from "../core/index.js";
 import { stepper, fmt, fmtC } from "./view.js";
 import { motorSvg, grow, mtx } from "./pics.js";
+import * as Py from "./python.js";
+import { num } from "./python.js";
 
 // Kubinger (2021a), Beispiel 21, p. 22: RA = 0.8 Ω, LA = 125 mH, c = 50 mVs, J = 0.002 kg m², UA,max = 16 V.
 const P = { RA: 0.8, LA: 0.125, c: 0.05, J: 0.002 };
 const m = motor21(P);
 const code = `RA = 0.8; LA = 0.125; c = 0.05; J = 0.002;\nA = [-RA/LA -c*2*pi/LA; c/(J*2*pi) 0];\nb = [1/LA; 0];\nbz = [0; -1/(J*2*pi)];   % load torque ML\ncT = [0 1];   % n in 1/s\nd = 0;\nSYS = ss(A,[b bz],cT,[0 0]);   % inputs UA and ML`;
+
+const pyCode = `${Py.HEAD}\n\nRA = 0.8\nLA = 0.125\nc = 0.05\nJ = 0.002\nA = np.array([[-RA/LA, -c*2*np.pi/LA], [c/(J*2*np.pi), 0]])\nb = np.array([[1/LA], [0]])\nbz = np.array([[0], [-1/(J*2*np.pi)]])   # load torque ML\ncT = np.array([[0, 1]])   # n in 1/s\nd = 0\nSYS = ss(A, np.hstack([b, bz]), cT, [[0, 0]])   # inputs UA and ML`;
 
 /** Speed n (1/s) and the shaft angle 2π∫n, for UA from t = 0 and ML from t = tL. */
 function run(UA, ML, tL, T = 1.5) {
@@ -33,7 +37,7 @@ export default {
         notes: [["States", "x1 = iA, x2 = n", "", "u = UA, disturbance z = ML, v = n in revolutions per second"],
           ["det Q_S", fmt(det(ctrb(m.A, m.b)), 4), "", "c/(2π·J·LA²) ≠ 0: controllable"], ["det Q_B", fmt(det(obsv(m.A, m.c)), 4), "", "−c/(2π·J) ≠ 0: observable"]],
         sheet: [{ source: "S2, pp. 11–12; M, p. 50", sheet: "A = [−RA/LA −c·2π/LA; c/(J·2π) 0], b = [1/LA; 0], cᵀ = [0 1]; symbolic only", lab: `A = [${fmt(m.A[0][0])} ${fmt(m.A[0][1])}; ${fmt(m.A[1][0])} 0]`, agree: true }],
-        code, hint: "The sheets write no disturbance column; from J·2π·dn/dt = c·iA − ML it is b_z = [0; −1/(2πJ)], worked here.",
+        code, python: pyCode, pyCheck: [["A", m.A], ["bz", m.bz.map(v => [v])]], hint: "The sheets write no disturbance column; from J·2π·dn/dt = c·iA − ML it is b_z = [0; −1/(2πJ)], worked here.",
       }) },
       { name: "Start the motor", draw: p => {
         const r = run(UA, 0, Infinity), k = Math.min(600, Math.floor(p * 600));
@@ -41,6 +45,7 @@ export default {
           figure: [motorSvg(r.angle[k], `The shaft after ${fmt(r.t[k], 2)} s`, `n = ${fmt(60 * r.n[k], 4)} rpm`),
             grow({ p, label: "Speed after switching UA on", xLabel: "t [s]", yLabel: "n [rpm]", lines: [{ x: r.t, y: r.n.map(v => 60 * v), name: "n" }] })],
           notes: [["Steady speed", `${fmt(60 * UA / (2 * Math.PI * P.c), 4)} rpm`, "", "UA/(c·2π) once the current has died away (no load, no friction)"], ["Poles", poles(m.A).map(fmtC).join(", ")]],
+          python: `${pyCode}\nt = np.linspace(0, 1.5, 601)\ny, t, x = lsim(SYS, np.column_stack([${num(UA)}*np.ones(len(t)), np.zeros(len(t))]), t)\nprint(60*y[-1])   # rpm`, pyCheck: ["60*y[-1]", 60 * r.n.at(-1), 1e-4],
           code: `${code}\nt = linspace(0,1.5,601);\n[y,t] = lsim(SYS, [${fmt(UA)}*ones(size(t')) zeros(size(t'))], t);\nplot(t, 60*y)   % rpm`,
         };
       } },
@@ -51,6 +56,7 @@ export default {
             grow({ p, label: "Speed and current with the load torque from 0.8 s", xLabel: "t [s]", yLabel: "n [rpm], iA [A]",
               lines: [{ x: r.t, y: r.n.map(v => 60 * v), name: "n" }, { x: r.t, y: r.i.map(v => 100 * v), name: "100·iA", cls: "second" }] })],
           notes: [["Speed drop", `${fmt(60 * ML * P.RA / (P.c * P.c * 2 * Math.PI), 3)} rpm`, "", "steady: iA = ML/c, so n falls by RA·ML/(c²·2π)"]],
+          python: `${pyCode}\nt = np.linspace(0, 1.5, 601)\nML = ${num(ML)}*(t >= 0.8)\ny, t, x = lsim(SYS, np.column_stack([${num(UA)}*np.ones(len(t)), ML]), t)\nprint(60*y[-1])`, pyCheck: ["60*y[-1]", 60 * r.n.at(-1), 1e-3],
           code: `${code}\nt = linspace(0,1.5,601)';\nML = ${fmt(ML)}*(t >= 0.8);\n[y,t] = lsim(SYS, [${fmt(UA)}*ones(size(t)) ML], t);\nplot(t, 60*y)`,
         };
       } },

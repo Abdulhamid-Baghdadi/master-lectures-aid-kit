@@ -8,9 +8,11 @@ import { stepper, fmt, fmtC } from "./view.js";
 import { mtx, terms, grow } from "./pics.js";
 import { SYSTEMS, SHEETS, odeTerms, cellOrder } from "./systems.js";
 import { model, modelMimo, mat, vec } from "./matlab.js";
+import * as Py from "./python.js";
 
 const eq = (P, Q) => JSON.stringify(P) === JSON.stringify(Q);
 const isSiso = S => S.B[0].length === 1 && S.C.length === 1;
+const pyCode = S => isSiso(S) ? Py.model({ A: S.A, b: S.B.map(r => r[0]), c: S.C[0], d: S.D[0][0] }) : Py.modelMimo(S);
 const code = S => isSiso(S) ? model({ A: S.A, b: S.B.map(r => r[0]), c: S.C[0], d: S.D[0][0] }) : modelMimo(S);
 
 /** The response of every output to a unit step on input j, or the free motion from x0. */
@@ -45,7 +47,7 @@ export default {
             "row i of A holds the coefficients of x1 … xn in the equation for ẋi; a term that is missing is a 0"]],
           sheet: [{ source: sh.source, sheet: `A = ${mat(sh.A)}`, lab: `A = ${mat(S.A)}, ${isSiso(S) ? "b, cᵀ, d" : "B, C, D"} as well`,
             agree: ["A", "B", "C", "D"].every(M => eq(sh[M], S[M])) }],
-          code: code(S),
+          code: code(S), python: pyCode(S), pyCheck: ["A", S.A],
           hint: "Each row of the matrix is one equation; each column belongs to one state (A, C) or one input (B, D).",
         };
       } },
@@ -56,6 +58,8 @@ export default {
             lines: r.v.map((y, i) => ({ x: r.t, y, name: S.C.length > 1 ? `v${i + 1}` : "v", cls: i ? "second" : "" })) }),
           notes: [["Poles of A", poles(S.A).map(fmtC).join(", "), unstable ? "warn" : "", unstable ? "a pole in the right half: the response grows without bound" : "all in the left half: it settles"]],
           code: `${code(S)}\nstep(SYS, ${T})`,
+          python: `${pyCode(S)}\ny, t = step(SYS, ${T})   # with two inputs, y holds every input-output pair\nprint(pole(SYS))`,
+          pyCheck: [Py.PY_POLES("A"), Py.polesKey(poles(S.A))],
           hint: "A unit step on the first input from rest. With two inputs, MATLAB's step plots every input–output pair.",
         };
       } },
@@ -65,6 +69,8 @@ export default {
           figure: grow({ p, label: `The states moving freely from x1 = 1 over ${T} s`, xLabel: "t [s]", yLabel: "x",
             lines: S.A.map((_, i) => ({ x: r.t, y: r.x.map(x => x[i]), name: `x${i + 1}`, cls: ["", "second", "third", "faint"][i] })) }),
           notes: [["Start", `x0 = ${vec(x0)}`, "", "no input: the motion is A's alone"]],
+          python: `${pyCode(S)}\nx0 = np.array(${Py.list(x0)})\nt = np.linspace(0, ${T}, 301)\ny, t, x = lsim(SYS, np.zeros((len(t), ${S.B[0].length})), t, x0)   # X0, the start state, fourth as in MATLAB`,
+          pyCheck: ["x[-1]", r.x.at(-1), 1e-4],
           code: `${code(S)}\nx0 = ${vec(x0)};\nt = linspace(0,${T},301);\n[y,t,x] = lsim(SYS, zeros(numel(t),${S.B[0].length}), t, x0);\nplot(t,x)`,
           hint: "lsim with a zero input and a start state: the fourth argument is the initial state (MathWorks, lsim).",
         };

@@ -17,6 +17,9 @@
 @media (prefers-reduced-motion: reduce) { .term, .mtx td { transition: none; } .mtx td.hot { transform: none; } }
 .player { grid-template-columns: auto 1fr auto; display: grid; gap: 8px; align-items: center; }
 .sheet .readout { border-left: 3px solid var(--accent); }
+.code-pair { display: grid; gap: 0 16px; min-width: 0; }
+.code-pair > * { min-width: 0; }
+@media (min-width: 900px) { .code-pair:has(> :nth-child(2)) { grid-template-columns: 1fr 1fr; } }
 .matlab { margin-top: 12px; }
 .matlab-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .matlab-head h3 { margin: 0; font-size: 1rem; }

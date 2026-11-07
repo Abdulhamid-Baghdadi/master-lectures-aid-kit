@@ -7,6 +7,11 @@ import { doppel, run, VALUES } from "../core/index.js";
 import { linkage, linkEnds, bars } from "./pics.js";
 import { reveal, memo, sliders, caption, at, deg, rad } from "./view.js";
 import { lagrange, eigKM, assign, num, vec } from "./matlab.js";
+import * as Py from "./python.js";
+const pyOde = ["kap = 2*k_D/(m*L_1**2)", "gam = 2*c_D/(m*L_1**2)",
+  "f = lambda t, x: [x[2], x[3], *np.linalg.solve(np.array([[8/3, np.cos(x[1]-x[0])], [np.cos(x[1]-x[0]), 2/3]]),   # MATLAB's \\ is np.linalg.solve",
+  "    [x[3]**2*np.sin(x[1]-x[0]) - 3*g/L_1*np.sin(x[0]) + kap*(x[1]-x[0]) + gam*(x[3]-x[2]),",
+  "     -x[2]**2*np.sin(x[1]-x[0]) - g/L_1*np.sin(x[1]) - kap*(x[1]-x[0]) - gam*(x[3]-x[2])])]"].join("\n");
 
 const T = 15, N = 7500; // RK4 at 2 ms
 const runs = memo(v => {
@@ -42,6 +47,7 @@ export default {
           T: "m*L_1^2/6*(4*diff(phi1,t)^2 + diff(phi2,t)^2 + 3*diff(phi1,t)*diff(phi2,t)*cos(phi2-phi1))",
           V: "-m*g*L_1/2*cos(phi1) - m*g*L_1*(cos(phi1) + cos(phi2)/2) + 1/2*k_D*(phi2-phi1)^2",
           D: "1/2*c_D*(diff(phi2,t)-diff(phi1,t))^2", Q: ["0", "0"] }),
+        ...(() => { const st0 = [0.3, -0.2, 0.5, 0.1], L = Py.lagrange({ q: ["phi1", "phi2"], names: ["m", "L_1", "g", "k_D", "c_D"], T: "m*L_1^2/6*(4*diff(phi1,t)^2 + diff(phi2,t)^2 + 3*diff(phi1,t)*diff(phi2,t)*cos(phi2-phi1))", V: "-m*g*L_1/2*cos(phi1) - m*g*L_1*(cos(phi1) + cos(phi2)/2) + 1/2*k_D*(phi2-phi1)^2", D: "1/2*c_D*(diff(phi2,t)-diff(phi1,t))^2", Q: ["0", "0"], check: { values: { m: st.m, L_1: st.L1, g: 9.80665, k_D: st.kD, c_D: st.cD }, state: st0 } }), n = st0.length / 2; return { python: L.code, pyCheck: [L.expr, doppel(st).f(0, st0).slice(n), 1e-9] }; })(),
       }) },
       { name: "Chaos: two runs 0.001 rad apart", draw: p => {
         const r = runs(st), k = at(r.a, p), from = Math.max(0, k - 400);
@@ -58,6 +64,10 @@ export default {
             odeRows,
             `[t,x] = ode45(f,[0 ${T}],${vec([rad(st.phi1), rad(st.phi2), 0, 0])});`,
             `[t2,x2] = ode45(f,[0 ${T}],${vec([rad(st.phi1) + 1e-3, rad(st.phi2), 0, 0])});`, "plot(t,x(:,2)*180/pi, t2,x2(:,2)*180/pi)"].join("\n"),
+          // Plots only: in a chaotic run no final state can be compared (python-defined.test.js scans it).
+          python: [Py.HEAD, "", Py.assign([["m", st.m, "kg"], ["L_1", st.L1, "m"], ["g", 9.80665], ["k_D", st.kD], ["c_D", st.cD]]), pyOde,
+            `sol = solve_ivp(f, [0, ${T}], ${Py.list([rad(st.phi1), rad(st.phi2), 0, 0])})   # RK45, rtol 1e-3 and atol 1e-6 as ode45's defaults: it parts from ode45 too after a while`,
+            `sol2 = solve_ivp(f, [0, ${T}], ${Py.list([rad(st.phi1) + 1e-3, rad(st.phi2), 0, 0])})`, "plt.plot(sol.t, np.rad2deg(sol.y[1]), sol2.t, np.rad2deg(sol2.y[1]))", "plt.show()"].join("\n"),
           hint: "MATLAB's ode45 and this lab's fixed-step integrator part from each other too after a while: in a chaotic system every rounding grows.",
         };
       } },
@@ -74,6 +84,11 @@ export default {
             "E = m*L_1^2/6*(4*x(:,3).^2 + x(:,4).^2 + 3*x(:,3).*x(:,4).*cos(x(:,2)-x(:,1))) ...",
             "    - m*g*L_1*(1.5*cos(x(:,1)) + 0.5*cos(x(:,2))) + 1/2*k_D*(x(:,2)-x(:,1)).^2;",
             "plot(t,E-E(1))   % how far K + V drifts in ode45's run"].join("\n"),
+          python: [Py.HEAD, "", Py.assign([["m", st.m, "kg"], ["L_1", st.L1, "m"], ["g", 9.80665], ["k_D", st.kD], ["c_D", st.cD]]), pyOde,
+            `sol = solve_ivp(f, [0, ${T}], ${Py.list([rad(st.phi1), rad(st.phi2), 0, 0])})`, "x = sol.y   # one row per state",
+            "E = (m*L_1**2/6*(4*x[2]**2 + x[3]**2 + 3*x[2]*x[3]*np.cos(x[1]-x[0]))", "     - m*g*L_1*(1.5*np.cos(x[0]) + 0.5*np.cos(x[1])) + 1/2*k_D*(x[1]-x[0])**2)",
+            "plt.plot(sol.t, E - E[0])   # how far K + V drifts in solve_ivp's run", "plt.show()"].join("\n"),
+          pyCheck: ["E[0]", E[0], 1e-4],   // the start angles printed to six figures
         };
       } },
       { name: "Linear: the two eigenmodes", draw: p => {
@@ -85,6 +100,7 @@ export default {
           notes: d.modes.map((m, i) => [`Mode ${i + 1}`, `ω = ${fmt(m.omega)} rad/s, f = ${fmt(m.f)} Hz`, i === j ? "" : "", `shape φ₂/φ₁ = ${fmt(m.v[1])}`]),
           sheet: [{ source: "VO pp. 34, 39", sheet: "K = [3gmL₁² 0; 0 gmL₁²] after multiplying by mL₁²", lab: "g/L₁ · mL₁² = gmL₁: K = [3gmL₁ 0; 0 gmL₁]", agree: false }],
           code: eigKM({ params: [["g", 9.80665], ["L_1", st.L1], ["kap", 2 * st.kD / (st.m * st.L1 ** 2)]], K: "[3*g/L_1+kap -kap; -kap g/L_1+kap]", M: "[8/3 1; 1 2/3]" }),
+          python: Py.eigKM({ params: [["g", 9.80665], ["L_1", st.L1], ["kap", 2 * st.kD / (st.m * st.L1 ** 2)]], K: "[3*g/L_1+kap -kap; -kap g/L_1+kap]", M: "[8/3 1; 1 2/3]" }), pyCheck: ["f0", d.modes.map(m => m.f)],
           hint: "Linearised at φ₁ = φ₂ = 0: cos(φ₂ − φ₁) → 1, the φ̇² terms drop, sin φ → φ.",
         };
       } },

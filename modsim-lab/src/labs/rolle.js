@@ -8,6 +8,7 @@ import { rolle, rolleRest, springS, run, VALUES } from "../core/index.js";
 import { linkage, blocks, blockCount } from "./pics.js";
 import { reveal, memo, sliders, caption, at, deg } from "./view.js";
 import { lagrange, ode, simulink, assign } from "./matlab.js";
+import * as Py from "./python.js";
 
 const runs = memo(v => ({ lab: run(rolle(v), [0, 0], 4, 2000), sheet: run(rolle({ ...v, variant: "sheet" }), [0, 0], 4, 2000) }));
 const SCALE = 380; // px per metre
@@ -42,6 +43,9 @@ export default {
           notes: [["φ₁", `${fmt(deg(phi), 3)}°`], ["S, dS/dφ₁", `${fmt(S, 4)} m, ${fmt(dS, 4)} m`]],
           sheet: [{ source: "VO p. 20", sheet: "S(φ₁) = √({L₁[1 − cos φ₁]}² + [0.25 + L₁ sin φ₁]²), cos ψ = (1 − cos φ₁)/(2S)", lab: "the same with L₁ = 0.5, L₂ = 0.25, which the sheet substitutes without naming", agree: true }],
           code: [assign([["L_1", st.L1, "m (VO p. 20)"], ["L_2", st.L2, "m"]]), "syms phi1", "S = sqrt((L_1*(1-cos(phi1)))^2 + (L_2 + L_1*sin(phi1))^2);", "dS = simplify(diff(S,phi1))"].join("\n"),
+          python: [Py.HEAD_SYM, "", Py.assign([["L_1", st.L1, "m (VO p. 20)"], ["L_2", st.L2, "m"]]), "phi1 = symbols('phi1')", "S = sqrt((L_1*(1-cos(phi1)))**2 + (L_2 + L_1*sin(phi1))**2)", "dS = sp.simplify(diff(S, phi1))", "print(dS)",
+            `phi_now = ${Py.num(phi)}   # the drawing's angle`, "print(float(S.subs(phi1, phi_now)), float(dS.subs(phi1, phi_now)))"].join("\n"),
+          pyCheck: ["[float(S.subs(phi1, phi_now)), float(dS.subs(phi1, phi_now))]", [S, dS], 1e-5],
         };
       } },
       { name: "Lagrange: K of rod and rolling disc", draw: p => ({
@@ -55,6 +59,7 @@ export default {
         code: lagrange({ q: ["phi1"], names: ["m_1", "m_2", "r", "L_1", "L_2", "g", "k", "l_0"],
           T: "1/2*(m_1*L_1^2/3*diff(phi1,t)^2 + m_2*(L_1*diff(phi1,t))^2 + m_2*r^2/2*(L_1/r*diff(phi1,t))^2)",
           V: "-m_1*g*L_1/2*sin(phi1) - m_2*g*L_1*sin(phi1) + 1/2*k*(sqrt((L_1*(1-cos(phi1)))^2 + (L_2 + L_1*sin(phi1))^2) - l_0)^2", Q: ["0"] }),
+        ...(() => { const st0 = [0.3, -0.5], L = Py.lagrange({ q: ["phi1"], names: ["m_1", "m_2", "r", "L_1", "L_2", "g", "k", "l_0"], T: "1/2*(m_1*L_1^2/3*diff(phi1,t)^2 + m_2*(L_1*diff(phi1,t))^2 + m_2*r^2/2*(L_1/r*diff(phi1,t))^2)", V: "-m_1*g*L_1/2*sin(phi1) - m_2*g*L_1*sin(phi1) + 1/2*k*(sqrt((L_1*(1-cos(phi1)))^2 + (L_2 + L_1*sin(phi1))^2) - l_0)^2", Q: ["0"], check: { values: { m_1: st.m1, m_2: st.m2, r: st.r, L_1: st.L1, L_2: st.L2, g: 9.80665, k: st.k, l_0: st.l0 }, state: st0 } }), n = st0.length / 2; return { python: L.code, pyCheck: [L.expr, rolle(st).f(0, st0).slice(n), 1e-9] }; })(),
       }) },
       { name: "The motion: the lab's equation and the sheet's", draw: p => {
         const r = runs(st), k = at(r.lab, p), rest = rolleRest(rolle(st));
@@ -68,6 +73,10 @@ export default {
           code: ode({ params: [["m_1", st.m1], ["m_2", st.m2], ["r", st.r], ["L_1", st.L1], ["L_2", st.L2], ["g", 9.80665], ["k", st.k], ["l_0", st.l0]],
             rows: ["x(2)", "((m_1/2+m_2)*g*L_1*cos(x(1)) - k*(S(x(1))-l_0)*dS(x(1)))/(m_1*L_1^2/3 + 3/2*m_2*L_1^2)"], x0: [0, 0], T: 4,
             plot: "plot(t,x(:,1)*180/pi)" }).replace("f = @(t,x)", "S = @(p) sqrt((L_1*(1-cos(p))).^2 + (L_2 + L_1*sin(p)).^2);\ndS = @(p) (L_1^2*(1-cos(p)).*sin(p) + (L_2 + L_1*sin(p))*L_1.*cos(p))./S(p);\nf = @(t,x)"),
+          python: Py.ode({ params: [["m_1", st.m1], ["m_2", st.m2], ["r", st.r], ["L_1", st.L1], ["L_2", st.L2], ["g", 9.80665], ["k", st.k], ["l_0", st.l0]],
+            pre: ["S = lambda p: np.sqrt((L_1*(1-np.cos(p)))**2 + (L_2 + L_1*np.sin(p))**2)", "dS = lambda p: (L_1**2*(1-np.cos(p))*np.sin(p) + (L_2 + L_1*np.sin(p))*L_1*np.cos(p))/S(p)"],
+            rows: ["x(2)", "((m_1/2+m_2)*g*L_1*cos(x(1)) - k*(S(x(1))-l_0)*dS(x(1)))/(m_1*L_1^2/3 + 3/2*m_2*L_1^2)"], x0: [0, 0], T: 4, plot: "plt.plot(sol.t, np.rad2deg(sol.y[0]))" }),
+          pyCheck: Py.odeCheck(r.lab),
         };
       } },
       { name: "The Simulink model of p. 24", draw: p => {
@@ -76,6 +85,7 @@ export default {
         return {
           figure: blocks([row], { show: Math.ceil(p * blockCount([row])), label: "The Simulink model: the gravity and spring moments as Fcn blocks of φ, summed, times 1/J, integrated twice" }),
           sheet: [{ source: "VO p. 24", sheet: "Gain 1/(m1*L1^2/3+3/2*m2*r); Sum of L0 and S drawn + +; Fcn 2*sin(u)+cos(u) over 4·S", lab: "1/(m1*L1^2/3+3/2*m2*L1^2); S − l₀; L₁(2 sin u + cos u)/(4S)", agree: false }],
+          python: Py.simulink({ params: [["m1", st.m1], ["m2", st.m2], ["r", st.r], ["L1", st.L1], ["k", st.k], ["L0", st.l0], ["g", 9.80665]], rows: [{ ...row, gain: "1/(m1*L1^2/3+3/2*m2*L1^2)" }] }),
           code: simulink({ params: [["m1", st.m1], ["m2", st.m2], ["r", st.r], ["L1", st.L1], ["k", st.k], ["L0", st.l0], ["g", 9.80665]],
             rows: [{ ...row, gain: "1/(m1*L1^2/3+3/2*m2*L1^2)", feedback: [{ from: 2, gain: "Fcn cos(u) -> Gain (m1/2+m2)*g*L1" }, { from: 2, gain: "Fcn k*(sqrt((L1*(1-cos(u)))^2+(0.25+L1*sin(u))^2)-L0)*L1*(2*sin(u)+cos(u))/(4*sqrt((L1*(1-cos(u)))^2+(0.25+L1*sin(u))^2))" }] }] }),
         };

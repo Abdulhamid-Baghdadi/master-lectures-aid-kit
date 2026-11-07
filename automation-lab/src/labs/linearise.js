@@ -7,6 +7,7 @@ import { simulate, tangent } from "../core/index.js";
 import { stepper, fmt, same } from "./view.js";
 import { grow, mtx, pendulumSvg } from "./pics.js";
 import { vec, mat, num } from "./matlab.js";
+import * as Py from "./python.js";
 
 const K = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const CASES = {
@@ -43,6 +44,7 @@ export default {
             marks: [{ x: at, y: Math.sin(at), shape: "dot" }, { x: at, y: at, shape: "dot", cls: "second" }] }),
           notes: [["At", `${y0}° = ${fmt(Y, 3)} rad`], ["sin y", fmt(Math.sin(Y), 4)], ["Relative error F", `${fmt(100 * F, 3)} %`, F > 0.02 ? "warn" : "",
             "F = |(f − y_t)/f| (slides p. 58); the slides allow small swings only, 5–10° for a pendulum (p. 59)"]],
+          python: `import numpy as np\n\ny = np.linspace(-np.pi/2, np.pi/2, 121)   # plot y, np.sin(y) and the tangent y\ny1 = ${num(Y)}\nF = abs((np.sin(y1) - y1)/np.sin(y1))\nprint(F)`, pyCheck: ["F", F],
           code: `y = linspace(-pi/2, pi/2, 121);\nplot(y, sin(y), y, y)   % tangent at y0 = 0: sin(0) + cos(0)*(y - 0)\ny1 = ${num(Y)};\nF = abs((sin(y1) - y1)/sin(y1))`,
           hint: "The tangent is the first Taylor polynomial: sin y ≈ y, cos y ≈ 1 near 0.",
         };
@@ -57,6 +59,8 @@ export default {
             grow({ p, label: "y(t) of both models", xLabel: "t [s]", yLabel: "y [rad]", lines: [{ x: nl.t, y: nl.x.map(x => x[0]), name: "ÿ + Dẏ + ω² sin y = 0" }, { x: li.t, y: li.x.map(x => x[0]), name: "ÿ + Dẏ + ω² y = 0", cls: "second" }] })],
           notes: [["Linear model", "A = [0 1; −ω² −D], b = 0", "", "x1 = y, x2 = ẏ (S2, p. 13; M, p. 56)"]],
           sheet: [{ source: "S2, p. 13", sheet: "ÿ + D·ẏ + ω²·y = 0", lab: "the same, by sin y ≈ y", agree: true }],
+          python: `${Py.HEAD}\nfrom scipy.integrate import solve_ivp\n\nD = ${num(D)}\nw = ${num(w)}\nA = np.array([[0, 1], [-w**2, -D]])\nf = lambda t, x: [x[1], -D*x[1] - w**2*np.sin(x[0])]   # ode45's @(t,x)\nsol = solve_ivp(f, [0, 10], [${num(Y)}, 0])   # RK45 with rtol 1e-3, atol 1e-6 by default, as ode45's RelTol and AbsTol; sol.y has one ROW per state, ode45 one row per time\nSYS = ss(A, np.zeros((2, 1)), [[1, 0]], 0)\ntl = np.linspace(0, 10, 501)\nyl, tl, xl = lsim(SYS, np.zeros(len(tl)), tl, [${num(Y)}, 0])`,
+          pyCheck: [["sol.y[:, -1]", nl.x.at(-1), 0.05, Math.max(...nl.x.flat().map(Math.abs))], ["xl[-1]", li.x.at(-1), 1e-4]],
           code: `D = ${num(D)}; w = ${num(w)};\nA = [0 1; -w^2 -D];\n[t,yn] = ode45(@(t,x) [x(2); -D*x(2) - w^2*sin(x(1))], [0 10], [${num(Y)}; 0]);\nSYS = ss(A, [0; 0], [1 0], 0);\ntl = linspace(0,10,501);\nyl = lsim(SYS, zeros(size(tl)), tl, [${num(Y)}; 0]);\nplot(t, yn(:,1), tl, yl)`,
           hint: "At large angles the real pendulum swings slower than the linear one, so the two drift apart.",
         };
@@ -71,6 +75,8 @@ export default {
           figure: h("div", { class: "fly" }, h("p", { class: "ode" }, `f(x, u) = ${C.f.replaceAll("*", "·")}`), h("div", { class: "mtx-row" }, ...shown)),
           notes: [["Each entry", "∂fᵢ/∂xⱼ at x0 = 0, u0 = 0", "", "sin x → x, cos x → 1, tan x → x, x² → 0, x·cos x → x"]],
           sheet: [{ source: sh.source, sheet: sh.text ?? `A = ${mat(sh.A)}, b = ${vec(sh.b)}, cᵀ = ${vec(sh.c, false)}, d = ${sh.d}`, lab: `A = ${mat(L.A.map(r => r.map(v => Number(v.toFixed(6)))))}`, agree }],
+          python: `${Py.HEAD}\n\n${key === "bsp24" ? "K = np.arange(1, 12)   # example values; K[0] is K1\n" : ""}f = lambda x, u: ${Py.pyVec(C.f)}\ng = lambda x, u: ${Py.pyExpr(C.g)}\nn = ${n}\nx0 = np.zeros(n)\nu0 = 0\nh = 1e-6\nA = np.zeros((n, n))\ncT = np.zeros((1, n))\nfor j in range(n):\n    e = np.zeros(n)\n    e[j] = h\n    A[:, j] = (f(x0+e, u0) - f(x0-e, u0))/(2*h)\n    cT[0, j] = (g(x0+e, u0) - g(x0-e, u0))/(2*h)\nb = ((f(x0, u0+h) - f(x0, u0-h))/(2*h)).reshape(-1, 1)\nd = (g(x0, u0+h) - g(x0, u0-h))/(2*h)\nSYS = ss(A, b, cT, d)\nprint(SYS)`,
+          pyCheck: [["A", L.A, 1e-5], ["b", L.b.map(v => [v]), 1e-5]],
           code: `${key === "bsp24" ? "K = 1:11;   % example values\n" : ""}f = @(x,u) ${C.f};\ng = @(x,u) ${C.g};\nn = ${n}; x0 = zeros(n,1); u0 = 0; h = 1e-6;\nA = zeros(n); cT = zeros(1,n);\nfor j = 1:n\n  e = zeros(n,1); e(j) = h;\n  A(:,j) = (f(x0+e,u0) - f(x0-e,u0))/(2*h);\n  cT(j) = (g(x0+e,u0) - g(x0-e,u0))/(2*h);\nend\nb = (f(x0,u0+h) - f(x0,u0-h))/(2*h);\nd = (g(x0,u0+h) - g(x0,u0-h))/(2*h);\nSYS = ss(A,b,cT,d)`,
           hint: "Solve each equation for its ẋi first: a leading −ẋ or K1·ẋ divides the whole row.",
         };

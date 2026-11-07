@@ -7,6 +7,7 @@ import { smd, run, eig2, VALUES } from "../core/index.js";
 import { massChain, blocks, blockCount } from "./pics.js";
 import { reveal, memo, sliders, caption, at } from "./view.js";
 import { lagrange, ode, stateSpace, simulink } from "./matlab.js";
+import * as Py from "./python.js";
 
 const sim = memo((v, T) => run(smd(v), [0, 0], T, 2000));
 const P = v => [["m", v.m, "kg"], ["k", v.k, "N/m"], ["c", v.c, "N*s/m"], ["F0", v.F0, "N"], ["Om", v.Om, "rad/s"]];
@@ -37,6 +38,7 @@ export default {
             { source: "VO p. 7", sheet: "\"neglecting the damping\", yet c stays in the equation", lab: "c kept, as the equation does", agree: false }],
           code: lagrange({ q: ["x"], names: ["m", "k", "c", "F_1"], T: "1/2*m*diff(x,t)^2", V: "1/2*k*x^2", D: "1/2*c*diff(x,t)^2", Q: ["F_1"] })
             + "\n% gives m*x'' + c*x' + k*x == F_1, the same ODE as the cut on VO p. 7",
+          ...(() => { const st0 = [0.01, 0.2], L = Py.lagrange({ q: ["x"], names: ["m", "k", "c", "F_1"], T: "1/2*m*diff(x,t)^2", V: "1/2*k*x^2", D: "1/2*c*diff(x,t)^2", Q: ["F_1"], check: { values: { m: st.m, k: st.k, c: st.c, F_1: 0 }, state: st0 } }), n = st0.length / 2; return { python: L.code, pyCheck: [L.expr, smd(st).f(0, st0).slice(n), 1e-9] }; })(),
           hint: "Newton's cut (d'Alembert) on the sheet; the MATLAB checks it by Lagrange's route: the same equation.",
         };
       } },
@@ -46,6 +48,7 @@ export default {
         sheet: [{ source: "VO p. 9", sheet: "Gain b (\"Damping\"), Gain k (\"Stiffness\"), Fcn 10*sin(2*pi*u), x0 = 0 m", lab: "Gain c: the text's name for the damper", agree: false }],
         code: simulink({ params: P(st), rows: [{ ...ROW, input: "Clock -> Fcn F0*sin(Om*u)", gain: "1/m" }],
           simscape: "Simulink-PS Converter -> Ideal Force Source -> Mass, Translational Spring, Translational Damper to a Mechanical Translational Reference; Solver Configuration" }),
+        python: Py.simulink({ params: P(st), rows: [{ ...ROW, input: "Clock -> Fcn F0*sin(Om*u)", gain: "1/m" }], simscape: "Ideal Force Source, Mass, Translational Spring and Damper" }),
       }) },
       { name: "State space: A and B fill in", draw: p => {
         const s = smd(st), cells = Math.floor(p * 7);
@@ -56,6 +59,7 @@ export default {
           sheet: [{ source: "VO p. 8", sheet: "A = [0 1; −k/m −c/m], B = [0; 1/m]", lab: "the same", agree: true },
             { source: "VO p. 8", sheet: "no C, D", lab: "C = [1 0], D = 0 to output x", agree: undefined }],
           code: stateSpace({ params: P(st).slice(0, 3), A: "[0 1; -k/m -c/m]", B: "[0; 1/m]", C: "[1 0]", then: ["eig(A)", "step(sys)   % x after a unit step of F1"] }),
+          python: Py.stateSpace({ params: P(st).slice(0, 3), A: "[0 1; -k/m -c/m]", B: "[0; 1/m]", C: "[1 0]" }), pyCheck: [Py.PY_POLES("A"), Py.polesKey(eig2(s.A))],
         };
       } },
       { name: "The mass bounces", draw: p => {
@@ -69,6 +73,7 @@ export default {
             ["Static deflection F₀/k", `${fmt(1000 * st.F0 / st.k)} mm`, "", "the response is larger when Ω is near ω₀"]],
           sheet: [{ source: "VO pp. 7–8", sheet: "ω₀ = √(k/m), f₀ = ω₀/2π, T₀ = 1/f₀, ωD = √(ω₀² − (c/2m)²)", lab: `ω₀ = ${fmt(s.w0)} rad/s from these values`, agree: true }],
           code: ode({ params: P(st), rows: ["x(2)", "(F0*sin(Om*t) - c*x(2) - k*x(1))/m"], x0: [0, 0], T, plot: "plot(t,1000*x(:,1)), xlabel('t [s]'), ylabel('x [mm]')" }),
+          python: Py.ode({ params: P(st), rows: ["x(2)", "(F0*sin(Om*t) - c*x(2) - k*x(1))/m"], x0: [0, 0], T, plot: "plt.plot(sol.t, 1000*sol.y[0]); plt.xlabel('t [s]'); plt.ylabel('x [mm]')" }), pyCheck: Py.odeCheck(r),
           hint: "The lab integrates with Runge–Kutta at a fixed 2.5 ms step; ode45 picks its own steps. The curves agree to the eye.",
         };
       } },

@@ -8,6 +8,7 @@ import { chain2, run, VALUES } from "../core/index.js";
 import { massChain } from "./pics.js";
 import { reveal, memo, sliders, caption, at } from "./view.js";
 import { ode, eigKM, assign } from "./matlab.js";
+import * as Py from "./python.js";
 
 const NOTE = "No solution sheet; worked here.";
 const KIND = {
@@ -53,6 +54,15 @@ function make(id) {
               `w = w0*cos(Om*t);`,
               q === "φ" ? `eq1 = ${m1}*diff(phi1,t,2) + ${c1}*(diff(phi1,t) - diff(w,t)) + ${k1}*(phi1 - w) - ${c2}*(diff(phi2,t) - diff(phi1,t)) - ${k2}*(phi2 - phi1) == 0` : `eq1 = ${m1}*diff(x1,t,2) + ${c1}*(diff(x1,t) - diff(w,t)) + ${k1}*(x1 - w) - ${c2}*(diff(x2,t) - diff(x1,t)) - ${k2}*(x2 - x1) == 0`,
               q === "φ" ? `eq2 = ${m2}*diff(phi2,t,2) + ${c2}*(diff(phi2,t) - diff(phi1,t)) + ${k2}*(phi2 - phi1) == 0` : `eq2 = ${m2}*diff(x2,t,2) + ${c2}*(diff(x2,t) - diff(x1,t)) + ${k2}*(x2 - x1) == 0`].join("\n"),
+            python: (([a, b]) => [Py.HEAD_SYM, "", "t = symbols('t')", `${m1}, ${m2}, ${k1}, ${k2}, ${c1}, ${c2}, w0, Om = symbols('${m1} ${m2} ${k1} ${k2} ${c1} ${c2} w0 Om')`,
+              `${a} = Function('${a}')(t)`, `${b} = Function('${b}')(t)`, "w = w0*cos(Om*t)",
+              `eq1 = Eq(${m1}*diff(${a}, t, 2) + ${c1}*(diff(${a}, t) - diff(w, t)) + ${k1}*(${a} - w) - ${c2}*(diff(${b}, t) - diff(${a}, t)) - ${k2}*(${b} - ${a}), 0)`,
+              `eq2 = Eq(${m2}*diff(${b}, t, 2) + ${c2}*(diff(${b}, t) - diff(${a}, t)) + ${k2}*(${b} - ${a}), 0)`,
+              `acc = solve([eq1, eq2], [diff(${a}, t, 2), diff(${b}, t, 2)], dict=True)[0]   # the accelerations alone`,
+              `vel = {diff(${a}, t): 0.2, diff(${b}, t): -0.1}   # a test state at t = 0`,
+              `at = {${a}: 0.01, ${b}: -0.02, ${m1}: ${Py.num(st.m1)}, ${m2}: ${Py.num(st.m2)}, ${k1}: ${Py.num(st.k1)}, ${k2}: ${Py.num(st.k2)}, ${c1}: ${Py.num(st.c1)}, ${c2}: ${Py.num(st.c2)}, w0: ${Py.num(st.w0)}, Om: ${Py.num(st.Om)}}`,
+              `a = [float(acc[diff(c, t, 2)].subs(vel).subs(at).subs(t, 0)) for c in (${a}, ${b})]`, "print(a)"].join("\n"))(q === "φ" ? ["phi1", "phi2"] : ["x1", "x2"]),
+            pyCheck: ["a", chain2(st).f(0, [0.01, -0.02, 0.2, -0.1]).slice(2), 1e-9],
           };
         } },
         { name: "Eigenfrequencies and modes", draw: p => {
@@ -62,6 +72,7 @@ function make(id) {
             figure: chain(md.v.map(v => amp * v * ph), 0, `Eigenmode ${j + 1}: ${md.v[1] > 0 ? "both move together" : "they move against each other"}`),
             notes: c.modes.map((m, i) => [`Mode ${i + 1}`, `f = ${fmt(m.f)} Hz`, "", `shape ${q}₂/${q}₁ = ${fmt(m.v[1])}`]),
             code: eigKM({ params: P(st).slice(0, 4), K: `[${k1}+${k2} -${k2}; -${k2} ${k2}]`, M: `[${m1} 0; 0 ${m2}]` }),
+            python: Py.eigKM({ params: P(st).slice(0, 4), K: `[${k1}+${k2} -${k2}; -${k2} ${k2}]`, M: `[${m1} 0; 0 ${m2}]` }), pyCheck: ["f0", c.modes.map(m => m.f)],
           };
         } },
         { name: "Driven by w(t): the response", draw: p => {
@@ -78,6 +89,11 @@ function make(id) {
               `M = [${m1} 0; 0 ${m2}]; K = [${k1}+${k2} -${k2}; -${k2} ${k2}]; C = [${c1}+${c2} -${c2}; -${c2} ${c2}];`,
               "f = linspace(0.05,20,2000);",
               `X2 = arrayfun(@(om) abs([0 1]*((K - om^2*M + 1i*om*C) \\ [${k1} + 1i*om*${c1}; 0])), 2*pi*f);`, "plot(f,X2)   % transmissibility"].join("\n"),
+            python: [Py.ode({ params: P(st), rows: ["x(3)", "x(4)", `(-${c1}*(x(3) + w0*Om*sin(Om*t)) - ${k1}*(x(1) - w0*cos(Om*t)) + ${c2}*(x(4)-x(3)) + ${k2}*(x(2)-x(1)))/${m1}`, `(-${c2}*(x(4)-x(3)) - ${k2}*(x(2)-x(1)))/${m2}`], x0: [0, 0, 0, 0], T, plot: "plt.plot(sol.t, sol.y[0], sol.t, sol.y[1])" }),
+              `M = np.array([[${m1}, 0], [0, ${m2}]])`, `K = np.array([[${k1}+${k2}, -${k2}], [-${k2}, ${k2}]])`, `C = np.array([[${c1}+${c2}, -${c2}], [-${c2}, ${c2}]])`,
+              "f = np.linspace(0.05, 20, 2000)", `X2 = [abs(np.linalg.solve(K - om**2*M + 1j*om*C, [${k1} + 1j*om*${c1}, 0])[1]) for om in 2*np.pi*f]   # MATLAB's arrayfun and \\`,
+              `X2_Om = abs(np.linalg.solve(K - Om**2*M + 1j*Om*C, [${k1} + 1j*Om*${c1}, 0])[1])   # at the excitation now`, "plt.plot(f, X2)   # transmissibility"].join("\n"),
+            pyCheck: [...Py.odeCheck(r), ["X2_Om", c.transmit(st.Om), 1e-9]],
           };
         } },
       ];

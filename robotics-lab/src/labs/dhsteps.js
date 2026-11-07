@@ -6,7 +6,7 @@ import * as a from "../../../kit/ui/art.js";
 import { stepper, mtx, fmt, same } from "../../../kit/ui/steps.js";
 import { chain, rrtRows, dh, posOf, rad, deg } from "../core/index.js";
 import { view, link, joint, label, frameAxes, angleSlider, lengthSlider, project } from "./draw.js";
-import { twin, matlabTree, PY_HEAD, pyAngles, num } from "./code.js";
+import { matlabTree, PY_HEAD, pyAngles, num } from "./code.js";
 
 const L = [1, 2, 3, 4];
 // ch. 3, p. 26: (θ1, θ2) in degrees and the printed ⁰T₃ (l5* = 5).
@@ -76,8 +76,6 @@ export default {
         };
       } },
     ];
-    const { steps: s2, panel } = twin(steps);
-    Object.assign(ui, stepper(root, s2, { controls }));
-    root.append(panel);
+    Object.assign(ui, stepper(root, steps, { controls }));
   },
 };

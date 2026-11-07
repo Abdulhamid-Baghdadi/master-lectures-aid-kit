@@ -8,6 +8,7 @@ import { motor, run, VALUES } from "../core/index.js";
 import { loop, bars, blocks, blockCount } from "./pics.js";
 import { reveal, memo, sliders, caption, at } from "./view.js";
 import { ode, stateSpace, simulink } from "./matlab.js";
+import * as Py from "./python.js";
 
 const T = 3;
 const sim = memo(v => run(motor(v), [0, 0, 0], T, 3000));
@@ -36,6 +37,12 @@ export default {
         code: ["syms i_A(t) phi(t) R_A L_A k_M k_T J c_L u_A M_L",
           "eq1 = L_A*diff(i_A,t) == u_A - R_A*i_A - k_M*diff(phi,t)", "eq2 = J*diff(phi,t,2) == k_T*i_A - c_L*diff(phi,t) - M_L",
           "[Vf,S] = odeToVectorField(eq1,eq2)   % read S: the order of i_A, phi, dphi/dt"].join("\n"),
+        python: [Py.HEAD_SYM, "", "t = symbols('t')", "R_A, L_A, k_M, k_T, J, c_L, u_A, M_L = symbols('R_A L_A k_M k_T J c_L u_A M_L')", "i_A = Function('i_A')(t)", "phi = Function('phi')(t)",
+          "eq1 = Eq(L_A*diff(i_A, t), u_A - R_A*i_A - k_M*diff(phi, t))", "eq2 = Eq(J*diff(phi, t, 2), k_T*i_A - c_L*diff(phi, t) - M_L)",
+          "acc = solve([eq1, eq2], [diff(i_A, t), diff(phi, t, 2)], dict=True)[0]   # sympy has no odeToVectorField", "print(acc)",
+          `at = {i_A: 0.5, phi: 0.1, R_A: ${Py.num(st.RA)}, L_A: ${Py.num(st.LA)}, k_M: ${Py.num(st.kM)}, k_T: ${Py.num(st.kT)}, J: ${Py.num(st.J)}, c_L: ${Py.num(st.cL)}, u_A: ${Py.num(st.uA)}, M_L: ${Py.num(st.ML)}}   # a test state`,
+          "a = [float(acc[d].subs({diff(phi, t): 20}).subs(at)) for d in (diff(i_A, t), diff(phi, t, 2))]", "print(a)"].join("\n"),
+        pyCheck: ["a", (([di, , dw]) => [di, dw])(motor(st).f(0, [0.5, 0.1, 20])), 1e-9],
       }) },
       { name: "Two Simulink rows", draw: p => ({
         figure: blocks(ROWS, { show: Math.ceil(p * blockCount(ROWS)), label: "Row 1 the current, row 2 the shaft; k_M·ω goes back to row 1, k_T·i_A drives row 2" }),
@@ -43,6 +50,7 @@ export default {
           { source: "VO p. 42", sheet: "the current named q_p and integrated once more to q", lab: "i_A needs one Integrator; the second is not used", agree: undefined }],
         code: simulink({ params: P(st), rows: [{ ...ROWS[0], feedback: [{ from: 1, gain: "R_A" }, { from: 1, gain: "k_M (on omega from row 2)" }] }, { ...ROWS[1], input: "Gain k_T on i_A", feedback: [{ from: 1, gain: "c_L" }, { from: 1, gain: "Constant M_L" }] }],
           simscape: "DC Voltage Source -> Resistor -> Inductor -> Rotational Electromechanical Converter -> Inertia, Rotational Damper; Ideal Torque Source for the load; Ideal Rotational Motion Sensor; Solver Configuration (VO p. 42)" }),
+        python: Py.simulink({ params: P(st), rows: ROWS, simscape: "DC Voltage Source, Resistor, Inductor, Rotational Electromechanical Converter, Inertia (VO p. 42)" }),
       }) },
       { name: "State space 3 × 3", draw: p => {
         const m = motor(st), cells = Math.floor(p * 13);
@@ -51,6 +59,7 @@ export default {
           notes: [["States", "(i_A, φ, ω)"], ["Poles", m.poles.map(fmtC).join(", "), "", "0 from φ (the angle keeps adding up), two from current and speed"]],
           sheet: [{ source: "VO p. 42", sheet: "A = [−R_A/L_A 0 −k_M/L_A; 0 0 1; k_T/J 0 −c_L/J], B = [1/L_A; 0; 0]", lab: "the same", agree: true }],
           code: stateSpace({ params: P(st).slice(0, 6), A: "[-R_A/L_A 0 -k_M/L_A; 0 0 1; k_T/J 0 -c_L/J]", B: "[1/L_A; 0; 0]", C: "[0 0 1]", then: ["eig(A)", "step(sys)   % omega after a 1 V step"] }),
+          python: Py.stateSpace({ params: P(st).slice(0, 6), A: "[-R_A/L_A 0 -k_M/L_A; 0 0 1; k_T/J 0 -c_L/J]", B: "[1/L_A; 0; 0]", C: "[0 0 1]" }), pyCheck: ["A", m.A],
         };
       } },
       { name: "Run-up and the power flow", draw: p => {
@@ -63,6 +72,7 @@ export default {
             caption("Example values of a small DC motor; the sheet gives none.")],
           notes: [["ω at rest", `${fmt(m.wInf)} rad/s`, m.wInf < 0 ? "danger" : "", "(k_T u_A − R_A M_L)/(R_A c_L + k_M k_T)"]],
           code: ode({ params: P(st), rows: ["(u_A - R_A*x(1) - k_M*x(3))/L_A", "x(3)", "(k_T*x(1) - c_L*x(3) - M_L)/J"], x0: [0, 0, 0], T, plot: "plot(t,x(:,3), t,10*x(:,1)), legend('\\omega','10 i_A')" }),
+          python: Py.ode({ params: P(st), rows: ["(u_A - R_A*x(1) - k_M*x(3))/L_A", "x(3)", "(k_T*x(1) - c_L*x(3) - M_L)/J"], x0: [0, 0, 0], T, plot: "plt.plot(sol.t, sol.y[2], sol.t, 10*sol.y[0]); plt.legend(['omega', '10 i_A'])" }), pyCheck: Py.odeCheck(r),
         };
       } },
     ];

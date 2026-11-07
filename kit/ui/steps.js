@@ -1,7 +1,7 @@
 // The step player two labs share (moved here from the Advanced Automation lab on 7 Nov 2026, when the ModSim lab
 // wanted it too): an exercise solved in steps, one animated view per step, a player that runs the animation once (or a
 // slider that steps it, for readers who asked for reduced motion), the readouts, the source's value beside the lab's
-// own, and the MATLAB that gives the view's result, with a copy button. Also the drawings every stepped view uses:
+// own, and the MATLAB that gives the view's result, with a copy button (and, when the view gives it, the Python beside it). Also the drawings every stepped view uses:
 // matrices that fill in, equations whose terms light up, and a chart whose curves grow. Its look: ../steps.css.
 import { h, choice, readout } from "./kit.js";
 import { lineChart } from "./chart.js";
@@ -19,13 +19,9 @@ export function stepper(root, steps, { controls = [], intro = null } = {}) {
   const id = `progress${++uid}`;
   const range = h("input", { type: "range", id, min: 0, max: 1, step: 0.01, value: p });
   const play = h("button", { type: "button", class: "press" }, "Play");
-  const pre = h("pre", { class: "matlab-code", tabindex: "0" });
-  const copied = h("span", { class: "copied", role: "status" });
-  const copy = h("button", { type: "button" }, "Copy");
-  copy.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(pre.textContent); copied.textContent = "Copied."; }
-    catch { copied.textContent = "The browser did not allow copying: select the code and press Ctrl+C."; }
-  });
+  const ml = codePanel("MATLAB", "In MATLAB", "matlab-code"), py = codePanel("Python", "In Python", "matlab-code python-code");
+  // A lab whose views return python gets the second panel (Robotics, Advanced Automation, ModSim since 7 Nov 2026).
+  const hasPython = steps[0].draw(p).python !== undefined;
 
   const draw = () => {
     const out = steps[k].draw(p);
@@ -40,7 +36,12 @@ export function stepper(root, steps, { controls = [], intro = null } = {}) {
       return r.el;
     }));
     hint.textContent = out.hint ?? "";
-    pre.textContent = out.code ?? "";
+    ml.pre.textContent = out.code ?? "";
+    if (hasPython) {
+      py.pre.textContent = out.python ?? "";
+      // What the Python should print, for the labs' python-run tests: [expression, value, tolerance?, scale?] or a list.
+      py.pre.setAttribute("data-check", JSON.stringify(out.pyCheck ?? null));
+    }
   };
   const stop = () => { if (timer) cancelAnimationFrame(timer); timer = null; last = null; play.textContent = "Play"; };
   const frame = now => {
@@ -63,11 +64,22 @@ export function stepper(root, steps, { controls = [], intro = null } = {}) {
     h("div", { class: "stage" }, figure, h("div", { class: "controls" },
       h("div", { class: "control player" }, h("label", { for: id }, "Animation"), range, play),
       ...controls, notes, sheet, hint)),
-    h("section", { class: "matlab", "aria-label": "MATLAB" }, h("div", { class: "matlab-head" },
-      h("h3", {}, "In MATLAB"), copy, copied), pre)].filter(Boolean));
+    h("div", { class: "code-pair" }, ml.el, hasPython ? py.el : null)].filter(Boolean));
   draw();
   if (!still) start();
   return { refresh: draw, go };
+}
+
+/** A code panel with its heading and a copy button: { el, pre }. */
+function codePanel(label, title, cls) {
+  const pre = h("pre", { class: cls, tabindex: "0" });
+  const copied = h("span", { class: "copied", role: "status" });
+  const copy = h("button", { type: "button" }, "Copy");
+  copy.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(pre.textContent); copied.textContent = "Copied."; }
+    catch { copied.textContent = "The browser did not allow copying: select the code and press Ctrl+C."; }
+  });
+  return { pre, el: h("section", { class: "matlab", "aria-label": label }, h("div", { class: "matlab-head" }, h("h3", {}, title), copy, copied), pre) };
 }
 
 /** The first share p of a sampled curve, so a response is drawn growing over time. */
