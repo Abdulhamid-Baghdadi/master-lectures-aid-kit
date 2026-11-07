@@ -93,3 +93,20 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
   Lab task 2's observer uses the position alone (MIMO place not in the core); pidtune is not reproduced, the PI is
   tuned by hand with sliders; ctrb/obsv argument order was confirmed from a search summary of the ctrb page, not the
   page itself; the solution sheet M pp. 1–39 were not checked for handwriting.
+
+## 7 Nov 2026: ModSim lab (`modsim-lab`)
+
+- Built: 13 labs in 4 parts. One degree of freedom: single-mass oscillator (VO 1), pendulum (VO 2), pendulum with
+  roller (VO 3). Two degrees of freedom: two-mass oscillator (VO 5, with the TM3 note's values), double pendulum
+  (VO 6). Electrical: RLC (VO 4), DC motor (VO 7), shaker (VO 8). Task sheet, worked here (no solution sheet): tasks 2,
+  3, 5, 6, 7. Each lab has 3–4 steps (forces arriving → ODE, T/V/D term by term, the Simulink integrator chain as
+  blocks, the state space filling in, the mechanism beside its time plot, eigenmodes, energy and power bars, linear
+  against nonlinear, chaos from 0.001 rad) and a MATLAB panel per view (the syms/diff Lagrange recipe,
+  odeToVectorField, ode45 with f = @(t,x), ss, eig, eig(K,M), bode, tf, jacobian, Simulink/Simscape blocks in words).
+- Kit: `ui/steps.js`, `steps.css`, `ui/matlab.js`, `core/ode.js` and `scripts/record-readme.mjs` moved from the
+  Automation lab, which now re-exports them (its 105 tests pass); kit test `steps.test.js` added.
+- Sources transcribed with pages in `modsim-lab/docs/sources/`; the disagreements with the lecture and the TM3 note,
+  and the slips in the group's scripts, are in the lab's README.
+- Checked: every view of every lab mounts and plays in Node on a fake page; in the browser pane every lab and step at
+  375 px, light and dark, without sideways scroll. GIFs and stills recorded with the kit's recorder. Nothing committed.
+- Not done: tasks 1, 4, 8–13; MATLAB not run (not installed); .slx models not opened.

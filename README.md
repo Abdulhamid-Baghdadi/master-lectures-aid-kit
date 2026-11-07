@@ -20,6 +20,7 @@ Published at <https://abdulhamid-baghdadi.github.io/master-lectures-aid-kit/>.
 | [Sensor Systems](sensors-lab/README.md) | Advanced Sensor Systems (ASENS), 1st semester | the ASENS slides |
 | [Finite Elements](fem-lab/README.md) | CAE and FEM, 2nd semester | Krach (2018, 2020, 2021) |
 | [Advanced Automation](automation-lab/README.md) | AAU, 2nd semester: the exercises, step by step, with their MATLAB | Kubinger (2021), Kubinger and Lang (2021) |
+| [ModSim](modsim-lab/README.md) | Modellbildung und Simulation, 2nd semester: the worked examples, step by step, with their MATLAB | Puhwein (2021a, 2021b) |
 
 Industrial Handling has 11 labs in three parts:
 

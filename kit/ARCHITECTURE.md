@@ -7,10 +7,16 @@ architecture.json name its layers, bottom first:
 |---|---|---|---|
 | vendor | `vendor/*.mjs` | nothing | Temml, `vendor/temml.mjs`, imported only by `ui/math.js` |
 | kit-core | `core/**` | nothing | `core/index.js` |
-| kit | `ui/**` | kit-core, vendor | `ui/kit.js`, `ui/chart.js`, `ui/field.js`, `ui/art.js`, `ui/math.js` |
+| kit | `ui/**` | kit-core, vendor | `ui/kit.js`, `ui/chart.js`, `ui/field.js`, `ui/art.js`, `ui/math.js`, `ui/steps.js`, `ui/matlab.js` |
 
 Tests: `node --test "kit/tests/*.test.js"` from the repository root. The layering of each lab, the kit within it, is
 checked by `scripts/check-architecture.js`, run from every lab's `tests/unit/architecture.test.js`.
+
+## The step player
+
+`ui/steps.js` (the exercise in animated steps, with the source beside the lab and the MATLAB panel; look in
+`steps.css`), `ui/matlab.js` (numbers and matrices as MATLAB input) and `core/ode.js` (fixed-step Runge–Kutta) came
+from the Advanced Automation lab on 7 Nov 2026, when the ModSim lab needed the same: one copy, imported by both.
 
 ## The one library: Temml
 

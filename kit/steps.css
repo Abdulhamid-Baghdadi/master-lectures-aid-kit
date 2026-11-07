@@ -1,0 +1,25 @@
+/* The look of the step player (ui/steps.js), shared by the labs that show an exercise in steps with its MATLAB:
+   the figure, the matrices that fill in, the lit terms, the player, the source beside the lab, the MATLAB panel. */
+.mtx-row { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; min-width: 0; }
+.figure { display: grid; gap: 12px; min-width: 0; }
+.figure > * { max-width: 100%; }
+.figure > svg { max-height: 340px; }
+.ode { margin: 0; font-family: ui-monospace, Consolas, monospace; font-size: 0.95rem; overflow-wrap: anywhere; }
+.ode p { margin: 2px 0; }
+.term { padding: 0 1px; border-radius: 3px; transition: background-color .25s; }
+.term.hot, .mtx td.hot { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.mtx { display: flex; align-items: center; gap: 6px; }
+.mtx-name { font-style: italic; white-space: nowrap; }
+.mtx-grid { border-left: 2px solid var(--ink); border-right: 2px solid var(--ink); border-collapse: separate; border-spacing: 6px 2px; }
+.mtx td { text-align: right; font-family: ui-monospace, Consolas, monospace; min-width: 2.2em; transition: transform .25s; }
+.mtx td.hot { transform: scale(1.25); font-weight: 700; }
+.mtx td.wait { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .term, .mtx td { transition: none; } .mtx td.hot { transform: none; } }
+.player { grid-template-columns: auto 1fr auto; display: grid; gap: 8px; align-items: center; }
+.sheet .readout { border-left: 3px solid var(--accent); }
+.matlab { margin-top: 12px; }
+.matlab-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.matlab-head h3 { margin: 0; font-size: 1rem; }
+.copied { color: var(--muted); font-size: 0.85rem; }
+.matlab-code { margin: 8px 0 0; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+  font-family: ui-monospace, Consolas, monospace; font-size: 0.85rem; white-space: pre; overflow-x: auto; max-width: 100%; }

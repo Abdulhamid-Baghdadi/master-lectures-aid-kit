@@ -51,3 +51,7 @@ slides, the exercise and task sheets and the MathWorks reference pages, with the
 - 7 Nov 2026: each lab is a sequence of steps of one exercise rather than one idea, because the course asked for the
   exercises animated; the frame for that lives in `src/labs/view.js`, not in the kit, so the other labs are untouched.
   Worth proposing back: the step player and the MATLAB panel, if a second lab wants them.
+- 7 Nov 2026: the ModSim lab wanted them: the step player (`view.js`), the filling matrix, lit terms and growing chart
+  (`pics.js`), the MATLAB number writers (`matlab.js`), Runge–Kutta (`lti.js`) and the README recorder now live in the
+  kit (`../kit/ui/steps.js`, `steps.css`, `ui/matlab.js`, `core/ode.js`, `scripts/record-readme.mjs`); these files
+  re-export them, so the labs import them as before.

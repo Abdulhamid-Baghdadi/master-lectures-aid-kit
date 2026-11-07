@@ -5,18 +5,9 @@
 // tf2ss puts −a in the FIRST row, the course's RNF has it in the last; stepinfo's defaults are a 10–90 % rise time
 // and a 2 % settling band; feedback(G,1) closes a unity negative loop; pidtune(sys,'PI',opts) tunes a PI.
 
-/** A number as MATLAB input: up to 6 significant figures, no trailing zeros, no "+" sign. */
-export const num = v => {
-  if (Math.abs(v) < 1e-12) return "0";
-  const t = Number(v.toPrecision(6));
-  return Math.abs(t) >= 1e5 || Math.abs(t) < 1e-3 ? t.toExponential().replace("e+", "e") : String(t);
-};
-/** A complex number as MATLAB writes it: -1+3j. */
-export const cplx = ([re, im]) => Math.abs(im) < 1e-12 ? num(re) : `${num(re)}${im < 0 ? "-" : "+"}${num(Math.abs(im))}j`;
-/** [1; -1] for a column, [1 0] for a row. */
-export const vec = (v, column = true) => `[${v.map(num).join(column ? "; " : " ")}]`;
-export const mat = M => `[${M.map(r => r.map(num).join(" ")).join("; ")}]`;
-export const poleVec = p => `[${p.map(cplx).join("; ")}]`;
+// The number, vector and matrix writers are the kit's, shared with the ModSim lab.
+import { num, cplx, vec, mat, poleVec } from "../../../kit/ui/matlab.js";
+export { num, cplx, vec, mat, poleVec };
 
 /** The model, as the slides' code starts (slides p. 18). */
 export const model = ({ A, b, c, d = 0 }) =>

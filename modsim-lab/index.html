@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ModSim</title>
+<meta name="description" content="The exercises of Modelling and Simulation (ModSim) animated step by step: free-body diagrams, Lagrange's equations, the Simulink integrator chain, state space, pendulums, a double pendulum, two-mass oscillators, an RLC circuit, a motor and a shaker, each step with the MATLAB that gives its result.">
+<script>
+  // Before the page draws, so a chosen theme never flashes the other one.
+  try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch {}
+</script>
+<link rel="stylesheet" href="../kit/style.css">
+<link rel="stylesheet" href="../kit/steps.css">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="src/app.js"></script>
+</head>
+<body>
+<header class="top">
+  <div>
+    <p class="home"><a href="../">← Aid kit home</a></p>
+    <h1><a href="#">ModSim</a></h1>
+  </div>
+  <button id="theme" type="button">Light or dark</button>
+</header>
+<main></main>
+<footer>
+  <p>After the worked lecture examples of Puhwein (2021a) and the task sheet of Puhwein (2021b), <i>Modellbildung und Simulation</i> (ModSim), FH Technikum Wien, and a TM3 note on the eigenfrequencies of a two-mass system.</p>
+  <p>A learning aid: every curve worked out the same way on every visit, every MATLAB snippet written from the view's current values. Pages are PDF pages; no text of the course is reproduced. Where the source gives a result, the lab shows it beside its own and says when they differ. The lecture gives symbols, not numbers: most values here are example values, labelled.</p>
+</footer>
+<noscript><p>ModSim needs JavaScript.</p></noscript>
+</body>
+</html>

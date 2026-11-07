@@ -1,0 +1,49 @@
+/* This lab's own look, after the kit's (../kit/style.css) and the step player's (../kit/steps.css): its families'
+   frame colours and the drawings of masses, springs, pendulums, Simulink blocks, circuits and energy bars. */
+[data-family=mech1] { --frame: #1E40AF; }
+[data-family=mech2] { --frame: #047857; }
+[data-family=electric] { --frame: #B45309; }
+[data-family=tasks] { --frame: #7C3AED; }
+
+.top { flex-wrap: wrap; }
+.top > div { min-width: 0; flex: 1 1 240px; }
+
+.mech .wall { stroke: var(--muted); stroke-width: 4; }
+.mech .spring { fill: none; stroke: var(--ink); stroke-width: 2; }
+.mech .damper line, .mech .damper polyline { stroke: var(--ink); stroke-width: 2; }
+.mech .mass { fill: var(--panel); stroke: var(--ink); stroke-width: 2.5; }
+.mech .rod { stroke: var(--ink); stroke-width: 5; stroke-linecap: round; }
+.mech .rope { stroke: var(--ink); stroke-width: 2; }
+.mech .load { fill: var(--accent); stroke: var(--ink); stroke-width: 2; }
+.mech .joint { fill: var(--bg); stroke: var(--ink); stroke-width: 2; }
+.mech .disc { fill: color-mix(in srgb, var(--accent) 35%, transparent); stroke: var(--ink); stroke-width: 2; }
+.mech .ghost { opacity: 0.3; }
+.mech .trail { stroke: var(--second); stroke-width: 1.5; opacity: 0.8; }
+.force line { stroke: var(--danger); stroke-width: 3; }
+.force polygon { fill: var(--danger); }
+.react line { stroke: var(--second); stroke-width: 3; }
+.react polygon { fill: var(--second); }
+.inertia line { stroke: var(--muted); stroke-width: 3; stroke-dasharray: 5 4; }
+.inertia polygon { fill: var(--muted); }
+.drive line { stroke: var(--accent); stroke-width: 3; }
+.drive polygon { fill: var(--accent); }
+.mass-label { font-style: italic; }
+
+.blocks .blk { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+.blocks .blk.int { fill: color-mix(in srgb, var(--accent) 22%, var(--panel)); }
+.blocks .blk.src { stroke-dasharray: 4 3; }
+.wire line, .wire-line { stroke: var(--ink); stroke-width: 1.5; }
+.wire polygon { fill: var(--ink); }
+.tick.small { font-size: 11px; }
+.tick.sig { fill: var(--second); font-style: italic; }
+
+.schematic .wire-line { stroke: var(--ink); stroke-width: 2.5; }
+.schematic .cpart line { stroke: var(--ink); stroke-width: 3; }
+.schematic .part, .schematic .src-circle { fill: var(--panel); stroke: var(--ink); stroke-width: 2.5; }
+.schematic .part.filled { fill: var(--ink); }
+.schematic .gapfill { fill: var(--bg); stroke: none; }
+.schematic .electron { fill: var(--accent); }
+
+.bars .bar { fill: var(--accent); }
+.bars .bar.loss { fill: var(--danger); }
+.bars .bar.store { fill: var(--second); }

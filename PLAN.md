@@ -13,6 +13,12 @@ Sources in `H:\My Drive\02_Personal\02_Education\FH\03_FH_Master\`.
 - 7 Nov 2026: `automation-lab` (14 labs, Advanced Automation): the exercises, not the slides, each in 2–4 animated steps
   with its MATLAB. Open: pidtune's result is not reproduced (PI set by hand); the crane observer of lab task 2 measures
   x only; Octave is not installed, so the snippets are checked for undefined names, not run.
+- 7 Nov 2026: `modsim-lab` (13 labs, ModSim): the 8 worked lecture examples and tasks 2, 3, 5, 6, 7 of the task sheet
+  (worked here), each in 3–4 animated steps with its MATLAB. The step player, MATLAB number writer, Runge–Kutta and
+  README recorder moved into the kit. Open: tasks 1, 4, 8–13 of the sheet (geometry or data unclear; the README says
+  why); MATLAB/Octave not installed, so snippets are checked for undefined names, not run; the MathWorks pages were
+  summarised by a helper agent, not re-read word for word; no .slx model opened; most values are example values,
+  since the lecture gives none.
 - Built overnight 2–3 Nov 2026: `robotics-lab` (8 labs), `mobile-robots-lab` (12), `sensors-lab` (9), `fem-lab` (9).
   Each lab's README and CLAUDE.md list its source errors and what it leaves out; WORKLOG.md has the night's summary.
 

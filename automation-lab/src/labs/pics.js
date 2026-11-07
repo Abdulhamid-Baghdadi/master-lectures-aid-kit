@@ -2,32 +2,9 @@
 // time, the s-plane, vectors in the state plane, and the crane, motor, pendulum and circuits drawn to scale. Draws
 // only what it is given.
 import { h, s } from "../../../kit/ui/kit.js";
-import { lineChart } from "../../../kit/ui/chart.js";
-import { fmt, upTo } from "./view.js";
-
-/** A matrix or vector as a bracketed grid. cells counts how many cells (row by row) have arrived; hot is the one
- *  arriving now, drawn larger; the rest wait as dots. */
-export function mtx(name, M, { cells = Infinity, hot = -1, row = false } = {}) {
-  const rows = Array.isArray(M[0]) ? M : row ? [M] : M.map(v => [v]);
-  let k = 0;
-  return h("div", { class: "mtx" }, h("span", { class: "mtx-name" }, `${name} =`),
-    h("table", { class: "mtx-grid" }, h("tbody", {}, rows.map(r => h("tr", {}, r.map(v => {
-      const i = k++;
-      return h("td", { class: i === hot ? "hot" : i < cells ? "" : "wait" }, i < cells || i === hot ? fmt(v) : "·");
-    }))))));
-}
-
-/** Equations as lines of terms; the term whose key is hot is marked, so the eye can follow it into the matrix. */
-export const terms = (lines, hot) => h("div", { class: "ode" }, lines.map(line => h("p", {},
-  line.map(([text, key]) => h("span", { class: key !== undefined && key === hot ? "term hot" : "term" }, text)))));
-
-/** A line chart whose lines are drawn up to the share p of their time, a dot on each tip. */
-export function grow({ lines, p = 1, ...rest }) {
-  const cut = lines.map(l => ({ ...l, x: upTo(l.x, p), y: upTo(l.y, p) }));
-  const xs = lines.flatMap(l => l.x), ys = lines.flatMap(l => l.y).filter(Number.isFinite);
-  return lineChart({ xMin: Math.min(...xs), xMax: Math.max(...xs), yMin: Math.min(0, ...ys), yMax: Math.max(...ys, 1e-9), ...rest,
-    lines: cut, marks: [...(rest.marks ?? []), ...cut.filter(l => !l.noTip).map(l => ({ x: l.x.at(-1), y: l.y.at(-1), shape: "dot", cls: l.cls }))] });
-}
+import { fmt } from "./view.js";
+// The filling matrix, the lit terms and the growing chart are the kit's, shared with the ModSim lab.
+export { mtx, terms, grow } from "../../../kit/ui/steps.js";
 
 const W = 520, H = 320;
 

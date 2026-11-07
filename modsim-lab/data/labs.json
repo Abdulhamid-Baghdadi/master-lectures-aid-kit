@@ -1,0 +1,239 @@
+{
+  "format": "modsim-lab labs",
+  "version": 1,
+  "about": "Modellbildung und Simulation (ModSim), FH Technikum Wien master's programme, 2nd semester: the eight worked lecture examples of Puhwein (2021a) and five tasks of the task sheet Puhwein (2021b), animated step by step, each step with the MATLAB that gives its result. Equations and results from the worked examples, cited by PDF page as 'VO p. N' (transcribed in docs/sources/vo-solutions-a.md and -b.md); the two-mass values from the TM3 note 'Bestimmung der Eigenfrequenzen des 2DoF Systems' (Zusatz Material, 'TM3 note'). The task-sheet labs have no solution sheet and are worked here. tests/unit/labs-data.test.js recomputes every practice answer with the core.",
+  "families": [
+    { "id": "mech1", "name": "One degree of freedom" },
+    { "id": "mech2", "name": "Two degrees of freedom" },
+    { "id": "electric", "name": "Electrical and electromechanical" },
+    { "id": "tasks", "name": "Task sheet, worked here" }
+  ],
+  "lectures": [
+    { "number": 1, "pages": "VO examples 1–3", "title": "One degree of freedom", "family": "mech1", "labs": ["einmasse", "pendel", "rolle"] },
+    { "number": 2, "pages": "VO examples 5, 6", "title": "Two degrees of freedom", "family": "mech2", "labs": ["zweimasse", "doppel"] },
+    { "number": 3, "pages": "VO examples 4, 7, 8", "title": "Electrical and electromechanical", "family": "electric", "labs": ["rlc", "motor", "shaker"] },
+    { "number": 4, "pages": "Task sheet 2, 3, 5–7", "title": "The task sheet, worked here", "family": "tasks", "labs": ["task2", "task3", "task5", "task6", "task7"] }
+  ],
+  "labs": [
+    {
+      "id": "einmasse",
+      "title": "Single-mass oscillator (Ein-Massen-Schwinger)",
+      "idea": "Cut the mass free, write the forces into Newton's law, solve for ẍ, and you have both the ODE and the Simulink model: one Integrator per dot.",
+      "lecture": "Puhwein (2021a), example 1, VO pp. 2, 7–9",
+      "law": "m ẍ + c ẋ + k x = F₁(t)",
+      "lawTex": "m\\ddot{x} + c\\dot{x} + kx = F_1(t)",
+      "equations": [
+        { "eq": "ẍ = F₁/m − (c/m)(ẋ − ẋ₀) − (k/m)(x − x₀)", "tex": "\\ddot{x} = \\frac{F_1}{m} - \\frac{c}{m}(\\dot{x} - \\dot{x}_0) - \\frac{k}{m}(x - x_0)", "note": "The DGL in the form for Simulink; the time plot integrates it with x₀ = ẋ₀ = 0", "ref": "VO p. 7", "explore": true },
+        { "eq": "ω₀ = √(k/m), f₀ = ω₀/2π, T₀ = 1/f₀", "tex": "\\omega_0 = \\sqrt{k/m}, \\quad f_0 = \\frac{\\omega_0}{2\\pi}, \\quad T_0 = \\frac{1}{f_0}", "note": "Natural frequency of the undamped linear system", "ref": "VO pp. 7–8" },
+        { "eq": "ω_D = √(ω₀² − (c/2m)²)", "tex": "\\omega_D = \\sqrt{\\omega_0^2 - \\left(\\frac{c}{2m}\\right)^2}", "note": "Damped natural frequency", "ref": "VO p. 8" },
+        { "eq": "ẋ = [0 1; −k/m −c/m] x + [0; 1/m] u", "tex": "\\dot{\\mathbf{x}} = \\begin{bmatrix} 0 & 1 \\\\ -k/m & -c/m \\end{bmatrix}\\mathbf{x} + \\begin{bmatrix} 0 \\\\ 1/m \\end{bmatrix} u", "note": "State space, x₁ = x, x₂ = ẋ, u = F₁", "ref": "VO p. 8" }
+      ],
+      "practice": [
+        { "question": "m = 2 kg, k = 800 N/m: what is ω₀?", "source": "VO p. 7: ω₀ = √(k/m); values chosen here", "answer": 20, "unit": "rad/s", "compute": { "law": "w0", "m": 2, "k": 800, "c": 0 }, "solution": "√(800/2) = √400 = 20 rad/s." },
+        { "question": "With c = 8 N·s/m as well, what is ω_D?", "source": "VO p. 8: ω_D = √(ω₀² − (c/2m)²)", "answer": 19.8997, "unit": "rad/s", "compute": { "law": "wD", "m": 2, "k": 800, "c": 8 }, "solution": "c/2m = 2 s⁻¹; √(400 − 4) = 19.90 rad/s." }
+      ]
+    },
+    {
+      "id": "pendel",
+      "title": "Pendulum (Pendel)",
+      "idea": "Build T, V and D, apply Lagrange's operator, and the pendulum's ODE appears; then see where sin φ ≈ φ stops being true and which rest angles are stable.",
+      "lecture": "Puhwein (2021a), example 2, VO pp. 2, 10–18; Wagg and Neild (2015) for the stability chart",
+      "law": "m L₁² φ̈ + c_D φ̇ + k_D φ + m g L₁ sin φ = −M₁(t)",
+      "lawTex": "mL_1^2\\ddot{\\varphi} + c_D\\dot{\\varphi} + k_D\\varphi + mgL_1\\sin\\varphi = -M_1(t)",
+      "equations": [
+        { "eq": "d/dt ∂L/∂q̇ − ∂L/∂q + ∂D/∂q̇ = Q", "tex": "\\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial \\dot{q}_k} - \\frac{\\partial L}{\\partial q_k} + \\frac{\\partial D}{\\partial \\dot{q}_k} = Q_k^{(nk)}", "note": "Lagrange's equations of the 2nd kind with a dissipation function, L = K − V", "ref": "VO p. 11" },
+        { "eq": "φ̈ = [−M₁ − m g L₁ sin φ − k_D φ − c_D φ̇]/(m L₁²)", "tex": "\\ddot{\\varphi} = \\frac{1}{mL_1^2}\\left[-M_1 - mgL_1\\sin\\varphi - k_D\\varphi - c_D\\dot{\\varphi}\\right]", "note": "The nonlinear model the swing plots", "ref": "VO pp. 10, 13", "explore": true },
+        { "eq": "φ̈ + c_D/(mL₁²) φ̇ + (g/L₁ + k_D/(mL₁²)) φ = −M₁/(mL₁²)", "tex": "\\ddot{\\varphi} + \\frac{c_D}{mL_1^2}\\dot{\\varphi} + \\left(\\frac{g}{L_1} + \\frac{k_D}{mL_1^2}\\right)\\varphi = -\\frac{M_1}{mL_1^2}", "note": "Linearised with sin φ ≈ φ: the faint pendulum", "ref": "VO p. 11", "explore": true },
+        { "eq": "ω₀ = √(g/L₁), T₀ = 2π√(L₁/g)", "tex": "\\omega_0 = \\sqrt{g/L_1}, \\quad T_0 = 2\\pi\\sqrt{L_1/g}", "note": "Small swings without spring", "ref": "VO p. 11" },
+        { "eq": "J = [0 1; −ω² cos x₁ −δ]", "tex": "D_x f = \\begin{bmatrix} 0 & 1 \\\\ -\\omega^2\\cos x_1 & -\\delta \\end{bmatrix}", "note": "Jacobian; at 2nπ stable spirals (light damping), at (2n+1)π saddles", "ref": "VO pp. 17–18" }
+      ],
+      "practice": [
+        { "question": "L₁ = 1 m, g = 9.80665 m/s²: how long is one small swing, T₀?", "source": "VO p. 11: ω₀ = √(g/L₁)", "answer": 2.0064, "unit": "s", "compute": { "law": "pendelT0", "m": 1, "L1": 1 }, "solution": "2π√(1/9.80665) = 2.006 s." }
+      ]
+    },
+    {
+      "id": "rolle",
+      "title": "Pendulum with roller (Pendel mit Rolle)",
+      "idea": "A rod with a rolling disc at its end, held up by a spring: the spring's length follows from the geometry, the disc's spin from rolling, and both go into one Lagrange equation.",
+      "lecture": "Puhwein (2021a), example 3, VO pp. 3, 19–24, after Fotiu (2018a)",
+      "law": "(m₁L₁²/3 + (3/2)m₂L₁²) φ̈₁ = (m₁/2 + m₂) g L₁ cos φ₁ − k(S − l₀) dS/dφ₁",
+      "lawTex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2L_1^2\\right)\\ddot{\\varphi}_1 = \\left(\\frac{m_1}{2} + m_2\\right)gL_1\\cos\\varphi_1 - k(S - l_0)\\frac{\\mathrm{d}S}{\\mathrm{d}\\varphi_1}",
+      "equations": [
+        { "eq": "S(φ₁) = √({L₁[1 − cos φ₁]}² + [L₂ + L₁ sin φ₁]²)", "tex": "S(\\varphi_1) = \\sqrt{\\{L_1[1 - \\cos\\varphi_1]\\}^2 + [L_2 + L_1\\sin\\varphi_1]^2}", "note": "Spring length; the sheet writes 0.25 for L₂", "ref": "VO p. 20" },
+        { "eq": "K = ½[(m₁L₁²/3)φ̇₁² + m₂(L₁φ̇₁)² + (m₂r²/2)(L₁φ̇₁/r)²]", "tex": "K = \\frac{1}{2}\\left[\\frac{m_1L_1^2}{3}\\dot{\\varphi}_1^2 + m_2(L_1\\dot{\\varphi}_1)^2 + \\frac{m_2r^2}{2}\\left(\\frac{L_1}{r}\\dot{\\varphi}_1\\right)^2\\right]", "note": "Kinetic energy of rod and rolling disc", "ref": "VO p. 22" },
+        { "eq": "V = −m₁g(L₁/2) sin φ₁ − m₂gL₁ sin φ₁ + ½k(S − l₀)²", "tex": "V = -m_1g\\frac{L_1}{2}\\sin\\varphi_1 - m_2gL_1\\sin\\varphi_1 + \\frac{1}{2}k(S - l_0)^2", "note": "Gravity and spring", "ref": "VO p. 23" },
+        { "eq": "(m₁L₁²/3 + (3/2)m₂L₁²) φ̈₁ = (m₁/2 + m₂) g L₁ cos φ₁ − k(S − l₀) dS/dφ₁", "tex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2L_1^2\\right)\\ddot{\\varphi}_1 = \\left(\\frac{m_1}{2} + m_2\\right)gL_1\\cos\\varphi_1 - k(S - l_0)\\frac{\\mathrm{d}S}{\\mathrm{d}\\varphi_1}", "note": "The lab's equation, from K and V of pp. 22–23; the sheet prints (3/2)m₂r and a spring moment without L₁ (README)", "ref": "", "explore": true },
+        { "eq": "(m₁L₁²/3 + (3/2)m₂r) φ̈₁ − (m₂ + m₁/2) g L₁ cos φ₁ + k(S − l₀)(2 sin φ₁ + cos φ₁)/(4S) = 0", "tex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2r\\right)\\ddot{\\varphi}_1 - \\left(m_2 + \\frac{m_1}{2}\\right)gL_1\\cos\\varphi_1 + k(S - l_0)\\frac{2\\sin\\varphi_1 + \\cos\\varphi_1}{4S} = 0", "note": "The sheet's printed equation, run faint beside the lab's", "ref": "VO pp. 21, 23", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's starting values (m₁ = 1 kg, m₂ = 0.5 kg, k = 200 N/m, l₀ = 0.25 m, L₁ = 0.5 m, L₂ = 0.25 m), at what angle φ₁ does the rod rest?", "source": "worked here: the moment of the lab's equation set to zero", "answer": 5.6224, "unit": "°", "compute": { "law": "rolleRest", "m1": 1, "m2": 0.5, "r": 0.1, "L1": 0.5, "L2": 0.25, "k": 200, "l0": 0.25 }, "solution": "(m₁/2 + m₂) g L₁ cos φ₁ = k(S − l₀) dS/dφ₁ at φ₁ ≈ 5.6°." }
+      ]
+    },
+    {
+      "id": "zweimasse",
+      "title": "Two-mass oscillator (Zwei-Massen-Schwinger)",
+      "idea": "Two masses give two coupled ODEs, M ẍ + C ẋ + K x = F; det(K − λM) = 0 gives two eigenfrequencies, each with its own way of moving.",
+      "lecture": "Puhwein (2021a), example 5, VO pp. 4, 27–31; values from the TM3 note, pp. 1–2",
+      "law": "M ẍ + C ẋ + K x = F",
+      "lawTex": "M\\ddot{\\mathbf{x}} + C\\dot{\\mathbf{x}} + K\\mathbf{x} = \\mathbf{F}",
+      "equations": [
+        { "eq": "ẍ₁ = (1/m₁)[F₁ − c₁ẋ₁ − k₁x₁ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁)], ẍ₂ = (1/m₂)[F₂ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁)]", "tex": "\\ddot{x}_1 = \\frac{1}{m_1}[F_1 - c_1\\dot{x}_1 - k_1x_1 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1)], \\; \\ddot{x}_2 = \\frac{1}{m_2}[F_2 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1)]", "note": "The form for Simulink (x₀ = ẋ₀ = 0); the driven run integrates it", "ref": "VO p. 28", "explore": true },
+        { "eq": "M = [m₁ 0; 0 m₂], C = [c₁+c₂ −c₂; −c₂ c₂], K = [k₁+k₂ −k₂; −k₂ k₂]", "tex": "M = \\begin{bmatrix} m_1 & 0 \\\\ 0 & m_2 \\end{bmatrix}, \\; C = \\begin{bmatrix} c_1+c_2 & -c_2 \\\\ -c_2 & c_2 \\end{bmatrix}, \\; K = \\begin{bmatrix} k_1+k_2 & -k_2 \\\\ -k_2 & k_2 \\end{bmatrix}", "note": "Mass, damping and stiffness matrices", "ref": "VO p. 28" },
+        { "eq": "det(K − λM) = 0, λ = ω₀ᵢ²", "tex": "\\det(K - \\lambda M) = 0, \\quad \\lambda = \\omega_{0i}^2", "note": "The eigenvalue problem; the modes step animates its eigenvectors", "ref": "VO p. 28", "explore": true },
+        { "eq": "λ₁,₂ = tr/2 ∓ √((tr/2)² − det), of M⁻¹K", "tex": "\\lambda_{1,2} = \\frac{\\operatorname{tr}}{2} \\mp \\sqrt{\\left(\\frac{\\operatorname{tr}}{2}\\right)^2 - \\det}", "note": "The same λ from trace and determinant of M⁻¹K", "ref": "", "explore": true },
+        { "eq": "(K − ω²M + jωC) X = F̂", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\hat{\\mathbf{F}}", "note": "Frequency response, plotted as |x₁/F₁| like the TM3 note's bode", "ref": "TM3 note p. 1", "explore": true }
+      ],
+      "practice": [
+        { "question": "m₁ = m₂ = 1 kg, k₁ = 2000 N/m, k₂ = 750 N/m: what is the first eigenfrequency f₀₁?", "source": "TM3 note p. 2: f0_1 = 3.5588", "answer": 3.5588, "unit": "Hz", "compute": { "law": "twoMassF", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 0 }, "solution": "λ from det(K − λM) = 0: 500 and 3000 s⁻²; √500/2π = 3.559 Hz." },
+        { "question": "And the second, f₀₂?", "source": "TM3 note p. 2: f0_2 = 8.7173", "answer": 8.7173, "unit": "Hz", "compute": { "law": "twoMassF", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 1 }, "solution": "√3000/2π = 8.717 Hz." },
+        { "question": "What is the smaller λ = ω² of eig(K,M) there?", "source": "TM3 note p. 2: EW = diag(500, 3000)", "answer": 500, "unit": "1/s²", "compute": { "law": "twoMassLambda", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 0 }, "solution": "tr(M⁻¹K) = 3500, det = 1.5·10⁶: λ = 1750 ∓ 1250." }
+      ]
+    },
+    {
+      "id": "doppel",
+      "title": "Double pendulum (Doppelpendel)",
+      "idea": "Two hinged rods: Lagrange gives two coupled nonlinear ODEs; two runs a thousandth of a radian apart soon have nothing in common, yet each keeps its energy.",
+      "lecture": "Puhwein (2021a), example 6, VO pp. 4, 32–40, after Fotiu (2018a, 2018b)",
+      "law": "(8/3)φ̈₁ + φ̈₂ cos(φ₂−φ₁) − φ̇₂² sin(φ₂−φ₁) + 3(g/L₁) sin φ₁ = 0",
+      "lawTex": "\\frac{8}{3}\\ddot{\\varphi}_1 + \\ddot{\\varphi}_2\\cos(\\varphi_2-\\varphi_1) - \\dot{\\varphi}_2^2\\sin(\\varphi_2-\\varphi_1) + 3\\frac{g}{L_1}\\sin\\varphi_1 = 0",
+      "equations": [
+        { "eq": "(2/3)φ̈₂ + φ̈₁ cos(φ₂−φ₁) + φ̇₁² sin(φ₂−φ₁) + (g/L₁) sin φ₂ = 0", "tex": "\\frac{2}{3}\\ddot{\\varphi}_2 + \\ddot{\\varphi}_1\\cos(\\varphi_2-\\varphi_1) + \\dot{\\varphi}_1^2\\sin(\\varphi_2-\\varphi_1) + \\frac{g}{L_1}\\sin\\varphi_2 = 0", "note": "The second equation; with the first, the chaos step integrates both", "ref": "VO p. 33", "explore": true },
+        { "eq": "K = (mL₁²/6)[4φ̇₁² + φ̇₂² + 3φ̇₁φ̇₂ cos(φ₂ − φ₁)]", "tex": "K = \\frac{mL_1^2}{6}\\left[4\\dot{\\varphi}_1^2 + \\dot{\\varphi}_2^2 + 3\\dot{\\varphi}_1\\dot{\\varphi}_2\\cos(\\varphi_2-\\varphi_1)\\right]", "note": "Kinetic energy; the energy step plots K + V", "ref": "VO p. 37", "explore": true },
+        { "eq": "V_g = −(mgL₁/2) cos φ₁ − mgL₁[cos φ₁ + ½ cos φ₂]", "tex": "V_g = -\\frac{mgL_1}{2}\\cos\\varphi_1 - mgL_1\\left[\\cos\\varphi_1 + \\frac{1}{2}\\cos\\varphi_2\\right]", "note": "Potential energy of gravity", "ref": "VO p. 37", "explore": true },
+        { "eq": "V_F = ½k_D(φ₂ − φ₁)², D = ½c_D(φ̇₂ − φ̇₁)²", "tex": "V_F = \\frac{1}{2}k_D(\\varphi_2-\\varphi_1)^2, \\quad D = \\frac{1}{2}c_D(\\dot{\\varphi}_2-\\dot{\\varphi}_1)^2", "note": "Torsion spring and damper at A; in the equations divided by mL₁²/2 they enter as 2k_D/(mL₁²) and 2c_D/(mL₁²)", "ref": "VO p. 37" },
+        { "eq": "M̃ = [8/3 1; 1 2/3], K̃ = (g/L₁)[3 0; 0 1]", "tex": "\\tilde{M} = \\begin{bmatrix} 8/3 & 1 \\\\ 1 & 2/3 \\end{bmatrix}, \\quad \\tilde{K} = \\frac{g}{L_1}\\begin{bmatrix} 3 & 0 \\\\ 0 & 1 \\end{bmatrix}", "note": "Linearised at φ₁ = φ₂ = 0, whose eigenmodes the last step shows", "ref": "VO p. 34", "explore": true }
+      ],
+      "practice": [
+        { "question": "L₁ = 1 m, no spring: what is the lower linear eigenfrequency ω₁?", "source": "worked here from VO p. 34's linearised equations: det(K̃ − λM̃) = 0", "answer": 2.6797, "unit": "rad/s", "compute": { "law": "doppelOmega", "m": 1, "L1": 1, "mode": 0 }, "solution": "With g/L₁ = 9.807: (7/9)λ² − (14/3)(g/L₁)λ + 3(g/L₁)² = 0 gives λ = 7.181, ω = 2.680 rad/s." }
+      ]
+    },
+    {
+      "id": "rlc",
+      "title": "RLC circuit (Elektrischer Schwingkreis)",
+      "idea": "The mesh rule with i = q̇ gives the single mass's ODE in other letters; the energy moves between capacitor and coil while the resistor turns it to heat.",
+      "lecture": "Puhwein (2021a), example 4, VO pp. 3, 25–26, after Nemecek (2014)",
+      "law": "L q̈ + R q̇ + q/C = u(t)",
+      "lawTex": "L\\ddot{q} + R\\dot{q} + \\frac{q}{C} = u(t)",
+      "equations": [
+        { "eq": "q̈ = (1/L)[u − (1/C)q − R q̇]", "tex": "\\ddot{q} = \\frac{1}{L}\\left[u - \\frac{1}{C}q - R\\dot{q}\\right]", "note": "The form for Simulink; the energy step integrates it", "ref": "VO p. 25", "explore": true },
+        { "eq": "ω₀ = 1/√(LC)", "tex": "\\omega_0 = \\frac{1}{\\sqrt{LC}}", "note": "Natural angular frequency", "ref": "VO p. 26" },
+        { "eq": "½Li², q²/(2C), ∫Ri² dt", "tex": "\\frac{1}{2}Li^2, \\quad \\frac{q^2}{2C}, \\quad \\int R i^2\\,\\mathrm{d}t", "note": "Energy in the coil, in the capacitor, and turned to heat: the bars", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "L = 0.1 H, C = 1 mF: what is ω₀?", "source": "VO p. 26: ω₀ = 1/√(LC)", "answer": 100, "unit": "rad/s", "compute": { "law": "rlcW0", "R": 10, "L": 0.1, "C": 0.001 }, "solution": "1/√(10⁻⁴) = 100 rad/s." }
+      ]
+    },
+    {
+      "id": "motor",
+      "title": "DC motor (E-Motor)",
+      "idea": "The armature circuit and the shaft are two ODEs coupled by k_M and k_T: the current turns the shaft and the turning shaft pushes the current back.",
+      "lecture": "Puhwein (2021a), example 7, VO pp. 5, 41–42",
+      "law": "u_A = R_A i_A + L_A di_A/dt + k_M ω,  J φ̈ + c_L φ̇ = k_T i_A",
+      "lawTex": "u_A = R_A i_A + L_A\\frac{\\mathrm{d}i_A}{\\mathrm{d}t} + k_M\\omega, \\quad J\\ddot{\\varphi} + c_L\\dot{\\varphi} = k_T i_A",
+      "equations": [
+        { "eq": "di_A/dt = (1/L_A)[u_A − R_A i_A − k_M ω], φ̈ = (1/J)[k_T i_A − c_L ω − M_L]", "tex": "\\frac{\\mathrm{d}i_A}{\\mathrm{d}t} = \\frac{1}{L_A}[u_A - R_A i_A - k_M\\omega], \\quad \\ddot{\\varphi} = \\frac{1}{J}[k_T i_A - c_L\\omega - M_L]", "note": "The form for Simulink; M_L the Simulink model's load torque, not in the sheet's ODE", "ref": "VO p. 42", "explore": true },
+        { "eq": "ω∞ = (k_T u_A − R_A M_L)/(R_A c_L + k_M k_T)", "tex": "\\omega_\\infty = \\frac{k_T u_A - R_A M_L}{R_A c_L + k_M k_T}", "note": "Speed at rest, from both equations with the derivatives zero", "ref": "", "explore": true },
+        { "eq": "u_A i_A = R_A i_A² + k_T i_A ω + d/dt(½L_A i_A²)", "tex": "u_A i_A = R_A i_A^2 + k_T i_A\\omega + \\frac{\\mathrm{d}}{\\mathrm{d}t}\\left(\\frac{1}{2}L_A i_A^2\\right)", "note": "Power balance of the circuit (k_M = k_T in SI units): the bars", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "u_A = 12 V, R_A = 1 Ω, k_M = k_T = 0.05, c_L = 10⁻³ N·m·s/rad, no load: what speed ω does the motor reach?", "source": "worked here from VO p. 42 with the derivatives zero", "answer": 171.43, "unit": "rad/s", "compute": { "law": "motorW", "RA": 1, "LA": 0.5, "kM": 0.05, "kT": 0.05, "J": 0.01, "cL": 0.001, "uA": 12, "ML": 0 }, "solution": "0.05·12/(1·0.001 + 0.05·0.05) = 0.6/0.0035 = 171.4 rad/s." }
+      ]
+    },
+    {
+      "id": "shaker",
+      "title": "Electromechanical shaker",
+      "idea": "A coil in a magnet pushes a sprung plate: a circuit in series with a single-mass oscillator, and, if the coil's motion is let back into the circuit, a slower current.",
+      "lecture": "Puhwein (2021a), example 8, VO pp. 5, 43–45, after Nemecek (2014)",
+      "law": "U_S = R_S i_S + L_S di_S/dt,  m_S ẍ + d_S ẋ + k_S x = h_S i_S",
+      "lawTex": "U_S = R_S i_S + L_S\\frac{\\mathrm{d}i_S}{\\mathrm{d}t}, \\quad m_S\\ddot{x} + d_S\\dot{x} + k_S x = h_S i_S",
+      "equations": [
+        { "eq": "G_Ux(s) = 1/(R_S + sL_S) · h_S/(m_S s² + d_S s + k_S)", "tex": "G_{Ux}(s) = \\frac{1}{R_S + sL_S}\\cdot\\frac{h_S}{m_S s^2 + d_S s + k_S}", "note": "Displacement over voltage", "ref": "VO p. 43" },
+        { "eq": "A = [−R_S/L_S 0 0; 0 0 1; h_S/m_S −k_S/m_S −d_S/m_S]", "tex": "A = \\begin{bmatrix} -R_S/L_S & 0 & 0 \\\\ 0 & 0 & 1 \\\\ h_S/m_S & -k_S/m_S & -d_S/m_S \\end{bmatrix}", "note": "State space (i_S, x, v), back-EMF left out: the uncoupled current", "ref": "VO p. 44", "explore": true },
+        { "eq": "L_S di_S/dt = U_S − R_S i_S − h_S ẋ", "tex": "L_S\\frac{\\mathrm{d}i_S}{\\mathrm{d}t} = U_S - R_S i_S - h_S\\dot{x}", "note": "With the back-EMF: the coupled current", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "U_S = 4 V, R_S = 4 Ω, h_S = 5 N/A, k_S = 2000 N/m: how far does the plate move at rest, in metres?", "source": "worked here from VO p. 43 with the derivatives zero", "answer": 0.0025, "unit": "m", "compute": { "law": "shakerX", "RS": 4, "LS": 0.5, "hS": 5, "mS": 0.5, "kS": 2000, "dS": 4, "US": 4 }, "solution": "i = 1 A, F = 5 N, x = 5/2000 = 2.5 mm." }
+      ]
+    },
+    {
+      "id": "task2",
+      "title": "Task 2: pendulum on a sprung block (Pendel mit Federaufhängung)",
+      "idea": "No solution sheet; worked here. A block on a vertical spring carries a pendulum: two coordinates, one T, one V, and the two coupled equations the group derived in 2021.",
+      "lecture": "Puhwein (2021b), task 2, p. 1; the group's report (Baghdadi, Keck and Maurer 2021) for the values",
+      "law": "m_ges ÿ − m_s l₁(θ̈ sin θ + θ̇² cos θ) + c ẏ + k y − m_ges g = F₁",
+      "lawTex": "m_{ges}\\ddot{y} - m_s l_1(\\ddot{\\theta}\\sin\\theta + \\dot{\\theta}^2\\cos\\theta) + c\\dot{y} + ky - m_{ges}g = F_1",
+      "equations": [
+        { "eq": "I θ̈ − m_s l₁ ÿ sin θ + m_s g l₁ sin θ + c_T θ̇ + k_T θ = M₁", "tex": "I\\ddot{\\theta} - m_s l_1\\ddot{y}\\sin\\theta + m_s g l_1\\sin\\theta + c_T\\dot{\\theta} + k_T\\theta = M_1", "note": "The pendulum's equation; with the block's, the motion step integrates both. m_s = m₁/2 + m₃, I = l₁²(m₁/3 + m₃)", "ref": "", "explore": true },
+        { "eq": "y* = m_ges g/k", "tex": "y^* = \\frac{m_{ges}g}{k}", "note": "Rest position of the block", "ref": "" },
+        { "eq": "M = [m_ges 0; 0 I], K = [k 0; 0 m_s g l₁ + k_T]", "tex": "M = \\begin{bmatrix} m_{ges} & 0 \\\\ 0 & I \\end{bmatrix}, \\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_s g l_1 + k_T \\end{bmatrix}", "note": "Linearised at the rest: block and pendulum uncoupled, the modes step", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the group's values (m₁ = m₂ = m₃ = 0.1 kg, k = 10 N/m), how far below the relaxed spring does the block rest?", "source": "worked here; the group's report p. 8 gives y = m_ges g/k", "answer": 0.2942, "unit": "m", "compute": { "law": "cartRest", "dir": "vertical", "m1": 0.1, "m2": 0.1, "m3": 0.1, "l1": 0.2, "k": 10, "c": 10, "kT": 40, "cT": 0.4 }, "solution": "0.3·9.80665/10 = 0.294 m." },
+        { "question": "And the pendulum's linear eigenfrequency, with l₁ = 0.2 m and k_T = 40 N·m/rad?", "source": "worked here: √((m_s g l₁ + k_T)/I)/2π", "answer": 13.834, "unit": "Hz", "compute": { "law": "cartF", "dir": "vertical", "m1": 0.1, "m2": 0.1, "m3": 0.1, "l1": 0.2, "k": 10, "c": 10, "kT": 40, "cT": 0.4, "mode": 1 }, "solution": "m_s = 0.15 kg, I = 0.04·0.1333 = 5.33·10⁻³ kg·m²; √(40.29/5.33·10⁻³) = 86.9 rad/s = 13.8 Hz." }
+      ]
+    },
+    {
+      "id": "task3",
+      "title": "Task 3: horizontally excited pendulum",
+      "idea": "No solution sheet; worked here. The same block and pendulum lying on the floor: now the block's motion swings the pendulum even at rest, so the two modes stay coupled.",
+      "lecture": "Puhwein (2021b), task 3, p. 2",
+      "law": "m_ges ẍ + m_s l₁(θ̈ cos θ − θ̇² sin θ) + c ẋ + k x = F₁",
+      "lawTex": "m_{ges}\\ddot{x} + m_s l_1(\\ddot{\\theta}\\cos\\theta - \\dot{\\theta}^2\\sin\\theta) + c\\dot{x} + kx = F_1",
+      "equations": [
+        { "eq": "I θ̈ + m_s l₁ ẍ cos θ + m_s g l₁ sin θ + c_T θ̇ + k_T θ = M₁", "tex": "I\\ddot{\\theta} + m_s l_1\\ddot{x}\\cos\\theta + m_s g l_1\\sin\\theta + c_T\\dot{\\theta} + k_T\\theta = M_1", "note": "The pendulum's equation; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "M = [m_ges m_s l₁; m_s l₁ I], K = [k 0; 0 m_s g l₁ + k_T]", "tex": "M = \\begin{bmatrix} m_{ges} & m_s l_1 \\\\ m_s l_1 & I \\end{bmatrix}, \\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_s g l_1 + k_T \\end{bmatrix}", "note": "Linearised at x = 0, θ = 0: coupled through M", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's starting values (masses 0.1 kg, l₁ = 0.2 m, k = 10 N/m, k_T = 0.1 N·m/rad), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0", "answer": 0.80619, "unit": "Hz", "compute": { "law": "cartF", "dir": "horizontal", "m1": 0.1, "m2": 0.1, "m3": 0.1, "l1": 0.2, "k": 10, "c": 1, "kT": 0.1, "cT": 0.01, "mode": 0 }, "solution": "From M = [0.3 0.03; 0.03 0.00533] and K = [10 0; 0 0.394]: λ₁ = 25.66 s⁻², f = 0.806 Hz." }
+      ]
+    },
+    {
+      "id": "task5",
+      "title": "Task 5: quarter car under road excitation",
+      "idea": "No solution sheet; worked here. A wheel and a body on two springs: the road moves the tyre spring's foot, and the body follows slow roads and ignores fast ones.",
+      "lecture": "Puhwein (2021b), task 5, p. 3",
+      "law": "m₁ẍ₁ + c₁(ẋ₁ − ẇ) + k₁(x₁ − w) − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = 0",
+      "lawTex": "m_1\\ddot{x}_1 + c_1(\\dot{x}_1 - \\dot{w}) + k_1(x_1 - w) - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = 0",
+      "equations": [
+        { "eq": "m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = 0", "tex": "m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = 0", "note": "The body; with the wheel's, the response step integrates both", "ref": "", "explore": true },
+        { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The road, as the sheet writes it", "ref": "task sheet p. 3", "explore": true },
+        { "eq": "(K − ω²M + jωC) X = [k₁ + jωc₁; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\begin{bmatrix} k_1 + \\mathrm{j}\\omega c_1 \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |x₂/ŵ₀| plotted", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "Wheel 40 kg, body 300 kg, tyre 200 kN/m, suspension 20 kN/m: what is the body's (lower) eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 1.2383, "unit": "Hz", "compute": { "law": "chainF", "m1": 40, "m2": 300, "k1": 200000, "k2": 20000, "c1": 100, "c2": 1500, "mode": 0 }, "solution": "λ₁ = 60.5 s⁻², √60.5/2π = 1.24 Hz (the wheel hops at 11.8 Hz)." }
+      ]
+    },
+    {
+      "id": "task6",
+      "title": "Task 6: two-disc torsional oscillator (2DoF Torsionsschwinger)",
+      "idea": "No solution sheet; worked here. Two discs on a shaft are the two-mass oscillator turned: J for m, torsion springs for springs, angles for positions.",
+      "lecture": "Puhwein (2021b), task 6, p. 3",
+      "law": "J₁φ̈₁ + c_T1(φ̇₁ − ẇ) + k_T1(φ₁ − w) − c_T2(φ̇₂ − φ̇₁) − k_T2(φ₂ − φ₁) = M₁",
+      "lawTex": "J_1\\ddot{\\varphi}_1 + c_{T1}(\\dot{\\varphi}_1 - \\dot{w}) + k_{T1}(\\varphi_1 - w) - c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) - k_{T2}(\\varphi_2 - \\varphi_1) = M_1",
+      "equations": [
+        { "eq": "J₂φ̈₂ + c_T2(φ̇₂ − φ̇₁) + k_T2(φ₂ − φ₁) = M₂", "tex": "J_2\\ddot{\\varphi}_2 + c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) + k_{T2}(\\varphi_2 - \\varphi_1) = M_2", "note": "The second disc; the response step integrates both (M₁ = M₂ = 0 there)", "ref": "", "explore": true },
+        { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The shaft end's angle, as the sheet writes it", "ref": "task sheet p. 3", "explore": true },
+        { "eq": "(K − ω²M + jωC) X = [k_T1 + jωc_T1; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\boldsymbol{\\varphi}} = \\begin{bmatrix} k_{T1} + \\mathrm{j}\\omega c_{T1} \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |φ₂/ŵ₀| plotted", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "J₁ = 0.02, J₂ = 0.05 kg·m², k_T1 = 50, k_T2 = 80 N·m/rad: what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 3.6581, "unit": "Hz", "compute": { "law": "chainF", "m1": 0.02, "m2": 0.05, "k1": 50, "k2": 80, "c1": 0.02, "c2": 0.02, "mode": 0 }, "solution": "λ₁ = 528 s⁻², f = 3.66 Hz." }
+      ]
+    },
+    {
+      "id": "task7",
+      "title": "Task 7: hanging two-mass chain, shaken at the top",
+      "idea": "No solution sheet; worked here. Measured from the static rest, the weight drops out and the hanging chain is the quarter car upside down.",
+      "lecture": "Puhwein (2021b), task 7, p. 4",
+      "law": "m₁ẍ₁ + c₁(ẋ₁ − ẇ) + k₁(x₁ − w) − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = 0",
+      "lawTex": "m_1\\ddot{x}_1 + c_1(\\dot{x}_1 - \\dot{w}) + k_1(x_1 - w) - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = 0",
+      "equations": [
+        { "eq": "m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = 0", "tex": "m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = 0", "note": "The lower mass; the response step integrates both", "ref": "", "explore": true },
+        { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The suspension point, as the sheet writes it", "ref": "task sheet p. 4", "explore": true },
+        { "eq": "(K − ω²M + jωC) X = [k₁ + jωc₁; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\begin{bmatrix} k_1 + \\mathrm{j}\\omega c_1 \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |x₂/ŵ₀| plotted", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the TM3 note's masses and springs (1 kg, 1 kg, 2000 N/m, 750 N/m), what is the higher eigenfrequency of the hanging chain?", "source": "worked here; the same K and M as the TM3 note p. 1, so its f0_2 = 8.7173 Hz", "answer": 8.7173, "unit": "Hz", "compute": { "law": "chainF", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 1 }, "solution": "The same matrices as the lying two-mass oscillator: gravity only shifts the rest." }
+      ]
+    }
+  ]
+}

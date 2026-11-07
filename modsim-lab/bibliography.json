@@ -1,0 +1,136 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (modelling and simulation of mechanical and electromechanical systems as taught in ModSim, and the MATLAB functions the labs show), apart from the design rules' bibliography, which keeps the design principles.",
+  "entries": [
+    {
+      "key": "puhwein2021a",
+      "authors": [
+        "Puhwein, A. M."
+      ],
+      "year": 2021,
+      "title": "Aufgabenstellung mechatronischer Systeme: Vorlesungsbeispiele mit Lösungen (ModSim)",
+      "venue": "Lecture examples with solutions, FH Technikum Wien, master's programme, 2nd semester; file VO-Aufgaben-mit-Lösungen.pdf, 46 PDF pages",
+      "backs": "The eight worked examples and every value cited as 'VO p. N' (PDF page): task statements pp. 2–5, example 1 pp. 7–9, 2 pp. 10–18, 3 pp. 19–24, 4 pp. 25–26, 5 pp. 27–31, 6 pp. 32–40, 7 pp. 41–42, 8 pp. 43–45, references p. 46. The text layer garbles the formulas: read from page images at 70–150 dpi, transcribed in docs/sources/vo-solutions-a.md and vo-solutions-b.md. Read as: page images.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "puhwein2021b",
+      "authors": [
+        "Puhwein, A. M."
+      ],
+      "year": 2021,
+      "title": "Aufgabenstellung zu ModSim und MKS (v01)",
+      "venue": "Task sheet, FH Technikum Wien; file Aufgabenstellung_ModSim_MKS_v01.pdf, 7 pages, 13 tasks as titles and figures without values or solutions",
+      "backs": "The task-sheet labs (tasks 2, 3 on pp. 1–2; 5, 6 on p. 3; 7 on p. 4) and the list of tasks left out; transcribed in docs/sources/task-sheet.md. Read as: page images.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "baghdadi2021",
+      "authors": [
+        "Baghdadi, A.",
+        "Keck, M.",
+        "Maurer, L."
+      ],
+      "year": 2021,
+      "title": "Aufbau eines 2-Massenschwingermodells (BMS SS2021, Phase 3), with the Phase 1 scripts aufgabe1.m, Mechanical_Equations.mlx, Jacobian.mlx and simscape_variables.m",
+      "venue": "Group report, FH Technikum Wien, 30 June 2021; file Teams - General\\Abgaben\\Phase 3\\BMS_SS2021_Baghdadi_Keck_Maurer.pdf, 25 pages",
+      "backs": "Task 2's simulation values (Tab. 1, p. 14), the MATLAB style the snippets follow, and the slips listed in the README; read in docs/sources/student-work.md. Read as: full text and the scripts' code.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "fotiu2018a",
+      "authors": [
+        "Fotiu, P."
+      ],
+      "year": 2018,
+      "title": "Mehrkörperkinetik I",
+      "venue": "Eigenverlag der FHWN, 2018; reference [1] of VO p. 46",
+      "backs": "Named by the lecture as the source of examples 3 and 6; not read here. Checked as a record: as cited by VO p. 46, not read.",
+      "checked": {
+        "how": "record",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "fotiu2018b",
+      "authors": [
+        "Fotiu, P."
+      ],
+      "year": 2018,
+      "title": "Mehrkörperkinetik II",
+      "venue": "Eigenverlag der FHWN, 2018; reference [4] of VO p. 46",
+      "backs": "Named by the lecture for Lagrange's equations of the 2nd kind (VO pp. 11, 22, 36); not read here. Checked as a record: as cited by VO p. 46, not read.",
+      "checked": {
+        "how": "record",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "nemecek2014",
+      "authors": [
+        "Nemecek, A."
+      ],
+      "year": 2014,
+      "title": "Moderne Regelungstechnik",
+      "venue": "Eigenverlag der FHWN, 2014; reference [3] of VO p. 46",
+      "backs": "Named by the lecture as the source of examples 4 and 8; not read here. Checked as a record: as cited by VO p. 46, not read.",
+      "checked": {
+        "how": "record",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "wagg2015",
+      "authors": [
+        "Wagg, D.",
+        "Neild, S."
+      ],
+      "year": 2015,
+      "title": "Nonlinear Vibration with Control, second edition",
+      "venue": "Springer, 2015; reference [5] of VO p. 46",
+      "backs": "The tr–det chart of equilibrium types and the pendulum phase portraits the lecture reproduces (VO pp. 16–18); read only as the lecture reproduces it. Checked as a record: as reproduced on VO pp. 16–18, not read.",
+      "checked": {
+        "how": "record",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "tm3note",
+      "authors": [
+        "FH Technikum Wien"
+      ],
+      "year": 2021,
+      "title": "Bestimmung der Eigenfrequenzen des 2DoF Systems (Technische Mechanik 3 note, author not named)",
+      "venue": "Zusatz Material\\Bestimmung der Eigenfrequenzen des 2DoF Systems.pdf, 2 pages; year not printed, taken from the course year",
+      "backs": "The two-mass values m1 = m2 = 1 kg, k1 = 2000, k2 = 750 N/m, c1 = 1.6, c2 = 0.2 N·s/m and the code [EV,EW] = eig(K,M), the bode plot (p. 1); EW = diag(500, 3000), f0_1 = 3.5588 Hz, f0_2 = 8.7173 Hz, peaks read at 3.56628 and 8.7279 Hz (p. 2). Cited in the labs as 'the TM3 note'. Read as: page images.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks2026",
+      "authors": [
+        "MathWorks"
+      ],
+      "year": 2026,
+      "title": "MATLAB, Symbolic Math Toolbox, Control System Toolbox, Simulink and Simscape reference pages (release R2026b)",
+      "venue": "https://www.mathworks.com/help/ — symbolic/sym.diff.html, symbolic/sym.functionalderivative.html, symbolic/syms.html, symbolic/sym.html, symbolic/sym.subs.html, symbolic/sym.simplify.html, symbolic/sym.solve.html, symbolic/sym.jacobian.html, symbolic/sym.odetovectorfield.html, symbolic/sym.matlabfunction.html, matlab/ref/ode45.html, matlab/ref/eig.html, matlab/ref/double.linspace.html, matlab/ref/plot.html, control/ref/ss.html, control/ref/tf.html, control/ref/dynamicsystem.step.html, control/ref/dynamicsystem.initial.html, control/ref/dynamicsystem.lsim.html, control/ref/dynamicsystem.bode.html, control/ref/dynamicsystem.damp.html, simulink/slref/integrator.html, simulink/slref/gain.html, simulink/slref/sum.html, simulink/slref/fcn.html, simulink/slref/matlabfunction.html, simulink/slref/sinewave.html, simulink/slref/scope.html, simulink/slref/mux.html, simscape/ref/mass.html, simscape/ref/translationalspring.html, simscape/ref/translationaldamper.html, simscape/ref/idealforcesource.html, simscape/ref/solverconfiguration.html, sm/ref/revolutejoint.html; read 7 Nov 2026",
+      "backs": "The calls in src/labs/matlab.js and the lab modules: diff(f, diff(x(t),t)) is documented (the diff page's own Euler–Lagrange example); odeToVectorField orders the states Y[1] = y, Y[2] = y' and returns the order as S, and the page's workflow is matlabFunction(V,'vars',{'t','Y'}) then ode45; ode45 wants odefun(t,y) returning a column and gives one row of y per time; eig(A,B) solves A*V = B*V*D, so eig(K,M) gives λ = ω²; bode's magnitude is a ratio, 1×1×N, to be squeezed; tf('s') builds s; jacobian(f,v) has ∂f(i)/∂v(j) at (i,j); subs does not change its argument; the Sum block's signs list one sign per input; the Integrator's initial condition defaults to 0; the Sine Wave block's frequency is in rad/s. Not read, used in their common forms only: arrayfun(@(om) …, w), trace, det, double, abs, squeeze, sqrt, diag, xlabel, ylabel, legend. Read as: web pages, read and summarised by a helper agent; not re-read word for word.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    }
+  ]
+}
