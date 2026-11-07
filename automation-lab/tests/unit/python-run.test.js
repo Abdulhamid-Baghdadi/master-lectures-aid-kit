@@ -14,5 +14,5 @@ const ready = pythonHas("numpy, control");
 test("every view's Python prints the lab's numbers", { skip: ready ? false : "python with numpy and control not found: install them to run this test" }, async () => {
   const runs = (await views()).filter(v => v.where.endsWith(" at 1") && v.check);
   assert.ok(runs.length >= 40, `${runs.length} snippets`);
-  assert.deepEqual(await runChecks(runs, { prefix: "automation-py-" }), []);
+  assert.deepEqual(await runChecks(runs, { prefix: "automation-py-", preload: ["numpy", "control"] }), []);
 });

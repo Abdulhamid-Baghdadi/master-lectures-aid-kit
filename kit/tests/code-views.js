@@ -1,9 +1,11 @@
 // What the labs' Python tests share (one copy since 7 Nov 2026, moved from the Robotics lab's code-defined.test.js):
 // the scanner for names a Python snippet reads before binding them, the player that mounts a lab's views on the fake
-// page and plays every step at its start, middle and end, and the runner that executes each snippet with python -P on
-// a copy in a fresh temporary folder and compares what it prints with the lab's own numbers. Not a test itself.
+// page and plays every step at its start, middle and end, and the runner that executes each snippet on a long-lived
+// python -P worker (py-worker.py: heavy imports once, fresh globals per snippet) in a fresh temporary folder and
+// compares what it prints with the lab's own numbers. Not a test itself.
 import { spawn, spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { install, El } from "./fake-dom.js";
@@ -98,41 +100,98 @@ export function views(labs) {
 /** Is Python with these modules on this PC? (-P: the script's folder is not put on the import path.) */
 export const pythonHas = modules => spawnSync("python", ["-P", "-c", `import ${modules}`], { encoding: "utf8" }).status === 0;
 
-const run1 = (file, cwd) => new Promise(res => {
-  const p = spawn("python", ["-P", file], { cwd, env: { ...process.env, MPLBACKEND: "Agg" } });
-  let stdout = "", stderr = "";
-  p.stdout.on("data", d => { stdout += d; }); p.stderr.on("data", d => { stderr += d; });
-  p.on("close", status => res({ status, stdout, stderr }));
-});
+const WORKER = fileURLToPath(new URL("./py-worker.py", import.meta.url));
+
+/** One long-lived python -P running py-worker.py: the heavy imports (preload) are paid once, each snippet still runs
+ *  in fresh globals (see the worker's header). The timeout counts from the worker's ready line, so a slow import on a
+ *  busy PC is not taken for a hanging snippet. A snippet that outlasts it kills the worker; the next run starts anew. */
+class PyWorker {
+  constructor(preload) { this.preload = preload; }
+  start() {
+    const p = this.p = spawn("python", ["-P", WORKER, ...this.preload], { env: { ...process.env, MPLBACKEND: "Agg" } });
+    let buf = "", log = "", onReady;
+    this.wait = null;
+    this.ready = new Promise(r => { onReady = r; });
+    p.stdout.setEncoding("utf8");
+    p.stdout.on("data", d => {
+      buf += d;
+      let i;
+      while ((i = buf.indexOf("\n")) >= 0) {
+        const msg = JSON.parse(buf.slice(0, i)); buf = buf.slice(i + 1);
+        if (this.p !== p) continue;
+        if (msg.ready) { onReady(); continue; }
+        const w = this.wait; this.wait = null; w?.(msg);
+      }
+    });
+    // The worker's own stderr: import warnings, or why it died; kept for the failure message.
+    p.stderr.on("data", d => { log = (log + d).slice(-4000); });
+    p.stdin.on("error", () => {}); // a killed worker's pipe; its close below says why
+    p.on("close", code => {
+      if (this.p !== p) return;
+      this.p = null; onReady();
+      const w = this.wait; this.wait = null;
+      w?.({ ok: false, stdout: "", stderr: `the Python worker stopped (exit ${code}):\n${log}` });
+    });
+  }
+  async run(file, cwd, timeout) {
+    if (!this.p) this.start();
+    await this.ready;
+    if (!this.p) return { ok: false, stdout: "", stderr: "the Python worker stopped before it was ready (see above)" };
+    return new Promise(res => {
+      const timer = setTimeout(() => {
+        this.wait = null; this.p?.kill(); this.p = null;
+        res({ ok: false, stdout: "", stderr: `no answer after ${timeout / 1000} s: the snippet was stopped` });
+      }, timeout);
+      this.wait = r => { clearTimeout(timer); res(r); };
+      this.p.stdin.write(JSON.stringify({ file, cwd }) + "\n");
+    });
+  }
+  stop() { this.p?.stdin.end(); }
+}
+
+/** Runs Python snippets (texts) on the workers, each in its own temporary folder: [{ ok, stdout, stderr }]. */
+export async function runSnippets(codes, { prefix = "lab-py-", parallel = 6, timeout = 120000, preload = ["numpy"] } = {}) {
+  const dir = mkdtempSync(join(tmpdir(), prefix)), out = [];
+  const pool = Array.from({ length: Math.min(parallel, codes.length) }, () => new PyWorker(preload));
+  try {
+    let next = 0;
+    await Promise.all(pool.map(async w => {
+      while (next < codes.length) {
+        const k = next++, cwd = join(dir, `s${k}`), file = join(cwd, "snippet.py");
+        mkdirSync(cwd);
+        writeFileSync(file, codes[k], "utf8");
+        out[k] = await w.run(file, cwd, timeout);
+      }
+    }));
+  } finally {
+    pool.forEach(w => w.stop());
+    // The workers may still hold a folder open for a moment on Windows; rmSync retries.
+    rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  }
+  return out;
+}
 
 /** Runs each view's Python (those with a check) on a copy in a temporary folder, a few at a time, and returns the
  *  failures as texts. A check is [expression, value, tolerance = 1e-6, scale = 1] or a list of them; a number passes
  *  when |got − want| ≤ tolerance · max(scale, |want|). */
-export async function runChecks(list, { prefix = "lab-py-", parallel = 6 } = {}) {
-  const dir = mkdtempSync(join(tmpdir(), prefix)), bad = [];
-  try {
-    const jobs = list.map((v, k) => {
-      const checks = Array.isArray(v.check[0]) ? v.check : [v.check];
-      const file = join(dir, `s${k}.py`);
-      writeFileSync(file, `${v.python}\nimport json as _json, numpy as _np\n${checks.map(([e]) =>
-        `print("@@" + _json.dumps(_np.asarray(${e}, dtype=float).tolist()))`).join("\n")}\n`, "utf8");
-      return { v, checks, file };
+export async function runChecks(list, opts = {}) {
+  const bad = [];
+  const jobs = list.map(v => {
+    const checks = Array.isArray(v.check[0]) ? v.check : [v.check];
+    const code = `${v.python}\nimport json as _json, numpy as _np\n${checks.map(([e]) =>
+      `print("@@" + _json.dumps(_np.asarray(${e}, dtype=float).tolist()))`).join("\n")}\n`;
+    return { v, checks, code };
+  });
+  const results = await runSnippets(jobs.map(j => j.code), opts);
+  for (const [k, { v, checks }] of jobs.entries()) {
+    const r = results[k];
+    if (!r.ok) { bad.push(`${v.where}: Python stopped:\n${r.stderr}\n${v.python}`); continue; }
+    const got = r.stdout.split(/\r?\n/).filter(l => l.startsWith("@@")).map(l => JSON.parse(l.slice(2)));
+    checks.forEach(([e, want, tol = 1e-6, scale = 1], i) => {
+      const a = [got[i]].flat(Infinity), b = [want].flat(Infinity);
+      if (a.length !== b.length) { bad.push(`${v.where}: ${e} has ${a.length} numbers, the lab ${b.length}`); return; }
+      a.forEach((x, n) => { if (!(Math.abs(x - b[n]) <= tol * Math.max(scale, Math.abs(b[n])))) bad.push(`${v.where}: ${e}[${n}] = ${x}, the lab ${b[n]}`); });
     });
-    let next = 0;
-    const worker = async () => {
-      while (next < jobs.length) {
-        const { v, checks, file } = jobs[next++];
-        const r = await run1(file, dir);
-        if (r.status !== 0) { bad.push(`${v.where}: Python stopped:\n${r.stderr}\n${v.python}`); continue; }
-        const got = r.stdout.split(/\r?\n/).filter(l => l.startsWith("@@")).map(l => JSON.parse(l.slice(2)));
-        checks.forEach(([e, want, tol = 1e-6, scale = 1], i) => {
-          const a = [got[i]].flat(Infinity), b = [want].flat(Infinity);
-          if (a.length !== b.length) { bad.push(`${v.where}: ${e} has ${a.length} numbers, the lab ${b.length}`); return; }
-          a.forEach((x, n) => { if (!(Math.abs(x - b[n]) <= tol * Math.max(scale, Math.abs(b[n])))) bad.push(`${v.where}: ${e}[${n}] = ${x}, the lab ${b[n]}`); });
-        });
-      }
-    };
-    await Promise.all(Array.from({ length: parallel }, worker));
-  } finally { rmSync(dir, { recursive: true, force: true }); }
+  }
   return bad;
 }

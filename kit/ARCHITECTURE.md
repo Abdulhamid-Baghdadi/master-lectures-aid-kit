@@ -22,6 +22,13 @@ the snippet should print) gets a second panel beside the MATLAB, `ui/python.js` 
 writer's digits, and `tests/code-views.js` and `tests/fake-dom.js` (not tests themselves) hold the Python name scanner,
 the view player and the runner the three labs' Python tests share.
 
+The runner (since 7 Nov 2026, evening) does not start one `python -P` per snippet: importing python-control took
+4 s to 30 s each, so a test file starts a few long-lived workers (`tests/py-worker.py`) that import the lab's modules
+once and run each snippet as if pasted alone: fresh globals, its own stdout and stderr, its own temporary folder, and
+matplotlib figures, numpy print options and the working folder reset after it. A per-snippet timeout, counted from the
+worker's ready line, kills a hanging worker and the next snippet gets a new one. `tests/py-worker.test.js` holds this
+(no name leaks into the next snippet, an error is named, a hang is stopped). The checks and tolerances are unchanged.
+
 ## The one library: Temml
 
 The house rule is plain web: plain JavaScript, no framework, no build step, a library only as a stated exception.

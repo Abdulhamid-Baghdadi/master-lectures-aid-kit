@@ -15,5 +15,5 @@ const ready = pythonHas("numpy, scipy, sympy, control");
 test("every view's Python prints the lab's numbers", { skip: ready ? false : "python with numpy, scipy, sympy and control not found: install them to run this test" }, async () => {
   const runs = (await views()).filter(v => v.where.endsWith(" at 1") && v.check);
   assert.ok(runs.length >= 30, `${runs.length} snippets`);
-  assert.deepEqual(await runChecks(runs, { prefix: "modsim-py-" }), []);
+  assert.deepEqual(await runChecks(runs, { prefix: "modsim-py-", preload: ["numpy", "scipy", "sympy", "control"] }), []);
 });
