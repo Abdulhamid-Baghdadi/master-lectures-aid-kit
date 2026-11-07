@@ -174,3 +174,26 @@ test("forward then inverse returns the joints, and the triangle route (ch. 5, p.
   const p = R.fkTurnTilt(1, 2, 0.7, -0.3), b = R.ikTurnTilt(1, 2, p);
   near(b.t1, 0.7, 1e-12, "turn"); near(b.t2, -0.3, 1e-12, "tilt"); assert.ok(b.reachable);
 });
+
+test("the student's seven-row DH table gives his printed home pose and this lab's flange at any axes (forward_kinematics(jupyter).ipynb)", () => {
+  nearM(R.irb120Student([0, 0, 0, 0, 0, 0])[7], [[0, 0, 1, 374], [0, -1, 0, 0], [1, 0, 0, 630], [0, 0, 0, 1]], 1e-9, "home");
+  const q = [0.3, -0.5, 0.4, 1, 0.7, -0.2];
+  nearM(R.irb120Student(q)[7], R.irb120(q)[6], 1e-9, "both tables");
+});
+
+test("the three-link arm backs off to its wrist and reaches the TCP at the tool angle (round trip, by definition)", () => {
+  const s = R.ik3r(3, 4, 2, 4, 3, rad(30));
+  for (const x of s.solutions) {
+    const e = R.planar2r(3, 4, x.t1, x.t2).tip, tip = [e[0] + 2 * Math.cos(x.t1 + x.t2 + x.t3), e[1] + 2 * Math.sin(x.t1 + x.t2 + x.t3)];
+    near(tip[0], 4, 1e-9, "x"); near(tip[1], 3, 1e-9, "y"); near(x.t1 + x.t2 + x.t3, rad(30), 1e-9, "φ");
+  }
+});
+
+test("the IRB 120's wrist split gives axes that reach the same flange pose, over 200 poses (round trip, by definition)", () => {
+  for (let k = 0; k < 200; k++) {
+    const q = [1 - 2 * Math.sin(k), Math.cos(3 * k), 0.8 * Math.sin(5 * k) - 0.3, 2 * Math.sin(7 * k), 0.2 + 1.5 * Math.abs(Math.sin(11 * k)), Math.sin(13 * k)];
+    const T = R.irb120(q)[6], s = R.ikIrb120(T, R.irb120);
+    assert.equal(s.solutions.length, 2, `pose ${k}: two elbows`);
+    for (const x of s.solutions) nearM(R.irb120(x.q)[6], T, 1e-8, `pose ${k}, elbow ${x.sign}`);
+  }
+});

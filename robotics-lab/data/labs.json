@@ -11,9 +11,9 @@
   "lectures": [
     { "number": 1, "pages": "ch. 1", "title": "Introduction: links, joints and freedoms", "family": "pose", "labs": ["dof"] },
     { "number": 2, "pages": "ch. 2", "title": "Mathematical description: frames and rotations", "family": "pose", "labs": ["frames2d", "rotations"] },
-    { "number": 3, "pages": "ch. 2–3, ABB spec", "title": "Forward kinematics", "family": "forward", "labs": ["planar", "dh", "irb120"] },
-    { "number": 4, "pages": "ch. 4", "title": "Velocity kinematics", "family": "velocity", "labs": ["jacobian"] },
-    { "number": 5, "pages": "ch. 5", "title": "Inverse kinematics", "family": "inverse", "labs": ["ik"] }
+    { "number": 3, "pages": "ch. 2–3, ABB spec", "title": "Forward kinematics", "family": "forward", "labs": ["planar", "dh", "irb120", "dhsteps", "irbsteps"] },
+    { "number": 4, "pages": "ch. 4", "title": "Velocity kinematics", "family": "velocity", "labs": ["jacobian", "jacsteps"] },
+    { "number": 5, "pages": "ch. 5", "title": "Inverse kinematics", "family": "inverse", "labs": ["ik", "iksteps"] }
   ],
   "labs": [
     {
@@ -187,6 +187,75 @@
         { "question": "The turning post of ch. 5, p. 21 with l1 = 2, l2 = 3 and the tip at (1.5, 2.598, 2): the turn θ1?", "source": "Worked by hand from ch. 5, p. 21", "answer": 60, "unit": "°", "tolerance": 0.005, "solution": "θ1 = atan2(2.598, 1.5) = 60°; l2xy = 3, θ2 = atan2(0, 3) = 0°: the arm lies level.", "compute": { "law": "turnTilt", "l1": 2, "l2": 3, "p": [1.5, 2.598, 2], "out": "t1" } }
       ],
       "lecture": "Ajanović (2020), ch. 5 Inverse Kinematik, pp. 2–21"
+    },
+    {
+      "id": "dhsteps",
+      "title": "Exercise: the RRT robot by DH, step by step",
+      "idea": "The slides' RRT robot solved as on the slides: fill the DH table one row at a time while each frame appears on the arm, then multiply the three steps into the pose entry by entry and set it beside the three poses the slide prints. Each step shows its Python and MATLAB.",
+      "law": "⁰T₃ = ⁰T₁ · ¹T₂ · ²T₃",
+      "lawTex": "{}^{0}T_3 = {}^{0}T_1\\,{}^{1}T_2\\,{}^{2}T_3",
+      "equations": [
+        { "explore": true, "eq": "ⁱ⁻¹Tᵢ = Rot(z, θᵢ) Trans(z, dᵢ) Trans(x, aᵢ) Rot(x, αᵢ)", "tex": "{}^{i-1}T_i = \\mathrm{Rot}(z,\\theta_i)\\,\\mathrm{Trans}(z,d_i)\\,\\mathrm{Trans}(x,a_i)\\,\\mathrm{Rot}(x,\\alpha_i)", "note": "One DH step, the matrix each row of the table gives", "ref": "ch. 3, pp. 20–21" },
+        { "explore": true, "eq": "θ: θ1*, 90° + θ2*, 0; α: 90°, 90°, 0; a: l3, 0, 0; d: l1 + l2, 0, l4 + l5*", "tex": "\\theta = (\\theta_1^*,\\ 90^\\circ + \\theta_2^*,\\ 0),\\ \\alpha = (90^\\circ, 90^\\circ, 0),\\ a = (l_3, 0, 0),\\ d = (l_1 + l_2,\\ 0,\\ l_4 + l_5^*)", "note": "The RRT robot's DH table", "ref": "ch. 3, p. 24" },
+        { "eq": "⁰T₃ = ⁰T₁ · ¹T₂ · ²T₃", "tex": "{}^{0}T_3 = {}^{0}T_1\\,{}^{1}T_2\\,{}^{2}T_3", "note": "The pose of the TCP: the steps multiplied in order", "ref": "ch. 3, p. 25" }
+      ],
+      "practice": [
+        { "question": "The RRT robot (l1…l4 = 1…4, l5* = 5) at θ1 = 0°, θ2 = 90°: the x of the TCP?", "source": "Ajanović (2020), ch. 3, p. 26, printed", "answer": 3, "unit": "1", "solution": "⁰T₃ = [−1 0 0 3; 0 −1 0 0; 0 0 1 12; 0 0 0 1]: x = l3 = 3.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 0, "t2": 90, "l5": 5, "out": "x" } },
+        { "question": "At θ1 = 90°, θ2 = 0° (not printed): the y of the TCP?", "source": "Worked by hand from ch. 3, p. 25 (the slide's ⁰T₃)", "answer": 12, "unit": "1", "solution": "y = (l4 + l5) s1 c2 + l3 s1 = 9 + 3 = 12.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 90, "t2": 0, "l5": 5, "out": "y" } }
+      ],
+      "lecture": "Ajanović (2020), ch. 3 Vorwärtskinematik, pp. 18–26"
+    },
+    {
+      "id": "irbsteps",
+      "title": "Exercise: the IRB 120 at the student's joint values",
+      "idea": "The student's own DH table of the IRB 120, seven rows from the project report, beside this lab's six; both multiplied into the flange's pose and set against the student's printed home pose and every row of the specification's working-range table. Each step shows its Python and MATLAB.",
+      "law": "⁰T₆ = ⁰T₁ ¹T₂ ⋯ ⁵T₆",
+      "lawTex": "{}^{0}T_6 = {}^{0}T_1\\,{}^{1}T_2 \\cdots {}^{5}T_6",
+      "equations": [
+        { "eq": "⁰T₆ = ⁰T₁ ¹T₂ ⋯ ⁵T₆", "tex": "{}^{0}T_6 = {}^{0}T_1\\,{}^{1}T_2 \\cdots {}^{5}T_6", "note": "The flange's pose, the DH steps multiplied in order", "ref": "ch. 3, p. 21" },
+        { "explore": true, "eq": "d = 290, 0, 0, 302, 0, 72 mm; a = 0, 270, 70, 0, 0, 0 mm; α = −90°, 0, −90°, 90°, −90°, 0", "tex": "d = (290, 0, 0, 302, 0, 72),\\ a = (0, 270, 70, 0, 0, 0)\\ \\mathrm{mm},\\ \\alpha = (-90^\\circ, 0, -90^\\circ, 90^\\circ, -90^\\circ, 0)", "note": "This lab's DH table, built from the dimensions; θ2 has a −90° offset", "ref": "ABB p. 12" },
+        { "explore": true, "eq": "wrist centre = flange − 72 mm along its z", "tex": "\\mathbf{p}_\\text{wc} = \\mathbf{p}_6 - 72\\,\\mathbf{z}_6", "note": "The point the working-range table gives", "ref": "ABB pp. 12, 31" }
+      ],
+      "practice": [
+        { "question": "The IRB 120 with every axis at 0°: the flange's x?", "source": "The student's notebook forward_kinematics(jupyter).ipynb, printed: 374", "answer": 374, "unit": "mm", "solution": "Wrist centre at 302 mm (ABB p. 31, row A) plus the 72 mm flange along x: 374 mm, at a height of 630 mm.", "compute": { "law": "irbFlange", "q": [0, 0, 0, 0, 0, 0], "out": "x" } },
+        { "question": "The same pose with axis 5 at 90°: the flange's height z?", "source": "Worked by hand from ABB p. 12", "answer": 558, "unit": "mm", "solution": "Axis 5 tips the flange down: z = 630 − 72 = 558 mm, x = 302 mm.", "compute": { "law": "irbFlange", "q": [0, 0, 0, 0, 90, 0], "out": "z" } }
+      ],
+      "lecture": "ABB (2020), pp. 12 and 31; the student's forward_kinematics(spyder).py and report"
+    },
+    {
+      "id": "jacsteps",
+      "title": "Exercise: the Jacobian column by column, then its singularity",
+      "idea": "Build the two-link arm's Jacobian by the course's schema: each column is the joint's axis crossed with the lever arm to the tip. Then close the elbow and watch det J fall to zero as the two columns line up. Each step shows its Python and MATLAB.",
+      "law": "Jᵢ = z_{i−1} × (p − p_{i−1})",
+      "lawTex": "J_i = \\mathbf{z}_{i-1} \\times (\\mathbf{p} - \\mathbf{p}_{i-1})",
+      "equations": [
+        { "explore": true, "eq": "Jᵢ = z_{i−1} × (p − p_{i−1}) for a turning joint", "tex": "J_{v,i} = {}^{0}R_{i-1}\\begin{pmatrix}0\\\\0\\\\1\\end{pmatrix} \\times ({}^{0}t_n - {}^{0}t_{i-1})", "note": "The schema's column of a turning joint", "ref": "ch. 4, p. 15" },
+        { "explore": true, "eq": "J = [−l1 s1 − l2 s12, −l2 s12; l1 c1 + l2 c12, l2 c12]", "tex": "J = \\begin{pmatrix} -l_1 s_1 - l_2 s_{12} & -l_2 s_{12} \\\\ l_1 c_1 + l_2 c_{12} & l_2 c_{12} \\end{pmatrix}", "note": "The two-link arm's position rows", "ref": "ch. 4, p. 20" },
+        { "explore": true, "eq": "det J = l1 l2 sin θ2", "tex": "\\det J = l_1 l_2 \\sin\\theta_2", "note": "Zero when the arm is stretched or folded", "ref": "" }
+      ],
+      "practice": [
+        { "question": "l1 = 5, l2 = 3, θ1 = 20°, θ2 = 10°: det J?", "source": "Worked by hand from ch. 4, p. 20", "answer": 2.605, "unit": "1", "solution": "det J = 15 sin 10° = 2.605: a fifth of its value at 64°, the arm near stretched.", "compute": { "law": "det2r", "l1": 5, "l2": 3, "t1": 20, "t2": 10 } },
+        { "question": "The same arm stretched, θ2 = 0°: det J?", "source": "Worked by hand from ch. 4, p. 20", "answer": 0, "unit": "1", "tolerance": 0, "solution": "sin 0° = 0: both columns point the same way, across the arm.", "compute": { "law": "det2r", "l1": 5, "l2": 3, "t1": 20, "t2": 0 } }
+      ],
+      "lecture": "Ajanović (2020), ch. 4 Geschwindigkeitskinematik, pp. 12–20"
+    },
+    {
+      "id": "iksteps",
+      "title": "Exercise: elbow up and down, then the IRB 120's wrist split",
+      "idea": "Solve the slides' two-link arm both ways, back a three-link arm off to its wrist, then split the IRB 120 the same way: the wrist centre sets axes 1–3, what is left of the turn sets axes 4–6. Each step shows its Python and MATLAB.",
+      "law": "cos θ2 = (x² + y² − l1² − l2²)/(2 l1 l2)",
+      "lawTex": "\\cos\\theta_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}",
+      "equations": [
+        { "explore": true, "eq": "θ2 = atan2(±√(1 − c2²), c2), θ1 = atan2(y, x) − atan2(l2 sin θ2, l1 + l2 cos θ2)", "tex": "\\theta_2 = \\operatorname{atan2}(\\pm\\sqrt{1 - c_2^2},\\ c_2),\\quad \\theta_1 = \\operatorname{atan2}(y, x) - \\operatorname{atan2}(l_2 \\sin\\theta_2,\\ l_1 + l_2\\cos\\theta_2)", "note": "Both elbows of the two-link arm", "ref": "ch. 5, pp. 17–20" },
+        { "explore": true, "eq": "wrist = TCP − l3 (cos φ, sin φ), θ3 = φ − θ1 − θ2", "tex": "\\mathbf{w} = \\mathbf{p} - l_3 (\\cos\\varphi, \\sin\\varphi),\\quad \\theta_3 = \\varphi - \\theta_1 - \\theta_2", "note": "The three-link arm split at its wrist", "ref": "" },
+        { "explore": true, "eq": "w = p − 72 z₆, q1 = atan2(wy, wx); ³R₆ = ⁰R₃ᵀ R = Rz(q4) Ry(−q5) Rz(q6)", "tex": "\\mathbf{w} = \\mathbf{p} - 72\\,\\mathbf{z}_6,\\ q_1 = \\operatorname{atan2}(w_y, w_x),\\ {}^{3}R_6 = {}^{0}R_3^{\\mathsf T} R = R_z(q_4)R_y(-q_5)R_z(q_6)", "note": "The IRB 120's wrist split, for this lab's DH table", "ref": "" }
+      ],
+      "practice": [
+        { "question": "l1 = 5, l2 = 4, TCP (6 | 5.93): θ1 of the solution with θ2 = −41.05°?", "source": "Ajanović (2020), ch. 5, p. 20, printed as 44.66 + 18.14", "answer": 62.8, "unit": "°", "solution": "θ1 = 44.66° + 18.14° = 62.80°.", "compute": { "law": "ik2r", "l1": 5, "l2": 4, "x": 6, "y": 5.93, "sign": -1, "out": "t1" } },
+        { "question": "Three-link arm l1 = 3, l2 = 4, l3 = 2, TCP (4, 3), tool angle φ = 30°: θ3 of the solution with θ2 > 0?", "source": "Worked by hand from ch. 5, pp. 17–18", "answer": -59.54, "unit": "°", "solution": "Wrist (4 − 2 cos 30°, 3 − 2 sin 30°) = (2.268, 2); c2 = (9.144 − 25)/24 = −0.661, θ2 = 131.35°, θ1 = −41.81°, θ3 = 30° − θ1 − θ2 = −59.54°.", "compute": { "law": "ik3r", "l1": 3, "l2": 4, "l3": 2, "x": 4, "y": 3, "phi": 30, "sign": 1, "out": "t3" } },
+        { "question": "The IRB 120's flange at axes (30°, 20°, 10°, 0°, 45°, 0°): axis 2 back from the wrist split, the elbow whose triangle angle is negative?", "source": "By definition: forward, then back, gives the axes again", "answer": 20, "unit": "°", "solution": "w = flange − 72 z₆; q1 = atan2(wy, wx) = 30°; the arm's triangle of 270 mm and 310 mm gives q2 = 20°, q3 = 10° (the other elbow: 114.43°, −163.90°, outside axis 3's range).", "compute": { "law": "irbIk", "q": [30, 20, 10, 0, 45, 0], "sign": -1, "axis": 2 } }
+      ],
+      "lecture": "Ajanović (2020), ch. 5 Inverse Kinematik, pp. 4–20; ABB (2020), p. 12"
     }
   ]
 }

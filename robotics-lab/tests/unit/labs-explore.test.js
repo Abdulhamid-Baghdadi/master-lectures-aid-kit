@@ -6,7 +6,8 @@ import { readFileSync } from "node:fs";
 
 const data = JSON.parse(readFileSync(new URL("../../data/labs.json", import.meta.url), "utf8"));
 const app = readFileSync(new URL("../../src/app.js", import.meta.url), "utf8");
-const plotted = {"planar": [2], "irb120": [3], "jacobian": [5, 4], "ik": [0, 1, 2]};
+const plotted = {"planar": [2], "irb120": [3], "jacobian": [5, 4], "ik": [0, 1, 2],
+  dhsteps: [0, 1], irbsteps: [1, 2], jacsteps: [0, 1, 2], iksteps: [0, 1, 2] };
 
 test("Explore renders the equations marked for it", () => {
   assert.match(app, /filter\(e => e\.explore\)/);

@@ -83,8 +83,24 @@ export const IRB120 = {
   limits: [[-165, 165], [-110, 110], [-110, 70], [-160, 160], [-120, 120], [-400, 400]].map(([lo, hi]) => [rad(lo), rad(hi)]),
 };
 
+/** The specification's table of wrist-centre positions (ABB 2020, p. 31): axis 2, axis 3 in degrees, X and Z in mm.
+ *  Rows D and H print Z = 270 mm where the chain gives 290 mm (see the README). */
+export const WRIST_TABLE = { A: [0, 0, 302, 630], B: [0, -77, 0, 870], C: [0, 70, 169, 300], D: [90, -77, 580, 270], E: [110, -77, 545, 91],
+  F: [-110, -110, -440, -50], G: [-110, 70, -67, 445], H: [-90, -77, -580, 270], J: [-110, -77, -545, 91] };
+
 /** The IRB 120's frames for the joint angles q (six, radians); frame 4's origin is the wrist centre, frame 6 the flange. */
 export const irb120 = q => chain(IRB120.rows.map((r, i) => ({ theta: q[i] + r.offset, alpha: r.alpha, a: r.a, d: r.d })));
+/**
+ * The student's own DH table of the IRB 120 (Baghdadi 2020, forward_kinematics(spyder).py and report slide 4): seven
+ * rows, the base height split into 165 + 125 mm by a fixed first row, axis 3's −90° written as θ3 of row 3. The joint
+ * angles q (axes 1–6) add to rows 2–7. The same robot as IRB120 above, so the two must give the same flange.
+ */
+export const STUDENT_ROWS = [
+  { theta: 0, alpha: 0, a: 0, d: 165 }, { theta: 0, alpha: rad(-90), a: 0, d: 125 }, { theta: rad(-90), alpha: 0, a: 270, d: 0 },
+  { theta: 0, alpha: rad(-90), a: 70, d: 0 }, { theta: 0, alpha: rad(90), a: 0, d: 302 }, { theta: 0, alpha: rad(-90), a: 0, d: 0 },
+  { theta: 0, alpha: 0, a: 0, d: 72 }];
+export const irb120Student = q => chain(STUDENT_ROWS.map((r, i) => ({ ...r, theta: r.theta + (i ? q[i - 1] : 0) })));
+
 export const wristCentre = q => posOf(irb120(q)[4]);
 
 /**

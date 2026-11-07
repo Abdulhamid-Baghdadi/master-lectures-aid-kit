@@ -22,6 +22,12 @@ Jacobians (ch. 4); `inverse.js` the two-link arm's inverse kinematics by atan2 a
 of ch. 5, p. 21. Inside the labs layer, `draw.js` (copied from the handling lab's and extended with arrows, a projection
 of space onto the page, frames and matrices) draws to scale; it is not a lab.
 
+The four stepped exercise labs (`dhsteps`, `irbsteps`, `jacsteps`, `iksteps`, 7 Nov 2026) use the kit's step player
+(`../kit/ui/steps.js`, `../kit/steps.css`) and number writer (`../kit/ui/matlab.js`), imported, not copied.
+`src/labs/code.js` writes their Python and MATLAB and adds the Python panel beside the player's MATLAB one; it is not a
+lab. `inverse.js` gained the three-link arm and the IRB 120's wrist split; `chains.js` the student's DH table and the
+specification's wrist-centre table.
+
 ## Data
 
 `data/labs.json` (`"format": "robotics-lab labs"`, version 1): four families, five chapters, then each lab's words, its
@@ -42,6 +48,9 @@ of space onto the page, frames and matrices) draws to scale; it is not a lab.
 - The laws: `tests/unit/core.test.js`, against the printed results of chapters 1, 2, 3 and 5 and the specification's
   table, or a second route (numerical derivatives for every Jacobian, forward-then-inverse round trips, the DH step as
   the product of its four elementary transforms, orthonormality).
+- Every stepped view: `code-defined.test.js` (MATLAB and Python use no name before defining it, on a fake page,
+  `fake-dom.js` from the ModSim lab), `python-run.test.js` (the Python run with numpy against the lab's numbers),
+  `code.test.js` (the generated text).
 - Every practice answer recomputed: `tests/unit/labs-data.test.js`. Every equation typesets: `labs-math.test.js` and
   `../kit/tests/math.test.js`. Modules and data agree: `labs-modules.test.js`. Citations: `design-citations.test.js`.
 

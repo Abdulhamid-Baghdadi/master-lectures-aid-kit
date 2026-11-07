@@ -110,3 +110,22 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Checked: every view of every lab mounts and plays in Node on a fake page; in the browser pane every lab and step at
   375 px, light and dark, without sideways scroll. GIFs and stills recorded with the kit's recorder. Nothing committed.
 - Not done: tasks 1, 4, 8–13; MATLAB not run (not installed); .slx models not opened.
+
+## 7 Nov 2026: Robot Kinematics extended (`robotics-lab`)
+
+- Built: 4 stepped exercise labs beside the 8 idea labs. `dhsteps` (ch. 3, pp. 22–26: DH table row by row with the
+  frames appearing, then ⁰T₁·¹T₂·²T₃ entry by entry against the three printed poses of p. 26); `irbsteps` (the student's
+  7-row DH table beside the lab's 6 rows, the home pose against his notebook's printed T and ABB p. 31 row A, then rows
+  A–J of p. 31); `jacsteps` (ch. 4, pp. 15, 20, values of ch. 2, p. 38: columns as z × (p − pᵢ) arrows, det J as the
+  elbow closes); `iksteps` (ch. 5, p. 20 both elbows, the 3R arm's wrist, the IRB 120's wrist split, worked here).
+- Each view has a MATLAB panel (Robotics System Toolbox: rigidBodyTree, setFixedTransform 'dh', getTransform,
+  geometricJacobian, inverseKinematics; plus plain atan2 code) and a Python panel (numpy, the student's m0_1 style).
+  MathWorks pages read 7 Nov 2026, in `bibliography.json`; the rotz page answered 404, so rotations are written out.
+- Core: `ik3r`, `ikIrb120` (wrist split, 200-pose round trip), `irb120Student`, `WRIST_TABLE` moved from the lab.
+- Tests: Python and MATLAB undefined-name scanners over every view (`code-defined.test.js`); the Python snippets run
+  with numpy on a temp copy and end with the lab's numbers (`python-run.test.js`); code text (`code.test.js`). robotics
+  85, automation 105, modsim 61, kit 29 pass. Browser pane at 375 px light and dark: no sideways scroll, no console
+  errors; server stopped.
+- Not done: README GIF/stills of the new labs; MATLAB not run (not installed); the 3R arm and the IRB 120's wrist split
+  have no worked numbers in the slides, so they are checked by round trip only. Nothing committed.
+

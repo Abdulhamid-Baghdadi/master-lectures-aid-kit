@@ -30,6 +30,118 @@
         "how": "full text",
         "date": "2026-11-02"
       }
+    },
+    {
+      "key": "baghdadi2020",
+      "authors": [
+        "Baghdadi, A."
+      ],
+      "year": 2020,
+      "title": "Modulating the ABB IRB 120 for milling tasks: forward_kinematics(spyder).py, forward_kinematics(jupyter).ipynb and the report Baghdadi Irb120 report.pptx",
+      "venue": "Student project, Industrierobotik, FH Technikum Wien, 2020 (the user's own work, in the course folder's Presentation-Baghdadi)",
+      "backs": "The seven-row DH table of the IRB 120 (report slide 4, the script's subs), the printed home pose T = [0 0 1 374; 0 −1 0 0; 1 0 0 630] (notebook cell 1), and the Python style of the code panels.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-setfixedtransform",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "setFixedTransform, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/rigidbodyjoint.setfixedtransform.html",
+      "backs": "setFixedTransform(jnt,dhparams,'dh') with dhparams ordered [a alpha d theta]; theta ignored for revolute joints, d for prismatic ones; the Puma560 example building a robot body by body with rigidBody, rigidBodyJoint and addBody.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-rigidbodytree",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "rigidBodyTree, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/rigidbodytree.html",
+      "backs": "rigidBodyTree('DataFormat','row') as in the page's Dynamics example; addBody(robot,body,parentname) with 'base' for the first body; showdetails.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-gettransform",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "getTransform, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/rigidbodytree.gettransform.html",
+      "backs": "getTransform(robot,configuration,bodyname) returns the 4 × 4 transform from the body's frame to the base.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-geometricjacobian",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "geometricJacobian, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/rigidbodytree.geometricjacobian.html",
+      "backs": "geometricJacobian(robot,configuration,endeffector): 6 × n, angular velocity in rows 1–3, linear in rows 4–6; a vector configuration needs DataFormat 'row' or 'column'.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-inversekinematics",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "inverseKinematics, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/inversekinematics-system-object.html",
+      "backs": "ik = inverseKinematics('RigidBodyTree',robot); [configSol,solInfo] = ik(endeffector,pose,weights,initialguess); the first three weights are orientation, the last three position.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-homeconfiguration",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "homeConfiguration, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/rigidbodytree.homeconfiguration.html",
+      "backs": "homeConfiguration(robot) returns a vector of joint positions when DataFormat is 'row'.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
+    },
+    {
+      "key": "mathworks-trvec2tform",
+      "authors": [
+        "The MathWorks"
+      ],
+      "year": 2026,
+      "title": "trvec2tform, Robotics System Toolbox reference page",
+      "venue": "https://www.mathworks.com/help/robotics/ref/trvec2tform.html",
+      "backs": "trvec2tform([x y z]) gives a 4 × 4 transform with identity rotation. Read but not used in the panels; the rotz page (robotics/ref/rotz.html) answered 404 on 7 Nov 2026, so the panels write rotations by hand.",
+      "checked": {
+        "how": "full text",
+        "date": "2026-11-07"
+      }
     }
   ]
 }

@@ -1,14 +1,13 @@
 // The ABB IRB 120, a six-axis arm with 0.58 m reach (ABB 2020, pp. 11–12 and 31–32), as a DH chain built from the
 // specification's dimensions. Its wrist-centre table (p. 31) is the check: the lab sets axes 2 and 3 to a row and shows
 // where the chain puts the wrist centre. The geometric Jacobian (ch. 4, p. 15) shows where the arm loses a freedom.
-import { irb120, IRB120, jacobian, det, posOf, rad, deg } from "../core/index.js";
+import { irb120, IRB120, WRIST_TABLE, jacobian, det, posOf, rad, deg } from "../core/index.js";
 import { h, readout, choice } from "../../../kit/ui/kit.js";
 import * as a from "../../../kit/ui/art.js";
 import { view, link, joint, ground, label, frameAxes, angleSlider, project, num, dot } from "./draw.js";
 
-// The specification's table of wrist-centre positions, p. 31: axis 2, axis 3 in degrees, X and Z in mm.
-const TABLE = { A: [0, 0, 302, 630], B: [0, -77, 0, 870], C: [0, 70, 169, 300], D: [90, -77, 580, 270], E: [110, -77, 545, 91],
-  F: [-110, -110, -440, -50], G: [-110, 70, -67, 445], H: [-90, -77, -580, 270], J: [-110, -77, -545, 91] };
+// The specification's table of wrist-centre positions, p. 31, now kept in the core (chains.js) for the stepped lab too.
+const TABLE = WRIST_TABLE;
 const NAMES = ["Axis 1, turn", "Axis 2, arm", "Axis 3, arm", "Axis 4, wrist", "Axis 5, bend", "Axis 6, turn"];
 
 export default {

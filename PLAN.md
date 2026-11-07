@@ -19,6 +19,12 @@ Sources in `H:\My Drive\02_Personal\02_Education\FH\03_FH_Master\`.
   why); MATLAB/Octave not installed, so snippets are checked for undefined names, not run; the MathWorks pages were
   summarised by a helper agent, not re-read word for word; no .slx model opened; most values are example values,
   since the lecture gives none.
+- 7 Nov 2026: `robotics-lab` extended to 12 labs: four exercises in 2–3 animated steps (the RRT robot's DH table row by
+  row and ⁰T₃ entry by entry, ch. 3; the IRB 120 at the student's joint values against his script and ABB p. 31; the
+  Jacobian's columns as z × (p − pᵢ) and det J towards the singularity, ch. 4; both elbows of ch. 5, p. 20, a 3R wrist
+  split and the IRB 120's wrist split), each with a Python (numpy, the student's style) and a MATLAB panel. The Python
+  snippets run in a test against the lab's numbers; MATLAB not installed, so checked for undefined names only. Open: no
+  README GIF of the new labs; the IRB 120's axes 4–6 signs still unchecked against the robot.
 - Built overnight 2–3 Nov 2026: `robotics-lab` (8 labs), `mobile-robots-lab` (12), `sensors-lab` (9), `fem-lab` (9).
   Each lab's README and CLAUDE.md list its source errors and what it leaves out; WORKLOG.md has the night's summary.
 
