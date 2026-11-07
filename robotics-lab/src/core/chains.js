@@ -68,7 +68,8 @@ export function bentArm(l, t1) {
  * The ABB IRB 120 as a DH chain, built here from the dimensions of its product specification (ABB 2020, p. 12): base to
  * axis 2 290 mm, upper arm 270 mm, the 70 mm step to the forearm, forearm 302 mm, flange 72 mm. Axes 2 and 3 turn
  * forward for positive angles, as the specification's working-range table (p. 31) reads; θ2 is 0 with the upper arm
- * upright, hence its −90° offset. The signs of axes 4–6 are this lab's choice; the specification does not show them.
+ * upright, hence its −90° offset. Axes 4–6 (their sense, not printed as numbers in the specification) agree with the
+ * ROS-Industrial irb120_2.urdf of the student's project, pose for pose (tests/unit/urdf.test.js).
  */
 export const IRB120 = {
   rows: [

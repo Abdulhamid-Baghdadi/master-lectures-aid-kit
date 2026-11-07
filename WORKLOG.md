@@ -129,3 +129,12 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Not done: README GIF/stills of the new labs; MATLAB not run (not installed); the 3R arm and the IRB 120's wrist split
   have no worked numbers in the slides, so they are checked by round trip only. Nothing committed.
 
+
+## 7 Nov 2026, robotics-lab: IRB 120 against the URDF; stepped-lab GIFs
+
+- `tests/unit/urdf.test.js`: the student's project's `irb120_support/urdf/irb120_2.urdf` (joints lines 209–254, flange
+  line 258) composed in the test equals `irb120(q)[6]` at 50 seeded poses within 0.01 mm, mapping the identity (URDF
+  angle = lab axis angle); URDF limits = ABB p. 32 ranges. Axes 4–6 agree; no core change. README source note and
+  limits, `chains.js` comment updated. robotics 88, kit 29 pass.
+- GIFs not recorded: headless Edge did not open its DevTools port from this session (a probe was refused).
+  `robotics-lab/scripts/record-steps.mjs` is ready to run by hand. Server stopped. Nothing committed.

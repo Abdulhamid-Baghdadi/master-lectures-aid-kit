@@ -66,6 +66,11 @@ hand and say so.
   the forearm above is the one inside the axis ranges of p. 32 in the tested poses.
 - **MATLAB:** setFixedTransform with 'dh' ignores θ of a revolute joint, so axis 2's −90° offset is added to q; the
   panels say so. geometricJacobian puts the angular rows first, so the position rows are J(4:5,:).
+- **The chain agrees with the URDF, axes 4–6 included.** The student's project's `irb120_support/urdf/irb120_2.urdf`
+  (joints at lines 209–254, flange 72 mm at line 258) composed joint by joint gives the lab's flange pose at 50 seeded
+  poses within 0.01 mm, with the URDF's angle equal to the lab's axis angle (no offset or sign change); its limits are
+  ABB p. 32's ranges, axis 6 at ±400°. The specification's axes figure (p. 10) shows each axis's + and − sense only as
+  arrows. Checked in `tests/unit/urdf.test.js`; nothing in the core had to change.
 
 ## Open it
 
@@ -80,6 +85,6 @@ the server on port 8781 (see the script's head).
 
 ## Limits
 
-Ideal rigid links and joints, no play, no masses. The IRB 120's axes 4–6 turn by this lab's DH frames; their signs are
-not checked against the robot. A learning aid; no text of the slides is reproduced, and equations are cited by chapter
+Ideal rigid links and joints, no play, no masses. The IRB 120's axes 4–6 are checked against the ROS-Industrial URDF,
+not against a real robot's controller. A learning aid; no text of the slides is reproduced, and equations are cited by chapter
 and PDF page.
