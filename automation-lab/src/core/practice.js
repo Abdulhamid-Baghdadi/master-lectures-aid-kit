@@ -1,6 +1,7 @@
 // A practice question's answer, worked from its data with the core, so the answer in labs.json (the solution sheet's
 // value) is checked, never trusted.
 import { det } from "./lti.js";
+import { examQuestions as sharedExamQuestions } from "../../../kit/core/index.js";
 import { ss2tf, ctrb, obsv, poles, prefilter, linearise, normalForms, butterworth, finalValue } from "./ss.js";
 import { placeByRnf, observeByBnf, circuit20, circuit27, circuit28, motor21, crane } from "./models.js";
 
@@ -40,12 +41,8 @@ export const NONLINEAR = {
     g: ([x1, x2, x3]) => 1.4 * x1 * x1 + 1.8 * x2 + 6.7 * x3, n: 3 }),
 };
 
-/** The past exams' questions on one lab, each prefixed with its exam and task, so a lab's Practise tab can show
- *  them below the Beispiele' questions without a second copy in data/labs.json. */
-export function examQuestions(exams, labId) {
-  return exams.flatMap(e => e.tasks.filter(t => t.lab === labId)
-    .flatMap(t => t.questions.map(q => ({ ...q, question: `${e.title}, RB${t.number}: ${q.question}` }))));
-}
+/** The past exams' questions on one lab, each prefixed "RB<n>" (the kit's examQuestions, which every lab shares). */
+export const examQuestions = (exams, labId) => sharedExamQuestions(exams, labId, "RB");
 /** A, b, cᵀ, d of a nonlinear system's tangent at x0 = 0, u0 = 0. */
 export function tangent(name, params = {}) {
   const sys = NONLINEAR[name](params);

@@ -4,7 +4,8 @@
 // Reads the words from data/labs.json; a lab with no words there, or words with no lab, is reported, not skipped.
 import { h, practice, tabs } from "../../kit/ui/kit.js";
 import { math } from "../../kit/ui/math.js";
-import { parseSi } from "./core/index.js";
+import { examList, examPanel as examPage } from "../../kit/ui/exams.js";
+import { parseSi, examQuestions } from "./core/index.js";
 import { labs } from "./labs/index.js";
 
 const main = document.querySelector("main");
@@ -35,6 +36,8 @@ async function start() {
   const order = data.lectures.flatMap(lecture => lecture.labs.filter(id => code.has(id) && words.has(id)).map(id => ({ id, lecture })));
   const at = new Map(order.map((entry, k) => [entry.id, k]));
   const family = new Map(data.families.map(f => [f.id, f.name]));
+  const exams = data.exams ?? [];
+  const examAt = new Map(exams.map(e => [`exam-${e.id}`, e]));
 
   /** A card for a lab: its picture, its title, its lecture. The whole card is the link. */
   const card = ({ id, lecture }, small = false, label = "") => {
@@ -53,7 +56,12 @@ async function start() {
     h("div", { class: "lecture-rows" }, data.lectures.filter(lecture => lecture.labs.some(id => at.has(id))).map(lecture => h("section", { class: "lecture-row" },
       h("h2", {}, h("span", { class: "number" }, `${chapterOf(lecture)}`), " ", lecture.title,
         h("span", { class: "date" }, lecture.pages)),
-      h("div", { class: "cards" }, lecture.labs.filter(id => at.has(id)).map(id => card(order[at.get(id)])))))));
+      h("div", { class: "cards" }, lecture.labs.filter(id => at.has(id)).map(id => card(order[at.get(id)])))))),
+    examList(exams));
+
+  /** A past exam as a whole: its tasks in order, each with the lab that works its kind or a note why none does. */
+  const examPanel = e => examPage(e, { task: "Aufgabe", parse: parseSi, labTitle: id => words.get(id)?.title ?? id,
+    note: "No solution sheet; worked here. Constructions on the exam's scale drawing are listed with a note." });
 
   const panels = new Map();
   const panel = id => {
@@ -70,7 +78,12 @@ async function start() {
       ["Equations", h("div", {}, w.equations?.length ? h("table", { class: "eqs" }, h("tbody", {}, w.equations.map(e => h("tr", {},
           h("td", { class: "eq" }, e.tex ? math(e.tex, { display: true }) : e.eq), h("td", { class: "note" }, e.note), h("td", { class: "ref" }, e.ref || "derived"))))) : null,
         h("p", { class: "source" }, `Source: ${w.lecture}`))]];
-    if (w.practice.length) items.push(["Practise", h("div", { class: "practice-list" }, w.practice.map(q => practice({ ...q, parse: parseSi })))]);
+    // The lab's own questions, then the past exams' tasks of the same kind (kept once, in data/labs.json "exams").
+    const fromExams = examQuestions(exams, id, "Aufgabe ");
+    if (w.practice.length || fromExams.length) items.push(["Practise", h("div", { class: "practice-list" },
+      w.practice.map(q => practice({ ...q, parse: parseSi })),
+      fromExams.length ? h("h3", {}, "From past exams") : null,
+      fromExams.map(q => practice({ ...q, parse: parseSi })))]);
     // Previous and next as plain text links, no picture or motion: the lab's own drawing keeps the eye.
     const step = (o, text) => o ? h("a", { href: `#${o.id}` }, text.replace("%", words.get(o.id).title)) : h("span");
     const section = h("section", { class: "panel", "data-family": lecture.family, "aria-labelledby": `title-${id}` },
@@ -90,6 +103,10 @@ async function start() {
       // A lab keeps its knobs where the student left them when they come back to it.
       main.replaceChildren(panel(id));
       document.title = `${words.get(id).title} · Industrial Handling`;
+      if (focus) { scrollTo({ top: 0 }); main.querySelector("h2").focus({ preventScroll: true }); }
+    } else if (examAt.has(id)) {
+      main.replaceChildren(examPanel(examAt.get(id)));
+      document.title = `${examAt.get(id).title} · Industrial Handling`;
       if (focus) { scrollTo({ top: 0 }); main.querySelector("h2").focus({ preventScroll: true }); }
     } else {
       main.replaceChildren(overview);

@@ -200,3 +200,31 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Automation 153/153, kit 34/34. Checked at 375 px light and dark (exam page, overview list, observer Practise), no
   sideways scroll, no console errors; server stopped. No exam errors beyond small slips (README source notes).
   Nothing committed.
+
+## 7 Nov 2026, evening: Mobile robots past exams surveyed, none added
+
+- Read every exam page: `MMR17\MUS_Klausur_A_2017` (9 JPGs, SS2018 group A, 27.4.2018), `MUS_Klausur_B_2017`
+  (10 JPGs, SS2018 group B), `2017\Prüfungen\2019_bb_d.pdf` (scanned, 6 pages, SS2019 group D, 28.3.2019), and
+  `3. Semester\MUS2\Prüfungen` (`Prüfung1.jpg` and `test01.jpg`, one MMR-3 exam; `Fragen_MUS2.pdf`, a student's
+  memory list; `CVPOAusarbeitung.odt`, a 2013 student study guide, not an exam). No duplicates (SHA-256). The folder
+  named 2017 holds the SS2018 exams.
+- Every question is theory (explain, sketch, name): about 25 in SS2018 A, 23 in SS2018 B, 17 in SS2019 D, 14 in the
+  MUS2 exam and 9 in the memory list, 88 in all. No calculation task with numbers to work, so no "Past exams" set was
+  added to `mobile-robots-lab`; nothing in the lab changed. Nothing committed.
+
+## 7 Nov 2026, evening: Industrial Handling past exams
+
+- `IHA\Prüfungen\`: 2015 (photos, with a Musterlösung), 2016 (`.docx` of photos), 2017 (photos in
+  `Prüfung 18\Prüfung 17\`), 2018 (`Prüfung_18.pdf`, a graded student's scan). `Old\MMR17\Prüfung 15–18` are all
+  byte-identical to these (SHA-256). `Old\Skript_WS19\IHA_Uebungsskript_2019.pdf` has the same tasks as the 2021
+  Übungsskript and no solutions: nothing added from it.
+- `handling-lab/data/labs.json` gains `exams`: 4 exams, 17 tasks. Those a lab works have 14 questions (dead centre,
+  Grashof, poles, motion laws); Kutzbach plans, three-position synthesis, the dwell drive and the lifting-aid rating
+  carry a note instead. The motion-plan task repeats in 2016, 2017 and 2018. New laws `quinticCoef`, `swingAtCv`.
+- Shared: the past-exams list and page moved to `kit/ui/exams.js`, `examQuestions` to `kit/core/exams.js` (additive);
+  automation-lab uses them now (its own copy removed). Kit ARCHITECTURE.md says so.
+- Exam errors (README): the 2015 Musterlösung's ω31 = ω21·Cv = 23.56 s⁻¹ leaves out ψH/φP (right: 7.66 s⁻¹) and
+  writes 12.556 for 12.566; the 2018 table numbers its M21 row 1.3 (should be 1.5).
+- New `tests/unit/exams.test.js` (20 tests; failed first). Handling 66/66, automation 153/153, kit 34/34. Checked at
+  375 px light and dark (both labs' exam pages, the overview list, dead-centre Practise): no sideways scroll, no
+  console errors; server stopped. Nothing committed.

@@ -4,6 +4,7 @@
 // Reads the words from data/labs.json; a lab with no words there, or words with no lab, is reported, not skipped.
 import { h, practice, tabs } from "../../kit/ui/kit.js";
 import { math } from "../../kit/ui/math.js";
+import { examList, examPanel as examPage } from "../../kit/ui/exams.js";
 import { parseSi, examQuestions } from "./core/index.js";
 import { labs } from "./labs/index.js";
 
@@ -56,23 +57,11 @@ async function start() {
       h("h2", {}, h("span", { class: "number" }, `${chapterOf(lecture)}`), " ", lecture.title,
         h("span", { class: "date" }, lecture.pages)),
       h("div", { class: "cards" }, lecture.labs.filter(id => at.has(id)).map(id => card(order[at.get(id)])))))),
-    exams.length ? h("section", { class: "lecture-row exams" },
-      h("h2", {}, "Past exams", h("span", { class: "date" }, "calculation tasks")),
-      h("ul", { class: "exam-list" }, exams.map(e => h("li", {},
-        h("a", { href: `#exam-${e.id}` }, e.title), ` · ${e.date}, ${e.minutes} min`)))) : null);
+    examList(exams));
 
   /** A past exam as a whole: its three calculation tasks in order, each with the lab that animates its kind. */
-  const examPanel = e => h("section", { class: "panel", "aria-labelledby": `title-exam-${e.id}` },
-    h("a", { href: "#", class: "back" }, "← All labs"),
-    h("header", { class: "tab-head" }, h("p", { class: "eyebrow" }, `Past exam · ${e.date} · ${e.minutes} min`),
-      h("h2", { id: `title-exam-${e.id}`, tabindex: "-1" }, e.title)),
-    h("p", { class: "source" }, `No solution sheet; worked here. Where the exam leaves constants or values open, the question sets them and says so. Source: ${e.file}.`),
-    e.tasks.map(t => h("section", { class: "exam-task" },
-      h("h3", {}, `Rechenbeispiel ${t.number} (p. ${t.page})`),
-      h("p", {}, t.task),
-      h("p", { class: "source" }, t.repeats ? `Repeats ${t.repeats}: ` : "Same kind as: ",
-        h("a", { href: `#${t.lab}` }, words.get(t.lab)?.title ?? t.lab)),
-      h("div", { class: "practice-list" }, t.questions.map(q => practice({ ...q, parse: parseSi }))))));
+  const examPanel = e => examPage(e, { task: "Rechenbeispiel", parse: parseSi, labTitle: id => words.get(id)?.title ?? id,
+    note: "No solution sheet; worked here. Where the exam leaves constants or values open, the question sets them and says so." });
 
   const panels = new Map();
   const panel = id => {

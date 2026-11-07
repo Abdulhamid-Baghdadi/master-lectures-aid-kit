@@ -13,6 +13,9 @@ const LAWS = {
   poleY: q => K.pole(q.A1, q.A2, q.B1, q.B2).P[1],
   poleAngle: q => K.deg(K.pole(q.A1, q.A2, q.B1, q.B2).angle),
   quinticA3: q => M.quintic(q)[3],
+  quinticCoef: q => M.quintic(q)[q.k],
+  // The output's swing where Cv falls: yH·f(z at Cv), in the unit of yH.
+  swingAtCv: q => { const law = M.LAWS[q.motion]; return q.yHDeg * law.f(M.characteristic(law).Cv.z); },
   Cv: q => M.characteristic(q.motion ? M.LAWS[q.motion] : M.polynomial(M.quintic(q))).Cv.value,
   Ca: q => M.characteristic(q.motion ? M.LAWS[q.motion] : M.polynomial(M.quintic(q))).Ca.value,
   CM: q => M.characteristic(q.motion ? M.LAWS[q.motion] : M.polynomial(M.quintic(q))).CM.value,

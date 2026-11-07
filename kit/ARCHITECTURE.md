@@ -7,7 +7,7 @@ architecture.json name its layers, bottom first:
 |---|---|---|---|
 | vendor | `vendor/*.mjs` | nothing | Temml, `vendor/temml.mjs`, imported only by `ui/math.js` |
 | kit-core | `core/**` | nothing | `core/index.js` |
-| kit | `ui/**` | kit-core, vendor | `ui/kit.js`, `ui/chart.js`, `ui/field.js`, `ui/art.js`, `ui/math.js`, `ui/steps.js`, `ui/matlab.js`, `ui/python.js` |
+| kit | `ui/**` | kit-core, vendor | `ui/kit.js`, `ui/chart.js`, `ui/field.js`, `ui/art.js`, `ui/math.js`, `ui/steps.js`, `ui/matlab.js`, `ui/python.js`, `ui/exams.js` |
 
 Tests: `node --test "kit/tests/*.test.js"` from the repository root. The layering of each lab, the kit within it, is
 checked by `scripts/check-architecture.js`, run from every lab's `tests/unit/architecture.test.js`.
@@ -47,3 +47,11 @@ Temml's own `throwOnError: false` shows an unknown command as red text and repor
 throw, catches the error and shows the LaTeX source with a note saying why. Nothing fails silently.
 
 How to write the LaTeX in a lab's `labs.json`: `MATH.md`.
+
+## Past exams
+
+`ui/exams.js` (the overview's "Past exams" list and one page per exam) and `core/exams.js` (`examQuestions`, an
+exam's questions for one lab's Practise tab) came from the Advanced Automation lab on 7 Nov 2026, when the Industrial
+Handling lab took its exams too. A lab keeps its exams in `data/labs.json` under `exams`; it passes what its course
+calls a task ("Rechenbeispiel", "Aufgabe") and its note on solutions. A task cites `page`, or `where` for photos; a
+task with no `lab` carries a `note` saying why.

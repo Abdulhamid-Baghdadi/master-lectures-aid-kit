@@ -53,6 +53,95 @@
       ]
     }
   ],
+  "examsAbout": "The tasks of the past exams in Prüfungen\\ (Prüfung 15, 16, 18, and 17 inside Prüfung 18), by year; Old\\MMR17 holds byte-identical copies (SHA-256). The exams are photos or scans of graded students' sheets; only 2015 has a Musterlösung. Most tasks are constructions on a scale drawing: those a lab works are asked here with the exam's given values; those no lab draws (Kutzbach plans, three-position synthesis) are listed with a note. Each task's questions also appear in its lab's Practise tab.",
+  "exams": [
+    { "id": "iha-2015", "title": "IHA exam 2015", "date": "December 2015", "file": "Prüfungen\\Prüfung 15\\ (photos)",
+      "note": "The Musterlösung (photos 162310 to 162357) gives the answers; one of its steps is corrected here (see Aufgabe 4).",
+      "tasks": [
+        { "number": 1, "where": "photo 20151217_162157", "task": "Lifting aid: men, a loose space, poorly gripped gear housings up to 18.5 kg lifted and set down. Up to how many lifts a day no aid, when to rethink the work, from when an aid is a must?", "lab": null,
+          "note": "Rated by the key-indicator method, which no lab here works. The Musterlösung (photo 20151217_162310): load 2, posture 4, conditions 1, sum 7; up to 40 lifts a day, 40 to 500, more than 500." },
+        { "number": 2, "where": "photo 20151217_162330", "task": "Dead-centre synthesis of the crank-rocker A0ABB0 with φ0 = 210° and ψ0 = 80°, driving the slide D.", "lab": "deadcentre", "repeats": "",
+          "questions": [
+            { "question": "φ0 = 210°: what is the ratio of working to return time at constant crank speed?", "source": "Prüfungen\\Prüfung 15\\ (photos), photo 20151217_162330 (Musterlösung: φ0 = 210°, A0A = 45 mm, AB = 96 mm, B0B = 100 mm); the ratio is worked here by definition", "answer": 1.4, "unit": "1", "tolerance": 0.001,
+              "solution": "φ0/(360° − φ0) = 210/150 = 1.4.", "compute": { "law": "ratio", "phi0": 210 } }
+          ] },
+        { "number": 3, "where": "photo 20151217_162221", "task": "A knife on the coupler of a parallel crank D0DCC0 passes three given positions; construct it, give its lengths and the swing ψ21.", "lab": "grashof", "repeats": "",
+          "questions": [
+            { "question": "The Musterlösung's parallel crank has C0D0 = 16 mm, D0D = 72 mm, C0C = 72 mm, CD = 16 mm. By how many mm is lmin + lmax shorter than l′ + l″?", "source": "Prüfungen\\Prüfung 15\\ (photos), photo 20151217_162221; lengths from the Musterlösung, photo 20151217_162348", "answer": 0, "unit": "mm", "tolerance": 0.001,
+              "solution": "16 + 72 = 72 + 16: the margin is 0, Grashof's boundary case; the parallel crank turns fully but can fold over at its stretched positions.", "compute": { "law": "grashofMargin", "lengths": [16, 72, 72, 16] } }
+          ] },
+        { "number": 4, "where": "photo 20151217_162235", "task": "Cam with a swinging follower: rest, rise of 26° over Δφ = 80° (100° to 180°), rest, return. A 5th-order polynomial for the rise, its Cv and where it falls, and the follower's peak angular speed at n21 = 120 rpm.", "lab": "motionlaws", "repeats": "",
+          "questions": [
+            { "question": "Rest to rest, f = 10z³ − 15z⁴ + 6z⁵: what is Cv?", "source": "Prüfungen\\Prüfung 15\\ (photos), photo 20151217_162235; Musterlösung, photo 20151217_162357: Cv = 1.875 at z = 0.5", "answer": 1.875, "unit": "1", "tolerance": 0.001,
+              "solution": "f′ = 30z² − 60z³ + 30z⁴ peaks where f″ = 0, at z = 0.5: 30/4 − 60/8 + 30/16 = 1.875.", "compute": { "law": "Cv", "motion": "quintic" } },
+            { "question": "Where Cv falls, how far has the follower swung, in degrees?", "source": "Prüfungen\\Prüfung 15\\ (photos), photo 20151217_162235; Musterlösung, photo 20151217_162357: ψP = 13°", "answer": 13, "unit": "°", "tolerance": 0.001,
+              "solution": "f(0.5) = 0.5 by symmetry, so ψ = 0.5 · 26° = 13°, at φ21 = 100° + 40° = 140°.", "compute": { "law": "swingAtCv", "motion": "quintic", "yHDeg": 26 } },
+            { "question": "At n21 = 120 rpm, what is the follower's peak angular speed ω31 in s⁻¹?", "source": "Prüfungen\\Prüfung 15\\ (photos), photo 20151217_162235; the Musterlösung (photo 20151217_162357) prints ω31 = ω21·Cv = 23.56 s⁻¹, leaving out ψH/φP; corrected here (ch. 5, p. 30)", "answer": 7.658, "unit": "s⁻¹", "tolerance": 0.002,
+              "solution": "ω21 = 2π·120/60 = 12.566 s⁻¹; ω31 = Cv·ψH/φP·ω21 = 1.875 · 26/80 · 12.566 = 7.66 s⁻¹. The sheet's own vBmaxP = 90 mm · 1.875 · 26/80 = 54.8 mm does use ψH/φP.", "compute": { "law": "peakSpeed", "motion": "quintic", "yHDeg": 26, "xPDeg": 80, "rpm": 120 } }
+          ] }
+      ] },
+    { "id": "iha-2016", "title": "IHA exam 2016", "date": "2016", "file": "Prüfungen\\Prüfung 16\\Prüfung 16.docx (photos)",
+      "tasks": [
+        { "number": 1, "where": "image 4 of the docx (image10.jpg)", "task": "Separating unit: a crank-rocker A0ABB0 by dead-centre synthesis pushes the slide 6; crank 30 mm, φ0 = 200°, ψ0 = 80°, M = 1. Can it open the bunker fully (65 mm)?", "lab": "deadcentre", "repeats": "",
+          "questions": [
+            { "question": "φ0 = 200°: what is the ratio of working to return time at constant crank speed?", "source": "Prüfungen\\Prüfung 16\\Prüfung 16.docx (photos), image 4 of the docx (image10.jpg): no solution sheet; worked here", "answer": 1.25, "unit": "1", "tolerance": 0.001,
+              "solution": "φ0/(360° − φ0) = 200/160 = 1.25.", "compute": { "law": "ratio", "phi0": 200 } }
+          ] },
+        { "number": 2, "where": "image 10 of the docx (image16.jpg)", "task": "A dwell drive: a crank-rocker with a coupler point whose curve gives the rocker D0D a near rest of φR = 100° about the outer dead centre; construct it in position 2, sketch the coupler curve of C, find μmin at D.", "lab": null,
+          "note": "A construction on the exam's drawing; no lab draws this dwell mechanism. No solution sheet." },
+        { "number": 3, "where": "image 7 of the docx (image13.jpg)", "task": "Construct one of the two Roberts–Chebyshev cognates of the four-bar A0ABB0 with coupler point C, and check whether the shortest link of both turns fully.", "lab": "coupler", "repeats": "",
+          "note": "A construction on the exam's drawing, so no number to check; the coupler lab draws both cognates and their common curve. No solution sheet." },
+        { "number": 4, "where": "image 8 of the docx (image14.jpg)", "task": "Motion plan: rest R from P2 (120°, 60°) to P3 (210°, 60°), section 3 to P4 (300°, 30°), then the straight line G to P5 (360°, 0°). A 5th-order polynomial for section 3, without shock or jerk at P3 and P4; its coefficients, f′, f″, Ca and Cv.", "lab": "motionlaws", "repeats": "",
+          "questions": [
+            { "question": "Normed, f′(1) = 1.5 (G's slope −0.5 times 90°/−30°). What is a3?", "source": "Prüfungen\\Prüfung 16\\Prüfung 16.docx (photos), image 8 of the docx (image14.jpg): no solution sheet; worked here", "answer": 4, "unit": "1", "tolerance": 0.001,
+              "solution": "f(0) = f′(0) = f″(0) = 0 leave a3, a4, a5: a3 + a4 + a5 = 1, 3a3 + 4a4 + 5a5 = 1.5, 6a3 + 12a4 + 20a5 = 0 give a3 = 4, a4 = −4.5, a5 = 1.5.", "compute": { "law": "quinticCoef", "f1": 1, "v1": 1.5, "k": 3 } },
+            { "question": "And a5?", "source": "Prüfungen\\Prüfung 16\\Prüfung 16.docx (photos), image 8 of the docx (image14.jpg): no solution sheet; worked here", "answer": 1.5, "unit": "1", "tolerance": 0.001,
+              "solution": "f = 4z³ − 4.5z⁴ + 1.5z⁵.", "compute": { "law": "quinticCoef", "f1": 1, "v1": 1.5, "k": 5 } },
+            { "question": "What is Ca = max|f″| of that law?", "source": "Prüfungen\\Prüfung 16\\Prüfung 16.docx (photos), image 8 of the docx (image14.jpg): no solution sheet; worked here", "answer": 3.151, "unit": "1", "tolerance": 0.002,
+              "solution": "f″ = 24z − 54z² + 30z³; f‴ = 0 at z = (9 − √21)/15 = 0.2945, where f″ = 3.151.", "compute": { "law": "Ca", "f1": 1, "v1": 1.5 } }
+          ] }
+      ] },
+    { "id": "iha-2017", "title": "IHA exam 2017", "date": "October 2017", "file": "Prüfungen\\Prüfung 18\\Prüfung 17\\ (photos)",
+      "tasks": [
+        { "number": 1, "where": "photo 18.52.43(1)", "task": "Speeds of a two-shaft planetary drive (n21 = +715 rpm, brake B6 closed) by Kutzbach's speed plan: n31, n41, n51, n91, n35.", "lab": null,
+          "note": "A Kutzbach speed plan on the exam's drawing; no lab draws it. No solution sheet." },
+        { "number": 2, "where": "photo 18.52.42(1)", "task": "Three-position synthesis of the coupler mechanism C0CDD0 that lifts and empties a container through positions E1, E2, E3 (M = 0.1); its lengths and the swing of link 5.", "lab": null,
+          "note": "A three-position construction on the exam's drawing; the two-position lab is the nearest. No solution sheet." },
+        { "number": 3, "where": "photo 18.52.41(2)", "task": "Dead-centre synthesis of the crank-rocker A0ABB0 with the best transmission angle for φ0 = 170° and ψ0 = 75° (M = 1), drawn in its stretched and folded positions.", "lab": "deadcentre", "repeats": "",
+          "questions": [
+            { "question": "φ0 = 170°: what is the ratio of working to return time at constant crank speed?", "source": "Prüfungen\\Prüfung 18\\Prüfung 17\\ (photos), photo 18.52.41(2): no solution sheet; worked here", "answer": 0.8947, "unit": "1", "tolerance": 0.001,
+              "solution": "φ0/(360° − φ0) = 170/190 = 0.895: the working stroke is the faster one.", "compute": { "law": "ratio", "phi0": 170 } }
+          ] },
+        { "number": 4, "where": "photo 18.52.41(1)", "task": "The motion plan of 2016 Aufgabe 4 again: section 3 from the rest at P3 into the straight line G at P4.", "lab": "motionlaws", "repeats": "2016 Aufgabe 4",
+          "questions": [
+            { "question": "f = 4z³ − 4.5z⁴ + 1.5z⁵: what is Cv = max|f′|?", "source": "Prüfungen\\Prüfung 18\\Prüfung 17\\ (photos), photo 18.52.41(1): no solution sheet; worked here", "answer": 1.536, "unit": "1", "tolerance": 0.002,
+              "solution": "f″ = 6z(5z − 4)(z − 1) = 0 at z = 0.8, where f′ = 1.536, a little above f′(1) = 1.5.", "compute": { "law": "Cv", "f1": 1, "v1": 1.5 } }
+          ] }
+      ] },
+    { "id": "iha-2018", "title": "IHA exam 2018", "date": "November 2018", "file": "Prüfungen\\Prüfung 18\\Prüfung_18.pdf",
+      "tasks": [
+        { "number": 1, "where": "p. 1", "task": "A folding-flap drive of six links: mark all poles, draw the pole polygon, find i41-21 and i61-21 and the drive torque M21 for M61 = 400 Nm.", "lab": "poles", "repeats": "",
+          "note": "The ratios are measured on the scale drawing (p. 2), so only the pole count is asked here.",
+          "questions": [
+            { "question": "How many poles has the six-link drive?", "source": "Prüfungen\\Prüfung 18\\Prüfung_18.pdf, p. 1: no solution sheet; worked here", "answer": 15, "unit": "1", "tolerance": 0.001,
+              "solution": "n(n − 1)/2 = 6·5/2 = 15.", "compute": { "law": "poleCount", "n": 6 } }
+          ] },
+        { "number": 2, "where": "p. 3", "task": "Planetary drive with output speed n41 = 2500 rpm: n21, n31, n51, n61 by Kutzbach's plan, and the planets' relative speeds n35, n56.", "lab": null,
+          "note": "A Kutzbach speed plan on the exam's drawing (p. 4); no lab draws it. No solution sheet." },
+        { "number": 3, "where": "p. 5", "task": "The container drive of 2017 Aufgabe 2: three-position synthesis of C0CDD0, its lengths and the swing ψ51; name it by Grashof.", "lab": null,
+          "note": "A three-position construction on the exam's drawing (p. 6); no lab draws it. No solution sheet." },
+        { "number": 4, "where": "p. 7", "task": "The crank-rocker of 2017 Aufgabe 3 again: φ0 = 170°, ψ0 = 75°, now M = 0.25.", "lab": "deadcentre", "repeats": "2017 Aufgabe 3",
+          "questions": [
+            { "question": "In which ratio do working and return time stand, for φ0 = 170°?", "source": "Prüfungen\\Prüfung 18\\Prüfung_18.pdf, p. 7: no solution sheet; worked here", "answer": 0.8947, "unit": "1", "tolerance": 0.001,
+              "solution": "170/190 = 0.895.", "compute": { "law": "ratio", "phi0": 170 } }
+          ] },
+        { "number": 5, "where": "p. 8", "task": "The motion plan of 2016 Aufgabe 4 again: section 3 from the rest at P3 into the straight line G at P4.", "lab": "motionlaws", "repeats": "2016 Aufgabe 4",
+          "questions": [
+            { "question": "f = a3z³ + a4z⁴ + a5z⁵ with f′(1) = 1.5: what is a4?", "source": "Prüfungen\\Prüfung 18\\Prüfung_18.pdf, p. 8: no solution sheet; worked here", "answer": -4.5, "unit": "1", "tolerance": 0.001,
+              "solution": "a4 = −15 + 7·1.5 = −4.5.", "compute": { "law": "quinticCoef", "f1": 1, "v1": 1.5, "k": 4 } }
+          ] }
+      ] }
+  ],
   "labs": [
     {
       "id": "mobility",

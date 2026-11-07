@@ -16,6 +16,7 @@ and its Übungsskript with the solved Übungen 5_1 to 5_3.
 | 1 Linkages: analysis and synthesis (ch. 3–4) | the mobility count, Grashof's rule, the transmission angle, instant centres and the speed ratio, dead-centre synthesis of the crank-rocker, two-position synthesis with the pole P12, coupler curves and their cognates |
 | 2 Motion design, cams and indexing (ch. 5–6) | motion laws with Cv, Ca, Cj and CM and a 5th-order fit to any end values, the disc cam (base circle, roller, curvature), the indexing cam and the friction-wheel feed |
 | 3 Grippers (ch. 3) | suction force against height and vacuum, the magnet gripper |
+| Past exams | the exams of 2015 to 2018, one page each with every task: those a lab works (dead-centre synthesis, Grashof, poles, 5th-order motion laws) have questions, which also sit in that lab's Practise tab; constructions no lab draws carry a note |
 
 Each lab has a drawing or chart to move, readouts worked by the core, a table of its equations with chapter and page,
 and practice questions. Where the course has printed results (ch. 3, p. 113; ch. 6, p. 19; the Übungen 5_1–5_3) the
@@ -31,6 +32,15 @@ questions use them; the rest were worked by hand and say so.
 - **Two slips in the sources, corrected.** Übung 5_3 uses ω = 5.54 s⁻¹ for 50 rpm, where 2π·50/60 = 5.236 s⁻¹; its peaks
   are then 5.24 s⁻¹ and 104.7 s⁻², not 5.54 and 117.23. The magnet-gripper slide (ch. 3, p. 69) gives B in henry, the
   unit of inductance; flux density is in tesla.
+- **Past exams (`Prüfungen\`, checked 7 Nov 2026).** Photos and scans of graded students' sheets: 2015 (with a
+  Musterlösung), 2016 (`.docx` of photos), 2017 (photos in `Prüfung 18\Prüfung 17\`) and 2018 (`Prüfung_18.pdf`; the
+  `.docx` holds the same pages). `Old\MMR17\Prüfung 15–18` are byte-identical copies (SHA-256), as is `Prüfung 17\zum
+  üben`. Only the 2015 answers come from a solution sheet; the rest are worked here and tested in
+  `tests/unit/exams.test.js`. Errors found: the 2015 Musterlösung gives ω31 = ω21·Cv = 23.56 s⁻¹, leaving out ψH/φP
+  (ch. 5, p. 30): 1.875 · 26/80 · 12.566 = 7.66 s⁻¹; it also writes ω21 = 12.556 for 12.566 s⁻¹. The 2018 result table
+  numbers the M21 row 1.3 where it is 1.5. The motion-plan task is the same in 2016, 2017 and 2018. Students' names on
+  the sheets are not reproduced. `Old\Skript_WS19\IHA_Uebungsskript_2019.pdf` has the same tasks as the 2021
+  Übungsskript already used, and no solutions, so it adds nothing.
 - **Not in the course, so not here:** the Geneva wheel and the equations of vibratory feeders.
 
 ## Open it

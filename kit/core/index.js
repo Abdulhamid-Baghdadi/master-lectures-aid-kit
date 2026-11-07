@@ -4,3 +4,4 @@ export * from "./complex.js";
 export { si, parseSi } from "./units.js";
 export { isRight } from "./answer.js";
 export { rk4Step, simulate } from "./ode.js";
+export { examQuestions } from "./exams.js";
