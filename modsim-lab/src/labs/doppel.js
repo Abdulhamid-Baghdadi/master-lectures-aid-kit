@@ -83,11 +83,15 @@ export default {
             `[t,x] = ode45(f,[0 ${T}],${vec([rad(st.phi1), rad(st.phi2), 0, 0])});`,
             "E = m*L_1^2/6*(4*x(:,3).^2 + x(:,4).^2 + 3*x(:,3).*x(:,4).*cos(x(:,2)-x(:,1))) ...",
             "    - m*g*L_1*(1.5*cos(x(:,1)) + 0.5*cos(x(:,2))) + 1/2*k_D*(x(:,2)-x(:,1)).^2;",
-            "plot(t,E-E(1))   % how far K + V drifts in ode45's run"].join("\n"),
+            "plot(t,E-E(1))   % how far K + V drifts in ode45's run",
+            "% At the default RelTol 1e-3 the drift is the integrator's, not the model's; it shrinks with",
+            "% ode45(f,tspan,x0,odeset('RelTol',1e-8,'AbsTol',1e-10))"].join("\n"),
           python: [Py.HEAD, "", Py.assign([["m", st.m, "kg"], ["L_1", st.L1, "m"], ["g", 9.80665], ["k_D", st.kD], ["c_D", st.cD]]), pyOde,
             `sol = solve_ivp(f, [0, ${T}], ${Py.list([rad(st.phi1), rad(st.phi2), 0, 0])})`, "x = sol.y   # one row per state",
             "E = (m*L_1**2/6*(4*x[2]**2 + x[3]**2 + 3*x[2]*x[3]*np.cos(x[1]-x[0]))", "     - m*g*L_1*(1.5*np.cos(x[0]) + 0.5*np.cos(x[1])) + 1/2*k_D*(x[1]-x[0])**2)",
-            "plt.plot(sol.t, E - E[0])   # how far K + V drifts in solve_ivp's run", "plt.show()"].join("\n"),
+            "plt.plot(sol.t, E - E[0])   # how far K + V drifts in solve_ivp's run",
+            "# At the default rtol 1e-3 the drift is the integrator's, not the model's; it shrinks with",
+            "# solve_ivp(f, t_span, x0, rtol=1e-8, atol=1e-10)", "plt.show()"].join("\n"),
           pyCheck: ["E[0]", E[0], 1e-4],   // the start angles printed to six figures
         };
       } },
