@@ -22,7 +22,30 @@ export const NONLINEAR = {
                              Math.sin(x1) + 2 * Math.tan(x2) + x3 + u,
                              -6 * x1 - 7 * x2 - 8 * x3 - 9 * u],
     g: ([x1, x2, x3], u) => -2 * x1 - 3 * x2 - 4 * x3 - 5 * u, n: 3 }),
+  // The past exams' systems not among the Beispiele (Prüfungen\, file and page in data/labs.json). C are the
+  // constants C1 … C11 of SS2014 group B, given by the question.
+  exam14b: ({ C }) => ({
+    f: ([x1, x2], u) => [-(C[1] * Math.sin(x1) + C[2] * x2 * Math.cos(x2) + C[3] * u) / C[0],
+                         -(C[5] * x1 * Math.cos(x1) + C[6] * Math.sin(x2) + C[7] * u) / C[4]],
+    g: ([x1, x2], u) => -C[8] * x1 - C[9] * x2 - C[10] * u, n: 2 }),
+  exam17a: () => ({
+    f: ([x1, x2, x3], u) => [1.3 * x1 + Math.sin(x2) * Math.cos(x3) - 2.2 * u,
+                             0.27 * x1 * x1 - 2.1 * x1 * Math.cos(x2) - 3.7 * x3,
+                             -Math.atan(x1) - 0.7 * u],
+    g: ([x1, x2, x3]) => -2.8 * x1 + 0.3 * x2 - 4.4 * x3 * x3, n: 3 }),
+  exam17b: () => ({
+    f: ([x1, x2, x3], u) => [Math.cos(x1) * Math.sin(x2) - 3.3 * x3 * x3,
+                             -1.35 * x1 - 2.1 * x2 * Math.cos(x2) - 2.1 * Math.sin(x3),
+                             -2.7 * x2 - Math.atan(x3) + 1.2 * u],
+    g: ([x1, x2, x3]) => 1.4 * x1 * x1 + 1.8 * x2 + 6.7 * x3, n: 3 }),
 };
+
+/** The past exams' questions on one lab, each prefixed with its exam and task, so a lab's Practise tab can show
+ *  them below the Beispiele' questions without a second copy in data/labs.json. */
+export function examQuestions(exams, labId) {
+  return exams.flatMap(e => e.tasks.filter(t => t.lab === labId)
+    .flatMap(t => t.questions.map(q => ({ ...q, question: `${e.title}, RB${t.number}: ${q.question}` }))));
+}
 /** A, b, cᵀ, d of a nonlinear system's tangent at x0 = 0, u0 = 0. */
 export function tangent(name, params = {}) {
   const sys = NONLINEAR[name](params);

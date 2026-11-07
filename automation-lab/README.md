@@ -16,11 +16,12 @@ the view's current values.
 |---|---|
 | 1 Models from equations | the coefficients go into A, b, cᵀ, d (and B, C, D), a step, the free motion (Bsp 1–3) |
 | 2 Normal forms and G(s) | G(s) from (sE − A)⁻¹, RNF and BNF filled cell by cell, the same step for every form (Bsp 4, 5, 7–9) |
-| 3 Controllability, observability, stability | b and Ab spanning the plane, cᵀ and cᵀA, the poles and the free motion (Bsp 6, 10–12, two exam tasks) |
+| 3 Controllability, observability, stability | b and Ab spanning the plane, cᵀ and cᵀA, the poles and the free motion (Bsp 6, 10–12) |
 | 4 State control and observers | coefficient comparison in the RNF, poles dragged with the step updating, back to the plant's states, the prefilter (Bsp 13–16); the observer in the BNF and the estimate converging (Bsp 17, 18); both together, order 2n (Bsp 19) |
 | 5 Linearisation | sin y against its tangent, the pendulum both ways, A, b, cᵀ, d entry by entry (Bsp 23–26) |
 | 6 Physical models | the R-L-R-C device (Bsp 20), the DC motor turning (Bsp 21), the crane trolley to scale (Bsp 22), two circuits with no solution sheet, worked here (Bsp 27, 28) |
 | 7 The MATLAB lab tasks | six controllers compared (task 0), the sealed motor with dr, the ±10 V limit, observer and defect (task 1), the crane with Butterworth, LQ, observer and a PI outer loop (task 2) |
+| Past exams | the 15 calculation tasks of SS2014 (groups A, B, resit A) and SS2017 (groups A, B), one page per exam to practise it whole; each task links the lab of its kind, and its questions also sit in that lab's Practise tab |
 
 Each lab has steps to pick, a player that runs each step's animation once (or a slider that steps it, when the reader
 asks for reduced motion), readouts, the solution sheet's value beside the lab's own, and a MATLAB panel with a copy
@@ -45,6 +46,15 @@ are transcribed, with their pages, in `docs/sources/solution-sheets.md`.
   against Ackermann and place.
 - **Beispiel 24, M p. 58:** the sign of b2 is hard to read; the lab, from the task, gets −K8/K5, which is what the
   sheet seems to show.
+- **Past exams (`Prüfungen\`, 7 Nov 2026):** no solution sheet; every answer is worked here and checked by definition in
+  `tests/unit/exams.test.js` (eig(A − b rᵀ) and eig(A − ℓcᵀ) are the wanted poles, Q_S and Q_B have rank 2, the
+  tangents are the hand-worked A, b, cᵀ, d). The "- Copy" PDFs of SS2017 A and B are byte-identical to their originals
+  (SHA-256). Repeats of Beispiele: SS2014 A RB3 = Bsp 24, WH-Klausur RB1 = Bsp 26, WH-Klausur RB3 = Bsp 18 with poles
+  −3 ± j, SS2017 A RB1 = Bsp 27, SS2017 B RB2 = Bsp 28. No mathematical error found in the five exams; small slips:
+  the WH-Klausur's RB2 heading reads "Rechenbeispiel 2: Beispiel 2:", and the exams say "Vorfilter Gf" where the
+  slides write K_F. The SS2014 A and B constants (K, C) and the SS2017 circuits have no values; the questions set
+  them (K, C = 1 … 11; the lab's example components) and say so. A student's unofficial JPGs for SS2014 A and B
+  agree with every answer here (SS2014 B RB1's faint a22 sign reads −C7/C5, as worked).
 - **Slides p. 11:** the closed loop is written v = cᵀx + d·w; with u = w − rᵀx it is d·u. The labs use d = 0 there.
 
 The student's own lab scripts were the model for the MATLAB style, not for their results:

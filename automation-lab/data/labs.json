@@ -17,6 +17,133 @@
     { "number": 6, "pages": "Bsp 20–22, 27, 28", "title": "Physical models", "family": "physical", "labs": ["circuit", "motor", "crane", "circuits"] },
     { "number": 7, "pages": "Lab tasks 0–2", "title": "The MATLAB lab tasks", "family": "matlab", "labs": ["task0", "task1", "task2"] }
   ],
+  "examsAbout": "The calculation tasks (Rechenbeispiele) of the past exams in Prüfungen\\, by year and group; theory questions left out. The exams have no solution sheet: every answer is worked here, recomputed by the core and checked by definition in tests/unit/exams.test.js. Where an exam leaves constants or component values open, the question sets them and says so. Each task links the lab that animates its kind of exercise, and its questions also appear in that lab's Practise tab.",
+  "exams": [
+    { "id": "ss2014-a", "title": "SS2014 Klausur group A", "date": "11 April 2014", "minutes": 45, "file": "AAU_Pruefung_SS2014_Klausur_GrA.pdf",
+      "tasks": [
+        { "number": 1, "page": 2, "task": "State controller rᵀ and prefilter Gf by pole placement for the RNF system A = [0 1; 3 −4], b = [0; 1], cᵀ = [3 −2], d = 0; poles −3 ± j.", "lab": "placement", "repeats": "",
+          "questions": [
+            { "question": "the first entry of rᵀ?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB1, p. 2: no solution sheet; worked here (a student's unofficial JPG 11081522 agrees)", "answer": 13, "unit": "1", "tolerance": 0.001,
+              "solution": "Already an RNF: a0 = −3, a1 = 4. Wanted (s + 3)² + 1 = s² + 6s + 10: r1 = 10 + 3 = 13, r2 = 6 − 4 = 2.", "compute": { "law": "rRnf", "A": [[0, 1], [3, -4]], "b": [0, 1], "c": [3, -2], "poles": [[-3, 1], [-3, -1]], "k": 0 } },
+            { "question": "the second entry of rᵀ?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB1, p. 2: no solution sheet; worked here", "answer": 2, "unit": "1", "tolerance": 0.001,
+              "solution": "r2 = p1 − a1 = 6 − 4 = 2.", "compute": { "law": "rRnf", "A": [[0, 1], [3, -4]], "b": [0, 1], "c": [3, -2], "poles": [[-3, 1], [-3, -1]], "k": 1 } },
+            { "question": "the prefilter Gf?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB1, p. 2: no solution sheet; worked here (the student's JPG 11081522 has 10/3)", "answer": 3.3333, "unit": "1", "tolerance": 0.002,
+              "solution": "A − b rᵀ = [0 1; −10 −6]; (−A + b rᵀ)⁻¹ = 1/10·[6 1; −10 0]; cᵀ(…)⁻¹b = 3/10, so Gf = 10/3.", "compute": { "law": "Kf", "A": [[0, 1], [3, -4]], "b": [0, 1], "c": [3, -2], "poles": [[-3, 1], [-3, -1]] } }
+          ] },
+        { "number": 2, "page": 4, "task": "Controllable and observable? ẋ1 = −3x1 + 4x2 + u, ẋ2 = x1 − 2x2 − 3u, v = −2x1 + x2 + 2u.", "lab": "ctrbobsv", "repeats": "",
+          "questions": [
+            { "question": "det Q_S?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB2, p. 4: no solution sheet; worked here (the student's JPG 11072154 agrees)", "answer": -38, "unit": "1", "tolerance": 0.001,
+              "solution": "Ab = [−3 − 12; 1 + 6] = [−15; 7]; det [1 −15; −3 7] = 7 − 45 = −38 ≠ 0: controllable.", "compute": { "law": "detQs", "A": [[-3, 4], [1, -2]], "b": [1, -3] } },
+            { "question": "det Q_B?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB2, p. 4: no solution sheet; worked here (the student's JPG 11072154 agrees)", "answer": 13, "unit": "1", "tolerance": 0.001,
+              "solution": "cᵀA = [6 + 1, −8 − 2] = [7 −10]; det [−2 1; 7 −10] = 20 − 7 = 13 ≠ 0: observable. d = 2 plays no part.", "compute": { "law": "detQb", "A": [[-3, 4], [1, -2]], "c": [-2, 1] } }
+          ] },
+        { "number": 3, "page": 6, "task": "Linearise by the tangent at x0 = 0: K1ẋ1 + K2x1 cos x1 + K3 sin x2 + K4u = 0, −K5ẋ2 − K6 sin x1 − K7x2 cos x2 − K8u = 0, v − K9x1 − K10x2 − K11u = 0.", "lab": "linearise", "repeats": "Beispiel 24",
+          "questions": [
+            { "question": "a12 = −K3/K1, with K1 … K11 set to 1 … 11 here?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here (the exam leaves K open)", "answer": -3, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ1 = −(K2x1 cos x1 + K3 sin x2 + K4u)/K1; sin x2 → x2, so a12 = −K3/K1 = −3.", "compute": { "law": "tangent", "system": "bsp24", "params": { "K": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }, "at": ["A", 0, 1] } },
+            { "question": "b2 = −K8/K5, with K1 … K11 set to 1 … 11 here?", "source": "AAU_Pruefung_SS2014_Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here", "answer": -1.6, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ2 = −(K6 sin x1 + K7x2 cos x2 + K8u)/K5, so b2 = −K8/K5 = −8/5.", "compute": { "law": "tangent", "system": "bsp24", "params": { "K": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }, "at": ["b", 1] } }
+          ] }
+      ] },
+    { "id": "ss2014-b", "title": "SS2014 Klausur group B", "date": "11 April 2014", "minutes": 45, "file": "AAU_Pruefung_SS2014_Klausur_GrB.pdf",
+      "tasks": [
+        { "number": 1, "page": 2, "task": "Linearise by the tangent at x0 = 0: −C1ẋ1 − C2 sin x1 − C3x2 cos x2 − C4u = 0, C5ẋ2 + C6x1 cos x1 + C7 sin x2 + C8u = 0, v + C9x1 + C10x2 + C11u = 0.", "lab": "linearise", "repeats": "",
+          "questions": [
+            { "question": "a22 = −C7/C5, with C1 … C11 set to 1 … 11 here?", "source": "AAU_Pruefung_SS2014_Klausur_GrB.pdf, RB1, p. 2: no solution sheet; worked here (the exam leaves C open)", "answer": -1.4, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ2 = −(C6x1 cos x1 + C7 sin x2 + C8u)/C5; sin x2 → x2, so a22 = −C7/C5 = −7/5.", "compute": { "law": "tangent", "system": "exam14b", "params": { "C": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }, "at": ["A", 1, 1] } },
+            { "question": "d?", "source": "AAU_Pruefung_SS2014_Klausur_GrB.pdf, RB1, p. 2: no solution sheet; worked here", "answer": -11, "unit": "1", "tolerance": 0.001,
+              "solution": "v = −C9x1 − C10x2 − C11u, so d = −C11 = −11.", "compute": { "law": "tangent", "system": "exam14b", "params": { "C": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }, "at": ["d"] } }
+          ] },
+        { "number": 2, "page": 4, "task": "State controller rᵀ and prefilter Gf by pole placement for the RNF system A = [0 1; −2 3], b = [0; 1], cᵀ = [−1 3], d = 0; poles −2 ± j2.", "lab": "placement", "repeats": "",
+          "questions": [
+            { "question": "the second entry of rᵀ?", "source": "AAU_Pruefung_SS2014_Klausur_GrB.pdf, RB2, p. 4: no solution sheet; worked here (the student's JPG 11088155 agrees)", "answer": 7, "unit": "1", "tolerance": 0.001,
+              "solution": "a0 = 2, a1 = −3; wanted s² + 4s + 8: r1 = 8 − 2 = 6, r2 = 4 + 3 = 7.", "compute": { "law": "rRnf", "A": [[0, 1], [-2, 3]], "b": [0, 1], "c": [-1, 3], "poles": [[-2, 2], [-2, -2]], "k": 1 } },
+            { "question": "the prefilter Gf?", "source": "AAU_Pruefung_SS2014_Klausur_GrB.pdf, RB2, p. 4: no solution sheet; worked here (the student's JPG 11088155 agrees)", "answer": -8, "unit": "1", "tolerance": 0.001,
+              "solution": "(−A + b rᵀ)⁻¹ = 1/8·[4 1; −8 0]; cᵀ(…)⁻¹b = −1/8, so Gf = −8.", "compute": { "law": "Kf", "A": [[0, 1], [-2, 3]], "b": [0, 1], "c": [-1, 3], "poles": [[-2, 2], [-2, -2]] } }
+          ] },
+        { "number": 3, "page": 6, "task": "Controllable and observable? ẋ1 = 2x1 − 8x2 − 3u, ẋ2 = −3x1 + 5x2 + u, v = x1 − 2x2 − u.", "lab": "ctrbobsv", "repeats": "",
+          "questions": [
+            { "question": "det Q_S?", "source": "AAU_Pruefung_SS2014_Klausur_GrB.pdf, RB3, p. 6: no solution sheet; worked here (the student's JPG 11088099 agrees)", "answer": -28, "unit": "1", "tolerance": 0.001,
+              "solution": "Ab = [−6 − 8; 9 + 5] = [−14; 14]; det [−3 −14; 1 14] = −42 + 14 = −28 ≠ 0: controllable.", "compute": { "law": "detQs", "A": [[2, -8], [-3, 5]], "b": [-3, 1] } },
+            { "question": "det Q_B?", "source": "AAU_Pruefung_SS2014_Klausur_GrB.pdf, RB3, p. 6: no solution sheet; worked here (the student's JPG 11088099 agrees)", "answer": -2, "unit": "1", "tolerance": 0.001,
+              "solution": "cᵀA = [2 + 6, −8 − 10] = [8 −18]; det [1 −2; 8 −18] = −18 + 16 = −2 ≠ 0: observable.", "compute": { "law": "detQb", "A": [[2, -8], [-3, 5]], "c": [1, -2] } }
+          ] }
+      ] },
+    { "id": "ss2014-wh-a", "title": "SS2014 WH-Klausur group A", "date": "15 May 2014", "minutes": 45, "file": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf",
+      "tasks": [
+        { "number": 1, "page": 2, "task": "Linearise by the tangent at x0 = 0: −ẋ1 − 2 sin x1 − 3x2 cos x2 − 4 sin x3 − 3u = 0, ẋ2 − sin x1 − 2 tan x2 − x3 − u = 0, −ẋ3 − 6x1 − 7x2 − 8x3 − 9u = 0, v + 2x1 + 3x2 + 4x3 + 5u = 0.", "lab": "linearise", "repeats": "Beispiel 26",
+          "questions": [
+            { "question": "a22 (the tan term)?", "source": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf, RB1, p. 2: no solution sheet; worked here", "answer": 2, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ2 = sin x1 + 2 tan x2 + x3 + u; d/dx tan x = 1/cos² x = 1 at 0, times 2.", "compute": { "law": "tangent", "system": "bsp26", "at": ["A", 1, 1] } },
+            { "question": "a13 (the sin x3 term)?", "source": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf, RB1, p. 2: no solution sheet; worked here", "answer": -4, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ1 = −2 sin x1 − 3x2 cos x2 − 4 sin x3 − 3u; sin x3 → x3.", "compute": { "law": "tangent", "system": "bsp26", "at": ["A", 0, 2] } }
+          ] },
+        { "number": 2, "page": 4, "task": "Transfer function G(s) and stability: ẋ1 = −2x1 + 3x2 + 3u, ẋ2 = 3x1 − u, v = x1 + 2u.", "lab": "normalforms", "repeats": "",
+          "questions": [
+            { "question": "G(s) = (2s² + b1·s + b0)/(s² + 2s − 9): what is b0?", "source": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf, RB2, p. 4: no solution sheet; worked here", "answer": -21, "unit": "1", "tolerance": 0.001,
+              "solution": "det(sE − A) = s(s + 2) − 9; cᵀ adj(sE − A) b = 3s − 3; plus d = 2: (3s − 3 + 2s² + 4s − 18)/(s² + 2s − 9) = (2s² + 7s − 21)/(s² + 2s − 9).", "compute": { "law": "tf", "A": [[-2, 3], [3, 0]], "b": [3, -1], "c": [1, 0], "d": 2, "part": "num", "k": 2 } },
+            { "question": "the right-half pole (so: stable or not)?", "source": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf, RB2, p. 4: no solution sheet; worked here", "answer": 2.1623, "unit": "1", "tolerance": 0.002,
+              "solution": "s² + 2s − 9 = 0: s = −1 ± √10, one pole at +2.16: unstable.", "compute": { "law": "maxPoleRe", "A": [[-2, 3], [3, 0]] } }
+          ] },
+        { "number": 3, "page": 6, "task": "State observer by pole placement for the BNF system A = [0 −3; 1 6], b = [−8; 16], cᵀ = [0 1], d = 0; observer poles −3 ± j.", "lab": "observer", "repeats": "Beispiel 18, other poles",
+          "questions": [
+            { "question": "the first entry of ℓ?", "source": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here", "answer": 7, "unit": "1", "tolerance": 0.001,
+              "solution": "Already a BNF: a0 = 3, a1 = −6. Wanted s² + 6s + 10: ℓ1 = 10 − 3 = 7, ℓ2 = 6 + 6 = 12.", "compute": { "law": "lBnf", "A": [[0, -3], [1, 6]], "b": [-8, 16], "c": [0, 1], "poles": [[-3, 1], [-3, -1]], "k": 0 } },
+            { "question": "the second entry of ℓ?", "source": "AAU_Pruefung_SS2014_WH-Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here", "answer": 12, "unit": "1", "tolerance": 0.001,
+              "solution": "ℓ2 = p1 − a1 = 6 + 6 = 12.", "compute": { "law": "lBnf", "A": [[0, -3], [1, 6]], "b": [-8, 16], "c": [0, 1], "poles": [[-3, 1], [-3, -1]], "k": 1 } }
+          ] }
+      ] },
+    { "id": "ss2017-a", "title": "SS2017 Klausur group A", "date": "5 May 2017", "minutes": 60, "file": "AAU_Pruefung_SS2017_Klausur_GrA.pdf",
+      "tasks": [
+        { "number": 1, "page": 2, "task": "State space of the C1–R1 / C2 / R2–L1 circuit: input ua, outputs ub and uc; give A, b, cᵀ, d, x, u, v.", "lab": "circuits", "repeats": "Beispiel 27",
+          "questions": [
+            { "question": "the entry of D for ua in uc?", "source": "AAU_Pruefung_SS2017_Klausur_GrA.pdf, RB1, p. 2: no solution sheet; worked here from the figure (the exam gives no values; example values in the lab)", "answer": 1, "unit": "1", "tolerance": 0.001,
+              "solution": "uc is across R2 and L1: uc = ua − uC1 − R1·i − uC2, so ua goes straight through.", "compute": { "law": "circuit27", "C1": 0.0001, "R1": 10, "C2": 0.00022, "R2": 4.7, "L1": 0.05, "at": ["D", 1] } }
+          ] },
+        { "number": 2, "page": 4, "task": "BNF and Luenberger observer for ẋ1 = −4x1 + 3x2 − 2u, ẋ2 = 2x1 − 4x2 + 3u, v = −5x1 + 5x2; poles −1 ± j2.", "lab": "observer", "repeats": "",
+          "questions": [
+            { "question": "the first entry of ℓ_BNF?", "source": "AAU_Pruefung_SS2017_Klausur_GrA.pdf, RB2, p. 4: no solution sheet; worked here", "answer": -5, "unit": "1", "tolerance": 0.001,
+              "solution": "det(sE − A) = s² + 8s + 10, G(s) = (25s + 35)/(s² + 8s + 10): A_BNF = [0 −10; 1 −8], b_BNF = [35; 25]. Wanted s² + 2s + 5: ℓ1 = 5 − 10 = −5.", "compute": { "law": "lBnf", "A": [[-4, 3], [2, -4]], "b": [-2, 3], "c": [-5, 5], "poles": [[-1, 2], [-1, -2]], "k": 0 } },
+            { "question": "the second entry of ℓ_BNF?", "source": "AAU_Pruefung_SS2017_Klausur_GrA.pdf, RB2, p. 4: no solution sheet; worked here", "answer": -6, "unit": "1", "tolerance": 0.001,
+              "solution": "ℓ2 = p1 − a1 = 2 − 8 = −6: the plant is faster than the wanted observer.", "compute": { "law": "lBnf", "A": [[-4, 3], [2, -4]], "b": [-2, 3], "c": [-5, 5], "poles": [[-1, 2], [-1, -2]], "k": 1 } }
+          ] },
+        { "number": 3, "page": 6, "task": "Linearise by the tangent at x0 = 0: ẋ1 − 1.3x1 − sin x2 cos x3 + 2.2u = 0, ẋ2 − 0.27x1² + 2.1x1 cos x2 + 3.7x3 = 0, ẋ3 + atan x1 + 0.7u = 0, v + 2.8x1 − 0.3x2 + 4.4x3² = 0.", "lab": "linearise", "repeats": "",
+          "questions": [
+            { "question": "a12 (the sin x2 · cos x3 term)?", "source": "AAU_Pruefung_SS2017_Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here", "answer": 1, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ1 = 1.3x1 + sin x2 cos x3 − 2.2u; at 0 the slope in x2 is cos 0 · cos 0 = 1.", "compute": { "law": "tangent", "system": "exam17a", "at": ["A", 0, 1] } },
+            { "question": "a31 (the atan term)?", "source": "AAU_Pruefung_SS2017_Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here", "answer": -1, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ3 = −atan x1 − 0.7u; d/dx atan x = 1/(1 + x²) = 1 at 0.", "compute": { "law": "tangent", "system": "exam17a", "at": ["A", 2, 0] } },
+            { "question": "the entry of cᵀ for x3?", "source": "AAU_Pruefung_SS2017_Klausur_GrA.pdf, RB3, p. 6: no solution sheet; worked here", "answer": 0, "unit": "1", "tolerance": 0.001,
+              "solution": "v = −2.8x1 + 0.3x2 − 4.4x3²; the slope of x3² is 2x3 = 0 at the working point.", "compute": { "law": "tangent", "system": "exam17a", "at": ["c", 2] } }
+          ] }
+      ] },
+    { "id": "ss2017-b", "title": "SS2017 Klausur group B", "date": "5 May 2017", "minutes": 60, "file": "AAU_Pruefung_SS2017_Klausur_GrB.pdf",
+      "tasks": [
+        { "number": 1, "page": 2, "task": "Linearise by the tangent at x0 = 0: ẋ1 − cos x1 sin x2 + 3.3x3² = 0, ẋ2 + 1.35x1 + 2.1x2 cos x2 + 2.1 sin x3 = 0, ẋ3 + 2.7x2 + atan x3 − 1.2u = 0, v − 1.4x1² − 1.8x2 − 6.7x3 = 0.", "lab": "linearise", "repeats": "",
+          "questions": [
+            { "question": "a22 (the x2 · cos x2 term)?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB1, p. 2: no solution sheet; worked here", "answer": -2.1, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ2 = −1.35x1 − 2.1x2 cos x2 − 2.1 sin x3; d/dx (x cos x) = cos x − x sin x = 1 at 0.", "compute": { "law": "tangent", "system": "exam17b", "at": ["A", 1, 1] } },
+            { "question": "a33 (the atan term)?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB1, p. 2: no solution sheet; worked here", "answer": -1, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ3 = −2.7x2 − atan x3 + 1.2u; the slope of atan at 0 is 1.", "compute": { "law": "tangent", "system": "exam17b", "at": ["A", 2, 2] } },
+            { "question": "b3?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB1, p. 2: no solution sheet; worked here", "answer": 1.2, "unit": "1", "tolerance": 0.001,
+              "solution": "ẋ3 = … + 1.2u; u enters no other equation, so b = [0; 0; 1.2].", "compute": { "law": "tangent", "system": "exam17b", "at": ["b", 2] } }
+          ] },
+        { "number": 2, "page": 4, "task": "State space of the C1–R1–C2 / L1 / R2 circuit: input u1, outputs u2 and u3; give A, b, cᵀ, d, x, u, v.", "lab": "circuits", "repeats": "Beispiel 28",
+          "questions": [
+            { "question": "the entry of C for i in u3, with R2 = 4.7 Ω (example value)?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB2, p. 4: no solution sheet; worked here from the figure (the exam gives no values)", "answer": 4.7, "unit": "1", "tolerance": 0.001,
+              "solution": "u3 is across R2: u3 = R2·i.", "compute": { "law": "circuit28", "C1": 0.0001, "R1": 10, "C2": 0.00022, "R2": 4.7, "L1": 0.05, "at": ["C", 1, 2] } }
+          ] },
+        { "number": 3, "page": 6, "task": "RNF and state controller with prefilter for ẋ1 = −4x1 + 3x2 − 2u, ẋ2 = 2x1 − 4x2 + 3u, v = 5x1 − 5x2; poles −3, −4.", "lab": "placement", "repeats": "",
+          "questions": [
+            { "question": "the first entry of rᵀ_RNF?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB3, p. 6: no solution sheet; worked here", "answer": 2, "unit": "1", "tolerance": 0.001,
+              "solution": "G(s) = (−25s − 35)/(s² + 8s + 10): A_RNF = [0 1; −10 −8], cᵀ_RNF = [−35 −25]. Wanted (s + 3)(s + 4) = s² + 7s + 12: r1 = 12 − 10 = 2, r2 = 7 − 8 = −1.", "compute": { "law": "rRnf", "A": [[-4, 3], [2, -4]], "b": [-2, 3], "c": [5, -5], "poles": [[-3, 0], [-4, 0]], "k": 0 } },
+            { "question": "the second entry of rᵀ_RNF?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB3, p. 6: no solution sheet; worked here", "answer": -1, "unit": "1", "tolerance": 0.001,
+              "solution": "r2 = p1 − a1 = 7 − 8 = −1.", "compute": { "law": "rRnf", "A": [[-4, 3], [2, -4]], "b": [-2, 3], "c": [5, -5], "poles": [[-3, 0], [-4, 0]], "k": 1 } },
+            { "question": "the prefilter Gf?", "source": "AAU_Pruefung_SS2017_Klausur_GrB.pdf, RB3, p. 6: no solution sheet; worked here", "answer": -0.342857, "unit": "1", "tolerance": 0.002,
+              "solution": "In the RNF (−A + b rᵀ)⁻¹ = 1/12·[7 1; −12 0]; cᵀ(…)⁻¹b = −35/12, so Gf = −12/35.", "compute": { "law": "Kf", "A": [[-4, 3], [2, -4]], "b": [-2, 3], "c": [5, -5], "poles": [[-3, 0], [-4, 0]] } }
+          ] }
+      ] }
+  ],
   "labs": [
     {
       "id": "models",
@@ -86,9 +213,7 @@
         { "question": "Beispiel 12: det Q_B of System 6?", "source": "S1, p. 15: det Q_B = 2", "answer": 2, "unit": "1", "tolerance": 0.001,
           "solution": "cᵀA = [3 −5]; det = (−1)(−5) − 1·3 = 2.", "compute": { "law": "detQb", "A": [[-1, 2], [2, -3]], "c": [-1, 1] } },
         { "question": "Beispiel 12: the right-half pole of System 6?", "source": "S1, p. 15: s1 = −2 + √5 ≈ 0.24, unstable", "answer": 0.236, "unit": "1", "tolerance": 0.03,
-          "solution": "det(sE − A) = s² + 4s − 1, s = −2 ± √5.", "compute": { "law": "maxPoleRe", "A": [[-1, 2], [2, -3]] } },
-        { "question": "Exam SS2014 GrA, RB2: det Q_S?", "source": "SS2014 Klausur GrA, RB2 (p. 2), student's solution: det Q_S = −38", "answer": -38, "unit": "1", "tolerance": 0.001,
-          "solution": "Ab = [−15; 7]; det = 1·7 − (−15)(−3) = −38.", "compute": { "law": "detQs", "A": [[-3, 4], [1, -2]], "b": [1, -3] } }
+          "solution": "det(sE − A) = s² + 4s − 1, s = −2 ± √5.", "compute": { "law": "maxPoleRe", "A": [[-1, 2], [2, -3]] } }
       ]
     },
     {
@@ -117,9 +242,7 @@
         { "question": "Beispiel 15: the second entry of rᵀ for s = −1, −2?", "source": "S1, p. 20: rᵀ_RNF = (6 −5)", "answer": -5, "unit": "1", "tolerance": 0.001,
           "solution": "Already an RNF with a0 = −4, a1 = 8; s² + 3s + 2: r2 = 3 − 8 = −5.", "compute": { "law": "rRnf", "A": [[0, 1], [4, -8]], "b": [0, 1], "c": [2, 4], "poles": [[-1, 0], [-2, 0]], "k": 1 } },
         { "question": "Beispiel 16: Gf for rᵀ = [13 25]?", "source": "S1, p. 21: Gf = 9/2", "answer": 4.5, "unit": "1", "tolerance": 0.001,
-          "solution": "(−A + b rᵀ)⁻¹ = 1/9·[33 1; −9 0]; cᵀ(…)⁻¹ = 1/9·(30 2); times b: 2/9.", "compute": { "law": "Kf", "A": [[0, 1], [4, -8]], "b": [0, 1], "c": [2, 4], "r": [13, 25] } },
-        { "question": "Exam SS2014 GrB, RB2: Gf for A = [0 1; −2 3], cᵀ = [−1 3] and s = −2 ± j2?", "source": "SS2014 Klausur GrB, RB2 (p. 4), student's solution: Gf = −8", "answer": -8, "unit": "1", "tolerance": 0.001,
-          "solution": "rᵀ = (6 7); (−A + b rᵀ)⁻¹ = 1/8·[4 1; −8 0]; cᵀ(…)⁻¹b = −1/8.", "compute": { "law": "Kf", "A": [[0, 1], [-2, 3]], "b": [0, 1], "c": [-1, 3], "poles": [[-2, 2], [-2, -2]] } }
+          "solution": "(−A + b rᵀ)⁻¹ = 1/9·[33 1; −9 0]; cᵀ(…)⁻¹ = 1/9·(30 2); times b: 2/9.", "compute": { "law": "Kf", "A": [[0, 1], [4, -8]], "b": [0, 1], "c": [2, 4], "r": [13, 25] } }
       ]
     },
     {

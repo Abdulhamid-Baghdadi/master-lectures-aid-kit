@@ -5,4 +5,4 @@ export { ss2tf, normalForms, ctrb, obsv, verdict, poles, stable, placeGain, clos
   withObserver, butterworth, lyap, lqr, linearise, stepRun, finalValue, stepinfo, col } from "./ss.js";
 export * from "./models.js";
 export { si, parseSi, isRight } from "../../../kit/core/index.js";
-export { solve, tangent, NONLINEAR } from "./practice.js";
+export { solve, tangent, NONLINEAR, examQuestions } from "./practice.js";

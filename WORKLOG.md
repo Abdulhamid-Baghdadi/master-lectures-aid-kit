@@ -184,3 +184,19 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - ModSim: all agree; doppel s2 is chaotic, doppel s3 plots ode45-style energy drift (2.1 J at rtol 1e-3) vs the lab's
   conserved K + V: left for a decision. Robotics: no Python curve to compare (IK and J checked by numbers).
 - Automation tests 109/109. Browser screenshots not used (lab series rendered instead). Nothing committed.
+
+## 7 Nov 2026, evening: Advanced Automation past exams
+
+- Five exams in `Prüfungen\` (SS2014 A, B, WH-Klausur A; SS2017 A, B), three calculation tasks each, 15 in all. The
+  two "- Copy" PDFs are byte-identical to their originals (SHA-256); theory file skipped.
+- `data/labs.json` gains `exams` (by year and group, file and page per task and question, "no solution sheet; worked
+  here"); new page per exam (`#exam-ss2014-a` …) listed under "Past exams" on the overview; each lab's Practise tab
+  shows the linked exam questions under "From past exams" (one copy, `examQuestions` in the core). The two exam
+  questions that sat in the ctrbobsv and placement labs moved into the exams.
+- Core: SS2014 B and SS2017 A, B nonlinear systems added to `NONLINEAR`. No new stepped lab: every task is a kind a
+  lab already animates (placement, observer, ctrbobsv, normalforms, linearise, circuits).
+- New `tests/unit/exams.test.js` (46 tests; failed first): recomputes every answer, eig of the closed loop and the
+  observer equal the wanted poles, Q_S/Q_B rank 2, tangents equal the hand-worked A, b, cᵀ, d, G(s) of the resit RB2.
+- Automation 153/153, kit 34/34. Checked at 375 px light and dark (exam page, overview list, observer Practise), no
+  sideways scroll, no console errors; server stopped. No exam errors beyond small slips (README source notes).
+  Nothing committed.

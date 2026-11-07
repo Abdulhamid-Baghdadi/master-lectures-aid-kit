@@ -4,7 +4,7 @@
 // Reads the words from data/labs.json; a lab with no words there, or words with no lab, is reported, not skipped.
 import { h, practice, tabs } from "../../kit/ui/kit.js";
 import { math } from "../../kit/ui/math.js";
-import { parseSi } from "./core/index.js";
+import { parseSi, examQuestions } from "./core/index.js";
 import { labs } from "./labs/index.js";
 
 const main = document.querySelector("main");
@@ -35,6 +35,8 @@ async function start() {
   const order = data.lectures.flatMap(lecture => lecture.labs.filter(id => code.has(id) && words.has(id)).map(id => ({ id, lecture })));
   const at = new Map(order.map((entry, k) => [entry.id, k]));
   const family = new Map(data.families.map(f => [f.id, f.name]));
+  const exams = data.exams ?? [];
+  const examAt = new Map(exams.map(e => [`exam-${e.id}`, e]));
 
   /** A card for a lab: its picture, its title, its lecture. The whole card is the link. */
   const card = ({ id, lecture }, small = false, label = "") => {
@@ -53,7 +55,24 @@ async function start() {
     h("div", { class: "lecture-rows" }, data.lectures.filter(lecture => lecture.labs.some(id => at.has(id))).map(lecture => h("section", { class: "lecture-row" },
       h("h2", {}, h("span", { class: "number" }, `${chapterOf(lecture)}`), " ", lecture.title,
         h("span", { class: "date" }, lecture.pages)),
-      h("div", { class: "cards" }, lecture.labs.filter(id => at.has(id)).map(id => card(order[at.get(id)])))))));
+      h("div", { class: "cards" }, lecture.labs.filter(id => at.has(id)).map(id => card(order[at.get(id)])))))),
+    exams.length ? h("section", { class: "lecture-row exams" },
+      h("h2", {}, "Past exams", h("span", { class: "date" }, "calculation tasks")),
+      h("ul", { class: "exam-list" }, exams.map(e => h("li", {},
+        h("a", { href: `#exam-${e.id}` }, e.title), ` · ${e.date}, ${e.minutes} min`)))) : null);
+
+  /** A past exam as a whole: its three calculation tasks in order, each with the lab that animates its kind. */
+  const examPanel = e => h("section", { class: "panel", "aria-labelledby": `title-exam-${e.id}` },
+    h("a", { href: "#", class: "back" }, "← All labs"),
+    h("header", { class: "tab-head" }, h("p", { class: "eyebrow" }, `Past exam · ${e.date} · ${e.minutes} min`),
+      h("h2", { id: `title-exam-${e.id}`, tabindex: "-1" }, e.title)),
+    h("p", { class: "source" }, `No solution sheet; worked here. Where the exam leaves constants or values open, the question sets them and says so. Source: ${e.file}.`),
+    e.tasks.map(t => h("section", { class: "exam-task" },
+      h("h3", {}, `Rechenbeispiel ${t.number} (p. ${t.page})`),
+      h("p", {}, t.task),
+      h("p", { class: "source" }, t.repeats ? `Repeats ${t.repeats}: ` : "Same kind as: ",
+        h("a", { href: `#${t.lab}` }, words.get(t.lab)?.title ?? t.lab)),
+      h("div", { class: "practice-list" }, t.questions.map(q => practice({ ...q, parse: parseSi }))))));
 
   const panels = new Map();
   const panel = id => {
@@ -70,7 +89,12 @@ async function start() {
       ["Equations", h("div", {}, w.equations?.length ? h("table", { class: "eqs" }, h("tbody", {}, w.equations.map(e => h("tr", {},
           h("td", { class: "eq" }, e.tex ? math(e.tex, { display: true }) : e.eq), h("td", { class: "note" }, e.note), h("td", { class: "ref" }, e.ref || "derived"))))) : null,
         h("p", { class: "source" }, `Source: ${w.lecture}`))]];
-    if (w.practice.length) items.push(["Practise", h("div", { class: "practice-list" }, w.practice.map(q => practice({ ...q, parse: parseSi })))]);
+    // The Beispiele' questions, then the past exams' tasks of the same kind (kept once, in data/labs.json "exams").
+    const fromExams = examQuestions(exams, id);
+    if (w.practice.length || fromExams.length) items.push(["Practise", h("div", { class: "practice-list" },
+      w.practice.map(q => practice({ ...q, parse: parseSi })),
+      fromExams.length ? h("h3", {}, "From past exams") : null,
+      fromExams.map(q => practice({ ...q, parse: parseSi })))]);
     // Previous and next as plain text links, no picture or motion: the lab's own drawing keeps the eye.
     const step = (o, text) => o ? h("a", { href: `#${o.id}` }, text.replace("%", words.get(o.id).title)) : h("span");
     const section = h("section", { class: "panel", "data-family": lecture.family, "aria-labelledby": `title-${id}` },
@@ -90,6 +114,10 @@ async function start() {
       // A lab keeps its knobs where the student left them when they come back to it.
       main.replaceChildren(panel(id));
       document.title = `${words.get(id).title} · Advanced Automation`;
+      if (focus) { scrollTo({ top: 0 }); main.querySelector("h2").focus({ preventScroll: true }); }
+    } else if (examAt.has(id)) {
+      main.replaceChildren(examPanel(examAt.get(id)));
+      document.title = `${examAt.get(id).title} · Advanced Automation`;
       if (focus) { scrollTo({ top: 0 }); main.querySelector("h2").focus({ preventScroll: true }); }
     } else {
       main.replaceChildren(overview);
