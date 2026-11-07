@@ -1,0 +1,323 @@
+{
+  "format": "automation-lab labs",
+  "version": 1,
+  "about": "Advanced Automation (AAU), FH Technikum Wien master's programme, summer term 2021: the 28 Rechenbeispiele of Kubinger (2021a) and the three MATLAB lab tasks (Kubinger 2021b; Kubinger and Lang 2021), animated step by step, each step with the MATLAB that gives its result. Equations from the slides of Kubinger (2021), cited by PDF page as 'slides p. N' (docs/sources/slide-conventions.md); solution-sheet values from the handwritten sheets S1, S2 and M, cited by file and page (docs/sources/solution-sheets.md). tests/unit/labs-data.test.js recomputes every practice answer with the core.",
+  "families": [
+    { "id": "models", "name": "Models and their properties" },
+    { "id": "control", "name": "State control" },
+    { "id": "physical", "name": "Nonlinear and physical models" },
+    { "id": "matlab", "name": "MATLAB lab tasks" }
+  ],
+  "lectures": [
+    { "number": 1, "pages": "Bsp 1–3", "title": "Models from equations", "family": "models", "labs": ["models"] },
+    { "number": 2, "pages": "Bsp 4, 5, 7–9", "title": "Normal forms and G(s)", "family": "models", "labs": ["normalforms"] },
+    { "number": 3, "pages": "Bsp 6, 10–12", "title": "Controllability, observability, stability", "family": "models", "labs": ["ctrbobsv"] },
+    { "number": 4, "pages": "Bsp 13–19", "title": "State control and observers", "family": "control", "labs": ["placement", "observer", "combined"] },
+    { "number": 5, "pages": "Bsp 23–26", "title": "Linearisation", "family": "physical", "labs": ["linearise"] },
+    { "number": 6, "pages": "Bsp 20–22, 27, 28", "title": "Physical models", "family": "physical", "labs": ["circuit", "motor", "crane", "circuits"] },
+    { "number": 7, "pages": "Lab tasks 0–2", "title": "The MATLAB lab tasks", "family": "matlab", "labs": ["task0", "task1", "task2"] }
+  ],
+  "labs": [
+    {
+      "id": "models",
+      "title": "From equations to A, b, cᵀ, d",
+      "idea": "Each state equation is one row of A and b, each output equation one row of cᵀ and d: watch every coefficient go to its cell, then run the model.",
+      "lecture": "Kubinger (2021a), Beispiele 1–3, pp. 2–4; Kubinger (2021), slides pp. 3–4",
+      "law": "ẋ = A x + b u,  v = cᵀx + d u",
+      "lawTex": "\\dot{x} = A x + b u, \\quad v = c^T x + d u",
+      "equations": [
+        { "eq": "ẋ = A x + b u, v = cᵀx + d u", "tex": "\\dot{x} = A x + b u, \\quad v = c^T x + d u", "note": "SISO state space: A n × n, b n × 1, cᵀ 1 × n, d a scalar", "ref": "slides p. 3" },
+        { "eq": "ẋ = A x + B u, v = C x + D u", "tex": "\\dot{x} = A x + B u, \\quad v = C x + D u", "note": "Two inputs or outputs (System C, System 4): B, C and D become matrices", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "System B (Beispiel 1): what is a23, the entry of A for x3 in the equation of ẋ2?", "source": "S1, p. 1: A = [1 −2 5; 0 10 −1; −3 1 −2]", "answer": -1, "unit": "1", "tolerance": 0.001,
+          "solution": "ẋ2 = 10x2 − x3 + 2u: row 2 of A is [0 10 −1].", "compute": { "law": "entry", "M": [[1, -2, 5], [0, 10, -1], [-3, 1, -2]], "at": [1, 2] } },
+        { "question": "System 3 (Beispiel 2): what is d?", "source": "S1, p. 3: d = 3", "answer": 3, "unit": "1", "tolerance": 0.001,
+          "solution": "v = 3x1 − 2x2 + 2x3 + 3u: the input goes straight through with factor 3.", "compute": { "law": "entry", "M": [[3]], "at": [0, 0] } },
+        { "question": "System C (Beispiel 1): what is D's entry for u2 in v1?", "source": "S1, p. 1: D = [2 −1; 0 2]", "answer": -1, "unit": "1", "tolerance": 0.001,
+          "solution": "v1 = x1 − x2 + x3 + 2u1 − u2: row 1 of D is [2 −1].", "compute": { "law": "entry", "M": [[2, -1], [0, 2]], "at": [0, 1] } }
+      ]
+    },
+    {
+      "id": "normalforms",
+      "title": "G(s), RNF and BNF",
+      "idea": "The same system in other states: its transfer function's coefficients fill the RNF's last row or the BNF's last column, and the step response does not change.",
+      "lecture": "Kubinger (2021a), Beispiele 4, 5, 7, 8, 9; Kubinger (2021), slides pp. 8–9",
+      "law": "G(s) = cᵀ(sE − A)⁻¹b + d",
+      "lawTex": "G(s) = c^T (sE - A)^{-1} b + d",
+      "equations": [
+        { "eq": "G(s) = cᵀ(sE − A)⁻¹b + d", "tex": "G(s) = c^T (sE - A)^{-1} b + d", "note": "Transfer function from the state space; E is the identity", "ref": "slides p. 9", "explore": true },
+        { "eq": "A_RNF = [0 1 …; …; −a0 −a1 … −a(n−1)], b_RNF = [0 … 1]ᵀ, cᵀ_RNF = [b0 … b(n−1)]", "tex": "A_{RNF} = \\begin{bmatrix} 0 & 1 & \\cdots \\\\ \\vdots & & \\ddots \\\\ -a_0 & -a_1 & \\cdots \\end{bmatrix},\\; b_{RNF} = \\begin{bmatrix} 0 \\\\ \\vdots \\\\ 1 \\end{bmatrix},\\; c^T_{RNF} = [b_0 \\cdots b_{n-1}]", "note": "Regelungsnormalform: ones above the diagonal, −a_i in the last row", "ref": "slides p. 8", "explore": true },
+        { "eq": "A_BNF = A_RNFᵀ, b_BNF = [b0 … b(n−1)]ᵀ, cᵀ_BNF = [0 … 1]", "tex": "A_{BNF} = A_{RNF}^T,\\; b_{BNF} = \\begin{bmatrix} b_0 \\\\ \\vdots \\\\ b_{n-1} \\end{bmatrix},\\; c^T_{BNF} = [0 \\cdots 1]", "note": "Beobachtungsnormalform: ones below the diagonal, −a_i in the last column", "ref": "slides p. 9", "explore": true },
+        { "eq": "stable ⇔ every root of det(sE − A) = 0 has Re < 0", "tex": "\\text{stable} \\iff \\operatorname{Re}\\lambda_i < 0 \\;\\forall i", "note": "Poles from the characteristic equation", "ref": "slides p. 9" }
+      ],
+      "practice": [
+        { "question": "Beispiel 5: G(s) of System A has the numerator s + b0. What is b0?", "source": "S1, p. 7: G(s) = (s − 13)/(s² − 8s − 29)", "answer": -13, "unit": "1", "tolerance": 0.001,
+          "solution": "adj(sE − A) = [s − 10 3; 3 s + 2]; cᵀ adj b = (s − 10)·1 + 3·(−1) = s − 13.", "compute": { "law": "tf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "part": "num", "k": 2 } },
+        { "question": "Beispiel 5: what is a0 in det(sE − A) = s² + a1·s + a0?", "source": "S1, p. 7: s² − 8s − 29", "answer": -29, "unit": "1", "tolerance": 0.001,
+          "solution": "(s + 2)(s − 10) − 9 = s² − 8s − 29.", "compute": { "law": "tf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "part": "den", "k": 2 } },
+        { "question": "Beispiel 5: the larger pole of System A?", "source": "S1, p. 7: s1 = 4 + √45 ≈ 10.7, unstable", "answer": 10.7, "unit": "1", "tolerance": 0.01,
+          "solution": "s = 4 ± √(16 + 29) = 4 ± √45.", "compute": { "law": "maxPoleRe", "A": [[-2, 3], [3, 10]] } },
+        { "question": "Beispiel 4: the first entry of the RNF's last row?", "source": "S1, p. 5: A_RNF = [0 1 0; 0 0 1; −6 −8 −4]", "answer": -6, "unit": "1", "tolerance": 0.001,
+          "solution": "−a0 with a0 = 6, the constant of v‴ + 4v″ + 8v′ + 6v.", "compute": { "law": "nf", "num": [5, 2, 3], "den": [1, 4, 8, 6], "at": ["rnf", "A", 2, 0] } },
+        { "question": "Beispiel 9: the first entry of b_BNF?", "source": "S1, p. 11: b = [3; 2; 1]", "answer": 3, "unit": "1", "tolerance": 0.001,
+          "solution": "b0, the numerator's constant term of s² + 2s + 3.", "compute": { "law": "nf", "num": [1, 2, 3], "den": [1, 3, 2, 1], "at": ["bnf", "b", 0] } }
+      ]
+    },
+    {
+      "id": "ctrbobsv",
+      "title": "Controllable, observable, stable?",
+      "idea": "b and Ab span a parallelogram whose area is det Q_S: zero area, and some direction can never be steered. cᵀ and cᵀA do the same for what the output can see.",
+      "lecture": "Kubinger (2021a), Beispiele 6, 10, 11, 12; Kubinger (2021), slides pp. 6–10",
+      "law": "Q_S = [b  Ab  …  Aⁿ⁻¹b],  Q_B = [cᵀ; cᵀA; …; cᵀAⁿ⁻¹]",
+      "lawTex": "Q_S = [b \\; Ab \\; \\cdots \\; A^{n-1}b], \\quad Q_B = \\begin{bmatrix} c^T \\\\ c^T A \\\\ \\vdots \\\\ c^T A^{n-1} \\end{bmatrix}",
+      "equations": [
+        { "eq": "Q_S = [b Ab … Aⁿ⁻¹b]; controllable ⇔ det Q_S ≠ 0", "tex": "Q_S = [b \\; Ab \\; \\cdots \\; A^{n-1} b], \\quad \\det Q_S \\ne 0", "note": "Steuerbarkeitsmatrix; or rank Q_S = n", "ref": "slides p. 6", "explore": true },
+        { "eq": "Q_B = [cᵀ; cᵀA; …]; observable ⇔ det Q_B ≠ 0", "tex": "Q_B = \\begin{bmatrix} c^T \\\\ c^T A \\\\ \\vdots \\end{bmatrix}, \\quad \\det Q_B \\ne 0", "note": "Beobachtbarkeitsmatrix; or rank Q_B = n", "ref": "slides p. 7", "explore": true },
+        { "eq": "det(sE − A) = 0, stable ⇔ all Re λi < 0", "tex": "\\det(sE - A) = 0, \\quad \\operatorname{Re}\\lambda_i < 0", "note": "Stable, marginally stable (simple poles on the axis) or unstable", "ref": "slides pp. 9–10", "explore": true }
+      ],
+      "practice": [
+        { "question": "Beispiel 6: det Q_S of System A?", "source": "S1, p. 8: Q_S = [1 −5; −1 −7], det = −12", "answer": -12, "unit": "1", "tolerance": 0.001,
+          "solution": "Ab = [−2 − 3; 3 − 10] = [−5; −7]; det = 1·(−7) − (−5)(−1) = −12 ≠ 0: controllable.", "compute": { "law": "detQs", "A": [[-2, 3], [3, 10]], "b": [1, -1] } },
+        { "question": "Beispiel 10: det Q_S?", "source": "S1, p. 12: det Q_S = 52", "answer": 52, "unit": "1", "tolerance": 0.001,
+          "solution": "Ab = [−7; 22]; det = 3·22 − (−7)(−2) = 52.", "compute": { "law": "detQs", "A": [[-1, 2], [2, -8]], "b": [3, -2] } },
+        { "question": "Beispiel 11: det Q_B?", "source": "S1, p. 13: Q_B = [3 −4; 4 0], det = 16", "answer": 16, "unit": "1", "tolerance": 0.001,
+          "solution": "cᵀA = [3·0 + (−4)(−1), 3·4 + (−4)·3] = [4 0]; det = 0 + 16.", "compute": { "law": "detQb", "A": [[0, 4], [-1, 3]], "c": [3, -4] } },
+        { "question": "Beispiel 12: det Q_B of System 6?", "source": "S1, p. 15: det Q_B = 2", "answer": 2, "unit": "1", "tolerance": 0.001,
+          "solution": "cᵀA = [3 −5]; det = (−1)(−5) − 1·3 = 2.", "compute": { "law": "detQb", "A": [[-1, 2], [2, -3]], "c": [-1, 1] } },
+        { "question": "Beispiel 12: the right-half pole of System 6?", "source": "S1, p. 15: s1 = −2 + √5 ≈ 0.24, unstable", "answer": 0.236, "unit": "1", "tolerance": 0.03,
+          "solution": "det(sE − A) = s² + 4s − 1, s = −2 ± √5.", "compute": { "law": "maxPoleRe", "A": [[-1, 2], [2, -3]] } },
+        { "question": "Exam SS2014 GrA, RB2: det Q_S?", "source": "SS2014 Klausur GrA, RB2 (p. 2), student's solution: det Q_S = −38", "answer": -38, "unit": "1", "tolerance": 0.001,
+          "solution": "Ab = [−15; 7]; det = 1·7 − (−15)(−3) = −38.", "compute": { "law": "detQs", "A": [[-3, 4], [1, -2]], "b": [1, -3] } }
+      ]
+    },
+    {
+      "id": "placement",
+      "title": "Pole placement and the prefilter",
+      "idea": "In the RNF each coefficient of the closed loop is a_i + r_(i+1): set it to the wanted p_i. Then carry rᵀ back to the plant's states and scale the reference with Kf.",
+      "lecture": "Kubinger (2021a), Beispiele 13–16; Kubinger (2021), slides pp. 11–18",
+      "law": "rᵀ_RNF = [p0 − a0  …  p(n−1) − a(n−1)]",
+      "lawTex": "r^T_{RNF} = [p_0 - a_0 \\;\\cdots\\; p_{n-1} - a_{n-1}]",
+      "equations": [
+        { "eq": "u = −rᵀx + K_F·w, ẋ = (A − b rᵀ)x + b K_F w", "tex": "u = -r^T x + K_F w, \\quad \\dot{x} = (A - b r^T) x + b K_F w", "note": "State controller with prefilter", "ref": "slides pp. 11, 16" },
+        { "eq": "det(sE − (A − b rᵀ)) = sⁿ + p(n−1)sⁿ⁻¹ + … + p0", "tex": "\\det(sE - (A - b r^T)) = s^n + p_{n-1}s^{n-1} + \\cdots + p_0", "note": "The wanted characteristic polynomial from the wanted poles", "ref": "slides p. 13", "explore": true },
+        { "eq": "rᵀ_RNF = [p0 − a0 … p(n−1) − a(n−1)]", "tex": "r^T_{RNF} = [p_0 - a_0 \\;\\cdots\\; p_{n-1} - a_{n-1}]", "note": "Coefficient comparison in the RNF", "ref": "slides p. 13" },
+        { "eq": "x_RNF = S x, S = Q_S,RNF·Q_S⁻¹, rᵀ = rᵀ_RNF·S", "tex": "x_{RNF} = S x,\\; S = Q_{S,RNF} Q_S^{-1},\\; r^T = r^T_{RNF} S", "note": "Back to the plant's states (the transform is on slides p. 5; S worked here from Q_S,RNF = S·Q_S)", "ref": "slides p. 5" },
+        { "eq": "K_F = [cᵀ(−A + b rᵀ)⁻¹b]⁻¹", "tex": "K_F = \\left[c^T(-A + b r^T)^{-1} b\\right]^{-1}", "note": "Prefilter: the steady output follows w", "ref": "slides p. 16", "explore": true }
+      ],
+      "practice": [
+        { "question": "Beispiel 13: the first entry of rᵀ_RNF for System A and s = −1 ± j3?", "source": "S1, p. 16: rᵀ_RNF = (39 10)", "answer": 39, "unit": "1", "tolerance": 0.001,
+          "solution": "s² + 2s + 10 against s² − 8s − 29: r1 = 10 + 29 = 39, r2 = 2 + 8 = 10.", "compute": { "law": "rRnf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "poles": [[-1, 3], [-1, -3]], "k": 0 } },
+        { "question": "Beispiel 13: the prefilter Gf?", "source": "S1, p. 17: Gf = −10/13", "answer": -0.7692, "unit": "1", "tolerance": 0.005,
+          "solution": "(−A + b rᵀ)⁻¹ = 1/10·[2 1; −10 0] in the RNF; cᵀ(…)⁻¹b = −13/10, so Gf = −10/13.", "compute": { "law": "Kf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "poles": [[-1, 3], [-1, -3]] } },
+        { "question": "Beispiel 14: the first entry of rᵀ_RNF for System 5 and s = −2 ± j2?", "source": "S1, p. 19: rᵀ_RNF = (15 4)", "answer": 15, "unit": "1", "tolerance": 0.001,
+          "solution": "s² + 4s + 8 against s² − 7: r1 = 8 + 7 = 15, r2 = 4.", "compute": { "law": "rRnf", "A": [[-2, 3], [1, 2]], "b": [4, -2], "c": [2, -1], "poles": [[-2, 2], [-2, -2]], "k": 0 } },
+        { "question": "Beispiel 14: the prefilter Gf?", "source": "S1, p. 19: Gf = −8/28 = −2/7", "answer": -0.2857, "unit": "1", "tolerance": 0.005,
+          "solution": "cᵀ_RNF(−A + b rᵀ)⁻¹b = −28/8.", "compute": { "law": "Kf", "A": [[-2, 3], [1, 2]], "b": [4, -2], "c": [2, -1], "poles": [[-2, 2], [-2, -2]] } },
+        { "question": "Beispiel 15: the second entry of rᵀ for s = −1, −2?", "source": "S1, p. 20: rᵀ_RNF = (6 −5)", "answer": -5, "unit": "1", "tolerance": 0.001,
+          "solution": "Already an RNF with a0 = −4, a1 = 8; s² + 3s + 2: r2 = 3 − 8 = −5.", "compute": { "law": "rRnf", "A": [[0, 1], [4, -8]], "b": [0, 1], "c": [2, 4], "poles": [[-1, 0], [-2, 0]], "k": 1 } },
+        { "question": "Beispiel 16: Gf for rᵀ = [13 25]?", "source": "S1, p. 21: Gf = 9/2", "answer": 4.5, "unit": "1", "tolerance": 0.001,
+          "solution": "(−A + b rᵀ)⁻¹ = 1/9·[33 1; −9 0]; cᵀ(…)⁻¹ = 1/9·(30 2); times b: 2/9.", "compute": { "law": "Kf", "A": [[0, 1], [4, -8]], "b": [0, 1], "c": [2, 4], "r": [13, 25] } },
+        { "question": "Exam SS2014 GrB, RB2: Gf for A = [0 1; −2 3], cᵀ = [−1 3] and s = −2 ± j2?", "source": "SS2014 Klausur GrB, RB2 (p. 4), student's solution: Gf = −8", "answer": -8, "unit": "1", "tolerance": 0.001,
+          "solution": "rᵀ = (6 7); (−A + b rᵀ)⁻¹ = 1/8·[4 1; −8 0]; cᵀ(…)⁻¹b = −1/8.", "compute": { "law": "Kf", "A": [[0, 1], [-2, 3]], "b": [0, 1], "c": [-1, 3], "poles": [[-2, 2], [-2, -2]] } }
+      ]
+    },
+    {
+      "id": "observer",
+      "title": "The Luenberger observer",
+      "idea": "A copy of the plant, corrected by ℓ times the output error: in the BNF its gain is p_i − a_i, and the estimate closes in on the true state at the pace of the observer poles.",
+      "lecture": "Kubinger (2021a), Beispiele 17, 18; Kubinger (2021), slides pp. 23–27",
+      "law": "dx̃/dt = (A − ℓcᵀ) x̃",
+      "lawTex": "\\dot{\\tilde{x}} = (A - \\ell c^T)\\, \\tilde{x}",
+      "equations": [
+        { "eq": "dx̂/dt = A x̂ + b u + ℓ(v − cᵀx̂)", "tex": "\\dot{\\hat{x}} = A\\hat{x} + b u + \\ell (v - c^T \\hat{x})", "note": "The observer: the plant's model plus a correction", "ref": "slides pp. 23–24" },
+        { "eq": "dx̃/dt = (A − ℓcᵀ)x̃, x̃ = x − x̂", "tex": "\\dot{\\tilde{x}} = (A - \\ell c^T)\\tilde{x}, \\quad \\tilde{x} = x - \\hat{x}", "note": "The error dies away when A − ℓcᵀ is stable", "ref": "slides p. 24", "explore": true },
+        { "eq": "ℓ_BNF = [p0 − a0; …; p(n−1) − a(n−1)]", "tex": "\\ell_{BNF} = \\begin{bmatrix} p_0 - a_0 \\\\ \\vdots \\\\ p_{n-1} - a_{n-1} \\end{bmatrix}", "note": "Coefficient comparison in the BNF", "ref": "slides p. 27", "explore": true },
+        { "eq": "ℓ = S⁻¹ℓ_BNF, S = Q_B,BNF⁻¹·Q_B", "tex": "\\ell = S^{-1}\\ell_{BNF}, \\quad S = Q_{B,BNF}^{-1} Q_B", "note": "Back to the plant's states (worked here from Q_B,BNF = Q_B·S⁻¹)", "ref": "" }
+      ],
+      "practice": [
+        { "question": "Beispiel 17: the first entry of ℓ_BNF for System 5 and s = −4 ± j4?", "source": "S1, p. 22: ℓ_BNF = (39; 8)", "answer": 39, "unit": "1", "tolerance": 0.001,
+          "solution": "s² + 8s + 32 against s² − 7: ℓ1 = 32 + 7 = 39, ℓ2 = 8 − 0 = 8.", "compute": { "law": "lBnf", "A": [[-2, 3], [1, 2]], "b": [4, -2], "c": [2, -1], "poles": [[-4, 4], [-4, -4]], "k": 0 } },
+        { "question": "Beispiel 18: the second entry of ℓ for s = −3, −4?", "source": "S1, p. 23: ℓ_BNF = (9; 13)", "answer": 13, "unit": "1", "tolerance": 0.001,
+          "solution": "Already a BNF with a0 = 3, a1 = −6; s² + 7s + 12: ℓ2 = 7 + 6 = 13.", "compute": { "law": "lBnf", "A": [[0, -3], [1, 6]], "b": [-8, 16], "c": [0, 1], "poles": [[-3, 0], [-4, 0]], "k": 1 } },
+        { "question": "Beispiel 18: the first entry of ℓ?", "source": "S1, p. 23: ℓ_BNF = (9; 13)", "answer": 9, "unit": "1", "tolerance": 0.001,
+          "solution": "ℓ1 = p0 − a0 = 12 − 3 = 9.", "compute": { "law": "lBnf", "A": [[0, -3], [1, 6]], "b": [-8, 16], "c": [0, 1], "poles": [[-3, 0], [-4, 0]], "k": 0 } }
+      ]
+    },
+    {
+      "id": "combined",
+      "title": "Controller and observer together",
+      "idea": "Design the controller first, then the observer, faster: the loop of order 2n has both sets of poles side by side, and a wrong first estimate fades out.",
+      "lecture": "Kubinger (2021a), Beispiel 19; Kubinger (2021), slides pp. 25–26",
+      "law": "[ẋ; dx̂/dt] = [A  −b rᵀ; ℓcᵀ  A − b rᵀ − ℓcᵀ][x; x̂] + [b; b] K_F w",
+      "lawTex": "\\begin{bmatrix} \\dot{x} \\\\ \\dot{\\hat{x}} \\end{bmatrix} = \\begin{bmatrix} A & -b r^T \\\\ \\ell c^T & A - b r^T - \\ell c^T \\end{bmatrix} \\begin{bmatrix} x \\\\ \\hat{x} \\end{bmatrix} + \\begin{bmatrix} b \\\\ b \\end{bmatrix} K_F w",
+      "equations": [
+        { "eq": "[ẋ; dx̂/dt] = [A −b rᵀ; ℓcᵀ A − b rᵀ − ℓcᵀ][x; x̂] + [b; b]K_F w", "tex": "\\begin{bmatrix} \\dot{x} \\\\ \\dot{\\hat{x}} \\end{bmatrix} = \\begin{bmatrix} A & -b r^T \\\\ \\ell c^T & A - b r^T - \\ell c^T \\end{bmatrix} \\begin{bmatrix} x \\\\ \\hat{x} \\end{bmatrix} + \\begin{bmatrix} b \\\\ b \\end{bmatrix} K_F w", "note": "The loop with observer, order 2n", "ref": "slides p. 25", "explore": true },
+        { "eq": "eig = eig(A − b rᵀ) ∪ eig(A − ℓcᵀ)", "tex": "\\operatorname{eig} = \\operatorname{eig}(A - b r^T) \\cup \\operatorname{eig}(A - \\ell c^T)", "note": "Separation theorem", "ref": "slides p. 25", "explore": true }
+      ],
+      "practice": [
+        { "question": "Beispiel 19: the second entry of rᵀ_RNF for s = −3 ± j?", "source": "S1, p. 24: rᵀ_RNF = (39 14)", "answer": 14, "unit": "1", "tolerance": 0.001,
+          "solution": "s² + 6s + 10 against s² − 8s − 29: r2 = 6 + 8 = 14.", "compute": { "law": "rRnf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "poles": [[-3, 1], [-3, -1]], "k": 1 } },
+        { "question": "Beispiel 19: Gf?", "source": "S1, p. 25: Gf = −10/13", "answer": -0.7692, "unit": "1", "tolerance": 0.005,
+          "solution": "cᵀ(−A + b rᵀ)⁻¹b = −13/10 in the RNF.", "compute": { "law": "Kf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "poles": [[-3, 1], [-3, -1]] } },
+        { "question": "Beispiel 19: the first entry of ℓ_BNF for s = −6 ± j2?", "source": "S1, p. 25: ℓ_BNF = (69; 20)", "answer": 69, "unit": "1", "tolerance": 0.001,
+          "solution": "s² + 12s + 40: ℓ1 = 40 + 29 = 69.", "compute": { "law": "lBnf", "A": [[-2, 3], [3, 10]], "b": [1, -1], "c": [1, 0], "poles": [[-6, 2], [-6, -2]], "k": 0 } }
+      ]
+    },
+    {
+      "id": "linearise",
+      "title": "Linearisation by the tangent",
+      "idea": "Near the working point a curve is its tangent: sin y becomes y, cos y becomes 1, and every entry of A, b, cᵀ, d is one slope at x0 = 0.",
+      "lecture": "Kubinger (2021a), Beispiele 23–26; Kubinger (2021), slides pp. 56–59",
+      "law": "y_t = f(x0) + f′(x0)·(x − x0)",
+      "lawTex": "y_t = f(x_0) + \\left.\\frac{df}{dx}\\right|_{x_0} (x - x_0)",
+      "equations": [
+        { "eq": "y_t = f(x0) + f′(x0)(x − x0)", "tex": "y_t = f(x_0) + \\left.\\frac{df}{dx}\\right|_{x_0}(x - x_0)", "note": "Tangent method", "ref": "slides p. 57", "explore": true },
+        { "eq": "F(x) = |(f(x) − y_t(x))/f(x)|", "tex": "F(x) = \\left|\\frac{f(x) - y_t(x)}{f(x)}\\right|", "note": "Relative error of the tangent", "ref": "slides p. 58", "explore": true },
+        { "eq": "ÿ + Dẏ + ω² y = 0", "tex": "\\ddot{y} + D\\dot{y} + \\omega^2 y = 0", "note": "Beispiel 23 linearised at y0 = 0", "ref": "S2, p. 13", "explore": true },
+        { "eq": "a_ij = ∂f_i/∂x_j, b_i = ∂f_i/∂u at x0 = 0, u0 = 0", "tex": "a_{ij} = \\frac{\\partial f_i}{\\partial x_j}, \\; b_i = \\frac{\\partial f_i}{\\partial u}", "note": "Each entry the slope of one term (the slides give the one-variable tangent only)", "ref": "" }
+      ],
+      "practice": [
+        { "question": "Beispiel 25: a21?", "source": "M, p. 60: A = [−2 −3 −4; 2 2 1; −6 0 −8]", "answer": 2, "unit": "1", "tolerance": 0.001,
+          "solution": "ẋ2 = 2x1 + 2 tan x2 + x3 + u: the slope in x1 is 2.", "compute": { "law": "tangent", "system": "bsp25", "at": ["A", 1, 0] } },
+        { "question": "Beispiel 25: a22 (the tan term)?", "source": "M, p. 60: a22 = 2", "answer": 2, "unit": "1", "tolerance": 0.001,
+          "solution": "d/dx tan x = 1/cos² x = 1 at 0, times 2.", "compute": { "law": "tangent", "system": "bsp25", "at": ["A", 1, 1] } },
+        { "question": "Beispiel 26: a32?", "source": "M, p. 62: A = [−2 −3 −4; 1 2 1; −6 −7 −8]", "answer": -7, "unit": "1", "tolerance": 0.001,
+          "solution": "−ẋ3 − 6x1 − 7x2 − 8x3 − 9u = 0, so ẋ3 = −6x1 − 7x2 − 8x3 − 9u.", "compute": { "law": "tangent", "system": "bsp26", "at": ["A", 2, 1] } },
+        { "question": "Beispiel 26: d?", "source": "M, p. 62: d = −5", "answer": -5, "unit": "1", "tolerance": 0.001,
+          "solution": "v + 2x1 + 3x2 + 4x3 + 5u = 0 gives v = … − 5u.", "compute": { "law": "tangent", "system": "bsp26", "at": ["d"] } },
+        { "question": "Beispiel 24 with K1 = 1, K3 = 3: a12 = −K3/K1?", "source": "M, p. 58: a12 = −K3/K1 (values set here)", "answer": -3, "unit": "1", "tolerance": 0.001,
+          "solution": "K1ẋ1 = −K2x1 cos x1 − K3 sin x2 − K4u; sin x2 → x2.", "compute": { "law": "tangent", "system": "bsp24", "params": { "K": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }, "at": ["A", 0, 1] } }
+      ]
+    },
+    {
+      "id": "circuit",
+      "title": "A circuit in state space",
+      "idea": "One state per energy store: the coil's current and the capacitor's voltage. Kirchhoff's mesh rule gives the rows of A; only Uh leaves the housing.",
+      "lecture": "Kubinger (2021a), Beispiel 20, p. 21",
+      "law": "L1·diL/dt = Us − (R1 + R2)iL − uC,  C2·duC/dt = iL",
+      "lawTex": "L_1 \\frac{di_L}{dt} = U_s - (R_1 + R_2) i_L - u_C, \\quad C_2 \\frac{du_C}{dt} = i_L",
+      "equations": [
+        { "eq": "A = [−(R1 + R2)/L1 −1/L1; 1/C2 0], b = [1/L1; 0], cᵀ = [R2 1]", "tex": "A = \\begin{bmatrix} -\\frac{R_1 + R_2}{L_1} & -\\frac{1}{L_1} \\\\ \\frac{1}{C_2} & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} \\frac{1}{L_1} \\\\ 0 \\end{bmatrix},\\; c^T = [R_2 \\;\\; 1]", "note": "x = [iL; uC], u = Us, v = Uh", "ref": "S1, p. 26", "explore": true },
+        { "eq": "det Q_S = 1/(L1²C2), det Q_B = R1R2/L1 − 1/C2", "tex": "\\det Q_S = \\frac{1}{L_1^2 C_2}, \\quad \\det Q_B = \\frac{R_1 R_2}{L_1} - \\frac{1}{C_2}", "note": "Both non-zero: controllable and observable", "ref": "S1, p. 27" }
+      ],
+      "practice": [
+        { "question": "Beispiel 20: det Q_S, in 1/(Ω s³)?", "source": "S1, p. 27: det Q_S ≈ 205.9 k", "answer": 205900, "unit": "1", "tolerance": 0.002,
+          "solution": "1/(L1²·C2) = 1/((0.123)²·321·10⁻⁶).", "compute": { "law": "circuit20Qs", "R1": 4.53, "L1": 0.123, "R2": 0.8, "C2": 0.000321 } },
+        { "question": "Beispiel 20: det Q_B, in Ω/s?", "source": "S1, p. 27: det Q_B ≈ −3.1 k", "answer": -3100, "unit": "1", "tolerance": 0.01,
+          "solution": "R1R2/L1 − 1/C2 = 29.5 − 3115 ≈ −3086.", "compute": { "law": "circuit20Qb", "R1": 4.53, "L1": 0.123, "R2": 0.8, "C2": 0.000321 } }
+      ]
+    },
+    {
+      "id": "motor",
+      "title": "The DC motor",
+      "idea": "The armature mesh and the torque balance give two states, current and speed; the load torque enters as a disturbance through its own column.",
+      "lecture": "Kubinger (2021a), Beispiel 21, p. 22",
+      "law": "UA = RA·iA + LA·diA/dt + c·2π·n,  J·2π·dn/dt = c·iA − ML",
+      "lawTex": "U_A = R_A i_A + L_A \\frac{di_A}{dt} + c\\,2\\pi n, \\quad J\\,2\\pi \\frac{dn}{dt} = c\\, i_A - M_L",
+      "equations": [
+        { "eq": "UA = RA iA + LA diA/dt + c·2π·n; J·2π·dn/dt = c·iA − ML", "tex": "U_A = R_A i_A + L_A \\dot{i}_A + c\\,2\\pi n, \\; J\\,2\\pi\\,\\dot{n} = c\\, i_A - M_L", "note": "Armature mesh and torque balance, friction neglected", "ref": "S2, p. 11", "explore": true },
+        { "eq": "A = [−RA/LA −c·2π/LA; c/(J·2π) 0], b = [1/LA; 0], b_z = [0; −1/(J·2π)]", "tex": "A = \\begin{bmatrix} -\\frac{R_A}{L_A} & -\\frac{2\\pi c}{L_A} \\\\ \\frac{c}{2\\pi J} & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} \\frac{1}{L_A} \\\\ 0 \\end{bmatrix},\\; b_z = \\begin{bmatrix} 0 \\\\ -\\frac{1}{2\\pi J} \\end{bmatrix}", "note": "x = [iA; n]; b_z worked here from the torque balance", "ref": "S2, p. 12" }
+      ],
+      "practice": [
+        { "question": "Beispiel 21: a12 = −c·2π/LA with the task's values?", "source": "S2, p. 12 (symbolic); value worked here", "answer": -2.513, "unit": "1", "tolerance": 0.002,
+          "solution": "0.05·2π/0.125 = 2.513.", "compute": { "law": "motor21", "RA": 0.8, "LA": 0.125, "c": 0.05, "J": 0.002, "at": ["A", 0, 1] } },
+        { "question": "Beispiel 21: a21 = c/(J·2π)?", "source": "S2, p. 12 (symbolic); value worked here", "answer": 3.979, "unit": "1", "tolerance": 0.002,
+          "solution": "0.05/(0.002·2π) = 3.979.", "compute": { "law": "motor21", "RA": 0.8, "LA": 0.125, "c": 0.05, "J": 0.002, "at": ["A", 1, 0] } }
+      ]
+    },
+    {
+      "id": "crane",
+      "title": "The crane trolley, linearised",
+      "idea": "The load swings under the trolley: a nonlinear pair of equations that, for small swings, becomes four linear states, angle, angular speed, position and speed.",
+      "lecture": "Kubinger (2021a), Beispiel 22, p. 23",
+      "law": "ω̇ = −(g/l)·sin φ − (v̇/l)·cos φ",
+      "lawTex": "\\dot{\\omega} = -\\frac{g}{l}\\sin\\varphi - \\frac{\\dot{v}}{l}\\cos\\varphi",
+      "equations": [
+        { "eq": "ω̇ = −(g/l) sin φ − (v̇/l) cos φ", "tex": "\\dot{\\omega} = -\\frac{g}{l}\\sin\\varphi - \\frac{\\dot{v}}{l}\\cos\\varphi", "note": "The swing", "ref": "M, p. 53", "explore": true },
+        { "eq": "v̇ = [Fa + mL g sin φ cos φ + mL l ω² sin φ]/(mK + mL sin² φ)", "tex": "\\dot{v} = \\frac{F_a + m_L g \\sin\\varphi\\cos\\varphi + m_L l \\omega^2 \\sin\\varphi}{m_K + m_L \\sin^2\\varphi}", "note": "The trolley, by Lagrange (worked here; M, p. 53 writes −mL ω² l sin φ)", "ref": "", "explore": true },
+        { "eq": "A = [0 1 0 0; −g(mK + mL)/(mK l) 0 0 0; 0 0 0 1; mL g/mK 0 0 0], b = [0; −1/(mK l); 0; 1/mK]", "tex": "A = \\begin{bmatrix} 0 & 1 & 0 & 0 \\\\ -\\frac{g(m_K + m_L)}{m_K l} & 0 & 0 & 0 \\\\ 0 & 0 & 0 & 1 \\\\ \\frac{m_L g}{m_K} & 0 & 0 & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} 0 \\\\ -\\frac{1}{m_K l} \\\\ 0 \\\\ \\frac{1}{m_K} \\end{bmatrix}", "note": "x = [φ; ω; x; v], at φ = 0", "ref": "M, p. 54" }
+      ],
+      "practice": [
+        { "question": "Beispiel 22: b4 = 1/mK with mK = 20 kg?", "source": "M, p. 54: b = [0; −1/(mK·l); 0; 1/mK]", "answer": 0.05, "unit": "1", "tolerance": 0.001,
+          "solution": "1/20 = 0.05 per kg.", "compute": { "law": "crane", "mK": 20, "mL": 100, "l": 4, "at": ["b", 3] } },
+        { "question": "Beispiel 22: b2 = −1/(mK·l) with l = 4.0 m?", "source": "M, p. 54", "answer": -0.0125, "unit": "1", "tolerance": 0.001,
+          "solution": "−1/(20·4) = −0.0125.", "compute": { "law": "crane", "mK": 20, "mL": 100, "l": 4, "at": ["b", 1] } }
+      ]
+    },
+    {
+      "id": "circuits",
+      "title": "Two circuits with two outputs",
+      "idea": "Three stores, one mesh: both capacitor voltages and the coil current are the states, and the two outputs are sums of their voltages. Worked here, no solution sheet.",
+      "lecture": "Kubinger (2021a), Beispiele 27 and 28, pp. 28–29",
+      "law": "L1·di/dt = u − uC1 − uC2 − (R1 + R2)·i",
+      "lawTex": "L_1 \\frac{di}{dt} = u - u_{C1} - u_{C2} - (R_1 + R_2)\\, i",
+      "equations": [
+        { "eq": "C1 duC1/dt = i, C2 duC2/dt = i, L1 di/dt = u − uC1 − uC2 − (R1 + R2)i", "tex": "C_1 \\dot{u}_{C1} = i,\\; C_2 \\dot{u}_{C2} = i,\\; L_1 \\dot{i} = u - u_{C1} - u_{C2} - (R_1 + R_2) i", "note": "One mesh through every part (worked here from the figures)", "ref": "", "explore": true },
+        { "eq": "Bsp 27: ub = uC2, uc = ua − uC1 − R1 i − uC2", "tex": "u_b = u_{C2}, \\quad u_c = u_a - u_{C1} - R_1 i - u_{C2}", "note": "Outputs of Beispiel 27 (worked here)", "ref": "" },
+        { "eq": "Bsp 28: u2 = u1 − uC1 − uC2 − (R1 + R2)i, u3 = R2 i", "tex": "u_2 = u_1 - u_{C1} - u_{C2} - (R_1 + R_2) i, \\quad u_3 = R_2 i", "note": "Outputs of Beispiel 28 (worked here)", "ref": "" }
+      ],
+      "practice": [
+        { "question": "Beispiel 28: the entry of D for u2 (worked here, no solution sheet)?", "source": "worked here from the figure (task sheet p. 29): u2 = L1·di/dt", "answer": 1, "unit": "1", "tolerance": 0.001,
+          "solution": "u2 = L1·di/dt = u1 − uC1 − uC2 − (R1 + R2)i: u1 goes straight through.", "compute": { "law": "circuit28", "C1": 0.0001, "R1": 10, "C2": 0.00022, "R2": 4.7, "L1": 0.05, "at": ["D", 0] } },
+        { "question": "Beispiel 27: the entry of C for i in uc, with R1 = 10 Ω (example value)?", "source": "worked here from the figure (task sheet p. 28): uc = ua − uC1 − R1·i − uC2", "answer": -10, "unit": "1", "tolerance": 0.001,
+          "solution": "−R1 = −10 Ω.", "compute": { "law": "circuit27", "C1": 0.0001, "R1": 10, "C2": 0.00022, "R2": 4.7, "L1": 0.05, "at": ["C", 1, 2] } }
+      ]
+    },
+    {
+      "id": "task0",
+      "title": "Lab task 0: six controllers compared",
+      "idea": "One plant, six pole choices: slow, fast, swinging, LQ, Butterworth and your own. Their step responses show what each choice buys in rise time, overshoot and settling.",
+      "lecture": "Kubinger (2021b), task 0, pp. 1–2; Kubinger (2021), slides pp. 14–18, 31–32",
+      "law": "u = −rᵀx + K_F·w",
+      "lawTex": "u = -r^T x + K_F w",
+      "equations": [
+        { "eq": "J = ∫(xᵀQx + uᵀRu) dt → min, rᵀ = R⁻¹bᵀS", "tex": "J = \\int_0^\\infty (x^T Q x + u^T R u)\\,dt, \\quad r^T = R^{-1} b^T S", "note": "LQ controller; here Q = λ·c cᵀ, R = 1", "ref": "slides pp. 14–15", "explore": true },
+        { "eq": "Butterworth: n poles on a circle, dividing it into 2n equal parts", "tex": "s_k = r_0\\, e^{j(\\pi/2 + (2k - 1)\\pi/(2n))}", "note": "Formula worked here from the slides' description", "ref": "slides pp. 31–32", "explore": true },
+        { "eq": "K_F = [cᵀ(−A + b rᵀ)⁻¹b]⁻¹", "tex": "K_F = \\left[c^T(-A + b r^T)^{-1} b\\right]^{-1}", "note": "Prefilter", "ref": "slides p. 16" }
+      ],
+      "practice": [
+        { "question": "Controller 5: the real pole of a third-order Butterworth configuration of radius 2?", "source": "slides p. 32, by definition", "answer": -2, "unit": "1", "tolerance": 0.001,
+          "solution": "For n = 3 the poles sit at 120°, 180° and 240°: one on the negative real axis at −r0.", "compute": { "law": "butterworth", "n": 3, "w0": 2, "at": [1, 0] } },
+        { "question": "Is the plant controllable? Give det Q_S.", "source": "worked here; check in MATLAB with det(ctrb(A,b))", "answer": 8276, "unit": "1", "tolerance": 0.002,
+          "solution": "Q_S = [b Ab A²b] has full rank 3.", "compute": { "law": "detQs", "A": [[-7.1, -8.7, 3.15], [2.3, 0, 3.0], [2.3, 2.5, -1]], "b": [2, -3.45, 1.75] } }
+      ]
+    },
+    {
+      "id": "task1",
+      "title": "Lab task 1: the sealed motor",
+      "idea": "Make the motor follow speed steps as fast as dr allows, without asking more than ±10 V, with an observer for the states you cannot measure; then see what a damaged C2 does.",
+      "lecture": "Kubinger and Lang (2021), task 1, pp. 1–3",
+      "law": "dr = (0.85·tr + 0.25·ts)·(1 + 2.2·Xmax/Xmin)",
+      "lawTex": "d_r = (0.85\\, t_r + 0.25\\, t_s)\\left(1 + 2.2\\,\\frac{X_{max}}{X_{min}}\\right)",
+      "equations": [
+        { "eq": "dr = (0.85·tr + 0.25·ts)·(1 + 2.2·Xmax/Xmin)", "tex": "d_r = (0.85\\, t_r + 0.25\\, t_s)\\left(1 + 2.2\\,\\frac{X_{max}}{X_{min}}\\right)", "note": "tr from 5 % to 95 %, ts with a 1 % band, Xmin and Xmax once risen", "ref": "task 1, p. 2", "explore": true },
+        { "eq": "|u| ≤ 10 V", "tex": "|u| \\le 10\\,\\text{V}", "note": "The controller's output limit; over 2 % costs points", "ref": "task 1, pp. 2–3", "explore": true },
+        { "eq": "v = 500·Uh = 500·(R2 iL + uC)", "tex": "v = 500\\,(R_2 i_L + u_C)", "note": "Speed in rpm: 1 V of Uh is 500 rpm", "ref": "task 1, p. 1" }
+      ],
+      "practice": [
+        { "question": "At standstill, how many rpm does 1 V at Us give?", "source": "task 1, p. 1: 1 V of Uh = 500 rpm; at DC C2 carries no current, so Uh = Us", "answer": 500, "unit": "rpm", "tolerance": 0.001,
+          "solution": "G(0) = −cᵀA⁻¹b = 500·1.", "compute": { "law": "dcGain", "R1": 2.75, "L1": 0.125, "R2": 1.99, "C2": 0.000234, "scale": 500 } }
+      ]
+    },
+    {
+      "id": "task2",
+      "title": "Lab task 2: the crane trolley",
+      "idea": "Move the trolley 2.5 m with the load swinging no more than ±2.5°: Butterworth against LQ, an observer for the states not measured, then a PI loop in place of the prefilter.",
+      "lecture": "Kubinger (2021b), task 2, pp. 1–3",
+      "law": "|φ(t)| ≤ 2.5° for x: 0 → 2.5 m",
+      "lawTex": "|\\varphi(t)| \\le 2.5^\\circ \\text{ for } x: 0 \\to 2.5\\,\\text{m}",
+      "equations": [
+        { "eq": "|φ| ≤ 2.5° for a move from 0 to 2.5 m", "tex": "|\\varphi| \\le 2.5^\\circ", "note": "The task's quality limit", "ref": "task 2, p. 2", "explore": true },
+        { "eq": "G_R(s) = kp·(1 + 1/(s·Tn))", "tex": "G_R(s) = k_p\\left(1 + \\frac{1}{s T_n}\\right)", "note": "PI outer loop in place of the prefilter", "ref": "task 2, p. 3; slides p. 17", "explore": true },
+        { "eq": "A as in Beispiel 22 with mK = 24 kg, mL = 160 kg, l = 7.8 m", "tex": "a_{21} = -\\frac{g(m_K + m_L)}{m_K l}, \\; a_{41} = \\frac{m_L g}{m_K}", "note": "The linear model", "ref": "M, p. 54" }
+      ],
+      "practice": [
+        { "question": "Task 2: a21 = −g(mK + mL)/(mK·l)?", "source": "M, p. 54 (symbolic), with task 2's values (p. 2)", "answer": -9.639, "unit": "1", "tolerance": 0.002,
+          "solution": "−9.8065·184/(24·7.8) = −9.639 s⁻².", "compute": { "law": "crane", "mK": 24, "mL": 160, "l": 7.8, "at": ["A", 1, 0] } },
+        { "question": "Task 2: a41 = mL·g/mK?", "source": "M, p. 54 (symbolic), with task 2's values (p. 2)", "answer": 65.38, "unit": "1", "tolerance": 0.002,
+          "solution": "160·9.8065/24 = 65.38 m/s².", "compute": { "law": "crane", "mK": 24, "mL": 160, "l": 7.8, "at": ["A", 3, 0] } }
+      ]
+    }
+  ]
+}

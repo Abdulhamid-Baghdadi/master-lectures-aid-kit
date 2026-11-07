@@ -10,6 +10,9 @@ Sources in `H:\My Drive\02_Personal\02_Education\FH\03_FH_Master\`.
   were checked in the browser pane: they load without errors and don't scroll sideways at phone width.
 - Public repository Abdulhamid-Baghdadi/master-lectures-aid-kit since 2 Nov 2026, published with GitHub Pages from main.
 
+- 7 Nov 2026: `automation-lab` (14 labs, Advanced Automation): the exercises, not the slides, each in 2–4 animated steps
+  with its MATLAB. Open: pidtune's result is not reproduced (PI set by hand); the crane observer of lab task 2 measures
+  x only; Octave is not installed, so the snippets are checked for undefined names, not run.
 - Built overnight 2–3 Nov 2026: `robotics-lab` (8 labs), `mobile-robots-lab` (12), `sensors-lab` (9), `fem-lab` (9).
   Each lab's README and CLAUDE.md list its source errors and what it leaves out; WORKLOG.md has the night's summary.
 

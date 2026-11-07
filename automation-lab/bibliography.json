@@ -1,0 +1,52 @@
+{
+  "format": "design-rules bibliography",
+  "version": 1,
+  "about": "The sources of this project's subject matter (state-space control as taught in Advanced Automation, and the MATLAB functions the labs show), apart from the design rules' bibliography, which keeps the design principles.",
+  "entries": [
+    {
+      "key": "kubinger2021",
+      "authors": ["Kubinger, W."],
+      "year": 2021,
+      "title": "Advanced Automation (AAU), lecture slides",
+      "venue": "FH Technikum Wien, master's programme, summer term 2021; file AAU_SS2021_Folien_v1_2Seiten.pdf, 71 PDF pages, two slides a page",
+      "backs": "Every equation cited as 'slides p. N' (PDF page): notation, RNF and BNF (pp. 8–9), Q_S and Q_B (pp. 6–7), stability (pp. 9–10), pole placement and prefilter (pp. 11–18), observer (pp. 23–27), LQ (pp. 14–15), Butterworth (pp. 31–32), linearisation (pp. 56–59), and the MATLAB of pp. 18 and 33. Summary with pages: docs/sources/slide-conventions.md.",
+      "checked": { "how": "full text", "date": "2026-11-07" }
+    },
+    {
+      "key": "kubinger2021a",
+      "authors": ["Kubinger, W."],
+      "year": 2021,
+      "title": "Advanced Automation: Rechenbeispiele, SS2021 (v1)",
+      "venue": "Exercise sheet, FH Technikum Wien, 2021; file Beispiele 2017\\AAU_SS2021_Rechenbeispiele_v1.pdf, Beispiel N on PDF page N + 1",
+      "backs": "The 28 exercises the labs animate, their systems and values; read in the text layer, the figures of Beispiele 20–22, 27, 28 from the page images. The handwritten solution sheets S1, S2 and M that go with it are transcribed in docs/sources/solution-sheets.md.",
+      "checked": { "how": "full text", "date": "2026-11-07" }
+    },
+    {
+      "key": "kubinger2021b",
+      "authors": ["Kubinger, W."],
+      "year": 2021,
+      "title": "Advanced Automation Übungen: Aufgabenstellung des Vorführbeispieles, and des Beispiels 2",
+      "venue": "Lab task sheets, FH Technikum Wien, 2021; files AAU_SS2021_Aufgabenstellung_Bsp0-Vorfuehrung_v1.pdf (2 pp.) and Lab_3\\AAU_SS2021_Aufgabenstellung_Bsp2_v1.pdf (3 pp.)",
+      "backs": "Lab task 0 (the plant and the six controllers, p. 1) and lab task 2 (crane values, the ±2.5° limit for 0 → 2.5 m, p. 2; the PI outer loop with pidtune and feedback, Abbildung 2, p. 3).",
+      "checked": { "how": "full text", "date": "2026-11-07" }
+    },
+    {
+      "key": "kubinger2021c",
+      "authors": ["Kubinger, W.", "Lang, M."],
+      "year": 2021,
+      "title": "Advanced Automation Übungen: Aufgabenstellung des Beispiels 1",
+      "venue": "Lab task sheet, FH Technikum Wien, 2021; file AAU_SS2021_Aufgabenstellung_Bsp1.pdf (3 pp.)",
+      "backs": "Lab task 1: the motor's values and 500 rpm per volt (p. 1), the factor dr with a 5–95 % rise time and a 1 % settling band and the ±10 V limit (p. 2), the defect C2 × 10 (p. 2), the tips (p. 3).",
+      "checked": { "how": "full text", "date": "2026-11-07" }
+    },
+    {
+      "key": "mathworks2026",
+      "authors": ["MathWorks"],
+      "year": 2026,
+      "title": "MATLAB and Control System Toolbox reference pages: stepinfo, place, lqr, lsim, step, feedback, pidtune, pidtuneOptions, tf2ss, ctrb, ode45",
+      "venue": "https://www.mathworks.com/help/control/ref/dynamicsystem.stepinfo.html, .../control/ref/place.html, .../control/ref/lti.lqr.html, .../control/ref/dynamicsystem.lsim.html, .../control/ref/dynamicsystem.step.html, .../control/ref/inputoutputmodel.feedback.html, .../control/ref/dynamicsystem.pidtune.html, .../control/ref/pidtuneoptions.html, .../signal/ref/tf2ss.html, .../control/ref/statespacemodel.ctrb.html (search summary), .../matlab/ref/ode45.html; read 7 Nov 2026",
+      "backs": "The argument orders and defaults in src/labs/matlab.js: stepinfo RiseTimeLimits [0.1 0.9] and SettlingTimeThreshold 0.02 by default; place makes eig(A − BK) = p, the observer is place(A',C',p)', and place refuses a pole of multiplicity above rank(B); lqr returns K with u = −Kx and P = eig(A − BK); lsim's fourth argument is the initial state, [y,tOut,x] = lsim(...) and step(...); feedback is negative by default; pidtune(sys,'PI',opts), PhaseMargin 60° and DesignFocus 'balanced' by default; tf2ss puts the negated denominator in the first row; acker has no current reference page (MATLAB Answers calls it undocumented), so the labs prefer place except for repeated poles.",
+      "checked": { "how": "full text", "date": "2026-11-07" }
+    }
+  ]
+}

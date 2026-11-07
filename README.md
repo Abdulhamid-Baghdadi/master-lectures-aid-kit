@@ -19,6 +19,7 @@ Published at <https://abdulhamid-baghdadi.github.io/master-lectures-aid-kit/>.
 | [Mobile Robots and Vision](mobile-robots-lab/README.md) | Mobile und Service Robotik (MUS, MUS2), 2nd and 3rd semester | the MUS and MUS2 slides |
 | [Sensor Systems](sensors-lab/README.md) | Advanced Sensor Systems (ASENS), 1st semester | the ASENS slides |
 | [Finite Elements](fem-lab/README.md) | CAE and FEM, 2nd semester | Krach (2018, 2020, 2021) |
+| [Advanced Automation](automation-lab/README.md) | AAU, 2nd semester: the exercises, step by step, with their MATLAB | Kubinger (2021), Kubinger and Lang (2021) |
 
 Industrial Handling has 11 labs in three parts:
 

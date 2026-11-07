@@ -67,3 +67,29 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Committed and pushed to Abdulhamid-Baghdadi/master-lectures-aid-kit; the site updates through GitHub Pages.
 - Worth your look: the source errors above (each lab's README lists them with the check), and the IRB 120 DH table,
   which is reconstructed from the spec rather than printed in the course.
+
+## 7 Nov 2026: Automation lab (`automation-lab`)
+
+- Built: 14 labs in 7 parts, the exercises of Advanced Automation rather than the slides. Models from equations
+  (Bsp 1–3), normal forms and G(s) (4, 5, 7–9), controllability, observability, stability (6, 10–12 and two exam
+  tasks), pole placement with prefilter (13–16 and two exam tasks), observer (17, 18 and two exam tasks), both
+  together (19), linearisation (23–26), the R-L-R-C device (20), the DC motor (21), the crane (22), the circuits of 27
+  and 28 (worked here, no solution sheet), and the lab tasks 0, 1 and 2. Each lab has 2 to 4 animated steps (a player,
+  or a slider under reduced motion), the solution sheet's value beside the lab's own, and a MATLAB panel generated from
+  the current values (`src/labs/matlab.js`, tested against expected text).
+- Core added: `src/core/models.js` (S into RNF/BNF coordinates, the circuits, motor, crane by Lagrange, a closed loop
+  with observer, ±umax and a nonlinear plant, the PI outer loop, dr) and `practice.js`. 100 tests pass in the lab
+  (13 before), 25 in the kit. In headless Edge all 14 labs and every step mount without console errors and none
+  scrolls sideways at 375 px.
+- MATLAB checked on the MathWorks pages (7 Nov 2026): stepinfo, place, lqr, lsim, step, feedback, pidtune,
+  pidtuneOptions, tf2ss, ctrb, ode45; acker has no current page (undocumented, per MATLAB Answers).
+- Source errors and doubts (README "Source notes"): M p. 53 writes −mL·ω²·l·sin φ in the crane (Lagrange: +; vanishes
+  at φ = 0) and drops a21's minus that p. 54 has; S2 p. 9's det Q_B does not follow from the matrices (S1 p. 27 does);
+  the sheets give rᵀ, ℓ in RNF/BNF coordinates only (13, 14, 17, 19); M p. 58's b2 sign hard to read. Every other
+  sheet value agrees with the lab. In the student's scripts: task 1 used stepinfo's 2 % band where the task asks 1 %;
+  task 2 placed Butterworth poles at π/8 and π/4 instead of π/8 and 3π/8, and with the right angles its radius 0.98
+  swings the load 3.2°, over the ±2.5° limit.
+- Not done: the start page, root README and PLAN do not list the lab yet (left to you, as asked); nothing committed.
+  Lab task 2's observer uses the position alone (MIMO place not in the core); pidtune is not reproduced, the PI is
+  tuned by hand with sliders; ctrb/obsv argument order was confirmed from a search summary of the ctrb page, not the
+  page itself; the solution sheet M pp. 1–39 were not checked for handwriting.
