@@ -1,7 +1,7 @@
 # ModSim
 
 The exercises of Modellbildung und Simulation (ModSim, FH Technikum Wien, 2nd semester, summer term 2021) animated
-step by step: the eight worked lecture examples of Puhwein (2021a) and five tasks of the task sheet Puhwein (2021b).
+step by step: the eight worked lecture examples of Puhwein (2021a) and the 13 tasks of the task sheet Puhwein (2021b).
 Every step of every exercise is a view of its own (a free-body diagram whose forces arrive, T, V and D built term by
 term, the ODE drawn as the Simulink integrator chain, the state space filling in, the mechanism moving beside its time
 plot), and every view shows the MATLAB that gives its result, written from the view's current values.
@@ -18,7 +18,7 @@ plot), and every view shows the MATLAB that gives its result, written from the v
 | 1 One degree of freedom | the single-mass oscillator: forces → ODE → Simulink → state space → the mass bouncing (VO 1); the pendulum: T, V, D term by term, nonlinear against linear, rest angles and their stability from the Jacobian, Simulink and state space (VO 2); the pendulum with roller: S(φ₁) from the geometry, K of rod and rolling disc, the lab's equation beside the sheet's, the Simulink model of p. 24 (VO 3) |
 | 2 Two degrees of freedom | the two-mass oscillator: M, C, K, two Simulink rows, det(K − λM) = 0 and the trace, the eigenmodes moving, the driven masses beside the frequency response (VO 5, with the TM3 note's values); the double pendulum: K and V term by term, chaos from 0.001 rad, the energy it keeps, the linear eigenmodes (VO 6) |
 | 3 Electrical and electromechanical | the RLC circuit with its energy between coil and capacitor (VO 4); the DC motor's two equations, two Simulink rows, 3 × 3 state space, run-up and power flow (VO 7); the shaker's transfer functions, state space and the current with and without back-EMF (VO 8) |
-| 4 The task sheet, worked here | tasks 2 (pendulum on a sprung block, the group's task, with their values) and 3 (on the floor); tasks 5 (quarter car), 6 (torsional oscillator) and 7 (hanging chain): no solution sheet; worked here |
+| 4 The task sheet, worked here | all 13 tasks: 1 (elastic pendulum), 2 (pendulum on a sprung block, the group's task, with their values) and 3 (on the floor), 4 (unbalance), 5 (quarter car), 6 (torsional oscillator), 7 (hanging chain), 8 (coupled pendulums), 9–10 (rolling discs), 11–12 (roller pendulum), 13 (robot manipulator): no solution sheet; worked here |
 
 Each lab has steps to pick, a player that runs each step's animation once (or a slider that steps it, when the reader
 asks for reduced motion), readouts, the source's result beside the lab's own, and a MATLAB panel with a copy button:
@@ -78,13 +78,33 @@ results:
   design values give a pendulum at 1.6 Hz, outside the 3–10 Hz asked (p. 19); p. 15 cites Abb. 12 for Abb. 7.
 - **`simscape_variables.m`:** `ylabel('phi [m]')` for rad; titles say M_2 for M_1; `tout`, `simout` used before any run.
 
-## Left out of the task sheet
+## The task sheet's figures: the readings taken
 
-Tasks 1 (elastic pendulum: whether the block turns with the rod is unclear, 2 or 3 degrees of freedom), 4 (unbalance:
-a prescribed rotation and rod data the sheet does not give), 8 (coupled pendulums: the double labels m₁, l₁ leave the
-rods' geometry and the coupling point unclear), 9–12 (rolling discs: radii, inertias and where the springs attach are
-not given or unclear) and 13 (robot manipulator: no link data; its dynamics are the double pendulum's). Each follows
-from the lecture's Lagrange method once its geometry is fixed.
+All 13 tasks are in. The sheet gives a figure per task and nothing else (`docs/sources/task-sheet.md`), so every number
+in tasks 1, 4 and 8–13 is an example value, labelled "example value — not given on the sheet" on each slider. Where the
+figure leaves a choice, the lab takes one reading and says so on its first step (added 10 Nov 2026; the figures were
+read from the transcription of 7 Nov, the PDF itself was not reachable that day):
+
+- **Task 1 (elastic pendulum):** 2 degrees of freedom, r and φ: the block looks rigidly fixed to the rod's end, so it
+  turns with it (J₁ of a 0.10 m × 0.06 m block). The other reading, the block hinged at its centre, is a slider: its own
+  turn is then undriven and J₁ leaves φ's equation.
+- **Task 4 (unbalance):** 2, y₁ and y₂: Ω(t) is read as a prescribed constant speed (drawn blue like the path
+  excitations), so the rod angle β = Ωt is given and the unbalance acts as −(m₃/2 + m₄)l₃Ω² cos Ωt on m₁. Read as a
+  torque, β would be a third coordinate. Energy is not kept even undamped; the test checks it against the drive's work.
+- **Task 8 (coupled pendulums):** 2, φ₁ and φ₂; each rod read as two segments mᵢ, lᵢ (the double label), so a rod is
+  2mᵢ, 2lᵢ and the spring holds at lᵢ; pivots b apart with the spring unstretched at rest; its length kept exact.
+- **Tasks 9, 10 (rolling discs):** 2, x₁ and x₂; solid discs (J = ½mr²) rolling without slip; task 10's wall spring
+  at the top of the rim stretches by 2x₁ (first order), the disc-to-disc spring taken at the axles.
+- **Tasks 11, 12 (roller pendulum):** 2, x and φ; massless rod with a point bob; M₁ turns the disc against the floor
+  (the sheet does not say whether it acts between disc and rod); task 11's spring at the top of the rim (2x), task 12's
+  at axle height (x). The model is task 3's with a rolling disc for the block.
+- **Task 13 (robot manipulator):** 2, absolute link angles; uniform links, elbow motor m₃ and load m₄ as points; the
+  motor torques are inputs, the elbow's acting back on link 1 (Q = (M₁ − M₂, M₂)). The core is the double pendulum's:
+  VO example 6 is this model with equal rods and no point masses, and now calls it.
+
+Held by `tests/unit/tasks.test.js` (energy kept undamped; eigenfrequencies against closed forms derived by hand, among
+them ω₁ = √(g/L), ω₂ = √(g/L + 2ka²/(mL²)) for point-mass coupled pendulums and λ = (g/l)(2 ∓ √2) for the arm) and
+`python-run.test.js` (sympy's Lagrange equations from each T, V, D at a test state).
 
 ## MATLAB facts the code relies on
 
@@ -103,7 +123,7 @@ Every view also shows the same steps in Python, beside the MATLAB, and the Pytho
 (Python 3 with numpy, scipy, sympy, matplotlib and python-control 0.10.2): sympy for the Lagrange recipe (`symbols`,
 `Function`, `diff`, `solve`), `solve_ivp(f, t_span, x0)` with `f = lambda t, x: [...]` for ode45's `@(t,x) [...]`,
 `scipy.linalg.eig(K, M)` for `eig(K,M)`, python-control for `ss`, `step`, `tf` and the frequency response.
-`tests/unit/python-run.test.js` runs 41 of the 47 snippets and compares what they print with the lab: the
+`tests/unit/python-run.test.js` runs 65 of the 71 snippets and compares what they print with the lab: the
 accelerations of the Lagrange equations at a test state, eigenfrequencies, poles, matrices, and solve_ivp's end state.
 What Python cannot do: **Simulink and Simscape have no Python counterpart**, so those views give the parameters and
 the blocks as comments and point to the ODE the motion view integrates; they and the chaotic double pendulum, which

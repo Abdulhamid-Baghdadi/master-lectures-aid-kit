@@ -1,7 +1,7 @@
 {
   "format": "modsim-lab labs",
   "version": 1,
-  "about": "Modellbildung und Simulation (ModSim), FH Technikum Wien master's programme, 2nd semester: the eight worked lecture examples of Puhwein (2021a) and five tasks of the task sheet Puhwein (2021b), animated step by step, each step with the MATLAB that gives its result. Equations and results from the worked examples, cited by PDF page as 'VO p. N' (transcribed in docs/sources/vo-solutions-a.md and -b.md); the two-mass values from the TM3 note 'Bestimmung der Eigenfrequenzen des 2DoF Systems' (Zusatz Material, 'TM3 note'). The task-sheet labs have no solution sheet and are worked here. tests/unit/labs-data.test.js recomputes every practice answer with the core.",
+  "about": "Modellbildung und Simulation (ModSim), FH Technikum Wien master's programme, 2nd semester: the eight worked lecture examples of Puhwein (2021a) and the 13 tasks of the task sheet Puhwein (2021b), animated step by step, each step with the MATLAB that gives its result. Equations and results from the worked examples, cited by PDF page as 'VO p. N' (transcribed in docs/sources/vo-solutions-a.md and -b.md); the two-mass values from the TM3 note 'Bestimmung der Eigenfrequenzen des 2DoF Systems' (Zusatz Material, 'TM3 note'). The task-sheet labs have no solution sheet and are worked here. tests/unit/labs-data.test.js recomputes every practice answer with the core.",
   "families": [
     { "id": "mech1", "name": "One degree of freedom" },
     { "id": "mech2", "name": "Two degrees of freedom" },
@@ -12,7 +12,7 @@
     { "number": 1, "pages": "VO examples 1–3", "title": "One degree of freedom", "family": "mech1", "labs": ["einmasse", "pendel", "rolle"] },
     { "number": 2, "pages": "VO examples 5, 6", "title": "Two degrees of freedom", "family": "mech2", "labs": ["zweimasse", "doppel"] },
     { "number": 3, "pages": "VO examples 4, 7, 8", "title": "Electrical and electromechanical", "family": "electric", "labs": ["rlc", "motor", "shaker"] },
-    { "number": 4, "pages": "Task sheet 2, 3, 5–7", "title": "The task sheet, worked here", "family": "tasks", "labs": ["task2", "task3", "task5", "task6", "task7"] }
+    { "number": 4, "pages": "Task sheet 1–13", "title": "The task sheet, worked here", "family": "tasks", "labs": ["task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9", "task10", "task11", "task12", "task13"] }
   ],
   "labs": [
     {
@@ -233,6 +233,126 @@
       ],
       "practice": [
         { "question": "With the TM3 note's masses and springs (1 kg, 1 kg, 2000 N/m, 750 N/m), what is the higher eigenfrequency of the hanging chain?", "source": "worked here; the same K and M as the TM3 note p. 1, so its f0_2 = 8.7173 Hz", "answer": 8.7173, "unit": "Hz", "compute": { "law": "chainF", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 1 }, "solution": "The same matrices as the lying two-mass oscillator: gravity only shifts the rest." }
+      ]
+    },
+    {
+      "id": "task1",
+      "title": "Task 1: elastic pendulum",
+      "idea": "No solution sheet; worked here. A block on a spring–damper rod: read as fixed to the rod (2 degrees of freedom, r and φ), it bounces and swings at once, and near a 2 : 1 ratio the two trade energy. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 1, p. 1",
+      "law": "m₁r̈ − m₁rφ̇² − m₁g cos φ + k(r − l₀) + c ṙ = 0",
+      "lawTex": "m_1\\ddot{r} - m_1 r\\dot{\\varphi}^2 - m_1 g\\cos\\varphi + k(r - l_0) + c\\dot{r} = 0",
+      "equations": [
+        { "eq": "(m₁r² + J₁)φ̈ + 2m₁rṙφ̇ + m₁g r sin φ + k_T φ + c_T φ̇ = M₁", "tex": "(m_1 r^2 + J_1)\\ddot{\\varphi} + 2m_1 r\\dot{r}\\dot{\\varphi} + m_1 g r\\sin\\varphi + k_T\\varphi + c_T\\dot{\\varphi} = M_1", "note": "The swing; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "ω_r = √(k/m₁), ω_φ = √((m₁g r* + k_T)/(m₁r*² + J₁)), r* = l₀ + m₁g/k", "tex": "\\omega_r = \\sqrt{k/m_1},\\quad \\omega_\\varphi = \\sqrt{\\frac{m_1 g r^* + k_T}{m_1 r^{*2} + J_1}},\\quad r^* = l_0 + \\frac{m_1 g}{k}", "note": "Linear at rest the two part", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's example values (m₁ = 1 kg, a 0.10 m × 0.06 m block, l₀ = 0.5 m, k = 200 N/m, k_T = 0), at what frequency does the pendulum swing at small angles?", "source": "worked here: ω_φ² = m₁g r*/(m₁r*² + J₁); example values", "answer": 0.67138, "unit": "Hz", "compute": { "law": "elasticF", "m1": 1, "J1": 0.0011333333, "l0": 0.5, "k": 200, "kT": 0, "mode": 0 }, "solution": "r* = 0.5 + 9.80665/200 = 0.549 m; ω² = 9.80665·0.549/(0.549² + 0.00113) = 17.79 s⁻², f = 0.671 Hz. The spring bounces at √200/2π = 2.25 Hz." }
+      ]
+    },
+    {
+      "id": "task4",
+      "title": "Task 4: unbalance-excited oscillator",
+      "idea": "No solution sheet; worked here. Two masses stacked on springs, a rod turned at a prescribed speed Ω on the lower one: the unbalance pushes with (m₃/2 + m₄)l₃Ω² cos Ωt. 2 degrees of freedom, since the rod's angle is driven. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 4, p. 2",
+      "law": "(m₁+m₃+m₄)ÿ₁ + c₁ẏ₁ + k₁y₁ − c₂(ẏ₂−ẏ₁) − k₂(y₂−y₁) = −(m₃/2 + m₄)l₃Ω² cos Ωt",
+      "lawTex": "(m_1+m_3+m_4)\\ddot{y}_1 + c_1\\dot{y}_1 + k_1 y_1 - c_2(\\dot{y}_2-\\dot{y}_1) - k_2(y_2-y_1) = -(m_3/2 + m_4)l_3\\Omega^2\\cos\\Omega t",
+      "equations": [
+        { "eq": "m₂ÿ₂ + c₂(ẏ₂ − ẏ₁) + k₂(y₂ − y₁) = 0", "tex": "m_2\\ddot{y}_2 + c_2(\\dot{y}_2 - \\dot{y}_1) + k_2(y_2 - y_1) = 0", "note": "The upper mass; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "β(t) = Ωt", "tex": "\\beta(t) = \\Omega t", "note": "The rod's angle, driven: Ω(t) read as a prescribed speed", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's example values (m₁ = 2 kg, m₂ = 1 kg, m₃ = 0.1 kg, m₄ = 0.05 kg, k₁ = 2000 N/m, k₂ = 750 N/m), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0 with M = diag(m₁+m₃+m₄, m₂); example values", "answer": 3.33346, "unit": "Hz", "compute": { "law": "unbalanceF", "m1": 2, "m2": 1, "m3": 0.1, "m4": 0.05, "l3": 0.1, "k1": 2000, "k2": 750, "mode": 0 }, "solution": "M = diag(2.15, 1), K = [2750 −750; −750 750]: λ₁ = 438.7 s⁻², f = 3.33 Hz (and 6.35 Hz)." }
+      ]
+    },
+    {
+      "id": "task8",
+      "title": "Task 8: coupled pendulums",
+      "idea": "No solution sheet; worked here. Two pendulums joined by a spring–damper, each rod read as two segments m, l (the sheet's double label): started alone, one passes its swing to the other and back. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 8, p. 4",
+      "law": "J₁φ̈₁ + 2g l₁(m₁+m₃) sin φ₁ + k_T φ₁ + c_T φ̇₁ + [k(S − b) + cṠ] ∂S/∂φ₁ = M₁",
+      "lawTex": "J_1\\ddot{\\varphi}_1 + 2g l_1(m_1+m_3)\\sin\\varphi_1 + k_T\\varphi_1 + c_T\\dot{\\varphi}_1 + [k(S - b) + c\\dot{S}]\\,\\partial S/\\partial\\varphi_1 = M_1",
+      "equations": [
+        { "eq": "J₂φ̈₂ + 2g l₂(m₂+m₄) sin φ₂ + k_T φ₂ + c_T φ̇₂ + [k(S − b) + cṠ] ∂S/∂φ₂ = M₂", "tex": "J_2\\ddot{\\varphi}_2 + 2g l_2(m_2+m_4)\\sin\\varphi_2 + k_T\\varphi_2 + c_T\\dot{\\varphi}_2 + [k(S - b) + c\\dot{S}]\\,\\partial S/\\partial\\varphi_2 = M_2", "note": "The second pendulum; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "S = √[(b + l₂ sin φ₂ − l₁ sin φ₁)² + (l₁ cos φ₁ − l₂ cos φ₂)²]", "tex": "S = \\sqrt{(b + l_2\\sin\\varphi_2 - l_1\\sin\\varphi_1)^2 + (l_1\\cos\\varphi_1 - l_2\\cos\\varphi_2)^2}", "note": "The spring's length, exact", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's example values (segments 0.05 kg and 0.25 m, end masses 0.5 kg, k = 20 N/m, k_T = 0), at what frequency do the pendulums swing against each other?", "source": "worked here: ω₂ = √((G + 2k l₁²)/J); example values", "answer": 0.99362, "unit": "Hz", "compute": { "law": "coupledF", "m1": 0.05, "l1": 0.25, "m2": 0.05, "l2": 0.25, "m3": 0.5, "m4": 0.5, "b": 0.4, "k": 20, "kT": 0, "mode": 1 }, "solution": "J = (8/3)·0.05·0.0625 + 4·0.5·0.0625 = 0.1333 kg·m², G = 2·9.80665·0.25·0.55 = 2.697 N·m: in phase √(G/J) = 0.716 Hz; against each other √((G + 2·20·0.0625)/J) = 0.994 Hz." }
+      ]
+    },
+    {
+      "id": "task9",
+      "title": "Task 9: two rolling discs",
+      "idea": "No solution sheet; worked here. Two discs rolling without slipping, tied to the wall and to each other at their axles: rolling adds half of each disc's mass again. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 9, p. 5",
+      "law": "(3/2)m₁ẍ₁ + c₁ẋ₁ + k₁x₁ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = M₁/r₁",
+      "lawTex": "\\tfrac{3}{2}m_1\\ddot{x}_1 + c_1\\dot{x}_1 + k_1 x_1 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = M_1/r_1",
+      "equations": [
+        { "eq": "(3/2)m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = F₁", "tex": "\\tfrac{3}{2}m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = F_1", "note": "Disc 2; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "M₁(t) = M₀₁ cos(Ωt), F₁(t) = F₀₁ cos(Ωt)", "tex": "M_1(t) = M_{01}\\cos(\\Omega t),\\quad F_1(t) = F_{01}\\cos(\\Omega t)", "note": "The drive, as the sheet writes it", "ref": "task sheet p. 5", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's example values (discs 2 kg and 1 kg, k₁ = 400 N/m, k₂ = 300 N/m), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0 with M = diag(3/2 m₁, 3/2 m₂); example values", "answer": 1.37157, "unit": "Hz", "compute": { "law": "discsF", "m1": 2, "m2": 1, "r1": 0.1, "k1": 400, "k2": 300, "mode": 0 }, "solution": "M = diag(3, 1.5), K = [700 −300; −300 300]: λ₁ = 74.27 s⁻², f = 1.37 Hz." }
+      ]
+    },
+    {
+      "id": "task10",
+      "title": "Task 10: two rolling discs, held at the rim",
+      "idea": "No solution sheet; worked here. As task 9, but the wall spring holds the top of disc 1's rim, which moves twice as far as the axle: the spring acts four times as stiff. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 10, p. 5",
+      "law": "(3/2)m₁ẍ₁ + 4c₁ẋ₁ + 4k₁x₁ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = M₁/r₁",
+      "lawTex": "\\tfrac{3}{2}m_1\\ddot{x}_1 + 4c_1\\dot{x}_1 + 4k_1 x_1 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = M_1/r_1",
+      "equations": [
+        { "eq": "(3/2)m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = F₁", "tex": "\\tfrac{3}{2}m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = F_1", "note": "Disc 2; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "V₁ = ½k₁(2x₁)²", "tex": "V_1 = \\tfrac{1}{2}k_1(2x_1)^2", "note": "The top of a rolling rim moves 2x₁ (first order)", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With task 9's example values but the wall spring at the top of the rim, what is the lower eigenfrequency?", "source": "worked here: K₁₁ = 4k₁ + k₂; example values", "answer": 2.00011, "unit": "Hz", "compute": { "law": "discsF", "m1": 2, "m2": 1, "r1": 0.1, "k1": 400, "k2": 300, "top": true, "mode": 0 }, "solution": "K = [1900 −300; −300 300], M = diag(3, 1.5): λ₁ = 157.9 s⁻², f = 2.00 Hz." }
+      ]
+    },
+    {
+      "id": "task11",
+      "title": "Task 11: roller pendulum, held at the rim",
+      "idea": "No solution sheet; worked here. A pendulum hanging from the axle of a rolling disc, the disc held at the top of its rim: task 3's pendulum on a block, with a rolling disc for the block. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 11, p. 6",
+      "law": "(3/2 m₁ + m₂)ẍ + m₂l(φ̈ cos φ − φ̇² sin φ) + 4cẋ + 4kx = F₁ + M₁/r",
+      "lawTex": "(\\tfrac{3}{2}m_1 + m_2)\\ddot{x} + m_2 l(\\ddot{\\varphi}\\cos\\varphi - \\dot{\\varphi}^2\\sin\\varphi) + 4c\\dot{x} + 4kx = F_1 + M_1/r",
+      "equations": [
+        { "eq": "m₂l²φ̈ + m₂lẍ cos φ + m₂g l sin φ = 0", "tex": "m_2 l^2\\ddot{\\varphi} + m_2 l\\ddot{x}\\cos\\varphi + m_2 g l\\sin\\varphi = 0", "note": "The pendulum; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "M = [3/2 m₁ + m₂  m₂l; m₂l  m₂l²], K = [4k 0; 0 m₂g l]", "tex": "M = \\begin{bmatrix} \\tfrac{3}{2}m_1 + m_2 & m_2 l \\\\ m_2 l & m_2 l^2 \\end{bmatrix},\\quad K = \\begin{bmatrix} 4k & 0 \\\\ 0 & m_2 g l \\end{bmatrix}", "note": "Linear at rest: coupled through M", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's example values (disc 1 kg, bob 0.5 kg, l = 0.4 m, k = 100 N/m held at the top of the rim), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 0.77512, "unit": "Hz", "compute": { "law": "rollerF", "m1": 1, "m2": 0.5, "r": 0.1, "l": 0.4, "k": 100, "top": true, "mode": 0 }, "solution": "M = [2 0.2; 0.2 0.08], K = [400 0; 0 1.961]: λ₁ = 23.72 s⁻², f = 0.775 Hz." }
+      ]
+    },
+    {
+      "id": "task12",
+      "title": "Task 12: roller pendulum, held at the axle",
+      "idea": "No solution sheet; worked here. As task 11, with the wall spring at axle height: it stretches by x, not 2x. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 12, p. 6",
+      "law": "(3/2 m₁ + m₂)ẍ + m₂l(φ̈ cos φ − φ̇² sin φ) + cẋ + kx = F₁ + M₁/r",
+      "lawTex": "(\\tfrac{3}{2}m_1 + m_2)\\ddot{x} + m_2 l(\\ddot{\\varphi}\\cos\\varphi - \\dot{\\varphi}^2\\sin\\varphi) + c\\dot{x} + kx = F_1 + M_1/r",
+      "equations": [
+        { "eq": "m₂l²φ̈ + m₂lẍ cos φ + m₂g l sin φ = 0", "tex": "m_2 l^2\\ddot{\\varphi} + m_2 l\\ddot{x}\\cos\\varphi + m_2 g l\\sin\\varphi = 0", "note": "The pendulum; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "M = [3/2 m₁ + m₂  m₂l; m₂l  m₂l²], K = [k 0; 0 m₂g l]", "tex": "M = \\begin{bmatrix} \\tfrac{3}{2}m_1 + m_2 & m_2 l \\\\ m_2 l & m_2 l^2 \\end{bmatrix},\\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_2 g l \\end{bmatrix}", "note": "Linear at rest: coupled through M", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With task 11's example values but the spring at axle height, what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 0.72601, "unit": "Hz", "compute": { "law": "rollerF", "m1": 1, "m2": 0.5, "r": 0.1, "l": 0.4, "k": 100, "top": false, "mode": 0 }, "solution": "K = [100 0; 0 1.961]: λ₁ = 20.81 s⁻², f = 0.726 Hz." }
+      ]
+    },
+    {
+      "id": "task13",
+      "title": "Task 13: robot manipulator",
+      "idea": "No solution sheet; worked here. A two-link arm driven by motor torques at the base and the elbow: the double pendulum of VO example 6 with an elbow motor and a load as point masses, the same core. Every number is an example value — not given on the sheet.",
+      "lecture": "Puhwein (2021b), task 13, p. 7",
+      "law": "a₁₁φ̈₁ + b cos(φ₂−φ₁)φ̈₂ − b φ̇₂² sin(φ₂−φ₁) + G₁ sin φ₁ + k₁φ₁ − k₂(φ₂−φ₁) + c₁φ̇₁ − c₂(φ̇₂−φ̇₁) = M₁ − M₂",
+      "lawTex": "a_{11}\\ddot{\\varphi}_1 + b\\cos(\\varphi_2-\\varphi_1)\\ddot{\\varphi}_2 - b\\dot{\\varphi}_2^2\\sin(\\varphi_2-\\varphi_1) + G_1\\sin\\varphi_1 + k_1\\varphi_1 - k_2(\\varphi_2-\\varphi_1) + c_1\\dot{\\varphi}_1 - c_2(\\dot{\\varphi}_2-\\dot{\\varphi}_1) = M_1 - M_2",
+      "equations": [
+        { "eq": "a₂₂φ̈₂ + b cos(φ₂−φ₁)φ̈₁ + b φ̇₁² sin(φ₂−φ₁) + G₂ sin φ₂ + k₂(φ₂−φ₁) + c₂(φ̇₂−φ̇₁) = M₂", "tex": "a_{22}\\ddot{\\varphi}_2 + b\\cos(\\varphi_2-\\varphi_1)\\ddot{\\varphi}_1 + b\\dot{\\varphi}_1^2\\sin(\\varphi_2-\\varphi_1) + G_2\\sin\\varphi_2 + k_2(\\varphi_2-\\varphi_1) + c_2(\\dot{\\varphi}_2-\\dot{\\varphi}_1) = M_2", "note": "Link 2; the motion step integrates both", "ref": "", "explore": true },
+        { "eq": "a₁₁ = m₁l₁²/3 + (m₂+m₃+m₄)l₁², a₂₂ = m₂l₂²/3 + m₄l₂², b = (m₂/2 + m₄)l₁l₂", "tex": "a_{11} = \\tfrac{1}{3}m_1 l_1^2 + (m_2+m_3+m_4)l_1^2,\\quad a_{22} = \\tfrac{1}{3}m_2 l_2^2 + m_4 l_2^2,\\quad b = (\\tfrac{1}{2}m_2 + m_4)l_1 l_2", "note": "The inertias from T", "ref": "", "explore": true }
+      ],
+      "practice": [
+        { "question": "With the lab's example values (links 1 kg × 0.5 m and 0.6 kg × 0.4 m, elbow 0.5 kg, load 0.2 kg, no joint springs), what is the lower eigenfrequency hanging at rest?", "source": "worked here: det(K − λM) = 0; example values", "answer": 0.62701, "unit": "Hz", "compute": { "law": "robotF", "m1": 1, "l1": 0.5, "m2": 0.6, "l2": 0.4, "m3": 0.5, "m4": 0.2, "k1": 0, "k2": 0, "mode": 0 }, "solution": "a₁₁ = 0.4083, a₂₂ = 0.064, b = 0.1, G₁ = 8.826, G₂ = 1.961: λ₁ = 15.52 s⁻², f = 0.627 Hz." }
       ]
     }
   ]

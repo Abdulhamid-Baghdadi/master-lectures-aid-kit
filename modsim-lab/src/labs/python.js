@@ -27,15 +27,20 @@ export const assign = items => items.map(([n, v, c]) => `${n} = ${typeof v === "
 
 /** The Lagrange recipe with sympy (VO p. 11), then the accelerations alone. check: { values: {name: number},
  *  state: [q…, q̇…] } adds the line that prints them at that state, for the run test; returns { code, expr }. */
-export function lagrange({ q, names, T, V, D = "0", Q, check }) {
+export function lagrange({ q, names, T, V, D = "0", Q, check, simplify = true }) {
   const dd = c => `diff(${c}, t, 2)`;
   const lines = [HEAD_SYM, "", "t = symbols('t')", `${names.join(", ")}${names.length === 1 ? "," : ""} = symbols('${names.join(" ")}')`,
     ...q.map(c => `${c} = Function('${c}')(t)`),
     `T = ${symExpr(T)}   # kinetic energy`, `V = ${symExpr(V)}   # potential energy`, `D = ${symExpr(D)}   # Rayleigh dissipation function`,
     "Lag = T - V   # L is taken: the lengths are L"];
   q.forEach((c, i) => lines.push(`eq${i + 1} = Eq(diff(diff(Lag, diff(${c}, t)), t) - diff(Lag, ${c}) + diff(D, diff(${c}, t)), ${symExpr(Q[i])})`));
-  lines.push(`acc = solve([${q.map((_, i) => `eq${i + 1}`).join(", ")}], [${q.map(dd).join(", ")}], dict=True)[0]   # the accelerations alone: sympy has no odeToVectorField`,
-    `print([sp.simplify(acc[${dd("c")}]) for c in (${q.join(", ")}${q.length === 1 ? "," : ""})])`.replace(/diff\(c, t, 2\)/, "diff(c, t, 2)"));
+  const eqs = q.map((_, i) => `eq${i + 1}`).join(", ");
+  if (simplify) lines.push(`acc = solve([${eqs}], [${q.map(dd).join(", ")}], dict=True)[0]   # the accelerations alone: sympy has no odeToVectorField`,
+    `print([sp.simplify(acc[${dd("c")}]) for c in (${q.join(", ")}${q.length === 1 ? "," : ""})])`);
+  // With many symbols solve and simplify take minutes; the equations are linear in the accelerations, so M q'' = r.
+  else lines.push(`dd = [${q.map(dd).join(", ")}]`,
+    `Mq, rq = sp.linear_eq_to_matrix([e.lhs - e.rhs for e in (${eqs})], dd)   # M q'' = r: the mass matrix and the rest`,
+    "acc = dict(zip(dd, Mq.LUsolve(rq)))   # the accelerations alone, unsimplified (sp.simplify would take minutes)");
   if (!check) return { code: lines.join("\n"), expr: null };
   const n = q.length, s = check.state;
   lines.push(`vel = {${q.map((c, i) => `diff(${c}, t): ${num(s[n + i])}`).join(", ")}}   # a test state`,

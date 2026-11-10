@@ -23,7 +23,9 @@ every practice answer. Integration is the kit core's fixed-step Runge–Kutta (`
 Inside the labs layer, `view.js` holds what the views share beyond the kit's step player (lines that arrive one by one,
 a run cache, sliders), `pics.js` the drawings (masses on springs and dampers, linkages, the Simulink blocks, a circuit
 loop, energy bars), and `matlab.js` the MATLAB text of each view; none of them is a lab. `cart.js` and `chain.js` each
-make several task-sheet labs from one model.
+make several task-sheet labs from one model; `sheet.js` makes a three-step task-sheet lab from a spec, and `tasks.js`
+holds the specs of tasks 1, 4, 8–13 (10 Nov 2026), whose models reuse the core's: task 13's `manipulator` is the one
+copy of the double pendulum (`doppel` calls it), tasks 11–12 use `cartPendulum`, tasks 4, 9, 10 `chain2`.
 
 ## Data
 

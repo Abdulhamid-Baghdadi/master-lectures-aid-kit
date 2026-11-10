@@ -228,3 +228,32 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - New `tests/unit/exams.test.js` (20 tests; failed first). Handling 66/66, automation 153/153, kit 34/34. Checked at
   375 px light and dark (both labs' exam pages, the overview list, dead-centre Practise): no sideways scroll, no
   console errors; server stopped. Nothing committed.
+
+## 10 Nov 2026: modsim-lab, the rest of the task sheet
+
+- Added tasks 1 (elastic pendulum), 4 (unbalance), 8 (coupled pendulums), 9–10 (rolling discs), 11–12 (roller
+  pendulum), 13 (robot manipulator): `src/labs/sheet.js` (a three-step lab from a spec: T, V, D → equations; motion
+  beside its plot; M, K and eigenfrequencies; MATLAB and Python each), `src/labs/tasks.js` (the specs), four drawings in
+  `pics.js`, six models in `src/core/models.js`, values, practice laws and `data/labs.json` entries.
+- Readings: task 1 two DoF (block fixed; hinged reading a slider); task 4 Ω a prescribed speed; task 8 each rod two
+  segments mᵢ, lᵢ, spring at lᵢ, exact length; 9–12 solid discs rolling without slip, top-rim springs 2x (first
+  order); 11–12 M₁ on the disc; 13 the double pendulum's core, now one copy (`doppel` calls `manipulator`).
+- The sheet's PDF on H: was not reachable (drive not mounted): the figures were taken from the 7 Nov transcription
+  (`docs/sources/task-sheet.md`), not re-read from the page images. To check when H: is back.
+- `modes2` now gives the right shape for uncoupled modes (it gave [0, 1] for both). `python.js` `lagrange` has a
+  `simplify: false` route (linear_eq_to_matrix + LUsolve) for tasks 8 and 13, where solve and simplify took minutes.
+- New `tests/unit/tasks.test.js` (11 tests; failed first): energy kept, task 4's work balance, hand-derived
+  eigenfrequencies. modsim 82/82 with Python run (65 of 71 snippets). Checked the eight labs at 375 px light and dark:
+  no sideways scroll, no console errors; server stopped. Nothing committed.
+
+## 10 Nov 2026: the MATLAB snippets run in GNU Octave
+
+- GNU Octave 11.3.0 installed (user's approval); control 4.2.1 and signal 1.4.7 bundled. New kit runner
+  `kit/tests/octave-run.js` with long-lived workers `kit/tests/octave-worker.m` (fresh function workspace per snippet,
+  headless figures, reset after each, per-snippet timeout; requests through an inbox file, since Octave reads a piped
+  stdin in blocks). `kit/tests/octave-run.test.js` (5 tests) proves no variable leaks into the next snippet.
+- automation-lab `tests/unit/matlab-run.test.js`: 37 of 44 views run and agree with the lab; MATLAB-only 7 (stepinfo 3,
+  tf2ss realisation 2, pidtune 1, Octave's place misplacing task 2's Butterworth poles 1). robotics-lab: 2 of 10 run and
+  agree; 8 MATLAB-only (Robotics System Toolbox). No MATLAB bug found. READMEs say which views need real MATLAB.
+- modsim-lab not touched (another session): it needs one `tests/unit/matlab-run.test.js` like the automation one.
+  Nothing committed.

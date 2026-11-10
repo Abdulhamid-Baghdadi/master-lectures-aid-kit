@@ -1,6 +1,7 @@
 // A practice question's answer, worked from its data with the core, so the answer in labs.json is checked, never
 // trusted.
-import { g, smd, pendel, rlc, twoMass, doppel, motor, shaker, cartPendulum, chain2, rolle, rolleRest, modes2 } from "./models.js";
+import { g, smd, pendel, rlc, twoMass, doppel, motor, shaker, cartPendulum, chain2, rolle, rolleRest, modes2,
+  elasticPendulum, unbalance, coupledPendulum, rollingDiscs, rollerPendulum, manipulator } from "./models.js";
 
 const LAWS = {
   w0: q => smd(q).w0,
@@ -20,6 +21,12 @@ const LAWS = {
   cartRest: q => cartPendulum(q).rest,
   chainF: q => chain2(q).modes[q.mode].f,
   rolleRest: q => rolleRest(rolle(q)) * 180 / Math.PI,
+  elasticF: q => elasticPendulum(q).modes[q.mode].f,
+  unbalanceF: q => unbalance(q).modes[q.mode].f,
+  coupledF: q => coupledPendulum(q).modes[q.mode].f,
+  discsF: q => rollingDiscs(q).modes[q.mode].f,
+  rollerF: q => rollerPendulum(q).modes[q.mode].f,
+  robotF: q => manipulator(q).modes[q.mode].f,
   gravity: () => g,
 };
 

@@ -15,8 +15,8 @@ Sources in `H:\My Drive\02_Personal\02_Education\FH\03_FH_Master\`.
   x only; Octave is not installed, so the snippets are checked for undefined names, not run.
 - 7 Nov 2026: `modsim-lab` (13 labs, ModSim): the 8 worked lecture examples and tasks 2, 3, 5, 6, 7 of the task sheet
   (worked here), each in 3–4 animated steps with its MATLAB. The step player, MATLAB number writer, Runge–Kutta and
-  README recorder moved into the kit. Open: tasks 1, 4, 8–13 of the sheet (geometry or data unclear; the README says
-  why); MATLAB/Octave not installed, so snippets are checked for undefined names, not run; the MathWorks pages were
+  README recorder moved into the kit. 10 Nov 2026: tasks 1, 4, 8–13 added (21 labs, the whole sheet), each reading
+  of the figure stated on the lab and in the README, every number an example value. MATLAB/Octave not installed, so snippets are checked for undefined names, not run; the MathWorks pages were
   summarised by a helper agent, not re-read word for word; no .slx model opened; most values are example values,
   since the lecture gives none.
 - 7 Nov 2026: Python beside the MATLAB on every step of `automation-lab` (44 views, python-control's MATLAB layer and

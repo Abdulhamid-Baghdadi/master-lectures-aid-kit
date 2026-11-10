@@ -31,7 +31,8 @@ export function modes2(K, M) {
   const lambdas = quadRoots(a, b, c).map(z => z[0]).sort((x, y) => x - y);
   return lambdas.map(l => {
     const p = K[0][1] - l * M[0][1], q = K[0][0] - l * M[0][0];
-    const v = Math.abs(p) > 1e-12 ? [1, -q / p] : [0, 1];
+    // Uncoupled (p = 0): the mode moves the coordinate whose own equation λ satisfies.
+    const v = Math.abs(p) > 1e-12 ? [1, -q / p] : Math.abs(q) <= 1e-9 * Math.max(1, Math.abs(K[0][0])) ? [1, 0] : [0, 1];
     return { lambda: l, omega: Math.sqrt(l), f: Math.sqrt(l) / (2 * Math.PI), v };
   });
 }
@@ -174,19 +175,34 @@ export function receptance({ M, K, Cd }, w, input = [1, 0]) {
  *  (2/3)φ̈2 + φ̈1 cos Δ + φ̇1² sin Δ + (g/L1) sin φ2 + κ Δ + γ Δ̇ = 0, Δ = φ2 − φ1, κ = 2k_D/(mL1²), γ = 2c_D/(mL1²).
  *  The sheet (p. 38) writes k_D and c_D unscaled; with k_D = c_D = 0 both are p. 33's equations. State [φ1, φ2, φ̇1, φ̇2]. */
 export function doppel({ m, L1, kD = 0, cD = 0 }) {
-  const kap = 2 * kD / (m * L1 * L1), gam = 2 * cD / (m * L1 * L1), w2 = g / L1;
-  const f = (t, [p1, p2, w1, wB]) => {
-    const d = p2 - p1, cs = Math.cos(d), sn = Math.sin(d), dd = wB - w1;
-    const r1 = wB * wB * sn - 3 * w2 * Math.sin(p1) + kap * d + gam * dd;
-    const r2 = -w1 * w1 * sn - w2 * Math.sin(p2) - kap * d - gam * dd;
-    const [a1, a2] = solve2([[8 / 3, cs], [cs, 2 / 3]], [r1, r2]);
-    return [w1, wB, a1, a2];
-  };
+  // The motion is the manipulator's (task 13) with two equal rods, no point masses and the spring at A only: one copy.
+  const kap = 2 * kD / (m * L1 * L1), w2 = g / L1;
+  const { f, energy } = manipulator({ m1: m, m2: m, l1: L1, l2: L1, m3: 0, m4: 0, k1: 0, c1: 0, k2: kD, c2: cD });
   const Ml = [[8 / 3, 1], [1, 2 / 3]], Kl = [[3 * w2 + kap, -kap], [-kap, w2 + kap]];
+  return { f, Ml, Kl, modes: modes2(Kl, Ml), energy };
+}
+
+/** Task 13, Robotermanipulator: link 1 (uniform rod m1, l1) from the base, joint mass m3 at its end, link 2 (uniform rod
+ *  m2, l2) with end mass m4; absolute angles φ1, φ2 from the downward vertical. Torsion springs and dampers k1, c1 at
+ *  the base and k2, c2 at the elbow (on φ2 − φ1); motor torques M1 = M01·cos(Ω1 t) at the base and M2 = M02·cos(Ω2 t)
+ *  at the elbow, the elbow's reaction on link 1, so Q = (M1 − M2, M2). Worked here (Lagrange 2nd kind):
+ *  a11 = m1l1²/3 + (m2+m3+m4)l1², a22 = m2l2²/3 + m4l2², b = (m2/2+m4)l1l2, G1 = (m1/2+m2+m3+m4)g l1, G2 = (m2/2+m4)g l2. */
+export function manipulator({ m1, l1, m2, l2, m3 = 0, m4 = 0, k1 = 0, c1 = 0, k2 = 0, c2 = 0, M01 = 0, M02 = 0, Om1 = 1, Om2 = 1 }) {
+  const a11 = m1 * l1 * l1 / 3 + (m2 + m3 + m4) * l1 * l1, a22 = m2 * l2 * l2 / 3 + m4 * l2 * l2, b = (m2 / 2 + m4) * l1 * l2;
+  const G1 = (m1 / 2 + m2 + m3 + m4) * g * l1, G2 = (m2 / 2 + m4) * g * l2;
+  const M1 = t => M01 * Math.cos(Om1 * t), M2 = t => M02 * Math.cos(Om2 * t);
+  const f = (t, [p1, p2, w1, w2]) => {
+    const d = p2 - p1, cs = Math.cos(d), sn = Math.sin(d);
+    const r1 = M1(t) - M2(t) + b * w2 * w2 * sn - G1 * Math.sin(p1) - k1 * p1 + k2 * d - c1 * w1 + c2 * (w2 - w1);
+    const r2 = M2(t) - b * w1 * w1 * sn - G2 * Math.sin(p2) - k2 * d - c2 * (w2 - w1);
+    const [x1, x2] = solve2([[a11, b * cs], [b * cs, a22]], [r1, r2]);
+    return [w1, w2, x1, x2];
+  };
+  const Ml = [[a11, b], [b, a22]], Kl = [[G1 + k1 + k2, -k2], [-k2, G2 + k2]];
   return {
-    f, Ml, Kl, modes: modes2(Kl, Ml),
-    energy: ([p1, p2, w1, wB]) => m * L1 * L1 / 6 * (4 * w1 * w1 + wB * wB + 3 * w1 * wB * Math.cos(p2 - p1))
-      - m * g * L1 * (1.5 * Math.cos(p1) + 0.5 * Math.cos(p2)) + 0.5 * kD * (p2 - p1) ** 2,
+    f, a11, a22, b, G1, G2, Ml, Kl, modes: modes2(Kl, Ml),
+    energy: ([p1, p2, w1, w2]) => 0.5 * a11 * w1 * w1 + 0.5 * a22 * w2 * w2 + b * w1 * w2 * Math.cos(p2 - p1)
+      - G1 * Math.cos(p1) - G2 * Math.cos(p2) + 0.5 * k1 * p1 * p1 + 0.5 * k2 * (p2 - p1) ** 2,
   };
 }
 
@@ -262,4 +278,74 @@ export function chain2({ m1, m2, k1, k2, c1, c2, w0 = 0, F01 = 0, F02 = 0, Om = 
     transmit: om => receptance({ M, K, Cd }, om, [C(k1, om * c1), C(0)])[1],
     energy: ([x1, x2, v1, v2]) => 0.5 * m1 * v1 * v1 + 0.5 * m2 * v2 * v2 + 0.5 * k1 * x1 * x1 + 0.5 * k2 * (x2 - x1) ** 2,
   };
+}
+
+// ---------------------------------------------------------------- Task sheet 1, 4, 8, 9–12 (13 is manipulator above)
+// The sheet gives figures only; the readings (degrees of freedom, where things attach) are this lab's and are stated on
+// each lab and in the README. Worked here with Lagrange's method of the lecture.
+
+/** Task 1, Elastisches Pendel: block m1 (inertia J1 about its centre) fixed to the end of an axial spring k ∥ damper c,
+ *  turning with it; r the distance pivot–block centre (l0 unstretched), φ from the downward vertical; torsion spring
+ *  k_T, damper c_T and M1 = M01·cos(Ω t) at the pivot. State [r, φ, ṙ, φ̇]. */
+export function elasticPendulum({ m1, J1, l0, k, c = 0, kT = 0, cT = 0, M01 = 0, Om = 1 }) {
+  const rest = l0 + m1 * g / k;
+  const f = (t, [r, p, rd, w]) => [rd, w,
+    (m1 * r * w * w + m1 * g * Math.cos(p) - k * (r - l0) - c * rd) / m1,
+    (M01 * Math.cos(Om * t) - 2 * m1 * r * rd * w - m1 * g * r * Math.sin(p) - kT * p - cT * w) / (m1 * r * r + J1)];
+  const Ml = [[m1, 0], [0, m1 * rest * rest + J1]], Kl = [[k, 0], [0, m1 * g * rest + kT]];
+  return {
+    f, rest, Ml, Kl, modes: modes2(Kl, Ml),
+    energy: ([r, p, rd, w]) => 0.5 * m1 * (rd * rd + r * r * w * w) + 0.5 * J1 * w * w - m1 * g * r * Math.cos(p)
+      + 0.5 * k * (r - l0) ** 2 + 0.5 * kT * p * p,
+  };
+}
+
+/** Task 4, Unwucht erregter Schwinger: m1 on k1 ∥ c1 from the ground, m2 on k2 ∥ c2 above it, a rod m3, l3 pinned at m1
+ *  with m4 at its end turned at the prescribed speed Ω (β = Ω t from the downward vertical). y1, y2 up from the static
+ *  rest. Lagrange gives chain2 with m1 + m3 + m4 below and F(t) = −(m3/2 + m4) l3 Ω² cos Ω t on it. */
+export function unbalance({ m1, m2, m3, m4, l3, k1, k2, c1 = 0, c2 = 0, Om = 1 }) {
+  const mg = m1 + m3 + m4, ms = m3 / 2 + m4, F0 = -ms * l3 * Om * Om;
+  return { ...chain2({ m1: mg, m2, k1, k2, c1, c2, F01: F0, Om }), mg, ms, F0, F: t => F0 * Math.cos(Om * t) };
+}
+
+/** Task 8, Koppelpendel, read as each rod made of two uniform segments (m_i, l_i) above and below the coupling point
+ *  (the sheet's double label), end masses m3, m4 at 2l_i; pivots b apart, the spring k ∥ damper c from l1 down rod 1
+ *  to l2 down rod 2, unstretched at length b; torsion k_T, c_T and M_i = M0i·cos(Ω_i t) at each pivot. The spring's
+ *  length is exact, not linearised. State [φ1, φ2, φ̇1, φ̇2]. */
+export function coupledPendulum({ m1, l1, m2, l2, m3, m4, b, k, c = 0, kT = 0, cT = 0, M01 = 0, M02 = 0, Om1 = 1, Om2 = 1 }) {
+  const J1 = 8 / 3 * m1 * l1 * l1 + 4 * m3 * l1 * l1, J2 = 8 / 3 * m2 * l2 * l2 + 4 * m4 * l2 * l2;
+  const G1 = 2 * g * l1 * (m1 + m3), G2 = 2 * g * l2 * (m2 + m4);
+  const spring = (p1, p2) => {
+    const dx = b + l2 * Math.sin(p2) - l1 * Math.sin(p1), dy = l1 * Math.cos(p1) - l2 * Math.cos(p2), S = Math.hypot(dx, dy);
+    return { S, d1: -l1 * (dx * Math.cos(p1) + dy * Math.sin(p1)) / S, d2: l2 * (dx * Math.cos(p2) + dy * Math.sin(p2)) / S };
+  };
+  const f = (t, [p1, p2, w1, w2]) => {
+    const { S, d1, d2 } = spring(p1, p2), Fs = -k * (S - b) - c * (d1 * w1 + d2 * w2);
+    return [w1, w2, (M01 * Math.cos(Om1 * t) - G1 * Math.sin(p1) - kT * p1 - cT * w1 + Fs * d1) / J1,
+      (M02 * Math.cos(Om2 * t) - G2 * Math.sin(p2) - kT * p2 - cT * w2 + Fs * d2) / J2];
+  };
+  const Ml = [[J1, 0], [0, J2]], Kl = [[G1 + kT + k * l1 * l1, -k * l1 * l2], [-k * l1 * l2, G2 + kT + k * l2 * l2]];
+  return {
+    f, J1, J2, G1, G2, spring, Ml, Kl, modes: modes2(Kl, Ml),
+    energy: ([p1, p2, w1, w2]) => 0.5 * J1 * w1 * w1 + 0.5 * J2 * w2 * w2 - G1 * Math.cos(p1) - G2 * Math.cos(p2)
+      + 0.5 * k * (spring(p1, p2).S - b) ** 2 + 0.5 * kT * (p1 * p1 + p2 * p2),
+  };
+}
+
+/** Tasks 9 and 10, 2-Massen-Schwinger mit Rollen: two solid discs (J = ½ m r²) rolling without slip, axles at x1, x2.
+ *  The wall spring k1 ∥ c1 at the axle (task 9) or at the top of the rim (task 10, top: it moves 2x1, to first order);
+ *  disc to disc k2 ∥ c2 at axle height. M1 = M01·cos Ω t turns disc 1 (Q = M1/r1), F1 = F01·cos Ω t pulls axle 2.
+ *  Linear, so chain2 with 3/2 m and κ² k1, κ = 1 or 2. */
+export function rollingDiscs({ m1, m2, r1, k1, k2, c1 = 0, c2 = 0, M01 = 0, F01 = 0, Om = 1, top = false }) {
+  const kap2 = top ? 4 : 1;
+  return chain2({ m1: 1.5 * m1, m2: 1.5 * m2, k1: kap2 * k1, k2, c1: kap2 * c1, c2, F01: M01 / r1, F02: F01, Om });
+}
+
+/** Tasks 11 and 12, Rollen-Pendel: a solid disc m1, radius r, rolling without slip (axle x), a massless rod l from the
+ *  axle with point mass m2 (φ from the downward vertical); the wall spring k ∥ c at the top of the rim (task 11: 2x) or
+ *  at axle height (task 12: x); M1 = M01·cos Ω t turns the disc, F1 = F01·cos Ω t pulls the axle. Task 3's model with
+ *  block 3/2 m1, no rod mass, end mass m2 and force F1 + M1/r. */
+export function rollerPendulum({ m1, m2, r, l, k, c = 0, M01 = 0, F01 = 0, Om = 1, top = false }) {
+  const kap2 = top ? 4 : 1;
+  return cartPendulum({ dir: "horizontal", m1: 0, m2: 1.5 * m1, m3: m2, l1: l, k: kap2 * k, c: kap2 * c, kT: 0, cT: 0, F01: F01 + M01 / r, M01: 0, Om });
 }
