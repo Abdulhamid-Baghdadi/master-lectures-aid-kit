@@ -114,8 +114,9 @@ Y[1] = x, Y[2] = ẋ and returns the order as S, then `matlabFunction(V,'vars',{
 `ode45(odefun,tspan,y0)` wants a column from odefun(t,y) and returns one row per time; `eig(K,M)` solves K·V = M·V·D,
 so D holds λ = ω²; `bode` returns the magnitude as a ratio, 1×1×N; `jacobian(f,v)` puts ∂fᵢ/∂vⱼ at (i, j); the Sum
 block takes one sign per input, the Integrator's initial condition defaults to 0. The pages were read and summarised by
-a helper agent and not re-read word for word. **MATLAB and Octave are not installed here**: the snippets are checked for
-names used before they are assigned (every view of every lab, tests/unit/matlab-defined.test.js), not run.
+a helper agent and not re-read word for word. **MATLAB is not installed here**: the snippets are checked for names used
+before they are assigned (every view of every lab, tests/unit/matlab-defined.test.js), and most run in GNU Octave (next
+section but one).
 
 ## Python beside the MATLAB
 
@@ -132,6 +133,26 @@ only plots, are checked for undefined names only. Differences the snippets state
 state where ode45 returns one row per time; `scipy.linalg.eig` returns complex eigenvalues in no promised order, so
 they are sorted; sympy has no `odeToVectorField`, so `solve` gives the accelerations; MATLAB's `\` is
 `np.linalg.solve`.
+
+## Running the MATLAB in Octave
+
+The MATLAB panels also run in GNU Octave, which is free (checked with Octave 11.3.0, its control 4.2.1, signal 1.4.7
+and symbolic 3.2.2 packages: `pkg load control signal symbolic`). `tests/unit/matlab-run.test.js` runs every view's
+MATLAB there, headless, and 49 of 71 give the lab's own accelerations, eigenfrequencies, poles, matrices and end states;
+the chaotic double pendulum only plots and is held to running. ode45's end states are held to 5 % of the largest value
+of the lab's run, as the Python's are: Octave's ode45 is the same Dormand–Prince pair with the same default
+tolerances, but chooses its steps otherwise. Twenty-two need real MATLAB, and their MATLAB is not changed to suit Octave
+(10 Nov 2026):
+
+- Simulink and Simscape are not in Octave: steps 2 of the one-mass, two-mass, RLC and motor labs, step 4 of the
+  roller lab.
+- `diff(Lag, q)` of a symbolic function `q(t)` stops Octave's symbolic package with "max_recursion_depth exceeded"
+  (`diff(Lag, q(t))` works there). MATLAB takes it: the diff page's Euler–Lagrange example does the same. Step 1 of
+  the one-mass, pendulum and double pendulum labs and of tasks 1–4 and 8–13, step 2 of the roller lab: 14 views.
+- `odeToVectorField` is not in Octave's symbolic package: step 1 of the RLC, motor and shaker labs.
+
+Tasks 5–7's equations of motion are written directly, without `diff` by a function, and run: their accelerations at
+the Python's test state are checked. No MATLAB snippet was found wrong.
 
 ## Open it
 

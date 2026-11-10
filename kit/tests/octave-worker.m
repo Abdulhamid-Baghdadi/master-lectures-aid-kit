@@ -11,6 +11,12 @@
 function reply = run_one__(req__)
   reply = struct("ok", true, "stdout", "", "stderr", "", "values", {{}});
   code__ = fileread(req__.file);
+  % The symbolic package starts a Python (SymPy) and adds seconds, so only a snippet that declares syms loads it.
+  persistent symbolic__ = false;
+  if ! symbolic__ && ! isempty(regexp(code__, '(^|\n)\s*syms\s', "once"))
+    pkg load symbolic
+    symbolic__ = true;
+  end
   cd(req__.cwd);
   try
     reply.stdout = evalc(code__);

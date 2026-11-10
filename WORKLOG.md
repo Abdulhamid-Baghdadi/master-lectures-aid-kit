@@ -257,3 +257,13 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
   agree; 8 MATLAB-only (Robotics System Toolbox). No MATLAB bug found. READMEs say which views need real MATLAB.
 - modsim-lab not touched (another session): it needs one `tests/unit/matlab-run.test.js` like the automation one.
   Nothing committed.
+
+## 10 Nov 2026: ModSim's MATLAB runs in GNU Octave
+
+- modsim-lab `tests/unit/matlab-run.test.js`: 49 of 71 views run in Octave and agree with the lab (ode45 end states to
+  5 % of the run's largest value, as the Python's); the chaotic double pendulum's plot is held to running. MATLAB-only
+  22: Lagrange `diff(Lag, q)` of a symfun, which Octave's symbolic 3.2.2 cannot do (14; MathWorks' diff page allows
+  it), Simulink/Simscape (5), `odeToVectorField` (3). Tasks 5–7's directly written ODEs run in symbolic and their
+  accelerations are checked. No MATLAB bug found. README section and CLAUDE.md rule added.
+- kit: the worker loads the symbolic package only for a snippet with `syms`; `plan` takes `[]` for a view with no
+  pyCheck. Nothing committed.

@@ -6,6 +6,7 @@
 //   [mexpr, ...]   one MATLAB expression per entry of the view's pyCheck; that entry's value, tolerance and scale are
 //                  reused, so the lab's numbers have one source. An entry may be [mexpr, want => part of want] when
 //                  the MATLAB has only part of what the Python prints (an output where Python has the states);
+//                  a view with no pyCheck takes [] and must run without an error;
 //   { only: reason } the view needs what Octave lacks (a toolbox, a function): it is counted, not run.
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, mkdirSync, writeFileSync, renameSync, rmSync } from "node:fs";
@@ -119,7 +120,8 @@ export function plan(views, table) {
     const key = v.where.replace(/ at 1$/, ""), m = table[key];
     if (!m) { missing.push(key); continue; }
     if (m.only) { only.push({ where: v.where, reason: m.only }); continue; }
-    const py = Array.isArray(v.check?.[0]) ? v.check : [v.check];
+    // A view without a pyCheck (a plot alone) takes [] and is held to running without an error.
+    const py = v.check == null ? [] : Array.isArray(v.check[0]) ? v.check : [v.check];
     if (m.length !== py.length) throw new Error(`${key}: ${m.length} MATLAB checks for ${py.length} Python ones`);
     const checks = m.map((e, i) => {
       const [expr, part = w => w] = [e].flat();

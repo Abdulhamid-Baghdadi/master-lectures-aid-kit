@@ -32,10 +32,11 @@ worker's ready line, kills a hanging worker and the next snippet gets a new one.
 The MATLAB runs too (10 Nov 2026), in GNU Octave: `tests/octave-run.js` finds octave-cli (env `OCTAVE_CLI`, else
 Octave 11.3.0's install path, else the PATH; without it a lab's test is skipped and says so) and starts a few
 long-lived workers (`tests/octave-worker.m`: control and signal loaded once, each snippet inside a function so its
-workspace starts empty, figures invisible, format, globals, figures and folder reset after it). Octave reads a piped
+workspace starts empty, figures invisible, format, globals, figures and folder reset after it; the symbolic package,
+which starts a SymPy, only once a snippet declares `syms`). Octave reads a piped
 stdin in blocks, so requests go through a per-worker inbox file and replies come back as `@@` lines on stdout. A lab's
 `tests/unit/matlab-run.test.js` gives each view at the end of its step either MATLAB expressions, one per entry of its
-pyCheck (whose values and tolerances are reused), or `{ only: reason }` when it needs what Octave lacks; `plan` counts
+pyCheck (whose values and tolerances are reused; `[]` for a view with no pyCheck, held to running), or `{ only: reason }` when it needs what Octave lacks; `plan` counts
 both and fails on a view with neither. `tests/octave-run.test.js` holds the worker (nothing leaks, an error is named,
 a hang is stopped, plots stay headless).
 

@@ -10,7 +10,9 @@ in `docs/sources/vo-solutions-a.md`, `-b.md`), `Aufgabenstellung_ModSim_MKS_v01.
 the two-mass values), and the group's work in `Teams - General\` (`docs/sources/student-work.md`), which sets the
 MATLAB style; its slips are listed in the README. Keep the source's German symbols (k, c, k_D, c_D, φ, L₁, h_S …),
 label in English with the German term once. Check MATLAB behaviour on the MathWorks reference pages before showing a
-call, and cite the PDF page for every value. MATLAB is not installed: snippets are checked for undefined names, not run.
+call, and cite the PDF page for every value. MATLAB is not installed: snippets are checked for undefined names and run
+in GNU Octave in `tests/unit/matlab-run.test.js` (kit/tests/octave-run.js): a new view needs a row there, MATLAB
+expressions for its pyCheck or a MATLAB-only reason; never change correct MATLAB to suit Octave.
 Every view also returns `python` (src/labs/python.js; sympy, solve_ivp, scipy.linalg.eig, python-control) and a
 `pyCheck`; `tests/unit/python-run.test.js` runs them. Check a Python call on its docs.scipy.org, docs.sympy.org or
 python-control.readthedocs.io page and in the installed Python before showing it; Simulink and Simscape views stay
