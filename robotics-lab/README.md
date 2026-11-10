@@ -49,6 +49,17 @@ hand and say so.
 - **The slides cut numbers after three decimals** instead of rounding: ch. 2, p. 38 prints 4.693 for 4.6937, 0.104 for
   cos 84° = 0.10453 and 0.994 for sin 84° = 0.99452.
 
+## The stepped exercises
+
+The four stepped labs play each exercise step by step, with its MATLAB and Python beside it.
+
+| | |
+|---|---|
+| <picture><source media="(prefers-color-scheme: dark)" srcset="docs/dhsteps-dark.gif"><img src="docs/dhsteps-light.gif" alt="The RRT robot's DH table filling row by row as each frame appears on the arm" width="360"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/irbsteps-dark.gif"><img src="docs/irbsteps-light.gif" alt="The IRB 120 at the student's joint values beside the lab's chain" width="360"></picture> |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="docs/jacsteps-dark.gif"><img src="docs/jacsteps-light.gif" alt="The Jacobian's columns drawn as arrows at the tip of a two-link arm" width="360"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/iksteps-dark.gif"><img src="docs/iksteps-light.gif" alt="Inverse kinematics of the two-link arm swinging to its target, elbow up and elbow down" width="360"></picture> |
+
+Recorded with `node scripts/record-steps.mjs` (see its header for the server it needs).
+
 ## Source notes for the stepped exercises (7 Nov 2026)
 
 - **The student's DH table agrees with this lab's.** His seven rows (report slide 4; script) split the base's 290 mm
