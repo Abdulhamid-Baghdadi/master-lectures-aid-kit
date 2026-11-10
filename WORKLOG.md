@@ -278,3 +278,12 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Still open on the sheet: task 4 Ω(t) speed or torque; tasks 11, 12 where M₁ acts, rod unlabelled, bob drawn as a
   disc; task 8 pivot distance. Moment arrows are drawn clockwise; the lab's φ is counter-clockwise (tasks 1, 8, 13),
   a phase shift of π only, noted in the README. Nothing committed.
+
+## 10 Nov 2026: ModSim tasks 2, 3, 5-7 checked against the PDF
+
+- Labs (`src/labs/cart.js`, `chain.js`, `src/core/models.js`) re-read against `Aufgabenstellung_ModSim_MKS_v01.pdf`
+  p. 1 (task 2), p. 2 (task 3), p. 3 (tasks 5, 6), p. 4 (task 7); 150 dpi pages, 400 dpi crops of tasks 2 and 3.
+- Tasks 2, 3, 5, 7 agree. M₁ is drawn clockwise in tasks 2 and 3, against the lab's θ (phase shift of π only).
+- Task 6 changed: the figure drives J₁ and J₂ with M₁(t), M₂(t) at their own Ω₁, Ω₂ besides w(t); the lab had w(t)
+  alone. New `torsion2` (chain2 with per-torque frequencies), values M₀₁, M₀₂, Ω₁, Ω₂ (example values), sliders, MATLAB
+  and Python snippets; failing test first in `tasks.test.js`, Octave row updated. README notes added. Nothing committed.

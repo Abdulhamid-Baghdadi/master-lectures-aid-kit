@@ -88,6 +88,20 @@ coordinate, so the positive senses are the lab's; its moments are drawn clockwis
 lab's φ, a sign that is only a phase shift of π in φ₁; tasks 9–12 the sense that rolls the disc to the right, as the
 lab takes it).
 
+- **Tasks 2, 3 (pendulum on a sprung block):** 2, y (down) or x (right) and θ from the downward vertical; block m₂
+  guided, spring k ∥ damper c to the ceiling (task 2) or the wall (task 3); rod m₁, l₁ pinned at the block's centre with
+  end mass m₃; torsion spring k_T ∥ damper c_T and M₁ at the pin, F₁ on the block. Task 2 keeps the group's values
+  (their report's Tab. 1). Checked against the figure (PDF p. 1 for task 2, p. 2 for task 3) on 10 Nov 2026: agrees;
+  F₁ is drawn down (task 2) and to the right (task 3), as the lab's y and x; M₁ is drawn clockwise, against the lab's θ
+  (a phase shift of π only). The grey symbol at the pin is read as k_T ∥ c_T, as at the other pivots.
+- **Tasks 5, 7 (path-excited chains):** 2, x₁ and x₂ from the static rest; w(t) moves the free end of spring 1 and
+  damper 1, from below (task 5, road under the wheel m₁) or above (task 7, the suspension point), no other force.
+  Checked against the figure (PDF p. 3 for task 5, p. 4 for task 7) on 10 Nov 2026: agrees.
+- **Task 6 (torsional oscillator):** 2, φ₁ and φ₂; the shaft's end turned by w(t), and, as drawn, M₁(t) = M₀₁ cos Ω₁t
+  on J₁ and M₂(t) = M₀₂ cos Ω₂t on J₂, each at its own frequency (phases φ₁, φ₂ taken 0). Checked against the figure
+  (PDF p. 3) on 10 Nov 2026: changed. The lab had w(t) alone; M₁, M₂ are now in the model (`torsion2`), the sliders and
+  the MATLAB and Python, held by `tasks.test.js` ("task 6: M₁ … on J₁ and M₂ … on J₂"). The transmissibility stays that
+  of w(t) alone. M₀₁, M₀₂, Ω₁, Ω₂ are example values — not given on the sheet.
 - **Task 1 (elastic pendulum):** 2 degrees of freedom, r and φ: the block looks rigidly fixed to the rod's end, so it
   turns with it (J₁ of a 0.10 m × 0.06 m block). The other reading, the block hinged at its centre, is a slider: its own
   turn is then undriven and J₁ leaves φ's equation. Checked against the figure (PDF p. 1) on 10 Nov 2026: agrees (block

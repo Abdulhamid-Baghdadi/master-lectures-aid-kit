@@ -21,7 +21,7 @@ export const VALUES = {
   task3: { m1: 0.1, m2: 0.1, m3: 0.1, l1: 0.2, k: 10, c: 1, kT: 0.1, cT: 0.01, F01: 2, M01: 0, Om: 10, source: "example values, the masses as task 2's" },
   // Example values of the order of a quarter car (wheel 40 kg, body 300 kg); the sheet gives none.
   task5: { m1: 40, m2: 300, k1: 200000, k2: 20000, c1: 100, c2: 1500, w0: 0.02, Om: 10, source: "example values" },
-  task6: { m1: 0.02, m2: 0.05, k1: 50, k2: 80, c1: 0.02, c2: 0.02, w0: 0.1, F01: 0, F02: 0, Om: 30, source: "example values" },
+  task6: { m1: 0.02, m2: 0.05, k1: 50, k2: 80, c1: 0.02, c2: 0.02, w0: 0.1, Om: 30, M01: 0.5, M02: 0.3, Om1: 20, Om2: 45, source: "example values — not given on the sheet" },
   task7: { m1: 1, m2: 1, k1: 2000, k2: 750, c1: 1.6, c2: 0.2, w0: 0.01, Om: 20, source: "example values: the TM3 note's masses and springs" },
   // Tasks 1, 4, 8–13 (added 10 Nov 2026): the sheet's figures carry symbols only, so every number is an example value.
   // J1 of task 1 is a 0.10 m × 0.06 m block, m(a² + b²)/12.

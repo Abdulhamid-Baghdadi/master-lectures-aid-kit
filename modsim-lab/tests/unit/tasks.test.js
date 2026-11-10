@@ -4,7 +4,7 @@
 // python-run.test.js (an independent derivation from T, V and D).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { g, elasticPendulum, unbalance, coupledPendulum, rollingDiscs, rollerPendulum, manipulator, doppel, run, VALUES } from "../../src/core/index.js";
+import { g, elasticPendulum, unbalance, coupledPendulum, rollingDiscs, rollerPendulum, manipulator, doppel, chain2, torsion2, run, VALUES } from "../../src/core/index.js";
 
 const close = (a, b, rel, msg) => assert.ok(Math.abs(a - b) <= rel * Math.max(1, Math.abs(b)), `${msg}: ${a} against ${b}`);
 const drift = r => Math.max(...r.E.map(e => Math.abs(e - r.E[0])));
@@ -80,6 +80,20 @@ test("task 8: the exact spring length gives back the linear K near rest (by defi
   const acc = x => c.f(0, x).slice(2);
   const a1 = acc([h, 0, 0, 0]), a2 = acc([0, h, 0, 0]);
   close(-a1[0] * c.Ml[0][0] / h, c.Kl[0][0], 1e-5, "K11"); close(-a2[0] * c.Ml[0][0] / h, c.Kl[0][1], 1e-5, "K12");
+});
+
+// Task 6's figure (PDF p. 3, checked 10 Nov 2026) drives J₁ and J₂ with M₁(t) = M₀₁ cos(Ω₁t + φ₁) and M₂(t) =
+// M₀₂ cos(Ω₂t + φ₂) besides the shaft end's w(t); the lab had the path excitation alone.
+test("task 6: M₁ = M₀₁ cos Ω₁t on J₁ and M₂ = M₀₂ cos Ω₂t on J₂, each at its own frequency (by definition: at rest, q̈ᵢ = Mᵢ/Jᵢ)", () => {
+  const v = VALUES.task6;
+  assert.ok(v.M01 > 0 && v.M02 > 0 && v.Om1 !== v.Om2, "task 6 carries M₀₁, M₀₂ and two frequencies Ω₁, Ω₂");
+  const s = torsion2({ ...v, w0: 0 }), t = 0.37;
+  const a = s.f(t, [0, 0, 0, 0]).slice(2);
+  close(a[0], v.M01 * Math.cos(v.Om1 * t) / v.m1, 1e-12, "φ̈₁ = M₁/J₁");
+  close(a[1], v.M02 * Math.cos(v.Om2 * t) / v.m2, 1e-12, "φ̈₂ = M₂/J₂");
+  // Without the torques it is the chain the path excitation drives, as tasks 5 and 7.
+  const x = [0.01, -0.02, 0.2, -0.1];
+  torsion2({ ...v, M01: 0, M02: 0 }).f(t, x).forEach((q, i) => close(q, chain2({ ...v, F01: 0, F02: 0 }).f(t, x)[i], 1e-12, `ẋ${i}`));
 });
 
 test("task 13: two point masses on massless links, λ = (g/l)(2 ∓ √2) (hand-checked: λ² − 4λ + 2 = 0 in g/l)", () => {

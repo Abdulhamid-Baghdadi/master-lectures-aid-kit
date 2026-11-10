@@ -11,6 +11,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { octaveSkip, plan, runMChecks, byReason } from "../../../kit/tests/octave-run.js";
 import { views } from "./python-defined.test.js";
+import { VALUES } from "../../src/core/index.js";
 
 // Sorted real parts over sorted |imaginary parts|, as the Python checks print them.
 const eig = M => `[sort(real(eig(${M}))).'; sort(abs(imag(eig(${M})))).']`;
@@ -79,7 +80,8 @@ const M = {
   "task5 step 2": ["f0"],
   "task5 step 3": [...ends(4), x2om("k1", "c1")],
   "task6 step 1": [acc(["phi1", "phi2"], ["J1", "J2"], [0.01, -0.02, 0.2, -0.1],
-    { J1: 0.02, J2: 0.05, k_T1: 50, k_T2: 80, c_T1: 0.02, c_T2: 0.02, w0: 0.1, Om: 30 })],
+    { J1: 0.02, J2: 0.05, k_T1: 50, k_T2: 80, c_T1: 0.02, c_T2: 0.02, w0: 0.1, Om: 30,
+      M01: VALUES.task6.M01, M02: VALUES.task6.M02, Om1: VALUES.task6.Om1, Om2: VALUES.task6.Om2 })],
   "task6 step 2": ["f0"],
   "task6 step 3": [...ends(4), x2om("k_T1", "c_T1")],
   "task7 step 1": [acc(["x1", "x2"], ["m1", "m2"], [0.01, -0.02, 0.2, -0.1],

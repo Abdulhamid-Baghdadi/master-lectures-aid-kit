@@ -266,18 +266,24 @@ export function cartPendulum({ dir = "vertical", m1, m2, m3, l1, k, c, kT, cT, F
  *  path excitation w = ŵ0·cos(Ω t) at the free end of spring 1 (task 5 the road, task 7 the suspension point, task 6 the
  *  shaft's end) and F1, F2 = F0i·cos(Ω t) (task 6's moments). Coordinates from the static rest, so g drops out of
  *  tasks 5 and 7. Worked here: the sheet gives figures only. State [x1, x2, ẋ1, ẋ2]. */
-export function chain2({ m1, m2, k1, k2, c1, c2, w0 = 0, F01 = 0, F02 = 0, Om = 10 }) {
+export function chain2({ m1, m2, k1, k2, c1, c2, w0 = 0, F01 = 0, F02 = 0, Om = 10, Om1 = Om, Om2 = Om }) {
   const w = t => w0 * Math.cos(Om * t), wd = t => -w0 * Om * Math.sin(Om * t);
   const M = [[m1, 0], [0, m2]], K = [[k1 + k2, -k2], [-k2, k2]], Cd = [[c1 + c2, -c2], [-c2, c2]];
   return {
     w, M, K, Cd, modes: modes2(K, M),
     f: (t, [x1, x2, v1, v2]) => [v1, v2,
-      (F01 * Math.cos(Om * t) - c1 * (v1 - wd(t)) - k1 * (x1 - w(t)) + c2 * (v2 - v1) + k2 * (x2 - x1)) / m1,
-      (F02 * Math.cos(Om * t) - c2 * (v2 - v1) - k2 * (x2 - x1)) / m2],
+      (F01 * Math.cos(Om1 * t) - c1 * (v1 - wd(t)) - k1 * (x1 - w(t)) + c2 * (v2 - v1) + k2 * (x2 - x1)) / m1,
+      (F02 * Math.cos(Om2 * t) - c2 * (v2 - v1) - k2 * (x2 - x1)) / m2],
     /** |X2/ŵ0| at ω: the base drives spring 1 and damper 1, (K − ω²M + jωC)X = [k1 + jωc1, 0]ᵀ. */
     transmit: om => receptance({ M, K, Cd }, om, [C(k1, om * c1), C(0)])[1],
     energy: ([x1, x2, v1, v2]) => 0.5 * m1 * v1 * v1 + 0.5 * m2 * v2 * v2 + 0.5 * k1 * x1 * x1 + 0.5 * k2 * (x2 - x1) ** 2,
   };
+}
+
+/** Task 6, 2DoF-Torsionsschwinger, as drawn (PDF p. 3): the shaft's end turned by w(t) = ŵ₀ cos Ω t, and besides it
+ *  M₁ = M₀₁ cos Ω₁t on J₁ and M₂ = M₀₂ cos Ω₂t on J₂, each at its own frequency. m1, m2 stand for J₁, J₂. */
+export function torsion2({ M01 = 0, M02 = 0, Om1 = 1, Om2 = 1, ...rest }) {
+  return chain2({ ...rest, F01: M01, F02: M02, Om1, Om2 });
 }
 
 // ---------------------------------------------------------------- Task sheet 1, 4, 8, 9–12 (13 is manipulator above)

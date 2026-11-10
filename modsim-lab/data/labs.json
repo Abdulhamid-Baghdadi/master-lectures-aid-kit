@@ -211,7 +211,8 @@
       "law": "J₁φ̈₁ + c_T1(φ̇₁ − ẇ) + k_T1(φ₁ − w) − c_T2(φ̇₂ − φ̇₁) − k_T2(φ₂ − φ₁) = M₁",
       "lawTex": "J_1\\ddot{\\varphi}_1 + c_{T1}(\\dot{\\varphi}_1 - \\dot{w}) + k_{T1}(\\varphi_1 - w) - c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) - k_{T2}(\\varphi_2 - \\varphi_1) = M_1",
       "equations": [
-        { "eq": "J₂φ̈₂ + c_T2(φ̇₂ − φ̇₁) + k_T2(φ₂ − φ₁) = M₂", "tex": "J_2\\ddot{\\varphi}_2 + c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) + k_{T2}(\\varphi_2 - \\varphi_1) = M_2", "note": "The second disc; the response step integrates both (M₁ = M₂ = 0 there)", "ref": "", "explore": true },
+        { "eq": "J₂φ̈₂ + c_T2(φ̇₂ − φ̇₁) + k_T2(φ₂ − φ₁) = M₂", "tex": "J_2\\ddot{\\varphi}_2 + c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) + k_{T2}(\\varphi_2 - \\varphi_1) = M_2", "note": "The second disc; the response step integrates both, driven by w, M₁ and M₂", "ref": "", "explore": true },
+        { "eq": "M₁(t) = M₀₁ cos(Ω₁t), M₂(t) = M₀₂ cos(Ω₂t)", "tex": "M_1(t) = M_{01}\\cos(\\Omega_1 t),\\; M_2(t) = M_{02}\\cos(\\Omega_2 t)", "note": "The torques on J₁ and J₂, as drawn, each at its own frequency (phases φ₁, φ₂ taken 0)", "ref": "task sheet p. 3", "explore": true },
         { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The shaft end's angle, as the sheet writes it", "ref": "task sheet p. 3", "explore": true },
         { "eq": "(K − ω²M + jωC) X = [k_T1 + jωc_T1; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\boldsymbol{\\varphi}} = \\begin{bmatrix} k_{T1} + \\mathrm{j}\\omega c_{T1} \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |φ₂/ŵ₀| plotted", "ref": "", "explore": true }
       ],
