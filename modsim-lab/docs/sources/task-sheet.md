@@ -16,6 +16,10 @@ Read on 2026-11-07 from page renders at 110 dpi. An identical-named copy lies in
 - Excitations are written as `M_1(t) = M_01 cos(Ω_1 t + φ_1)` and similar; Ω is the excitation frequency and φ the
   phase. On pp. 5-6 the phase is omitted: `M_1(t)=M_01 cos(Ωt)`, `F_1(t)=F_01 cos(Ωt)`.
 - `g` (gravity, red arrow pointing down) appears on every figure except task 6.
+- Moment arrows are drawn clockwise in tasks 1, 8, 9-12 and 13 (re-read on 2026-11-10); with no coordinate drawn,
+  this fixes only the moment's own positive sense.
+- Re-checked against the PDF page images (150 dpi, crops at 400 dpi) on 2026-11-10: tasks 1-13 as transcribed,
+  except the two corrections in tasks 10 and 12 below.
 
 The "what is asked" line is inferred from the course context (the student report, p. 1, states the common goal:
 model analytically, derive the ODE, linearise, matrix form, state space, Jacobian, simulate and compare).
@@ -122,8 +126,8 @@ model analytically, derive the ODE, linearise, matrix form, state space, Jacobia
 ### 10. 2-Massen-Schwinger mit Rollen (p. 5)
 - Asked: as task 9, with a different attachment.
 - Figure: as task 9, but the wall spring-damper attaches to the **top** of disc `m_1` (at its rim), not the axle.
-  Disc-to-disc spring-damper from the right side of `m_1` [unclear: at axle height, apparently at the rim] to the
-  left side of `m_2` [unclear: rim of `m_2` at axle height]. `M_1(t)=M_01 cos(Ωt)` on `m_1`;
+  Disc-to-disc spring-damper axle to axle, as in task 9: a bar runs from each axle to the end plate at the rim
+  (re-read at 400 dpi on 2026-11-10). `M_1(t)=M_01 cos(Ωt)` on `m_1`;
   `F_1(t)=F_01 cos(Ωt)` to the right on axle of `m_2`. `g` down.
 - Symbols: as task 9.
 - DoF: 2 (rolling without slipping).
@@ -143,8 +147,8 @@ model analytically, derive the ODE, linearise, matrix form, state space, Jacobia
 
 ### 12. Rollen-Pendel (p. 6)
 - Asked: as task 11.
-- Figure: as task 11, but the wall spring-damper attaches at axle height, to the left rim of `m_1`
-  [unclear: rim or axle]. `M_1(t)=M_01 cos(Ωt)`, `F_1(t)=F_01 cos(Ωt)` on `m_1`. `g` down.
+- Figure: as task 11, but the wall spring-damper attaches at the axle of `m_1`: an end plate at the left rim with a
+  bar through to the axle (re-read at 400 dpi on 2026-11-10). `M_1(t)=M_01 cos(Ωt)`, `F_1(t)=F_01 cos(Ωt)` on `m_1`. `g` down.
 - Symbols, DoF and Lagrange judgement: as task 11 (**yes**; x, φ). For an axle-height attachment the spring
   stretches by x.
 

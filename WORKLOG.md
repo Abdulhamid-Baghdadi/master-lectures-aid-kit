@@ -238,8 +238,8 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Readings: task 1 two DoF (block fixed; hinged reading a slider); task 4 Ω a prescribed speed; task 8 each rod two
   segments mᵢ, lᵢ, spring at lᵢ, exact length; 9–12 solid discs rolling without slip, top-rim springs 2x (first
   order); 11–12 M₁ on the disc; 13 the double pendulum's core, now one copy (`doppel` calls `manipulator`).
-- The sheet's PDF on H: was not reachable (drive not mounted): the figures were taken from the 7 Nov transcription
-  (`docs/sources/task-sheet.md`), not re-read from the page images. To check when H: is back.
+- The figures were first taken from the 7 Nov transcription (H: not mounted); re-checked against the PDF the same
+  day, see the note below.
 - `modes2` now gives the right shape for uncoupled modes (it gave [0, 1] for both). `python.js` `lagrange` has a
   `simplify: false` route (linear_eq_to_matrix + LUsolve) for tasks 8 and 13, where solve and simplify took minutes.
 - New `tests/unit/tasks.test.js` (11 tests; failed first): energy kept, task 4's work balance, hand-derived
@@ -267,3 +267,14 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
   accelerations are checked. No MATLAB bug found. README section and CLAUDE.md rule added.
 - kit: the worker loads the symbolic package only for a snippet with `syms`; `plan` takes `[]` for a view with no
   pyCheck. Nothing committed.
+
+## 10 Nov 2026: ModSim task-sheet figures checked against the PDF
+
+- Tasks 1, 4, 8-13 compared with `Aufgabenstellung_ModSim_MKS_v01.pdf` pp. 1-7 (renders at 150 dpi, crops at
+  400 dpi); tasks 2, 3, 5-7 compared with the transcription only (their labs' code not re-read). All eight readings
+  agree with the figures; no equation, value or snippet changed, so no new test.
+- Confirmed and relabelled "as drawn": task 10's disc-to-disc spring at the axles, task 12's wall spring at the axle,
+  tasks 10 and 11's wall springs at the top of the rim. `docs/sources/task-sheet.md` corrected for tasks 10 and 12.
+- Still open on the sheet: task 4 Ω(t) speed or torque; tasks 11, 12 where M₁ acts, rod unlabelled, bob drawn as a
+  disc; task 8 pivot distance. Moment arrows are drawn clockwise; the lab's φ is counter-clockwise (tasks 1, 8, 13),
+  a phase shift of π only, noted in the README. Nothing committed.

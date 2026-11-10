@@ -131,8 +131,8 @@ function discs(id, top) {
       + a.circle(80, 104, 26, a.ACC, 3) + zig("M106 104 l8 0 l4 -6 l6 12 l6 -12 l4 6 l8 0") + a.circle(160, 110, 20, a.COOL, 3)),
     dof: ["2: x₁ and x₂", "rolling without slip ties each disc's turn to its axle's travel, φᵢ = xᵢ/rᵢ"],
     assume: [["Solid discs, J = ½mr²", `${EXAMPLE}; the radii then drop out of T and stay only in M₁/r₁`], ["Rolling without slip", "the floor's friction holds; gravity does no work on the level floor"],
-      top ? ["The wall spring holds the top of the rim", "that point moves 2x₁ (first order): keep x₁ small against r₁, since the point leaves the top as the disc turns"] : ["The wall spring holds the axle", "as drawn"],
-      ["Disc to disc at axle height", top ? "the figure is unclear whether at the rims; a rim point at axle height moves like the axle to first order, so the axles are used" : "as drawn"]],
+      top ? ["The wall spring holds the top of the rim", "as drawn (the bar meets the rim at its top); that point moves 2x₁ to first order: keep x₁ small against r₁, since the point leaves the top as the disc turns"] : ["The wall spring holds the axle", "as drawn"],
+      ["Disc to disc at the axles", "as drawn: a bar runs from each axle to the spring's end plate"]],
     lines: ["Read: each disc rolls without slipping, turning by xᵢ/rᵢ: x₁ and x₂", "T = ½m₁ẋ₁² + ½(½m₁r₁²)(ẋ₁/r₁)² + … = ¾m₁ẋ₁² + ¾m₂ẋ₂²",
       top ? "V = ½k₁(2x₁)² + ½k₂(x₂ − x₁)²: the top of the rim moves twice as far as the axle" : "V = ½k₁x₁² + ½k₂(x₂ − x₁)²: both springs at the axles",
       `D = ½c₁(${top ? "2" : ""}ẋ₁)² + ½c₂(ẋ₂ − ẋ₁)²,  Q = (M₁/r₁, F₁)`,
@@ -165,13 +165,13 @@ function rollerPend(id, top) {
     ["F_01", st.F01, "N"], ["M_01", st.M01, "N*m"], ["Om", st.Om, "rad/s"]];
   return sheetLab({
     id, page: 6, values: VALUES[id], model: rollerPendulum, q: ["x", "phi"], qNames: ["x", "φ"],
-    art: () => a.picture(top ? "A disc rolling on the floor, held at the top of its rim by a wall spring, a pendulum hanging from its axle" : "A disc rolling on the floor, tied at axle height to the wall, a pendulum hanging from its axle",
+    art: () => a.picture(top ? "A disc rolling on the floor, held at the top of its rim by a wall spring, a pendulum hanging from its axle" : "A disc rolling on the floor, tied at its axle to the wall, a pendulum hanging from its axle",
       a.line([[14, 10], [14, 70]], a.INK, 3) + a.line([[14, 70], [190, 70]], a.INK, 3) + zig(top ? "M14 22 l12 0 l5 -6 l6 12 l6 -12 l6 12 l5 -6 l30 0" : "M14 46 l12 0 l5 -6 l6 12 l6 -12 l6 12 l5 -6 l12 0")
       + a.circle(100, 46, 24, a.ACC, 3) + a.line([[100, 46], [120, 128]], a.INK, 3) + a.circle(121, 132, 8, a.COOL, 3, a.COOL)),
     dof: ["2: x and φ", "rolling without slip ties the disc's turn to x/r; the rod swings freely about the axle"],
     assume: [["M₁ turns the disc against the floor", "the sheet does not say whether it acts between disc and rod; read as on the disc, so Q_x = M₁/r"],
       ["Rod massless, bob m₂ a point mass", `rod mass and length are not labelled; ${EXAMPLE}`], ["Solid disc, J₁ = ½m₁r²", EXAMPLE],
-      top ? ["The wall spring holds the top of the rim", "that point moves 2x (first order): keep x small against r"] : ["The wall spring at axle height", "the figure is unclear whether at the rim's side or the axle; to first order both move x"]],
+      top ? ["The wall spring holds the top of the rim", "as drawn (the bar meets the rim at its top); that point moves 2x to first order: keep x small against r"] : ["The wall spring holds the axle", "as drawn: a bar runs through the end plate at the rim to the axle"]],
     lines: ["Read: the disc rolls without slipping, the rod hangs from its axle: x and φ", "bob: (x + l sin φ, −l cos φ)",
       "T = ½m₁ẋ² + ½(½m₁r²)(ẋ/r)² + ½m₂[(ẋ + lφ̇ cos φ)² + (lφ̇ sin φ)²]",
       top ? "V = −m₂g l cos φ + ½k(2x)²: the top of the rim moves 2x" : "V = −m₂g l cos φ + ½k x²", `D = ½c(${top ? "2" : ""}ẋ)²,  Q = (F₁ + M₁/r, 0)`,

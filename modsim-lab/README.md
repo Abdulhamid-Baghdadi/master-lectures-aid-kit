@@ -82,25 +82,38 @@ results:
 
 All 13 tasks are in. The sheet gives a figure per task and nothing else (`docs/sources/task-sheet.md`), so every number
 in tasks 1, 4 and 8–13 is an example value, labelled "example value — not given on the sheet" on each slider. Where the
-figure leaves a choice, the lab takes one reading and says so on its first step (added 10 Nov 2026; the figures were
-read from the transcription of 7 Nov, the PDF itself was not reachable that day):
+figure leaves a choice, the lab takes one reading and says so on its first step (added 10 Nov 2026). Each was then
+checked against the sheet's own figure (PDF page images, 150 and 400 dpi) on 10 Nov 2026. The sheet draws no
+coordinate, so the positive senses are the lab's; its moments are drawn clockwise (tasks 1, 8, 13 opposite to the
+lab's φ, a sign that is only a phase shift of π in φ₁; tasks 9–12 the sense that rolls the disc to the right, as the
+lab takes it).
 
 - **Task 1 (elastic pendulum):** 2 degrees of freedom, r and φ: the block looks rigidly fixed to the rod's end, so it
   turns with it (J₁ of a 0.10 m × 0.06 m block). The other reading, the block hinged at its centre, is a slider: its own
-  turn is then undriven and J₁ leaves φ's equation.
+  turn is then undriven and J₁ leaves φ's equation. Checked against the figure (PDF p. 1) on 10 Nov 2026: agrees (block
+  drawn rigid on the rod, grey rotary spring-damper at the pivot); nothing changed.
 - **Task 4 (unbalance):** 2, y₁ and y₂: Ω(t) is read as a prescribed constant speed (drawn blue like the path
   excitations), so the rod angle β = Ωt is given and the unbalance acts as −(m₃/2 + m₄)l₃Ω² cos Ωt on m₁. Read as a
-  torque, β would be a third coordinate. Energy is not kept even undamped; the test checks it against the drive's work.
+  torque, β would be a third coordinate. Energy is not kept even undamped; the test checks it against the drive's work. Checked against the figure (PDF p. 2) on 10 Nov 2026:
+  agrees (rod m₃, l₃ pinned at m₁'s centre, m₄ at its end, Ω(t) blue); whether Ω(t) is a speed stays the sheet's open
+  point.
 - **Task 8 (coupled pendulums):** 2, φ₁ and φ₂; each rod read as two segments mᵢ, lᵢ (the double label), so a rod is
-  2mᵢ, 2lᵢ and the spring holds at lᵢ; pivots b apart with the spring unstretched at rest; its length kept exact.
+  2mᵢ, 2lᵢ and the spring holds at lᵢ; pivots b apart with the spring unstretched at rest; its length kept exact. Checked against the figure (PDF p. 4) on 10 Nov
+  2026: agrees (spring–damper between the two labels of each rod, grey rotary spring-dampers at both pivots, M̂₀₁, M̂₀₂);
+  b stays an example value.
 - **Tasks 9, 10 (rolling discs):** 2, x₁ and x₂; solid discs (J = ½mr²) rolling without slip; task 10's wall spring
-  at the top of the rim stretches by 2x₁ (first order), the disc-to-disc spring taken at the axles.
+  at the top of the rim stretches by 2x₁ (first order), the disc-to-disc spring taken at the axles. Checked against the
+  figure (PDF p. 5) on 10 Nov 2026: agrees; the disc-to-disc spring in task 10 is now confirmed at the axles (a bar runs
+  from each axle to its end plate), so its step no longer calls it unclear.
 - **Tasks 11, 12 (roller pendulum):** 2, x and φ; massless rod with a point bob; M₁ turns the disc against the floor
   (the sheet does not say whether it acts between disc and rod); task 11's spring at the top of the rim (2x), task 12's
-  at axle height (x). The model is task 3's with a rolling disc for the block.
+  at axle height (x). The model is task 3's with a rolling disc for the block. Checked against the figure (PDF p. 6) on
+  10 Nov 2026: agrees; task 12's spring is now confirmed at the axle (a bar runs through the end plate to it). Still
+  open: where M₁ acts, and the rod (unlabelled) and bob m₂ (drawn as a disc, taken as a point).
 - **Task 13 (robot manipulator):** 2, absolute link angles; uniform links, elbow motor m₃ and load m₄ as points; the
   motor torques are inputs, the elbow's acting back on link 1 (Q = (M₁ − M₂, M₂)). The core is the double pendulum's:
-  VO example 6 is this model with equal rods and no point masses, and now calls it.
+  VO example 6 is this model with equal rods and no point masses, and now calls it. Checked against the figure (PDF p. 7)
+  on 10 Nov 2026: agrees (M₁ at the base, M₂ at the elbow, grey rotary spring-dampers at both joints).
 
 Held by `tests/unit/tasks.test.js` (energy kept undamped; eigenfrequencies against closed forms derived by hand, among
 them ω₁ = √(g/L), ω₂ = √(g/L + 2ka²/(mL²)) for point-mass coupled pendulums and λ = (g/l)(2 ∓ √2) for the arm) and
