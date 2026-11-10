@@ -12,4 +12,6 @@ the Rechenbeispiele `Beispiele 2017\AAU_SS2021_Rechenbeispiele_v1.pdf` (Beispiel
 course's names: ẋ = A x + b u, v = cᵀx + d u, E, u = −rᵀx + K_F·w, Q_S, Q_B, ℓ. Check MATLAB behaviour on the MathWorks
 reference pages before showing a call; every view also returns `python` (src/labs/python.js, python-control's MATLAB
 layer and numpy) and a `pyCheck`, run by `tests/unit/python-run.test.js`: check a Python call on its
-python-control.readthedocs.io page and in the installed Python first, and cite file and page for every value. Part of `../PLAN.md`; not published.
+python-control.readthedocs.io page and in the installed Python first, and cite file and page for every value. The
+MATLAB runs in GNU Octave in `tests/unit/matlab-run.test.js` (kit/tests/octave-run.js): a new view needs a row there,
+MATLAB expressions for its pyCheck or a MATLAB-only reason; never change correct MATLAB to suit Octave. Part of `../PLAN.md`; not published.

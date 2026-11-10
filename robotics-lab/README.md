@@ -83,6 +83,14 @@ Recorded with `node scripts/record-steps.mjs` (see its header for the server it 
   ABB p. 32's ranges, axis 6 at ±400°. The specification's axes figure (p. 10) shows each axis's + and − sense only as
   arrows. Checked in `tests/unit/urdf.test.js`; nothing in the core had to change.
 
+## Running the MATLAB in Octave
+
+The stepped labs' MATLAB can be tried in GNU Octave, which is free, but only where it uses plain MATLAB: the two-link
+inverse kinematics (iksteps steps 1 and 2), which `tests/unit/matlab-run.test.js` runs in Octave 11.3.0 and which give
+the lab's angles. The other eight views build a `rigidBodyTree` (getTransform, geometricJacobian, inverseKinematics)
+and need MATLAB with the Robotics System Toolbox, which Octave has no counterpart for (10 Nov 2026). No MATLAB snippet
+was found wrong.
+
 ## Open it
 
 Not published. Locally, serve the repository's root and open `/robotics-lab/`:

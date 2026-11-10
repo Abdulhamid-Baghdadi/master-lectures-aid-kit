@@ -100,6 +100,22 @@ the snippets say where it matters (python-control 0.10.2 pages and the installed
 - `pidtune` has no python-control counterpart: lab task 2's PI loop takes kp and Tn from the sliders.
 - Simulink has no Python counterpart; this lab uses none.
 
+## Running the MATLAB in Octave
+
+The MATLAB panels also run in GNU Octave, which is free (checked with Octave 11.3.0, its control 4.2.1 and signal
+1.4.7 packages: `pkg load control signal`). `tests/unit/matlab-run.test.js` runs every view's MATLAB there, headless, and
+37 of 44 give the lab's own gains, poles, determinants and end states. Seven need real MATLAB, and their MATLAB is not
+changed to suit Octave (10 Nov 2026):
+
+- `stepinfo` is not in Octave's control package: placement step 2, lab task 0 step 3, lab task 1 step 1.
+- `pidtune` and `pidtuneOptions` are not there either: lab task 2 step 4.
+- `tf2ss` (signal package) returns another realisation than MATLAB's controller canonical form, so the normal forms'
+  steps 2 and 3 show other matrices; their poles agree.
+- `place` in Octave misplaces the four Butterworth poles of lab task 2 step 1 (its closed loop repeats one pair);
+  `acker(A,b,p)` in the same Octave gives the lab's rᵀ.
+
+No MATLAB snippet was found wrong.
+
 ## Open it
 
 Serve the repository's root and open `/automation-lab/`:

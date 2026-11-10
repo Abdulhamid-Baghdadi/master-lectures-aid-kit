@@ -11,7 +11,9 @@ the printed results. The folder's `Presentation-Baghdadi` and `project` are the 
 the four stepped exercise labs (`*steps.js`, 7 Nov 2026) compare with it and write their Python in its style. Each view
 of those labs shows MATLAB and Python (`src/labs/code.js`; the Python panel is the kit's step player's, shared with
 the Automation and ModSim labs since 7 Nov 2026); check MATLAB calls on the MathWorks pages first. The Python
-runs in `tests/unit/python-run.test.js` when numpy is installed.
+runs in `tests/unit/python-run.test.js` when numpy is installed; the MATLAB runs in GNU Octave in
+`tests/unit/matlab-run.test.js` (kit/tests/octave-run.js), where a new view needs a row: MATLAB expressions for its
+pyCheck, or MATLAB-only with the reason (the Robotics System Toolbox views).
 Known slips: ch. 2, p. 61 (the non-uniqueness example is wrong), ch. 5, p. 8 (rows 1–2 of the ZX′Z″ table do not reach
 the target), ABB p. 31 rows D and H (Z 270 mm, the geometry gives 290 mm). Check every equation against the slides and
 cite chapter and page. Part of `../PLAN.md`; not published.
