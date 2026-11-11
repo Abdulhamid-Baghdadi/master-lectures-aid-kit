@@ -3,6 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { typeset } from "../../../kit/ui/math.js";
 import { solve, isRight } from "../../src/core/index.js";
 
 const data = JSON.parse(readFileSync(new URL("../../data/labs.json", import.meta.url), "utf8"));
@@ -36,3 +37,16 @@ for (const lab of data.labs) {
     });
   }
 }
+
+test("every equation's symbol list has tex and meaning, and each symbol typesets (slides and sheets, 11 Nov 2026)", () => {
+  for (const w of data.labs) {
+    const lists = [w.lawWhere, ...(w.equations ?? []).map(e => e.where)].filter(Boolean);
+    for (const list of lists) for (const s of list) {
+      assert.ok(s.tex && s.means, `${w.id}: a where entry lacks tex or means`);
+      assert.ok(!typeset(s.tex).error, `${w.id}: ${s.tex} does not typeset`);
+    }
+    // Every equation with letters in it has a list, except purely numeric lines.
+    for (const e of w.equations ?? []) if (e.tex && /[A-Za-z]/.test(e.tex.replace(/\\[A-Za-z]+/g, ""))) assert.ok(e.where?.length, `${w.id}: ${e.tex} has no symbol list`);
+    if (w.lawTex) assert.ok(w.lawWhere ?? (w.equations ?? []).find(e => e.tex === w.lawTex)?.where, `${w.id}: the main law has no symbol list`);
+  }
+});

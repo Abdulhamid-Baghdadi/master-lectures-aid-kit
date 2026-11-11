@@ -153,8 +153,28 @@
       "law": "ẋ = A x + b u,  v = cᵀx + d u",
       "lawTex": "\\dot{x} = A x + b u, \\quad v = c^T x + d u",
       "equations": [
-        { "eq": "ẋ = A x + b u, v = cᵀx + d u", "tex": "\\dot{x} = A x + b u, \\quad v = c^T x + d u", "note": "SISO state space: A n × n, b n × 1, cᵀ 1 × n, d a scalar", "ref": "slides p. 3" },
-        { "eq": "ẋ = A x + B u, v = C x + D u", "tex": "\\dot{x} = A x + B u, \\quad v = C x + D u", "note": "Two inputs or outputs (System C, System 4): B, C and D become matrices", "ref": "", "explore": true }
+        { "eq": "ẋ = A x + b u, v = cᵀx + d u", "tex": "\\dot{x} = A x + b u, \\quad v = c^T x + d u", "note": "SISO state space: A n × n, b n × 1, cᵀ 1 × n, d a scalar", "ref": "slides p. 3",
+          "where": [
+            { "tex": "\\dot{x}", "means": "time derivative of the state vector (slides p. 3, sl. 6)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "u", "means": "manipulated variable, Stellgröße (slides p. 3, sl. 6)" },
+            { "tex": "v", "means": "controlled variable or actual value, Regelgröße (slides p. 3, sl. 6)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "d", "means": "feedthrough factor, Durchgangsfaktor (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "ẋ = A x + B u, v = C x + D u", "tex": "\\dot{x} = A x + B u, \\quad v = C x + D u", "note": "Two inputs or outputs (System C, System 4): B, C and D become matrices", "ref": "", "explore": true,
+          "where": [
+            { "tex": "\\dot{x}", "means": "time derivative of the state vector (slides p. 3, sl. 6)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "B", "means": "input matrix of a system with several inputs (not defined in the source); Beispiel 1, System C, uses it" },
+            { "tex": "u", "means": "input vector of a system with several inputs (not defined in the source)" },
+            { "tex": "v", "means": "output vector of a system with several outputs (not defined in the source)" },
+            { "tex": "C", "means": "output matrix (not defined in the source); Beispiel 1, System C" },
+            { "tex": "D", "means": "feedthrough matrix (not defined in the source); Beispiel 1, System C" }
+          ] }
       ],
       "practice": [
         { "question": "System B (Beispiel 1): what is a23, the entry of A for x3 in the equation of ẋ2?", "source": "S1, p. 1: A = [1 −2 5; 0 10 −1; −3 1 −2]", "answer": -1, "unit": "1", "tolerance": 0.001,
@@ -173,10 +193,39 @@
       "law": "G(s) = cᵀ(sE − A)⁻¹b + d",
       "lawTex": "G(s) = c^T (sE - A)^{-1} b + d",
       "equations": [
-        { "eq": "G(s) = cᵀ(sE − A)⁻¹b + d", "tex": "G(s) = c^T (sE - A)^{-1} b + d", "note": "Transfer function from the state space; E is the identity", "ref": "slides p. 9", "explore": true },
-        { "eq": "A_RNF = [0 1 …; …; −a0 −a1 … −a(n−1)], b_RNF = [0 … 1]ᵀ, cᵀ_RNF = [b0 … b(n−1)]", "tex": "A_{RNF} = \\begin{bmatrix} 0 & 1 & \\cdots \\\\ \\vdots & & \\ddots \\\\ -a_0 & -a_1 & \\cdots \\end{bmatrix},\\; b_{RNF} = \\begin{bmatrix} 0 \\\\ \\vdots \\\\ 1 \\end{bmatrix},\\; c^T_{RNF} = [b_0 \\cdots b_{n-1}]", "note": "Regelungsnormalform: ones above the diagonal, −a_i in the last row", "ref": "slides p. 8", "explore": true },
-        { "eq": "A_BNF = A_RNFᵀ, b_BNF = [b0 … b(n−1)]ᵀ, cᵀ_BNF = [0 … 1]", "tex": "A_{BNF} = A_{RNF}^T,\\; b_{BNF} = \\begin{bmatrix} b_0 \\\\ \\vdots \\\\ b_{n-1} \\end{bmatrix},\\; c^T_{BNF} = [0 \\cdots 1]", "note": "Beobachtungsnormalform: ones below the diagonal, −a_i in the last column", "ref": "slides p. 9", "explore": true },
-        { "eq": "stable ⇔ every root of det(sE − A) = 0 has Re < 0", "tex": "\\text{stable} \\iff \\operatorname{Re}\\lambda_i < 0 \\;\\forall i", "note": "Poles from the characteristic equation", "ref": "slides p. 9" }
+        { "eq": "G(s) = cᵀ(sE − A)⁻¹b + d", "tex": "G(s) = c^T (sE - A)^{-1} b + d", "note": "Transfer function from the state space; E is the identity", "ref": "slides p. 9", "explore": true,
+          "where": [
+            { "tex": "G(s)", "means": "transfer function V(s)/U(s) (slides p. 9, sl. 18)" },
+            { "tex": "s", "means": "Laplace variable (not defined in the source; used in the Laplace transform, slides p. 8, sl. 15)" },
+            { "tex": "E", "means": "identity matrix (slides p. 9, sl. 18)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "d", "means": "feedthrough factor, Durchgangsfaktor (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "A_RNF = [0 1 …; …; −a0 −a1 … −a(n−1)], b_RNF = [0 … 1]ᵀ, cᵀ_RNF = [b0 … b(n−1)]", "tex": "A_{RNF} = \\begin{bmatrix} 0 & 1 & \\cdots \\\\ \\vdots & & \\ddots \\\\ -a_0 & -a_1 & \\cdots \\end{bmatrix},\\; b_{RNF} = \\begin{bmatrix} 0 \\\\ \\vdots \\\\ 1 \\end{bmatrix},\\; c^T_{RNF} = [b_0 \\cdots b_{n-1}]", "note": "Regelungsnormalform: ones above the diagonal, −a_i in the last row", "ref": "slides p. 8", "explore": true,
+          "where": [
+            { "tex": "A_{RNF}", "means": "system matrix in Regelungsnormalform (slides p. 8, sl. 16)" },
+            { "tex": "a_0,\\ a_1", "means": "coefficients of the denominator of G(s), a_n = 1 (slides p. 8, sl. 15–16)" },
+            { "tex": "b_{RNF}", "means": "input vector in RNF (slides p. 8, sl. 16)" },
+            { "tex": "c^T_{RNF}", "means": "output vector in RNF (slides p. 8, sl. 16)" },
+            { "tex": "b_0,\\ b_{n-1}", "means": "coefficients of the numerator of G(s) (slides p. 8, sl. 15–16)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "A_BNF = A_RNFᵀ, b_BNF = [b0 … b(n−1)]ᵀ, cᵀ_BNF = [0 … 1]", "tex": "A_{BNF} = A_{RNF}^T,\\; b_{BNF} = \\begin{bmatrix} b_0 \\\\ \\vdots \\\\ b_{n-1} \\end{bmatrix},\\; c^T_{BNF} = [0 \\cdots 1]", "note": "Beobachtungsnormalform: ones below the diagonal, −a_i in the last column", "ref": "slides p. 9", "explore": true,
+          "where": [
+            { "tex": "A_{BNF}", "means": "system matrix in Beobachtungsnormalform (slides p. 9, sl. 17)" },
+            { "tex": "A_{RNF}^T", "means": "transpose of the RNF system matrix (slides p. 8, sl. 16)" },
+            { "tex": "b_{BNF}", "means": "input vector in BNF (slides p. 9, sl. 17)" },
+            { "tex": "c^T_{BNF}", "means": "output vector in BNF (slides p. 9, sl. 17)" },
+            { "tex": "b_0,\\ b_{n-1}", "means": "coefficients of the numerator of G(s) (slides p. 8, sl. 15)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "stable ⇔ every root of det(sE − A) = 0 has Re < 0", "tex": "\\text{stable} \\iff \\operatorname{Re}\\lambda_i < 0 \\;\\forall i", "note": "Poles from the characteristic equation", "ref": "slides p. 9",
+          "where": [
+            { "tex": "\\lambda_i", "means": "roots of the characteristic equation det(sE − A) = 0, the poles (slides p. 9, sl. 18)" },
+            { "tex": "i", "means": "index of the root, 1 to n (slides p. 9, sl. 18)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 5: G(s) of System A has the numerator s + b0. What is b0?", "source": "S1, p. 7: G(s) = (s − 13)/(s² − 8s − 29)", "answer": -13, "unit": "1", "tolerance": 0.001,
@@ -198,10 +247,35 @@
       "lecture": "Kubinger (2021a), Beispiele 6, 10, 11, 12; Kubinger (2021), slides pp. 6–10",
       "law": "Q_S = [b  Ab  …  Aⁿ⁻¹b],  Q_B = [cᵀ; cᵀA; …; cᵀAⁿ⁻¹]",
       "lawTex": "Q_S = [b \\; Ab \\; \\cdots \\; A^{n-1}b], \\quad Q_B = \\begin{bmatrix} c^T \\\\ c^T A \\\\ \\vdots \\\\ c^T A^{n-1} \\end{bmatrix}",
+      "lawWhere": [
+        { "tex": "Q_S", "means": "controllability matrix, Steuerbarkeitsmatrix (slides p. 6, sl. 12)" },
+        { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+        { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+        { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" },
+        { "tex": "Q_B", "means": "observability matrix, Beobachtbarkeitsmatrix (slides p. 7, sl. 13)" },
+        { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" }
+      ],
       "equations": [
-        { "eq": "Q_S = [b Ab … Aⁿ⁻¹b]; controllable ⇔ det Q_S ≠ 0", "tex": "Q_S = [b \\; Ab \\; \\cdots \\; A^{n-1} b], \\quad \\det Q_S \\ne 0", "note": "Steuerbarkeitsmatrix; or rank Q_S = n", "ref": "slides p. 6", "explore": true },
-        { "eq": "Q_B = [cᵀ; cᵀA; …]; observable ⇔ det Q_B ≠ 0", "tex": "Q_B = \\begin{bmatrix} c^T \\\\ c^T A \\\\ \\vdots \\end{bmatrix}, \\quad \\det Q_B \\ne 0", "note": "Beobachtbarkeitsmatrix; or rank Q_B = n", "ref": "slides p. 7", "explore": true },
-        { "eq": "det(sE − A) = 0, stable ⇔ all Re λi < 0", "tex": "\\det(sE - A) = 0, \\quad \\operatorname{Re}\\lambda_i < 0", "note": "Stable, marginally stable (simple poles on the axis) or unstable", "ref": "slides pp. 9–10", "explore": true }
+        { "eq": "Q_S = [b Ab … Aⁿ⁻¹b]; controllable ⇔ det Q_S ≠ 0", "tex": "Q_S = [b \\; Ab \\; \\cdots \\; A^{n-1} b], \\quad \\det Q_S \\ne 0", "note": "Steuerbarkeitsmatrix; or rank Q_S = n", "ref": "slides p. 6", "explore": true,
+          "where": [
+            { "tex": "Q_S", "means": "controllability matrix, Steuerbarkeitsmatrix (slides p. 6, sl. 12)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "Q_B = [cᵀ; cᵀA; …]; observable ⇔ det Q_B ≠ 0", "tex": "Q_B = \\begin{bmatrix} c^T \\\\ c^T A \\\\ \\vdots \\end{bmatrix}, \\quad \\det Q_B \\ne 0", "note": "Beobachtbarkeitsmatrix; or rank Q_B = n", "ref": "slides p. 7", "explore": true,
+          "where": [
+            { "tex": "Q_B", "means": "observability matrix, Beobachtbarkeitsmatrix (slides p. 7, sl. 13)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "det(sE − A) = 0, stable ⇔ all Re λi < 0", "tex": "\\det(sE - A) = 0, \\quad \\operatorname{Re}\\lambda_i < 0", "note": "Stable, marginally stable (simple poles on the axis) or unstable", "ref": "slides pp. 9–10", "explore": true,
+          "where": [
+            { "tex": "s", "means": "Laplace variable (not defined in the source; used in the Laplace transform, slides p. 8, sl. 15)" },
+            { "tex": "E", "means": "identity matrix (slides p. 9, sl. 18)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "\\lambda_i", "means": "roots of the characteristic equation det(sE − A) = 0, the poles (slides p. 9, sl. 18)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 6: det Q_S of System A?", "source": "S1, p. 8: Q_S = [1 −5; −1 −7], det = −12", "answer": -12, "unit": "1", "tolerance": 0.001,
@@ -224,11 +298,52 @@
       "law": "rᵀ_RNF = [p0 − a0  …  p(n−1) − a(n−1)]",
       "lawTex": "r^T_{RNF} = [p_0 - a_0 \\;\\cdots\\; p_{n-1} - a_{n-1}]",
       "equations": [
-        { "eq": "u = −rᵀx + K_F·w, ẋ = (A − b rᵀ)x + b K_F w", "tex": "u = -r^T x + K_F w, \\quad \\dot{x} = (A - b r^T) x + b K_F w", "note": "State controller with prefilter", "ref": "slides pp. 11, 16" },
-        { "eq": "det(sE − (A − b rᵀ)) = sⁿ + p(n−1)sⁿ⁻¹ + … + p0", "tex": "\\det(sE - (A - b r^T)) = s^n + p_{n-1}s^{n-1} + \\cdots + p_0", "note": "The wanted characteristic polynomial from the wanted poles", "ref": "slides p. 13", "explore": true },
-        { "eq": "rᵀ_RNF = [p0 − a0 … p(n−1) − a(n−1)]", "tex": "r^T_{RNF} = [p_0 - a_0 \\;\\cdots\\; p_{n-1} - a_{n-1}]", "note": "Coefficient comparison in the RNF", "ref": "slides p. 13" },
-        { "eq": "x_RNF = S x, S = Q_S,RNF·Q_S⁻¹, rᵀ = rᵀ_RNF·S", "tex": "x_{RNF} = S x,\\; S = Q_{S,RNF} Q_S^{-1},\\; r^T = r^T_{RNF} S", "note": "Back to the plant's states (the transform is on slides p. 5; S worked here from Q_S,RNF = S·Q_S)", "ref": "slides p. 5" },
-        { "eq": "K_F = [cᵀ(−A + b rᵀ)⁻¹b]⁻¹", "tex": "K_F = \\left[c^T(-A + b r^T)^{-1} b\\right]^{-1}", "note": "Prefilter: the steady output follows w", "ref": "slides p. 16", "explore": true }
+        { "eq": "u = −rᵀx + K_F·w, ẋ = (A − b rᵀ)x + b K_F w", "tex": "u = -r^T x + K_F w, \\quad \\dot{x} = (A - b r^T) x + b K_F w", "note": "State controller with prefilter", "ref": "slides pp. 11, 16",
+          "where": [
+            { "tex": "u", "means": "manipulated variable, Stellgröße (slides p. 3, sl. 6)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "K_F", "means": "constant prefilter gain, G_F(0) (slides p. 16, sl. 31)" },
+            { "tex": "w", "means": "reference variable or set point, Führungsgröße (slides p. 11, sl. 21)" },
+            { "tex": "\\dot{x}", "means": "time derivative of the state vector (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "det(sE − (A − b rᵀ)) = sⁿ + p(n−1)sⁿ⁻¹ + … + p0", "tex": "\\det(sE - (A - b r^T)) = s^n + p_{n-1}s^{n-1} + \\cdots + p_0", "note": "The wanted characteristic polynomial from the wanted poles", "ref": "slides p. 13", "explore": true,
+          "where": [
+            { "tex": "s", "means": "Laplace variable (not defined in the source; used in the Laplace transform, slides p. 8, sl. 15)" },
+            { "tex": "E", "means": "identity matrix (slides p. 9, sl. 18)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" },
+            { "tex": "p_0,\\ p_{n-1}", "means": "coefficients of the wanted characteristic polynomial, from the wanted poles (slides p. 13, sl. 25)" }
+          ] },
+        { "eq": "rᵀ_RNF = [p0 − a0 … p(n−1) − a(n−1)]", "tex": "r^T_{RNF} = [p_0 - a_0 \\;\\cdots\\; p_{n-1} - a_{n-1}]", "note": "Coefficient comparison in the RNF", "ref": "slides p. 13",
+          "where": [
+            { "tex": "r^T_{RNF}", "means": "state feedback vector in RNF coordinates (slides p. 13, sl. 26)" },
+            { "tex": "p_0,\\ p_{n-1}", "means": "coefficients of the wanted characteristic polynomial, from the wanted poles (slides p. 13, sl. 25)" },
+            { "tex": "a_0,\\ a_{n-1}", "means": "coefficients of the differential equation, a_n = 1: the plant's characteristic polynomial (slides p. 7, sl. 14; p. 8, sl. 16)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "x_RNF = S x, S = Q_S,RNF·Q_S⁻¹, rᵀ = rᵀ_RNF·S", "tex": "x_{RNF} = S x,\\; S = Q_{S,RNF} Q_S^{-1},\\; r^T = r^T_{RNF} S", "note": "Back to the plant's states (the transform is on slides p. 5; S worked here from Q_S,RNF = S·Q_S)", "ref": "slides p. 5",
+          "where": [
+            { "tex": "x_{RNF}", "means": "state vector in RNF (slides p. 5, sl. 9, as x_NF)" },
+            { "tex": "S", "means": "constant regular transformation matrix, x_NF = S x (slides p. 5, sl. 9)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "Q_{S,RNF}", "means": "controllability matrix of the RNF model (not defined in the source); worked here" },
+            { "tex": "Q_S", "means": "controllability matrix of the plant (slides p. 6, sl. 12)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+            { "tex": "r^T_{RNF}", "means": "state feedback vector in RNF coordinates (slides p. 13, sl. 26)" }
+          ] },
+        { "eq": "K_F = [cᵀ(−A + b rᵀ)⁻¹b]⁻¹", "tex": "K_F = \\left[c^T(-A + b r^T)^{-1} b\\right]^{-1}", "note": "Prefilter: the steady output follows w", "ref": "slides p. 16", "explore": true,
+          "where": [
+            { "tex": "K_F", "means": "constant prefilter gain, G_F(0) (slides p. 16, sl. 31)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 13: the first entry of rᵀ_RNF for System A and s = −1 ± j3?", "source": "S1, p. 16: rᵀ_RNF = (39 10)", "answer": 39, "unit": "1", "tolerance": 0.001,
@@ -252,11 +367,50 @@
       "lecture": "Kubinger (2021a), Beispiele 17, 18; Kubinger (2021), slides pp. 23–27",
       "law": "dx̃/dt = (A − ℓcᵀ) x̃",
       "lawTex": "\\dot{\\tilde{x}} = (A - \\ell c^T)\\, \\tilde{x}",
+      "lawWhere": [
+        { "tex": "\\dot{\\tilde{x}}", "means": "time derivative of the estimation error (slides p. 24, sl. 48)" },
+        { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+        { "tex": "\\ell", "means": "observer vector, Beobachtungsvektor [n × 1] (slides p. 24, sl. 47)" },
+        { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+        { "tex": "\\tilde{x}", "means": "estimation error, x − x̂ (slides p. 24, sl. 47)" }
+      ],
       "equations": [
-        { "eq": "dx̂/dt = A x̂ + b u + ℓ(v − cᵀx̂)", "tex": "\\dot{\\hat{x}} = A\\hat{x} + b u + \\ell (v - c^T \\hat{x})", "note": "The observer: the plant's model plus a correction", "ref": "slides pp. 23–24" },
-        { "eq": "dx̃/dt = (A − ℓcᵀ)x̃, x̃ = x − x̂", "tex": "\\dot{\\tilde{x}} = (A - \\ell c^T)\\tilde{x}, \\quad \\tilde{x} = x - \\hat{x}", "note": "The error dies away when A − ℓcᵀ is stable", "ref": "slides p. 24", "explore": true },
-        { "eq": "ℓ_BNF = [p0 − a0; …; p(n−1) − a(n−1)]", "tex": "\\ell_{BNF} = \\begin{bmatrix} p_0 - a_0 \\\\ \\vdots \\\\ p_{n-1} - a_{n-1} \\end{bmatrix}", "note": "Coefficient comparison in the BNF", "ref": "slides p. 27", "explore": true },
-        { "eq": "ℓ = S⁻¹ℓ_BNF, S = Q_B,BNF⁻¹·Q_B", "tex": "\\ell = S^{-1}\\ell_{BNF}, \\quad S = Q_{B,BNF}^{-1} Q_B", "note": "Back to the plant's states (worked here from Q_B,BNF = Q_B·S⁻¹)", "ref": "" }
+        { "eq": "dx̂/dt = A x̂ + b u + ℓ(v − cᵀx̂)", "tex": "\\dot{\\hat{x}} = A\\hat{x} + b u + \\ell (v - c^T \\hat{x})", "note": "The observer: the plant's model plus a correction", "ref": "slides pp. 23–24",
+          "where": [
+            { "tex": "\\dot{\\hat{x}}", "means": "time derivative of the estimated state (slides p. 24, sl. 48)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "\\hat{x}", "means": "state vector estimated by the observer (slides p. 24, sl. 47)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "u", "means": "manipulated variable, Stellgröße (slides p. 3, sl. 6)" },
+            { "tex": "\\ell", "means": "observer vector, Beobachtungsvektor [n × 1] (slides p. 24, sl. 47)" },
+            { "tex": "v", "means": "controlled variable or actual value, Regelgröße (slides p. 3, sl. 6)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "dx̃/dt = (A − ℓcᵀ)x̃, x̃ = x − x̂", "tex": "\\dot{\\tilde{x}} = (A - \\ell c^T)\\tilde{x}, \\quad \\tilde{x} = x - \\hat{x}", "note": "The error dies away when A − ℓcᵀ is stable", "ref": "slides p. 24", "explore": true,
+          "where": [
+            { "tex": "\\dot{\\tilde{x}}", "means": "time derivative of the estimation error (slides p. 24, sl. 48)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "\\ell", "means": "observer vector, Beobachtungsvektor [n × 1] (slides p. 24, sl. 47)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "\\tilde{x}", "means": "estimation error, x − x̂ (slides p. 24, sl. 47)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "\\hat{x}", "means": "state vector estimated by the observer (slides p. 24, sl. 47)" }
+          ] },
+        { "eq": "ℓ_BNF = [p0 − a0; …; p(n−1) − a(n−1)]", "tex": "\\ell_{BNF} = \\begin{bmatrix} p_0 - a_0 \\\\ \\vdots \\\\ p_{n-1} - a_{n-1} \\end{bmatrix}", "note": "Coefficient comparison in the BNF", "ref": "slides p. 27", "explore": true,
+          "where": [
+            { "tex": "\\ell_{BNF}", "means": "observer vector in BNF coordinates (slides p. 27, sl. 53)" },
+            { "tex": "p_0,\\ p_{n-1}", "means": "coefficients of the wanted characteristic polynomial, from the wanted poles (slides p. 13, sl. 25)" },
+            { "tex": "a_0,\\ a_{n-1}", "means": "coefficients of the differential equation, a_n = 1: the plant's characteristic polynomial (slides p. 7, sl. 14; p. 8, sl. 16)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "ℓ = S⁻¹ℓ_BNF, S = Q_B,BNF⁻¹·Q_B", "tex": "\\ell = S^{-1}\\ell_{BNF}, \\quad S = Q_{B,BNF}^{-1} Q_B", "note": "Back to the plant's states (worked here from Q_B,BNF = Q_B·S⁻¹)", "ref": "",
+          "where": [
+            { "tex": "\\ell", "means": "observer vector, Beobachtungsvektor [n × 1] (slides p. 24, sl. 47)" },
+            { "tex": "\\ell_{BNF}", "means": "observer vector in BNF coordinates (slides p. 27, sl. 53)" },
+            { "tex": "S", "means": "constant regular transformation matrix, x_NF = S x (slides p. 5, sl. 9)" },
+            { "tex": "Q_{B,BNF}", "means": "observability matrix of the BNF model (not defined in the source); worked here" },
+            { "tex": "Q_B", "means": "observability matrix of the plant (slides p. 7, sl. 13)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 17: the first entry of ℓ_BNF for System 5 and s = −4 ± j4?", "source": "S1, p. 22: ℓ_BNF = (39; 8)", "answer": 39, "unit": "1", "tolerance": 0.001,
@@ -275,8 +429,29 @@
       "law": "[ẋ; dx̂/dt] = [A  −b rᵀ; ℓcᵀ  A − b rᵀ − ℓcᵀ][x; x̂] + [b; b] K_F w",
       "lawTex": "\\begin{bmatrix} \\dot{x} \\\\ \\dot{\\hat{x}} \\end{bmatrix} = \\begin{bmatrix} A & -b r^T \\\\ \\ell c^T & A - b r^T - \\ell c^T \\end{bmatrix} \\begin{bmatrix} x \\\\ \\hat{x} \\end{bmatrix} + \\begin{bmatrix} b \\\\ b \\end{bmatrix} K_F w",
       "equations": [
-        { "eq": "[ẋ; dx̂/dt] = [A −b rᵀ; ℓcᵀ A − b rᵀ − ℓcᵀ][x; x̂] + [b; b]K_F w", "tex": "\\begin{bmatrix} \\dot{x} \\\\ \\dot{\\hat{x}} \\end{bmatrix} = \\begin{bmatrix} A & -b r^T \\\\ \\ell c^T & A - b r^T - \\ell c^T \\end{bmatrix} \\begin{bmatrix} x \\\\ \\hat{x} \\end{bmatrix} + \\begin{bmatrix} b \\\\ b \\end{bmatrix} K_F w", "note": "The loop with observer, order 2n", "ref": "slides p. 25", "explore": true },
-        { "eq": "eig = eig(A − b rᵀ) ∪ eig(A − ℓcᵀ)", "tex": "\\operatorname{eig} = \\operatorname{eig}(A - b r^T) \\cup \\operatorname{eig}(A - \\ell c^T)", "note": "Separation theorem", "ref": "slides p. 25", "explore": true }
+        { "eq": "[ẋ; dx̂/dt] = [A −b rᵀ; ℓcᵀ A − b rᵀ − ℓcᵀ][x; x̂] + [b; b]K_F w", "tex": "\\begin{bmatrix} \\dot{x} \\\\ \\dot{\\hat{x}} \\end{bmatrix} = \\begin{bmatrix} A & -b r^T \\\\ \\ell c^T & A - b r^T - \\ell c^T \\end{bmatrix} \\begin{bmatrix} x \\\\ \\hat{x} \\end{bmatrix} + \\begin{bmatrix} b \\\\ b \\end{bmatrix} K_F w", "note": "The loop with observer, order 2n", "ref": "slides p. 25", "explore": true,
+          "where": [
+            { "tex": "\\dot{x}", "means": "time derivative of the state vector (slides p. 3, sl. 6)" },
+            { "tex": "\\dot{\\hat{x}}", "means": "time derivative of the estimated state (slides p. 25, sl. 49)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "\\hat{x}", "means": "state vector estimated by the observer (slides p. 24, sl. 47)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+            { "tex": "\\ell", "means": "observer vector, Beobachtungsvektor [n × 1] (slides p. 24, sl. 47)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "K_F", "means": "constant prefilter gain, G_F(0) (slides p. 16, sl. 31)" },
+            { "tex": "w", "means": "reference variable or set point, Führungsgröße (slides p. 11, sl. 21)" }
+          ] },
+        { "eq": "eig = eig(A − b rᵀ) ∪ eig(A − ℓcᵀ)", "tex": "\\operatorname{eig} = \\operatorname{eig}(A - b r^T) \\cup \\operatorname{eig}(A - \\ell c^T)", "note": "Separation theorem", "ref": "slides p. 25", "explore": true,
+          "where": [
+            { "tex": "\\operatorname{eig}", "means": "set of eigenvalues of a matrix (not defined in the source); sl. 50 says the observer poles add to the controller poles" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+            { "tex": "\\ell", "means": "observer vector, Beobachtungsvektor [n × 1] (slides p. 24, sl. 47)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 19: the second entry of rᵀ_RNF for s = −3 ± j?", "source": "S1, p. 24: rᵀ_RNF = (39 14)", "answer": 14, "unit": "1", "tolerance": 0.001,
@@ -294,11 +469,42 @@
       "lecture": "Kubinger (2021a), Beispiele 23–26; Kubinger (2021), slides pp. 56–59",
       "law": "y_t = f(x0) + f′(x0)·(x − x0)",
       "lawTex": "y_t = f(x_0) + \\left.\\frac{df}{dx}\\right|_{x_0} (x - x_0)",
+      "lawWhere": [
+        { "tex": "y_t", "means": "the tangent, the linear approximation of f (slides p. 57, sl. 114)" },
+        { "tex": "f", "means": "the nonlinear function (slides p. 57, sl. 114)" },
+        { "tex": "x_0", "means": "operating point where the tangent touches f (slides p. 57, sl. 114)" },
+        { "tex": "x", "means": "the variable (slides p. 57, sl. 114)" }
+      ],
       "equations": [
-        { "eq": "y_t = f(x0) + f′(x0)(x − x0)", "tex": "y_t = f(x_0) + \\left.\\frac{df}{dx}\\right|_{x_0}(x - x_0)", "note": "Tangent method", "ref": "slides p. 57", "explore": true },
-        { "eq": "F(x) = |(f(x) − y_t(x))/f(x)|", "tex": "F(x) = \\left|\\frac{f(x) - y_t(x)}{f(x)}\\right|", "note": "Relative error of the tangent", "ref": "slides p. 58", "explore": true },
-        { "eq": "ÿ + Dẏ + ω² y = 0", "tex": "\\ddot{y} + D\\dot{y} + \\omega^2 y = 0", "note": "Beispiel 23 linearised at y0 = 0", "ref": "S2, p. 13", "explore": true },
-        { "eq": "a_ij = ∂f_i/∂x_j, b_i = ∂f_i/∂u at x0 = 0, u0 = 0", "tex": "a_{ij} = \\frac{\\partial f_i}{\\partial x_j}, \\; b_i = \\frac{\\partial f_i}{\\partial u}", "note": "Each entry the slope of one term (the slides give the one-variable tangent only)", "ref": "" }
+        { "eq": "y_t = f(x0) + f′(x0)(x − x0)", "tex": "y_t = f(x_0) + \\left.\\frac{df}{dx}\\right|_{x_0}(x - x_0)", "note": "Tangent method", "ref": "slides p. 57", "explore": true,
+          "where": [
+            { "tex": "y_t", "means": "the tangent, the linear approximation of f (slides p. 57, sl. 114)" },
+            { "tex": "f", "means": "the nonlinear function (slides p. 57, sl. 114)" },
+            { "tex": "x_0", "means": "operating point where the tangent touches f (slides p. 57, sl. 114)" },
+            { "tex": "x", "means": "the variable (slides p. 57, sl. 114)" }
+          ] },
+        { "eq": "F(x) = |(f(x) − y_t(x))/f(x)|", "tex": "F(x) = \\left|\\frac{f(x) - y_t(x)}{f(x)}\\right|", "note": "Relative error of the tangent", "ref": "slides p. 58", "explore": true,
+          "where": [
+            { "tex": "F(x)", "means": "relative error of the tangent (slides p. 58, sl. 115)" },
+            { "tex": "f", "means": "the nonlinear function (slides p. 57, sl. 114)" },
+            { "tex": "y_t", "means": "the tangent (slides p. 57, sl. 114)" },
+            { "tex": "x", "means": "the variable (slides p. 57, sl. 114)" }
+          ] },
+        { "eq": "ÿ + Dẏ + ω² y = 0", "tex": "\\ddot{y} + D\\dot{y} + \\omega^2 y = 0", "note": "Beispiel 23 linearised at y0 = 0", "ref": "S2, p. 13", "explore": true,
+          "where": [
+            { "tex": "y", "means": "pendulum deflection, operating point y0 = 0 (Beispiel 23, Rechenbeispiele p. 24, uses it; not defined in the source)" },
+            { "tex": "\\dot{y},\\ \\ddot{y}", "means": "first and second time derivative of y (Beispiel 23)" },
+            { "tex": "D", "means": "damping constant of the pendulum (not defined in the source)" },
+            { "tex": "\\omega", "means": "angular frequency of the pendulum (not defined in the source)" }
+          ] },
+        { "eq": "a_ij = ∂f_i/∂x_j, b_i = ∂f_i/∂u at x0 = 0, u0 = 0", "tex": "a_{ij} = \\frac{\\partial f_i}{\\partial x_j}, \\; b_i = \\frac{\\partial f_i}{\\partial u}", "note": "Each entry the slope of one term (the slides give the one-variable tangent only)", "ref": "",
+          "where": [
+            { "tex": "a_{ij}", "means": "entry in row i, column j of A (not defined in the source); the slides give the one-variable tangent only" },
+            { "tex": "f_i", "means": "right side of the i-th state equation, ẋ = f(x, u, t) (slides p. 53, sl. 105)" },
+            { "tex": "x_j", "means": "j-th state (slides p. 53, sl. 105)" },
+            { "tex": "b_i", "means": "i-th entry of b (not defined in the source)" },
+            { "tex": "u", "means": "input (slides p. 53, sl. 105)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 25: a21?", "source": "M, p. 60: A = [−2 −3 −4; 2 2 1; −6 0 −8]", "answer": 2, "unit": "1", "tolerance": 0.001,
@@ -320,9 +526,35 @@
       "lecture": "Kubinger (2021a), Beispiel 20, p. 21",
       "law": "L1·diL/dt = Us − (R1 + R2)iL − uC,  C2·duC/dt = iL",
       "lawTex": "L_1 \\frac{di_L}{dt} = U_s - (R_1 + R_2) i_L - u_C, \\quad C_2 \\frac{du_C}{dt} = i_L",
+      "lawWhere": [
+        { "tex": "L_1", "means": "inductor L1 [H] (Beispiel 20, Rechenbeispiele p. 21)" },
+        { "tex": "i_L", "means": "current through L1, state x1 [A] (solution sheet S1, p. 26)" },
+        { "tex": "U_s", "means": "input voltage [V] (Beispiel 20, Rechenbeispiele p. 21)" },
+        { "tex": "R_1", "means": "resistor R1 [Ω] (Beispiel 20, Rechenbeispiele p. 21)" },
+        { "tex": "R_2", "means": "resistor R2 [Ω] (Beispiel 20, Rechenbeispiele p. 21)" },
+        { "tex": "u_C", "means": "voltage across C2, state x2 [V] (solution sheet S1, p. 26)" },
+        { "tex": "C_2", "means": "capacitor C2 [F] (Beispiel 20, Rechenbeispiele p. 21)" }
+      ],
       "equations": [
-        { "eq": "A = [−(R1 + R2)/L1 −1/L1; 1/C2 0], b = [1/L1; 0], cᵀ = [R2 1]", "tex": "A = \\begin{bmatrix} -\\frac{R_1 + R_2}{L_1} & -\\frac{1}{L_1} \\\\ \\frac{1}{C_2} & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} \\frac{1}{L_1} \\\\ 0 \\end{bmatrix},\\; c^T = [R_2 \\;\\; 1]", "note": "x = [iL; uC], u = Us, v = Uh", "ref": "S1, p. 26", "explore": true },
-        { "eq": "det Q_S = 1/(L1²C2), det Q_B = R1R2/L1 − 1/C2", "tex": "\\det Q_S = \\frac{1}{L_1^2 C_2}, \\quad \\det Q_B = \\frac{R_1 R_2}{L_1} - \\frac{1}{C_2}", "note": "Both non-zero: controllable and observable", "ref": "S1, p. 27" }
+        { "eq": "A = [−(R1 + R2)/L1 −1/L1; 1/C2 0], b = [1/L1; 0], cᵀ = [R2 1]", "tex": "A = \\begin{bmatrix} -\\frac{R_1 + R_2}{L_1} & -\\frac{1}{L_1} \\\\ \\frac{1}{C_2} & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} \\frac{1}{L_1} \\\\ 0 \\end{bmatrix},\\; c^T = [R_2 \\;\\; 1]", "note": "x = [iL; uC], u = Us, v = Uh", "ref": "S1, p. 26", "explore": true,
+          "where": [
+            { "tex": "A", "means": "system matrix (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector (slides p. 3, sl. 6)" },
+            { "tex": "c^T", "means": "output vector, v = Uh (slides p. 3, sl. 6; S1, p. 26)" },
+            { "tex": "R_1", "means": "resistor R1 [Ω] (Beispiel 20, Rechenbeispiele p. 21)" },
+            { "tex": "R_2", "means": "resistor R2 [Ω] (Beispiel 20, Rechenbeispiele p. 21)" },
+            { "tex": "L_1", "means": "inductor L1 [H] (Beispiel 20, Rechenbeispiele p. 21)" },
+            { "tex": "C_2", "means": "capacitor C2 [F] (Beispiel 20, Rechenbeispiele p. 21)" }
+          ] },
+        { "eq": "det Q_S = 1/(L1²C2), det Q_B = R1R2/L1 − 1/C2", "tex": "\\det Q_S = \\frac{1}{L_1^2 C_2}, \\quad \\det Q_B = \\frac{R_1 R_2}{L_1} - \\frac{1}{C_2}", "note": "Both non-zero: controllable and observable", "ref": "S1, p. 27",
+          "where": [
+            { "tex": "Q_S", "means": "controllability matrix, Steuerbarkeitsmatrix (slides p. 6, sl. 12)" },
+            { "tex": "Q_B", "means": "observability matrix, Beobachtbarkeitsmatrix (slides p. 7, sl. 13)" },
+            { "tex": "R_1", "means": "resistor R1 [Ω] (Beispiel 20, Rechenbeispiele p. 21)" },
+            { "tex": "R_2", "means": "resistor R2 [Ω] (Beispiel 20, Rechenbeispiele p. 21)" },
+            { "tex": "L_1", "means": "inductor L1 [H] (Beispiel 20, Rechenbeispiele p. 21)" },
+            { "tex": "C_2", "means": "capacitor C2 [F] (Beispiel 20, Rechenbeispiele p. 21)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 20: det Q_S, in 1/(Ω s³)?", "source": "S1, p. 27: det Q_S ≈ 205.9 k", "answer": 205900, "unit": "1", "tolerance": 0.002,
@@ -338,9 +570,40 @@
       "lecture": "Kubinger (2021a), Beispiel 21, p. 22",
       "law": "UA = RA·iA + LA·diA/dt + c·2π·n,  J·2π·dn/dt = c·iA − ML",
       "lawTex": "U_A = R_A i_A + L_A \\frac{di_A}{dt} + c\\,2\\pi n, \\quad J\\,2\\pi \\frac{dn}{dt} = c\\, i_A - M_L",
+      "lawWhere": [
+        { "tex": "U_A", "means": "terminal voltage [V] (Beispiel 21, Rechenbeispiele p. 22)" },
+        { "tex": "R_A", "means": "armature resistance [Ω] (Beispiel 21)" },
+        { "tex": "i_A", "means": "armature current [A] (S2, p. 11)" },
+        { "tex": "L_A", "means": "armature inductance [H] (Beispiel 21)" },
+        { "tex": "c", "means": "motor constant c = k_m·Φ [V s] (Beispiel 21)" },
+        { "tex": "n", "means": "speed n = ω/2π [1/s] (Beispiel 21)" },
+        { "tex": "J", "means": "moment of inertia [kg m²] (Beispiel 21)" },
+        { "tex": "M_L", "means": "load torque [N m] (Beispiel 21)" }
+      ],
       "equations": [
-        { "eq": "UA = RA iA + LA diA/dt + c·2π·n; J·2π·dn/dt = c·iA − ML", "tex": "U_A = R_A i_A + L_A \\dot{i}_A + c\\,2\\pi n, \\; J\\,2\\pi\\,\\dot{n} = c\\, i_A - M_L", "note": "Armature mesh and torque balance, friction neglected", "ref": "S2, p. 11", "explore": true },
-        { "eq": "A = [−RA/LA −c·2π/LA; c/(J·2π) 0], b = [1/LA; 0], b_z = [0; −1/(J·2π)]", "tex": "A = \\begin{bmatrix} -\\frac{R_A}{L_A} & -\\frac{2\\pi c}{L_A} \\\\ \\frac{c}{2\\pi J} & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} \\frac{1}{L_A} \\\\ 0 \\end{bmatrix},\\; b_z = \\begin{bmatrix} 0 \\\\ -\\frac{1}{2\\pi J} \\end{bmatrix}", "note": "x = [iA; n]; b_z worked here from the torque balance", "ref": "S2, p. 12" }
+        { "eq": "UA = RA iA + LA diA/dt + c·2π·n; J·2π·dn/dt = c·iA − ML", "tex": "U_A = R_A i_A + L_A \\dot{i}_A + c\\,2\\pi n, \\; J\\,2\\pi\\,\\dot{n} = c\\, i_A - M_L", "note": "Armature mesh and torque balance, friction neglected", "ref": "S2, p. 11", "explore": true,
+          "where": [
+            { "tex": "U_A", "means": "terminal voltage, the manipulated variable [V] (Beispiel 21, Rechenbeispiele p. 22)" },
+            { "tex": "R_A", "means": "armature resistance [Ω] (Beispiel 21)" },
+            { "tex": "i_A", "means": "armature current, state x1 [A] (S2, p. 11)" },
+            { "tex": "\\dot{i}_A", "means": "time derivative of the armature current [A/s] (S2, p. 11)" },
+            { "tex": "L_A", "means": "armature inductance [H] (Beispiel 21)" },
+            { "tex": "c", "means": "motor constant c = k_m·Φ [V s] (Beispiel 21)" },
+            { "tex": "n", "means": "speed n = ω/2π, the output and state x2 [1/s] (Beispiel 21; S2, p. 11)" },
+            { "tex": "\\dot{n}", "means": "time derivative of the speed [1/s²] (S2, p. 11)" },
+            { "tex": "J", "means": "moment of inertia [kg m²] (Beispiel 21)" },
+            { "tex": "M_L", "means": "load torque, the disturbance [N m] (Beispiel 21)" }
+          ] },
+        { "eq": "A = [−RA/LA −c·2π/LA; c/(J·2π) 0], b = [1/LA; 0], b_z = [0; −1/(J·2π)]", "tex": "A = \\begin{bmatrix} -\\frac{R_A}{L_A} & -\\frac{2\\pi c}{L_A} \\\\ \\frac{c}{2\\pi J} & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} \\frac{1}{L_A} \\\\ 0 \\end{bmatrix},\\; b_z = \\begin{bmatrix} 0 \\\\ -\\frac{1}{2\\pi J} \\end{bmatrix}", "note": "x = [iA; n]; b_z worked here from the torque balance", "ref": "S2, p. 12",
+          "where": [
+            { "tex": "A", "means": "system matrix, x = [iA; n] (S2, p. 12)" },
+            { "tex": "b", "means": "input vector for U_A (S2, p. 12)" },
+            { "tex": "b_z", "means": "disturbance input vector for M_L (not defined in the source); worked here from the torque balance" },
+            { "tex": "R_A", "means": "armature resistance [Ω] (Beispiel 21)" },
+            { "tex": "L_A", "means": "armature inductance [H] (Beispiel 21)" },
+            { "tex": "c", "means": "motor constant c = k_m·Φ [V s] (Beispiel 21)" },
+            { "tex": "J", "means": "moment of inertia [kg m²] (Beispiel 21)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 21: a12 = −c·2π/LA with the task's values?", "source": "S2, p. 12 (symbolic); value worked here", "answer": -2.513, "unit": "1", "tolerance": 0.002,
@@ -357,9 +620,34 @@
       "law": "ω̇ = −(g/l)·sin φ − (v̇/l)·cos φ",
       "lawTex": "\\dot{\\omega} = -\\frac{g}{l}\\sin\\varphi - \\frac{\\dot{v}}{l}\\cos\\varphi",
       "equations": [
-        { "eq": "ω̇ = −(g/l) sin φ − (v̇/l) cos φ", "tex": "\\dot{\\omega} = -\\frac{g}{l}\\sin\\varphi - \\frac{\\dot{v}}{l}\\cos\\varphi", "note": "The swing", "ref": "M, p. 53", "explore": true },
-        { "eq": "v̇ = [Fa + mL g sin φ cos φ + mL l ω² sin φ]/(mK + mL sin² φ)", "tex": "\\dot{v} = \\frac{F_a + m_L g \\sin\\varphi\\cos\\varphi + m_L l \\omega^2 \\sin\\varphi}{m_K + m_L \\sin^2\\varphi}", "note": "The trolley, by Lagrange (worked here; M, p. 53 writes −mL ω² l sin φ)", "ref": "", "explore": true },
-        { "eq": "A = [0 1 0 0; −g(mK + mL)/(mK l) 0 0 0; 0 0 0 1; mL g/mK 0 0 0], b = [0; −1/(mK l); 0; 1/mK]", "tex": "A = \\begin{bmatrix} 0 & 1 & 0 & 0 \\\\ -\\frac{g(m_K + m_L)}{m_K l} & 0 & 0 & 0 \\\\ 0 & 0 & 0 & 1 \\\\ \\frac{m_L g}{m_K} & 0 & 0 & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} 0 \\\\ -\\frac{1}{m_K l} \\\\ 0 \\\\ \\frac{1}{m_K} \\end{bmatrix}", "note": "x = [φ; ω; x; v], at φ = 0", "ref": "M, p. 54" }
+        { "eq": "ω̇ = −(g/l) sin φ − (v̇/l) cos φ", "tex": "\\dot{\\omega} = -\\frac{g}{l}\\sin\\varphi - \\frac{\\dot{v}}{l}\\cos\\varphi", "note": "The swing", "ref": "M, p. 53", "explore": true,
+          "where": [
+            { "tex": "\\dot{\\omega}", "means": "angular acceleration of the rope [rad/s²] (M, p. 53)" },
+            { "tex": "g", "means": "gravitational acceleration, 9.8065 [m/s²] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "l", "means": "length of the massless rigid rope [m] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "\\varphi", "means": "deflection angle of the rope from the vertical [rad] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "\\dot{v}", "means": "acceleration of the trolley [m/s²] (M, p. 53)" }
+          ] },
+        { "eq": "v̇ = [Fa + mL g sin φ cos φ + mL l ω² sin φ]/(mK + mL sin² φ)", "tex": "\\dot{v} = \\frac{F_a + m_L g \\sin\\varphi\\cos\\varphi + m_L l \\omega^2 \\sin\\varphi}{m_K + m_L \\sin^2\\varphi}", "note": "The trolley, by Lagrange (worked here; M, p. 53 writes −mL ω² l sin φ)", "ref": "", "explore": true,
+          "where": [
+            { "tex": "\\dot{v}", "means": "acceleration of the trolley [m/s²] (M, p. 53)" },
+            { "tex": "F_a", "means": "force driving the trolley, the input [N] (figure, Rechenbeispiele p. 23; M, p. 54)" },
+            { "tex": "m_L", "means": "mass of the point load [kg] (task 2, p. 2; Beispiel 22 does not give it)" },
+            { "tex": "g", "means": "gravitational acceleration, 9.8065 [m/s²] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "\\varphi", "means": "deflection angle of the rope from the vertical [rad] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "l", "means": "length of the massless rigid rope [m] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "\\omega", "means": "angular velocity of the rope, state x2 [rad/s] (solution sheet M, p. 54, by use; not named in words there)" },
+            { "tex": "m_K", "means": "mass of the trolley, Krankatze [kg] (Beispiel 22, Rechenbeispiele p. 23)" }
+          ] },
+        { "eq": "A = [0 1 0 0; −g(mK + mL)/(mK l) 0 0 0; 0 0 0 1; mL g/mK 0 0 0], b = [0; −1/(mK l); 0; 1/mK]", "tex": "A = \\begin{bmatrix} 0 & 1 & 0 & 0 \\\\ -\\frac{g(m_K + m_L)}{m_K l} & 0 & 0 & 0 \\\\ 0 & 0 & 0 & 1 \\\\ \\frac{m_L g}{m_K} & 0 & 0 & 0 \\end{bmatrix},\\; b = \\begin{bmatrix} 0 \\\\ -\\frac{1}{m_K l} \\\\ 0 \\\\ \\frac{1}{m_K} \\end{bmatrix}", "note": "x = [φ; ω; x; v], at φ = 0", "ref": "M, p. 54",
+          "where": [
+            { "tex": "A", "means": "system matrix at φ = 0, x = [φ; ω; x; v] (M, p. 54; its row 2 sign differs from M, p. 53)" },
+            { "tex": "b", "means": "input vector for F_a (M, p. 54)" },
+            { "tex": "g", "means": "gravitational acceleration, 9.8065 [m/s²] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "m_K", "means": "mass of the trolley, Krankatze [kg] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "m_L", "means": "mass of the point load [kg] (task 2, p. 2; Beispiel 22 does not give it)" },
+            { "tex": "l", "means": "length of the massless rigid rope [m] (Beispiel 22, Rechenbeispiele p. 23)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 22: b4 = 1/mK with mK = 20 kg?", "source": "M, p. 54: b = [0; −1/(mK·l); 0; 1/mK]", "answer": 0.05, "unit": "1", "tolerance": 0.001,
@@ -375,10 +663,44 @@
       "lecture": "Kubinger (2021a), Beispiele 27 and 28, pp. 28–29",
       "law": "L1·di/dt = u − uC1 − uC2 − (R1 + R2)·i",
       "lawTex": "L_1 \\frac{di}{dt} = u - u_{C1} - u_{C2} - (R_1 + R_2)\\, i",
+      "lawWhere": [
+        { "tex": "L_1", "means": "inductor L1 [H] (figures, Rechenbeispiele pp. 28–29)" },
+        { "tex": "i", "means": "mesh current [A] (not defined in the source)" },
+        { "tex": "u", "means": "input voltage [V] (figures, Rechenbeispiele pp. 28–29)" },
+        { "tex": "u_{C1},\\ u_{C2}", "means": "voltages across C1 and C2 [V] (not defined in the source)" },
+        { "tex": "R_1,\\ R_2", "means": "resistors R1 and R2 [Ω] (figures, Rechenbeispiele pp. 28–29)" }
+      ],
       "equations": [
-        { "eq": "C1 duC1/dt = i, C2 duC2/dt = i, L1 di/dt = u − uC1 − uC2 − (R1 + R2)i", "tex": "C_1 \\dot{u}_{C1} = i,\\; C_2 \\dot{u}_{C2} = i,\\; L_1 \\dot{i} = u - u_{C1} - u_{C2} - (R_1 + R_2) i", "note": "One mesh through every part (worked here from the figures)", "ref": "", "explore": true },
-        { "eq": "Bsp 27: ub = uC2, uc = ua − uC1 − R1 i − uC2", "tex": "u_b = u_{C2}, \\quad u_c = u_a - u_{C1} - R_1 i - u_{C2}", "note": "Outputs of Beispiel 27 (worked here)", "ref": "" },
-        { "eq": "Bsp 28: u2 = u1 − uC1 − uC2 − (R1 + R2)i, u3 = R2 i", "tex": "u_2 = u_1 - u_{C1} - u_{C2} - (R_1 + R_2) i, \\quad u_3 = R_2 i", "note": "Outputs of Beispiel 28 (worked here)", "ref": "" }
+        { "eq": "C1 duC1/dt = i, C2 duC2/dt = i, L1 di/dt = u − uC1 − uC2 − (R1 + R2)i", "tex": "C_1 \\dot{u}_{C1} = i,\\; C_2 \\dot{u}_{C2} = i,\\; L_1 \\dot{i} = u - u_{C1} - u_{C2} - (R_1 + R_2) i", "note": "One mesh through every part (worked here from the figures)", "ref": "", "explore": true,
+          "where": [
+            { "tex": "C_1,\\ C_2", "means": "capacitors C1 and C2 [F] (figures, Rechenbeispiele pp. 28–29)" },
+            { "tex": "u_{C1},\\ u_{C2}", "means": "voltages across C1 and C2, states [V] (not defined in the source)" },
+            { "tex": "\\dot{u}_{C1},\\ \\dot{u}_{C2}", "means": "their time derivatives [V/s] (not defined in the source)" },
+            { "tex": "i", "means": "current of the single mesh, a state [A] (not defined in the source)" },
+            { "tex": "\\dot{i}", "means": "its time derivative [A/s] (not defined in the source)" },
+            { "tex": "L_1", "means": "inductor L1 [H] (figures, Rechenbeispiele pp. 28–29)" },
+            { "tex": "u", "means": "input voltage, u_a in Beispiel 27 and u_1 in Beispiel 28 [V] (figures, Rechenbeispiele pp. 28–29)" },
+            { "tex": "R_1,\\ R_2", "means": "resistors R1 and R2 [Ω] (figures, Rechenbeispiele pp. 28–29)" }
+          ] },
+        { "eq": "Bsp 27: ub = uC2, uc = ua − uC1 − R1 i − uC2", "tex": "u_b = u_{C2}, \\quad u_c = u_a - u_{C1} - R_1 i - u_{C2}", "note": "Outputs of Beispiel 27 (worked here)", "ref": "",
+          "where": [
+            { "tex": "u_b", "means": "output voltage across C2 [V] (figure, Rechenbeispiele p. 28)" },
+            { "tex": "u_{C2}", "means": "voltage across C2 [V] (not defined in the source)" },
+            { "tex": "u_c", "means": "output voltage across R2 and L1 [V] (figure, Rechenbeispiele p. 28)" },
+            { "tex": "u_a", "means": "input voltage [V] (figure, Rechenbeispiele p. 28)" },
+            { "tex": "u_{C1}", "means": "voltage across C1 [V] (not defined in the source)" },
+            { "tex": "R_1", "means": "resistor R1 [Ω] (figure, Rechenbeispiele p. 28)" },
+            { "tex": "i", "means": "mesh current [A] (not defined in the source)" }
+          ] },
+        { "eq": "Bsp 28: u2 = u1 − uC1 − uC2 − (R1 + R2)i, u3 = R2 i", "tex": "u_2 = u_1 - u_{C1} - u_{C2} - (R_1 + R_2) i, \\quad u_3 = R_2 i", "note": "Outputs of Beispiel 28 (worked here)", "ref": "",
+          "where": [
+            { "tex": "u_2", "means": "output voltage across L1 [V] (figure, Rechenbeispiele p. 29)" },
+            { "tex": "u_1", "means": "input voltage [V] (figure, Rechenbeispiele p. 29)" },
+            { "tex": "u_{C1},\\ u_{C2}", "means": "voltages across C1 and C2 [V] (not defined in the source)" },
+            { "tex": "R_1,\\ R_2", "means": "resistors R1 and R2 [Ω] (figure, Rechenbeispiele p. 29)" },
+            { "tex": "i", "means": "mesh current [A] (not defined in the source)" },
+            { "tex": "u_3", "means": "output voltage across R2 [V] (figure, Rechenbeispiele p. 29)" }
+          ] }
       ],
       "practice": [
         { "question": "Beispiel 28: the entry of D for u2 (worked here, no solution sheet)?", "source": "worked here from the figure (task sheet p. 29): u2 = L1·di/dt", "answer": 1, "unit": "1", "tolerance": 0.001,
@@ -394,10 +716,42 @@
       "lecture": "Kubinger (2021b), task 0, pp. 1–2; Kubinger (2021), slides pp. 14–18, 31–32",
       "law": "u = −rᵀx + K_F·w",
       "lawTex": "u = -r^T x + K_F w",
+      "lawWhere": [
+        { "tex": "u", "means": "manipulated variable, Stellgröße (slides p. 3, sl. 6)" },
+        { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+        { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+        { "tex": "K_F", "means": "constant prefilter gain, G_F(0) (slides p. 16, sl. 31)" },
+        { "tex": "w", "means": "reference variable or set point, Führungsgröße (slides p. 11, sl. 21)" }
+      ],
       "equations": [
-        { "eq": "J = ∫(xᵀQx + uᵀRu) dt → min, rᵀ = R⁻¹bᵀS", "tex": "J = \\int_0^\\infty (x^T Q x + u^T R u)\\,dt, \\quad r^T = R^{-1} b^T S", "note": "LQ controller; here Q = λ·c cᵀ, R = 1", "ref": "slides pp. 14–15", "explore": true },
-        { "eq": "Butterworth: n poles on a circle, dividing it into 2n equal parts", "tex": "s_k = r_0\\, e^{j(\\pi/2 + (2k - 1)\\pi/(2n))}", "note": "Formula worked here from the slides' description", "ref": "slides pp. 31–32", "explore": true },
-        { "eq": "K_F = [cᵀ(−A + b rᵀ)⁻¹b]⁻¹", "tex": "K_F = \\left[c^T(-A + b r^T)^{-1} b\\right]^{-1}", "note": "Prefilter", "ref": "slides p. 16" }
+        { "eq": "J = ∫(xᵀQx + uᵀRu) dt → min, rᵀ = R⁻¹bᵀS", "tex": "J = \\int_0^\\infty (x^T Q x + u^T R u)\\,dt, \\quad r^T = R^{-1} b^T S", "note": "LQ controller; here Q = λ·c cᵀ, R = 1", "ref": "slides pp. 14–15", "explore": true,
+          "where": [
+            { "tex": "J", "means": "quality criterion to minimise (slides p. 14, sl. 27)" },
+            { "tex": "x", "means": "state vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "Q", "means": "symmetric weighting matrix of the states (slides p. 14, sl. 27)" },
+            { "tex": "u", "means": "manipulated variable, Stellgröße (slides p. 3, sl. 6)" },
+            { "tex": "R", "means": "symmetric weighting matrix of the input (slides p. 14, sl. 27)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "S", "means": "solution of the Riccati equation SA + AᵀS − SbR⁻¹bᵀS + Q = 0 (slides p. 14, sl. 28)" }
+          ] },
+        { "eq": "Butterworth: n poles on a circle, dividing it into 2n equal parts", "tex": "s_k = r_0\\, e^{j(\\pi/2 + (2k - 1)\\pi/(2n))}", "note": "Formula worked here from the slides' description", "ref": "slides pp. 31–32", "explore": true,
+          "where": [
+            { "tex": "s_k", "means": "k-th Butterworth pole (not defined in the source); the slides describe the pattern in words, pp. 31–32, sl. 62–64" },
+            { "tex": "r_0", "means": "radius of the Butterworth circle, a measure of the bandwidth (slides p. 31, sl. 62)" },
+            { "tex": "j", "means": "imaginary unit (not defined in the source)" },
+            { "tex": "k", "means": "pole number, 1 to n (not defined in the source)" },
+            { "tex": "n", "means": "order of the system, the number of states (slides p. 3, sl. 6)" }
+          ] },
+        { "eq": "K_F = [cᵀ(−A + b rᵀ)⁻¹b]⁻¹", "tex": "K_F = \\left[c^T(-A + b r^T)^{-1} b\\right]^{-1}", "note": "Prefilter", "ref": "slides p. 16",
+          "where": [
+            { "tex": "K_F", "means": "constant prefilter gain, G_F(0) (slides p. 16, sl. 31)" },
+            { "tex": "c^T", "means": "output vector [1 × n] (slides p. 3, sl. 6)" },
+            { "tex": "A", "means": "system matrix [n × n] (slides p. 3, sl. 6)" },
+            { "tex": "b", "means": "input vector [n × 1] (slides p. 3, sl. 6)" },
+            { "tex": "r^T", "means": "state feedback vector of the controller (slides p. 11, sl. 21)" }
+          ] }
       ],
       "practice": [
         { "question": "Controller 5: the real pole of a third-order Butterworth configuration of radius 2?", "source": "slides p. 32, by definition", "answer": -2, "unit": "1", "tolerance": 0.001,
@@ -414,9 +768,25 @@
       "law": "dr = (0.85·tr + 0.25·ts)·(1 + 2.2·Xmax/Xmin)",
       "lawTex": "d_r = (0.85\\, t_r + 0.25\\, t_s)\\left(1 + 2.2\\,\\frac{X_{max}}{X_{min}}\\right)",
       "equations": [
-        { "eq": "dr = (0.85·tr + 0.25·ts)·(1 + 2.2·Xmax/Xmin)", "tex": "d_r = (0.85\\, t_r + 0.25\\, t_s)\\left(1 + 2.2\\,\\frac{X_{max}}{X_{min}}\\right)", "note": "tr from 5 % to 95 %, ts with a 1 % band, Xmin and Xmax once risen", "ref": "task 1, p. 2", "explore": true },
-        { "eq": "|u| ≤ 10 V", "tex": "|u| \\le 10\\,\\text{V}", "note": "The controller's output limit; over 2 % costs points", "ref": "task 1, pp. 2–3", "explore": true },
-        { "eq": "v = 500·Uh = 500·(R2 iL + uC)", "tex": "v = 500\\,(R_2 i_L + u_C)", "note": "Speed in rpm: 1 V of Uh is 500 rpm", "ref": "task 1, p. 1" }
+        { "eq": "dr = (0.85·tr + 0.25·ts)·(1 + 2.2·Xmax/Xmin)", "tex": "d_r = (0.85\\, t_r + 0.25\\, t_s)\\left(1 + 2.2\\,\\frac{X_{max}}{X_{min}}\\right)", "note": "tr from 5 % to 95 %, ts with a 1 % band, Xmin and Xmax once risen", "ref": "task 1, p. 2", "explore": true,
+          "where": [
+            { "tex": "d_r", "means": "speed measure of the control: the smaller, the faster (task 1, p. 2)" },
+            { "tex": "t_r", "means": "rise time, 5 % to 95 % [s] (task 1, p. 2)" },
+            { "tex": "t_s", "means": "settling time, 1 % band [s] (task 1, p. 2)" },
+            { "tex": "X_{max}", "means": "maximum value of X once the response has risen (task 1, p. 2)" },
+            { "tex": "X_{min}", "means": "minimum value of X once the response has risen (task 1, p. 2)" }
+          ] },
+        { "eq": "|u| ≤ 10 V", "tex": "|u| \\le 10\\,\\text{V}", "note": "The controller's output limit; over 2 % costs points", "ref": "task 1, pp. 2–3", "explore": true,
+          "where": [
+            { "tex": "u", "means": "controller output voltage, limited to ±10 V [V] (task 1, p. 2)" }
+          ] },
+        { "eq": "v = 500·Uh = 500·(R2 iL + uC)", "tex": "v = 500\\,(R_2 i_L + u_C)", "note": "Speed in rpm: 1 V of Uh is 500 rpm", "ref": "task 1, p. 1",
+          "where": [
+            { "tex": "v", "means": "motor speed [rpm]: 1 V of the output Uh is 500 rpm (task 1, p. 1)" },
+            { "tex": "R_2", "means": "resistor R2 [Ω] (task 1, p. 1)" },
+            { "tex": "i_L", "means": "current through L1 [A] (S1, p. 26)" },
+            { "tex": "u_C", "means": "voltage across C2 [V] (S1, p. 26)" }
+          ] }
       ],
       "practice": [
         { "question": "At standstill, how many rpm does 1 V at Us give?", "source": "task 1, p. 1: 1 V of Uh = 500 rpm; at DC C2 carries no current, so Uh = Us", "answer": 500, "unit": "rpm", "tolerance": 0.001,
@@ -430,10 +800,31 @@
       "lecture": "Kubinger (2021b), task 2, pp. 1–3",
       "law": "|φ(t)| ≤ 2.5° for x: 0 → 2.5 m",
       "lawTex": "|\\varphi(t)| \\le 2.5^\\circ \\text{ for } x: 0 \\to 2.5\\,\\text{m}",
+      "lawWhere": [
+        { "tex": "\\varphi", "means": "deflection angle of the rope [°] (task 2, p. 2)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" },
+        { "tex": "x", "means": "position of the trolley [m] (task 2, p. 2)" }
+      ],
       "equations": [
-        { "eq": "|φ| ≤ 2.5° for a move from 0 to 2.5 m", "tex": "|\\varphi| \\le 2.5^\\circ", "note": "The task's quality limit", "ref": "task 2, p. 2", "explore": true },
-        { "eq": "G_R(s) = kp·(1 + 1/(s·Tn))", "tex": "G_R(s) = k_p\\left(1 + \\frac{1}{s T_n}\\right)", "note": "PI outer loop in place of the prefilter", "ref": "task 2, p. 3; slides p. 17", "explore": true },
-        { "eq": "A as in Beispiel 22 with mK = 24 kg, mL = 160 kg, l = 7.8 m", "tex": "a_{21} = -\\frac{g(m_K + m_L)}{m_K l}, \\; a_{41} = \\frac{m_L g}{m_K}", "note": "The linear model", "ref": "M, p. 54" }
+        { "eq": "|φ| ≤ 2.5° for a move from 0 to 2.5 m", "tex": "|\\varphi| \\le 2.5^\\circ", "note": "The task's quality limit", "ref": "task 2, p. 2", "explore": true,
+          "where": [
+            { "tex": "\\varphi", "means": "deflection angle of the rope [°] (task 2, p. 2)" }
+          ] },
+        { "eq": "G_R(s) = kp·(1 + 1/(s·Tn))", "tex": "G_R(s) = k_p\\left(1 + \\frac{1}{s T_n}\\right)", "note": "PI outer loop in place of the prefilter", "ref": "task 2, p. 3; slides p. 17", "explore": true,
+          "where": [
+            { "tex": "G_R(s)", "means": "transfer function of the outer PI controller (slides p. 17, sl. 33)" },
+            { "tex": "k_p", "means": "proportional gain (written in G_R(s) on slides p. 17, sl. 33; not defined in the source)" },
+            { "tex": "s", "means": "Laplace variable (not defined in the source)" },
+            { "tex": "T_n", "means": "reset time [s], T_n = K_P/K_I (slides p. 69, sl. 137)" }
+          ] },
+        { "eq": "A as in Beispiel 22 with mK = 24 kg, mL = 160 kg, l = 7.8 m", "tex": "a_{21} = -\\frac{g(m_K + m_L)}{m_K l}, \\; a_{41} = \\frac{m_L g}{m_K}", "note": "The linear model", "ref": "M, p. 54",
+          "where": [
+            { "tex": "a_{21},\\ a_{41}", "means": "entries of A in rows 2 and 4, column 1 (M, p. 54)" },
+            { "tex": "g", "means": "gravitational acceleration, 9.8065 [m/s²] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "m_K", "means": "mass of the trolley, Krankatze [kg] (Beispiel 22, Rechenbeispiele p. 23)" },
+            { "tex": "m_L", "means": "mass of the point load [kg] (task 2, p. 2; Beispiel 22 does not give it)" },
+            { "tex": "l", "means": "length of the massless rigid rope [m] (Beispiel 22, Rechenbeispiele p. 23)" }
+          ] }
       ],
       "practice": [
         { "question": "Task 2: a21 = −g(mK + mL)/(mK·l)?", "source": "M, p. 54 (symbolic), with task 2's values (p. 2)", "answer": -9.639, "unit": "1", "tolerance": 0.002,

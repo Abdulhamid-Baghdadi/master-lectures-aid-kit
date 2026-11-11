@@ -4,6 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { solve, isRight } from "../../src/core/index.js";
+import { typeset } from "../../../kit/ui/math.js";
 
 const data = JSON.parse(readFileSync(new URL("../../data/labs.json", import.meta.url), "utf8"));
 
@@ -20,6 +21,20 @@ test("every lab sits under exactly one part, and every part's labs exist", () =>
   for (const l of data.lectures) {
     assert.ok(l.number && l.pages && l.title && l.labs.length, `part ${l.number} is complete`);
     assert.ok(families.has(l.family), `part ${l.number}'s family ${l.family} is listed in families`);
+  }
+});
+
+// Right result by definition (brief of 11 Nov 2026): every symbol list entry has tex and meaning and typesets, every
+// equation with letters has a list, and the main law has one (its own, or the list of the equation it repeats).
+test("every equation's symbol list has tex and meaning, and each symbol typesets (VO and task sheet, 11 Nov 2026)", () => {
+  for (const w of data.labs) {
+    const lists = [w.lawWhere, ...(w.equations ?? []).map(e => e.where)].filter(Boolean);
+    for (const list of lists) for (const s of list) {
+      assert.ok(s.tex && s.means, `${w.id}: a where entry lacks tex or means`);
+      assert.ok(!typeset(s.tex).error, `${w.id}: ${s.tex} does not typeset`);
+    }
+    for (const e of w.equations ?? []) if (e.tex && /[A-Za-z]/.test(e.tex.replace(/\\[A-Za-z]+/g, ""))) assert.ok(e.where?.length, `${w.id}: ${e.tex} has no symbol list`);
+    if (w.lawTex) assert.ok(w.lawWhere ?? (w.equations ?? []).find(e => e.tex === w.lawTex)?.where, `${w.id}: the main law has no symbol list`);
   }
 });
 

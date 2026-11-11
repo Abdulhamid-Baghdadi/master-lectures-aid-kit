@@ -24,7 +24,7 @@ export default {
       rM.set(`${deg(c.muMin.mu).toFixed(1)}°`, deg(c.muMin.mu) < 45 ? "warn" : "", `at a cam angle of ${deg(c.muMin.phi).toFixed(0)}°; a larger base circle raises it`);
       rR2.set(`${c.rhoMin.rho.toFixed(1)} mm`, c.cutsUnder ? "danger" : rR > c.rollerAdvice ? "warn" : "",
         c.cutsUnder ? "the roller is as big as ρmin: the profile gets a point and the lift is lost (p. 42)" : `roller up to 0.7·ρmin = ${c.rollerAdvice.toFixed(1)} mm advised; yours ${rR} mm`);
-      rV.set(`${(sH * C.Cv.value / rad(phiP)).toFixed(1)} mm/rad`, "", `sH·Cv/φP = ${sH}·${C.Cv.value.toFixed(3)}/${rad(phiP).toFixed(3)} (p. 35); times ω gives vBmax`);
+      rV.set(`${(sH * C.Cv.value / rad(phiP)).toFixed(1)} mm/rad`, "", `sH·Cv/φP = ${sH}·${C.Cv.value.toFixed(3)}/${rad(phiP).toFixed(3)} (ch. 6, p. 36); times ω gives vBmax`);
     };
     const sl = (name, unit, min, max, v, set) => slider({ label: name, unit, min, max, value: v, step: 1, format: x => `${x} ${unit}`, onInput: x => { set(x); update(); } }).el;
     root.append(h("div", { class: "stage" }, box, h("div", { class: "controls" },

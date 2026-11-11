@@ -23,9 +23,30 @@
       "law": "DOF = T(n − 1 − g) + Σ fi",
       "lawTex": "\\mathrm{DOF} = T\\,(n - 1 - g) + \\sum_{i=1}^{g} f_i",
       "equations": [
-        { "eq": "DOF = T(n − 1) − Σ (T − fi)", "tex": "\\mathrm{DOF} = T\\,(n-1) - \\sum_{i=1}^{g} (T - f_i)", "note": "Freedoms of the n − 1 moving links less the constraints of the g joints; n counts the base", "ref": "ch. 1, p. 37" },
-        { "eq": "DOF = T(n − 1 − g) + Σ fi", "tex": "\\mathrm{DOF} = T\\,(n - 1 - g) + \\sum_{i=1}^{g} f_i", "note": "Grübler's formula; T = 3 for plane or spherical mechanisms, 6 for spatial ones", "ref": "ch. 1, p. 37" },
-        { "eq": "f = 1 turning or sliding, 2 cylindrical or universal, 3 ball joint", "tex": "f_\\text{R} = f_\\text{T} = 1,\\quad f_\\text{cyl} = f_\\text{univ} = 2,\\quad f_\\text{ball} = 3", "note": "The freedoms of the common joints", "ref": "ch. 1, pp. 23–25" }
+        { "eq": "DOF = T(n − 1) − Σ (T − fi)", "tex": "\\mathrm{DOF} = T\\,(n-1) - \\sum_{i=1}^{g} (T - f_i)", "note": "Freedoms of the n − 1 moving links less the constraints of the g joints; n counts the base", "ref": "ch. 1, p. 37" ,
+          "where": [
+            { "tex": "\\mathrm{DOF}", "means": "degrees of freedom of the mechanism (ch. 1, p. 37)" },
+            { "tex": "T", "means": "type of mechanism: 3 for planar or spherical, 6 for spatial (ch. 1, p. 37)" },
+            { "tex": "n", "means": "number of links, base included (ch. 1, p. 37)" },
+            { "tex": "g", "means": "number of joints (ch. 1, p. 37)" },
+            { "tex": "i", "means": "joint index, 1 to g (ch. 1, p. 37)" },
+            { "tex": "f_i", "means": "mobility (degrees of freedom) of joint i (ch. 1, p. 37)" }
+          ] },
+        { "eq": "DOF = T(n − 1 − g) + Σ fi", "tex": "\\mathrm{DOF} = T\\,(n - 1 - g) + \\sum_{i=1}^{g} f_i", "note": "Grübler's formula; T = 3 for plane or spherical mechanisms, 6 for spatial ones", "ref": "ch. 1, p. 37" ,
+          "where": [
+            { "tex": "\\mathrm{DOF}", "means": "degrees of freedom of the mechanism (ch. 1, p. 37)" },
+            { "tex": "T", "means": "type of mechanism: 3 for planar or spherical, 6 for spatial (ch. 1, p. 37)" },
+            { "tex": "n", "means": "number of links, base included (ch. 1, p. 37)" },
+            { "tex": "g", "means": "number of joints (ch. 1, p. 37)" },
+            { "tex": "i", "means": "joint index, 1 to g (ch. 1, p. 37)" },
+            { "tex": "f_i", "means": "mobility (degrees of freedom) of joint i (ch. 1, p. 37)" }
+          ] },
+        { "eq": "f = 1 turning or sliding, 2 cylindrical or universal, 3 ball joint", "tex": "f_\\text{R} = f_\\text{T} = 1,\\quad f_\\text{cyl} = f_\\text{univ} = 2,\\quad f_\\text{ball} = 3", "note": "The freedoms of the common joints", "ref": "ch. 1, pp. 23–25" ,
+          "where": [
+            { "tex": "f_\\text{R},\\ f_\\text{T}", "means": "mobility of a revolute and of a prismatic joint: 1 (ch. 1, pp. 23–24)" },
+            { "tex": "f_\\text{cyl},\\ f_\\text{univ}", "means": "mobility of a cylindrical and of a universal joint: 2 (ch. 1, p. 25)" },
+            { "tex": "f_\\text{ball}", "means": "mobility of a ball (spherical) joint: 3 (ch. 1, p. 25)" }
+          ] }
       ],
       "practice": [
         { "question": "A 3R arm in the plane: T = 3, n = 4 links with the base, g = 3 turning joints. How many degrees of freedom?", "source": "Ajanović (2020), ch. 1, p. 38, printed", "answer": 3, "unit": "1", "tolerance": 0, "solution": "DOF = 3(4 − 1 − 3) + 3 = 3.", "compute": { "law": "dof", "T": 3, "n": 4, "g": 3, "f": 3 } },
@@ -40,12 +61,44 @@
       "idea": "A point has different coordinates in a frame that is turned and moved. One 3 × 3 matrix holds the turn and the move together, and its inverse brings the point back.",
       "law": "Rp = RTG · Gp, RTG = [R(θ) p; 0 1]",
       "lawTex": "{}^{R}\\mathbf{p} = {}^{R}\\mathbf{T}_{G}\\,{}^{G}\\mathbf{p},\\qquad {}^{R}\\mathbf{T}_{G} = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta & p_x \\\\ \\sin\\theta & \\cos\\theta & p_y \\\\ 0 & 0 & 1 \\end{pmatrix}",
+      "lawWhere": [
+        { "tex": "{}^{R}\\mathbf{p}", "means": "point P in coordinates of frame R (ch. 2, p. 15)" },
+        { "tex": "{}^{R}\\mathbf{T}_{G}", "means": "homogeneous transformation of frame G relative to frame R (ch. 2, pp. 29, 32)" },
+        { "tex": "{}^{G}\\mathbf{p}", "means": "the same point in coordinates of frame G (ch. 2, p. 29)" },
+        { "tex": "\\theta", "means": "rotation angle of frame G relative to frame R [°] (ch. 2, p. 24)" },
+        { "tex": "p_x,\\ p_y", "means": "position of G's origin in R; the slides write t_x, t_y (ch. 2, p. 29)" }
+      ],
       "equations": [
-        { "eq": "Rp = Gp + r", "tex": "{}^{R}\\mathbf{p} = {}^{G}\\mathbf{p} + \\mathbf{r}", "note": "A frame moved by r: the coordinates add", "ref": "ch. 2, p. 15" },
-        { "eq": "R(θ) = [cos θ −sin θ; sin θ cos θ]", "tex": "\\mathbf{R}(\\theta) = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}", "note": "The plane rotation; orthonormal, so its transpose is its inverse and R(θ)ᵀ = R(−θ)", "ref": "ch. 2, p. 24" },
-        { "eq": "RT = [R p; 0 1]", "tex": "{}^{R}\\mathbf{T}_{G} = \\begin{pmatrix} \\mathbf{R} & \\mathbf{p} \\\\ \\mathbf{0} & 1 \\end{pmatrix}", "note": "Homogeneous transform: turn and move in one product; its columns are G's axes and origin in R", "ref": "ch. 2, pp. 29, 32–33" },
-        { "eq": "T⁻¹ = [Rᵀ −Rᵀp; 0 1]", "tex": "\\mathbf{T}^{-1} = \\begin{pmatrix} \\mathbf{R}^\\mathsf{T} & -\\mathbf{R}^\\mathsf{T}\\mathbf{p} \\\\ \\mathbf{0} & 1 \\end{pmatrix}", "note": "The way back; T⁻¹ is not Tᵀ", "ref": "ch. 2, p. 32" },
-        { "eq": "0T2 = 0T1 · 1T2", "tex": "{}^{0}\\mathbf{T}_{2} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2}", "note": "Frames in a chain multiply", "ref": "ch. 2, pp. 36 and 54" }
+        { "eq": "Rp = Gp + r", "tex": "{}^{R}\\mathbf{p} = {}^{G}\\mathbf{p} + \\mathbf{r}", "note": "A frame moved by r: the coordinates add", "ref": "ch. 2, p. 15" ,
+          "where": [
+            { "tex": "{}^{R}\\mathbf{p}", "means": "point P in coordinates of frame R (ch. 2, p. 15)" },
+            { "tex": "{}^{G}\\mathbf{p}", "means": "the same point in coordinates of the shifted frame, ᴮP on the slide (ch. 2, p. 15)" },
+            { "tex": "\\mathbf{r}", "means": "translation of the frame's origin; the slide writes (t_x, t_y) (ch. 2, p. 15)" }
+          ] },
+        { "eq": "R(θ) = [cos θ −sin θ; sin θ cos θ]", "tex": "\\mathbf{R}(\\theta) = \\begin{pmatrix} \\cos\\theta & -\\sin\\theta \\\\ \\sin\\theta & \\cos\\theta \\end{pmatrix}", "note": "The plane rotation; orthonormal, so its transpose is its inverse and R(θ)ᵀ = R(−θ)", "ref": "ch. 2, p. 24" ,
+          "where": [
+            { "tex": "\\mathbf{R}(\\theta)", "means": "2D rotation matrix ᴿR_G (ch. 2, p. 24)" },
+            { "tex": "\\theta", "means": "rotation angle of frame G relative to frame R [°] (ch. 2, p. 24)" }
+          ] },
+        { "eq": "RT = [R p; 0 1]", "tex": "{}^{R}\\mathbf{T}_{G} = \\begin{pmatrix} \\mathbf{R} & \\mathbf{p} \\\\ \\mathbf{0} & 1 \\end{pmatrix}", "note": "Homogeneous transform: turn and move in one product; its columns are G's axes and origin in R", "ref": "ch. 2, pp. 29, 32–33" ,
+          "where": [
+            { "tex": "{}^{R}\\mathbf{T}_{G}", "means": "homogeneous transformation of frame G relative to frame R (ch. 2, pp. 29, 32)" },
+            { "tex": "\\mathbf{R}", "means": "orientation of G relative to R, 2 × 2 (ch. 2, p. 32)" },
+            { "tex": "\\mathbf{p}", "means": "position of G relative to R, 2 × 1; the slide writes t (ch. 2, p. 32)" },
+            { "tex": "\\mathbf{0}", "means": "zero row (ch. 2, p. 32)" }
+          ] },
+        { "eq": "T⁻¹ = [Rᵀ −Rᵀp; 0 1]", "tex": "\\mathbf{T}^{-1} = \\begin{pmatrix} \\mathbf{R}^\\mathsf{T} & -\\mathbf{R}^\\mathsf{T}\\mathbf{p} \\\\ \\mathbf{0} & 1 \\end{pmatrix}", "note": "The way back; T⁻¹ is not Tᵀ", "ref": "ch. 2, p. 32" ,
+          "where": [
+            { "tex": "\\mathbf{T}^{-1}", "means": "inverse transformation (ch. 2, p. 32)" },
+            { "tex": "\\mathbf{R}^\\mathsf{T}", "means": "transposed rotation, equal to its inverse (ch. 2, p. 24)" },
+            { "tex": "\\mathbf{p}", "means": "translation part; the slide writes t (ch. 2, p. 32)" },
+            { "tex": "\\mathbf{0}", "means": "zero row (ch. 2, p. 32)" }
+          ] },
+        { "eq": "0T2 = 0T1 · 1T2", "tex": "{}^{0}\\mathbf{T}_{2} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2}", "note": "Frames in a chain multiply", "ref": "ch. 2, pp. 36 and 54" ,
+          "where": [
+            { "tex": "{}^{0}\\mathbf{T}_{2}", "means": "transformation of frame 2 in frame 0: the forward kinematics (ch. 2, p. 38)" },
+            { "tex": "{}^{0}\\mathbf{T}_{1},\\ {}^{1}\\mathbf{T}_{2}", "means": "transformation of frame 1 in frame 0 and of frame 2 in frame 1 (ch. 2, p. 38)" }
+          ] }
       ],
       "practice": [
         { "question": "Frame G is turned 40° and its origin lies at (2, 3) in R. The point (5, 2) in G: what is its x in R?", "source": "Ajanović (2020), ch. 2, p. 34, printed", "answer": 4.54, "unit": "1", "solution": "x = 5 cos 40° − 2 sin 40° + 2 = 3.830 − 1.286 + 2 = 4.54; y = 5 sin 40° + 2 cos 40° + 3 = 7.74.", "compute": { "law": "toParent2", "t": 40, "p": [2, 3], "point": [5, 2], "out": "x" } },
@@ -64,14 +117,50 @@
       "idea": "Three turns, each about an axis that the turns before have already moved, set any orientation. The order matters, the same matrix comes from more than one set of angles, and when the middle turn lines up the first and third axes one freedom is lost.",
       "law": "R = Rz(α) Ry′(β) Rx″(γ)",
       "lawTex": "\\mathbf{R}_{ZY'X''} = \\mathbf{R}_z(\\alpha)\\,\\mathbf{R}_{y'}(\\beta)\\,\\mathbf{R}_{x''}(\\gamma)",
+      "lawWhere": [
+        { "tex": "\\mathbf{R}_{ZY'X''}", "means": "rotation about z, then the turned y′, then the twice-turned x″ (ch. 2, p. 44)" },
+        { "tex": "\\mathbf{R}_z(\\alpha),\\ \\mathbf{R}_{y'}(\\beta),\\ \\mathbf{R}_{x''}(\\gamma)", "means": "elementary rotations about z, y′ and x″ (ch. 2, pp. 41–44)" },
+        { "tex": "\\alpha,\\ \\beta,\\ \\gamma", "means": "the three rotation angles (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "Rx(α) = [1 0 0; 0 cos α −sin α; 0 sin α cos α]", "tex": "\\mathbf{R}_x(\\alpha) = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & \\cos\\alpha & -\\sin\\alpha \\\\ 0 & \\sin\\alpha & \\cos\\alpha \\end{pmatrix}", "note": "Turn about x", "ref": "ch. 2, p. 41" },
-        { "eq": "Ry(β) = [cos β 0 sin β; 0 1 0; −sin β 0 cos β]", "tex": "\\mathbf{R}_y(\\beta) = \\begin{pmatrix} \\cos\\beta & 0 & \\sin\\beta \\\\ 0 & 1 & 0 \\\\ -\\sin\\beta & 0 & \\cos\\beta \\end{pmatrix}", "note": "Turn about y", "ref": "ch. 2, p. 42" },
-        { "eq": "Rz(γ) = [cos γ −sin γ 0; sin γ cos γ 0; 0 0 1]", "tex": "\\mathbf{R}_z(\\gamma) = \\begin{pmatrix} \\cos\\gamma & -\\sin\\gamma & 0 \\\\ \\sin\\gamma & \\cos\\gamma & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}", "note": "Turn about z", "ref": "ch. 2, p. 43" },
-        { "eq": "Rᵀ = R⁻¹, det R = 1", "tex": "\\mathbf{R}^\\mathsf{T} = \\mathbf{R}^{-1},\\quad \\det\\mathbf{R} = 1", "note": "A rotation matrix is orthonormal", "ref": "ch. 2, pp. 24 and 53" },
-        { "eq": "ZY′X″ about moving axes = XYZ about fixed axes", "tex": "\\mathbf{R}_{ZY'X''} = \\mathbf{R}_z\\,\\mathbf{R}_{y'}\\,\\mathbf{R}_{x''} = \\mathbf{R}_{XYZ,\\,\\text{fixed}}", "note": "Turning about the fixed axes in the reverse order gives the same orientation", "ref": "ch. 2, pp. 44–45" },
-        { "eq": "R = Rz(yaw) Ry(pitch) Rx(roll)", "tex": "\\mathbf{R} = \\mathbf{R}_z(\\text{yaw})\\,\\mathbf{R}_{y}(\\text{pitch})\\,\\mathbf{R}_{x}(\\text{roll})", "note": "Roll-pitch-yaw: roll about x, pitch about y, yaw about z, all fixed; the same as ZY′X″", "ref": "ch. 2, p. 50" },
-        { "eq": "X(α) Y(−90°) Z(γ) depends only on α + γ", "tex": "\\mathbf{R}_{XYZ}(\\alpha, -90^\\circ, \\gamma) = \\begin{pmatrix} 0 & -\\sin(\\alpha+\\gamma) & -\\cos(\\alpha+\\gamma) \\\\ 0 & \\cos(\\alpha+\\gamma) & -\\sin(\\alpha+\\gamma) \\\\ 1 & 0 & 0 \\end{pmatrix}", "note": "Gimbal lock: the first and third turns share one axis, a freedom is lost", "ref": "ch. 2, pp. 56–59" }
+        { "eq": "Rx(α) = [1 0 0; 0 cos α −sin α; 0 sin α cos α]", "tex": "\\mathbf{R}_x(\\alpha) = \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & \\cos\\alpha & -\\sin\\alpha \\\\ 0 & \\sin\\alpha & \\cos\\alpha \\end{pmatrix}", "note": "Turn about x", "ref": "ch. 2, p. 41" ,
+          "where": [
+            { "tex": "\\mathbf{R}_x(\\alpha)", "means": "elementary rotation about the x axis (ch. 2, p. 41)" },
+            { "tex": "\\alpha", "means": "rotation angle about the x axis; the slide names it θ (ch. 2, p. 41)" }
+          ] },
+        { "eq": "Ry(β) = [cos β 0 sin β; 0 1 0; −sin β 0 cos β]", "tex": "\\mathbf{R}_y(\\beta) = \\begin{pmatrix} \\cos\\beta & 0 & \\sin\\beta \\\\ 0 & 1 & 0 \\\\ -\\sin\\beta & 0 & \\cos\\beta \\end{pmatrix}", "note": "Turn about y", "ref": "ch. 2, p. 42" ,
+          "where": [
+            { "tex": "\\mathbf{R}_y(\\beta)", "means": "elementary rotation about the y axis (ch. 2, p. 42)" },
+            { "tex": "\\beta", "means": "rotation angle about the y axis; the slide names it θ (ch. 2, p. 42)" }
+          ] },
+        { "eq": "Rz(γ) = [cos γ −sin γ 0; sin γ cos γ 0; 0 0 1]", "tex": "\\mathbf{R}_z(\\gamma) = \\begin{pmatrix} \\cos\\gamma & -\\sin\\gamma & 0 \\\\ \\sin\\gamma & \\cos\\gamma & 0 \\\\ 0 & 0 & 1 \\end{pmatrix}", "note": "Turn about z", "ref": "ch. 2, p. 43" ,
+          "where": [
+            { "tex": "\\mathbf{R}_z(\\gamma)", "means": "elementary rotation about the z axis (ch. 2, p. 43)" },
+            { "tex": "\\gamma", "means": "rotation angle about the z axis; the slide names it θ (ch. 2, p. 43)" }
+          ] },
+        { "eq": "Rᵀ = R⁻¹, det R = 1", "tex": "\\mathbf{R}^\\mathsf{T} = \\mathbf{R}^{-1},\\quad \\det\\mathbf{R} = 1", "note": "A rotation matrix is orthonormal", "ref": "ch. 2, pp. 24 and 53" ,
+          "where": [
+            { "tex": "\\mathbf{R}", "means": "rotation matrix, element of SO(3) (ch. 2, p. 53)" },
+            { "tex": "\\mathbf{R}^\\mathsf{T},\\ \\mathbf{R}^{-1}", "means": "transpose and inverse of R (ch. 2, p. 24)" },
+            { "tex": "\\det\\mathbf{R}", "means": "determinant of R (ch. 2, p. 53)" }
+          ] },
+        { "eq": "ZY′X″ about moving axes = XYZ about fixed axes", "tex": "\\mathbf{R}_{ZY'X''} = \\mathbf{R}_z\\,\\mathbf{R}_{y'}\\,\\mathbf{R}_{x''} = \\mathbf{R}_{XYZ,\\,\\text{fixed}}", "note": "Turning about the fixed axes in the reverse order gives the same orientation", "ref": "ch. 2, pp. 44–45" ,
+          "where": [
+            { "tex": "\\mathbf{R}_{ZY'X''}", "means": "rotations about the turned axes z, y′, x″ (ch. 2, p. 44)" },
+            { "tex": "\\mathbf{R}_z,\\ \\mathbf{R}_{y'},\\ \\mathbf{R}_{x''}", "means": "elementary rotations about z, y′ and x″ (ch. 2, p. 44)" },
+            { "tex": "\\mathbf{R}_{XYZ,\\,\\text{fixed}}", "means": "rotations about the fixed axes x, then y, then z (ch. 2, p. 45)" }
+          ] },
+        { "eq": "R = Rz(yaw) Ry(pitch) Rx(roll)", "tex": "\\mathbf{R} = \\mathbf{R}_z(\\text{yaw})\\,\\mathbf{R}_{y}(\\text{pitch})\\,\\mathbf{R}_{x}(\\text{roll})", "note": "Roll-pitch-yaw: roll about x, pitch about y, yaw about z, all fixed; the same as ZY′X″", "ref": "ch. 2, p. 50" ,
+          "where": [
+            { "tex": "\\mathbf{R}", "means": "orientation of the body (ch. 2, p. 50)" },
+            { "tex": "\\text{roll},\\ \\text{pitch},\\ \\text{yaw}", "means": "angles about the fixed x, y and z axes (ch. 2, p. 50)" },
+            { "tex": "\\mathbf{R}_x,\\ \\mathbf{R}_y,\\ \\mathbf{R}_z", "means": "elementary rotations (ch. 2, pp. 41–43)" }
+          ] },
+        { "eq": "X(α) Y(−90°) Z(γ) depends only on α + γ", "tex": "\\mathbf{R}_{XYZ}(\\alpha, -90^\\circ, \\gamma) = \\begin{pmatrix} 0 & -\\sin(\\alpha+\\gamma) & -\\cos(\\alpha+\\gamma) \\\\ 0 & \\cos(\\alpha+\\gamma) & -\\sin(\\alpha+\\gamma) \\\\ 1 & 0 & 0 \\end{pmatrix}", "note": "Gimbal lock: the first and third turns share one axis, a freedom is lost", "ref": "ch. 2, pp. 56–59" ,
+          "where": [
+            { "tex": "\\mathbf{R}_{XYZ}(\\alpha, -90^\\circ, \\gamma)", "means": "X(α)Y(−90°)Z(γ): gimbal lock, the middle axis at −90° (ch. 2, p. 59)" },
+            { "tex": "\\alpha,\\ \\gamma", "means": "first and third rotation angle; only their sum remains (ch. 2, p. 59)" }
+          ] }
       ],
       "practice": [
         { "question": "Z(0°) Y′(90°) X″(0°): the entry in row 3, column 1 of the rotation matrix?", "source": "Ajanović (2020), ch. 2, p. 46, printed", "answer": -1, "unit": "1", "tolerance": 0.001, "solution": "Only Ry(90°) is left: its row 3 is (−sin 90°, 0, cos 90°) = (−1, 0, 0).", "compute": { "law": "eulerEntry", "seq": "ZYX", "angles": [0, 90, 0], "row": 3, "col": 1 } },
@@ -87,12 +176,44 @@
       "idea": "Turn each joint and move along each link: multiplying one homogeneous transform per joint gives where the tip is and how it is turned. For every set of joint angles there is exactly one answer.",
       "law": "x = l1 cos θ1 + l2 cos(θ1 + θ2), y = l1 sin θ1 + l2 sin(θ1 + θ2)",
       "lawTex": "x = l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2),\\quad y = l_1\\sin\\theta_1 + l_2\\sin(\\theta_1+\\theta_2)",
+      "lawWhere": [
+        { "tex": "x,\\ y", "means": "position of the end effector in frame 0 (ch. 2, p. 38)" },
+        { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+        { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" }
+      ],
       "equations": [
-        { "eq": "x = l1 cos θ1 + l2 cos(θ1 + θ2)", "tex": "x = l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2)", "note": "Tip, x", "ref": "ch. 2, p. 38" },
-        { "eq": "y = l1 sin θ1 + l2 sin(θ1 + θ2)", "tex": "y = l_1\\sin\\theta_1 + l_2\\sin(\\theta_1+\\theta_2)", "note": "Tip, y", "ref": "ch. 2, p. 38" },
-        { "explore": true, "eq": "φ = θ1 + θ2", "tex": "\\varphi = \\theta_1 + \\theta_2", "note": "The tip's turn", "ref": "ch. 2, p. 38" },
-        { "eq": "0T2 = 0T1 · 1T2, iTj = [cos θ −sin θ l cos θ; sin θ cos θ l sin θ; 0 0 1]", "tex": "{}^{0}\\mathbf{T}_{2} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2},\\quad {}^{i-1}\\mathbf{T}_{i} = \\begin{pmatrix} \\cos\\theta_i & -\\sin\\theta_i & l_i\\cos\\theta_i \\\\ \\sin\\theta_i & \\cos\\theta_i & l_i\\sin\\theta_i \\\\ 0 & 0 & 1 \\end{pmatrix}", "note": "The same by transforms", "ref": "ch. 2, p. 38" },
-        { "eq": "x = k cos(α + θ1), y = l1 + k sin(α + θ1)", "tex": "x = k\\cos(\\alpha+\\theta_1),\\quad y = l_1 + k\\sin(\\alpha+\\theta_1),\\quad k = \\sqrt{(l_2 + l_3\\cos 45^\\circ)^2 + (l_4 + l_3\\sin 45^\\circ)^2}", "note": "The bent arm: one turning joint, two fixed 135° bends", "ref": "ch. 3, p. 3" }
+        { "eq": "x = l1 cos θ1 + l2 cos(θ1 + θ2)", "tex": "x = l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2)", "note": "Tip, x", "ref": "ch. 2, p. 38" ,
+          "where": [
+            { "tex": "x", "means": "x position of the end effector (ch. 2, p. 38)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "eq": "y = l1 sin θ1 + l2 sin(θ1 + θ2)", "tex": "y = l_1\\sin\\theta_1 + l_2\\sin(\\theta_1+\\theta_2)", "note": "Tip, y", "ref": "ch. 2, p. 38" ,
+          "where": [
+            { "tex": "y", "means": "y position of the end effector (ch. 2, p. 38)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "explore": true, "eq": "φ = θ1 + θ2", "tex": "\\varphi = \\theta_1 + \\theta_2", "note": "The tip's turn", "ref": "ch. 2, p. 38" ,
+          "where": [
+            { "tex": "\\varphi", "means": "orientation of the end effector; the slide writes θ (ch. 2, p. 38)" },
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "eq": "0T2 = 0T1 · 1T2, iTj = [cos θ −sin θ l cos θ; sin θ cos θ l sin θ; 0 0 1]", "tex": "{}^{0}\\mathbf{T}_{2} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2},\\quad {}^{i-1}\\mathbf{T}_{i} = \\begin{pmatrix} \\cos\\theta_i & -\\sin\\theta_i & l_i\\cos\\theta_i \\\\ \\sin\\theta_i & \\cos\\theta_i & l_i\\sin\\theta_i \\\\ 0 & 0 & 1 \\end{pmatrix}", "note": "The same by transforms", "ref": "ch. 2, p. 38" ,
+          "where": [
+            { "tex": "{}^{0}\\mathbf{T}_{2}", "means": "transformation of frame 2 in frame 0: the forward kinematics (ch. 2, p. 38)" },
+            { "tex": "{}^{0}\\mathbf{T}_{1},\\ {}^{1}\\mathbf{T}_{2}", "means": "transformation of frame 1 in frame 0 and of frame 2 in frame 1 (ch. 2, p. 38)" },
+            { "tex": "{}^{i-1}\\mathbf{T}_{i}", "means": "transformation of frame i in frame i−1 (ch. 3, p. 21)" },
+            { "tex": "\\theta_i,\\ l_i", "means": "angle and length of link i (ch. 2, p. 38)" }
+          ] },
+        { "eq": "x = k cos(α + θ1), y = l1 + k sin(α + θ1)", "tex": "x = k\\cos(\\alpha+\\theta_1),\\quad y = l_1 + k\\sin(\\alpha+\\theta_1),\\quad k = \\sqrt{(l_2 + l_3\\cos 45^\\circ)^2 + (l_4 + l_3\\sin 45^\\circ)^2}", "note": "The bent arm: one turning joint, two fixed 135° bends", "ref": "ch. 3, p. 3" ,
+          "where": [
+            { "tex": "x,\\ y", "means": "position of the end effector in frame 0 (ch. 2, p. 38)" },
+            { "tex": "k", "means": "distance from joint 1 to the end effector (ch. 3, p. 3, figure)" },
+            { "tex": "\\alpha", "means": "angle of k against link 2's direction, sin⁻¹((l₄ + l₃ sin 45°)/k) (ch. 3, p. 3)" },
+            { "tex": "\\theta_1", "means": "joint angle (ch. 3, p. 3)" },
+            { "tex": "l_1, \\dots, l_4", "means": "link lengths, 1 to 4 in the example (ch. 3, p. 3)" }
+          ] }
       ],
       "practice": [
         { "question": "l1 = 5, l2 = 3, θ1 = 20°, θ2 = 64°: the tip's x?", "source": "Ajanović (2020), ch. 2, p. 38, printed", "answer": 5.012, "unit": "1", "solution": "x = 5 cos 20° + 3 cos 84° = 4.698 + 0.314 = 5.012.", "compute": { "law": "planar2r", "l1": 5, "l2": 3, "t1": 20, "t2": 64, "out": "x" } },
@@ -109,12 +230,54 @@
       "idea": "Put a frame on every link by four rules, and each step from one frame to the next needs only four numbers: θ, d, a and α. Multiply the steps and the chain gives the pose of its last frame.",
       "law": "i−1Ti = Rot(z, θi) Trans(z, di) Trans(x, ai) Rot(x, αi)",
       "lawTex": "{}^{i-1}\\mathbf{T}_{i} = \\mathrm{Rot}(z,\\theta_i)\\,\\mathrm{Trans}(z,d_i)\\,\\mathrm{Trans}(x,a_i)\\,\\mathrm{Rot}(x,\\alpha_i)",
+      "lawWhere": [
+        { "tex": "{}^{i-1}\\mathbf{T}_{i}", "means": "transformation of frame i in frame i−1 (ch. 3, p. 21)" },
+        { "tex": "\\mathrm{Rot}(z,\\theta_i)", "means": "rotation by θ_i about z (ch. 3, p. 21)" },
+        { "tex": "\\mathrm{Trans}(z,d_i)", "means": "translation by d_i along z (ch. 3, p. 21)" },
+        { "tex": "\\mathrm{Trans}(x,a_i)", "means": "translation by a_i along x (ch. 3, p. 21)" },
+        { "tex": "\\mathrm{Rot}(x,\\alpha_i)", "means": "rotation by α_i about x (ch. 3, p. 21)" },
+        { "tex": "\\theta_i", "means": "joint angle: rotation from x_{i−1} to x_i about z_{i−1} (ch. 3, p. 18)" },
+        { "tex": "d_i", "means": "offset from x_{i−1} to x_i along z_{i−1} (ch. 3, p. 18)" },
+        { "tex": "a_i", "means": "distance from z_{i−1} to z_i along x_i (ch. 3, p. 18)" },
+        { "tex": "\\alpha_i", "means": "twist: rotation from z_{i−1} to z_i about x_i (ch. 3, p. 18)" }
+      ],
       "equations": [
-        { "eq": "zi along joint i + 1's axis; xi ⟂ zi−1 and meets zi−1; yi completes a right-handed frame", "tex": "z_i \\parallel \\text{axis}_{i+1},\\quad x_i \\perp z_{i-1},\\quad x_i \\cap z_{i-1} \\neq \\emptyset", "note": "The four DH rules for placing the frames", "ref": "ch. 3, pp. 7–8" },
-        { "eq": "θi about zi−1, di along zi−1, ai along xi, αi about xi", "tex": "\\theta_i: x_{i-1}\\to x_i \\text{ about } z_{i-1},\\; d_i \\text{ along } z_{i-1},\\; a_i \\text{ along } x_i,\\; \\alpha_i: z_{i-1}\\to z_i \\text{ about } x_i", "note": "The four parameters; θ is the variable of a turning joint, d of a sliding one", "ref": "ch. 3, p. 18" },
-        { "eq": "i−1Ti = [cθ −sθcα sθsα a cθ; sθ cθcα −cθsα a sθ; 0 sα cα d; 0 0 0 1]", "tex": "{}^{i-1}\\mathbf{T}_{i} = \\begin{pmatrix} \\cos\\theta_i & -\\sin\\theta_i\\cos\\alpha_i & \\sin\\theta_i\\sin\\alpha_i & a_i\\cos\\theta_i \\\\ \\sin\\theta_i & \\cos\\theta_i\\cos\\alpha_i & -\\cos\\theta_i\\sin\\alpha_i & a_i\\sin\\theta_i \\\\ 0 & \\sin\\alpha_i & \\cos\\alpha_i & d_i \\\\ 0 & 0 & 0 & 1 \\end{pmatrix}", "note": "One DH step", "ref": "ch. 3, p. 20" },
-        { "eq": "0Tn = 0T1 1T2 … n−1Tn", "tex": "{}^{0}\\mathbf{T}_{n} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2}\\cdots{}^{n-1}\\mathbf{T}_{n}", "note": "The chain", "ref": "ch. 3, p. 21" },
-        { "eq": "RRT: (θ1*, 90°, l3, l1 + l2), (90° + θ2*, 90°, 0, 0), (0, 0, 0, l4 + l5*)", "tex": "(\\theta, \\alpha, a, d):\\; (\\theta_1^*, 90^\\circ, l_3, l_1+l_2),\\; (90^\\circ+\\theta_2^*, 90^\\circ, 0, 0),\\; (0, 0, 0, l_4+l_5^*)", "note": "The slides' RRT robot", "ref": "ch. 3, p. 24" }
+        { "eq": "zi along joint i + 1's axis; xi ⟂ zi−1 and meets zi−1; yi completes a right-handed frame", "tex": "z_i \\parallel \\text{axis}_{i+1},\\quad x_i \\perp z_{i-1},\\quad x_i \\cap z_{i-1} \\neq \\emptyset", "note": "The four DH rules for placing the frames", "ref": "ch. 3, pp. 7–8" ,
+          "where": [
+            { "tex": "z_i", "means": "z axis of frame i: the axis of rotation or the direction of motion of the joint (ch. 3, p. 8, rule 1)" },
+            { "tex": "\\text{axis}_{i+1}", "means": "axis of joint i+1; rule 1 does not say which joint's axis (not defined in the source)" },
+            { "tex": "x_i", "means": "x axis of frame i: normal to and cutting z_{i−1} (ch. 3, p. 8, rules 2–3)" },
+            { "tex": "z_{i-1}", "means": "z axis of frame i−1 (ch. 3, p. 8)" }
+          ] },
+        { "eq": "θi about zi−1, di along zi−1, ai along xi, αi about xi", "tex": "\\theta_i: x_{i-1}\\to x_i \\text{ about } z_{i-1},\\; d_i \\text{ along } z_{i-1},\\; a_i \\text{ along } x_i,\\; \\alpha_i: z_{i-1}\\to z_i \\text{ about } x_i", "note": "The four parameters; θ is the variable of a turning joint, d of a sliding one", "ref": "ch. 3, p. 18" ,
+          "where": [
+            { "tex": "\\theta_i", "means": "joint angle: rotation from x_{i−1} to x_i about z_{i−1} (ch. 3, p. 18)" },
+            { "tex": "d_i", "means": "offset from x_{i−1} to x_i along z_{i−1} (ch. 3, p. 18)" },
+            { "tex": "a_i", "means": "distance from z_{i−1} to z_i along x_i (ch. 3, p. 18)" },
+            { "tex": "\\alpha_i", "means": "twist: rotation from z_{i−1} to z_i about x_i (ch. 3, p. 18)" },
+            { "tex": "x_{i-1},\\ z_{i-1}", "means": "x and z axes of frame i−1 (ch. 3, p. 18)" },
+            { "tex": "x_i,\\ z_i", "means": "x and z axes of frame i (ch. 3, p. 18)" }
+          ] },
+        { "eq": "i−1Ti = [cθ −sθcα sθsα a cθ; sθ cθcα −cθsα a sθ; 0 sα cα d; 0 0 0 1]", "tex": "{}^{i-1}\\mathbf{T}_{i} = \\begin{pmatrix} \\cos\\theta_i & -\\sin\\theta_i\\cos\\alpha_i & \\sin\\theta_i\\sin\\alpha_i & a_i\\cos\\theta_i \\\\ \\sin\\theta_i & \\cos\\theta_i\\cos\\alpha_i & -\\cos\\theta_i\\sin\\alpha_i & a_i\\sin\\theta_i \\\\ 0 & \\sin\\alpha_i & \\cos\\alpha_i & d_i \\\\ 0 & 0 & 0 & 1 \\end{pmatrix}", "note": "One DH step", "ref": "ch. 3, p. 20" ,
+          "where": [
+            { "tex": "{}^{i-1}\\mathbf{T}_{i}", "means": "transformation of frame i in frame i−1 (ch. 3, p. 21)" },
+            { "tex": "\\theta_i", "means": "joint angle: rotation from x_{i−1} to x_i about z_{i−1} (ch. 3, p. 18)" },
+            { "tex": "\\alpha_i", "means": "twist: rotation from z_{i−1} to z_i about x_i (ch. 3, p. 18)" },
+            { "tex": "a_i", "means": "distance from z_{i−1} to z_i along x_i (ch. 3, p. 18)" },
+            { "tex": "d_i", "means": "offset from x_{i−1} to x_i along z_{i−1} (ch. 3, p. 18)" }
+          ] },
+        { "eq": "0Tn = 0T1 1T2 … n−1Tn", "tex": "{}^{0}\\mathbf{T}_{n} = {}^{0}\\mathbf{T}_{1}\\,{}^{1}\\mathbf{T}_{2}\\cdots{}^{n-1}\\mathbf{T}_{n}", "note": "The chain", "ref": "ch. 3, p. 21" ,
+          "where": [
+            { "tex": "{}^{0}\\mathbf{T}_{n}", "means": "pose of the last frame in the base frame (ch. 3, p. 21)" },
+            { "tex": "{}^{i-1}\\mathbf{T}_{i}", "means": "transformation of frame i in frame i−1 (ch. 3, p. 21)" },
+            { "tex": "n", "means": "number of joints (not defined in the source)" }
+          ] },
+        { "eq": "RRT: (θ1*, 90°, l3, l1 + l2), (90° + θ2*, 90°, 0, 0), (0, 0, 0, l4 + l5*)", "tex": "(\\theta, \\alpha, a, d):\\; (\\theta_1^*, 90^\\circ, l_3, l_1+l_2),\\; (90^\\circ+\\theta_2^*, 90^\\circ, 0, 0),\\; (0, 0, 0, l_4+l_5^*)", "note": "The slides' RRT robot", "ref": "ch. 3, p. 24" ,
+          "where": [
+            { "tex": "(\\theta, \\alpha, a, d)", "means": "DH parameters of one row (ch. 3, p. 18)" },
+            { "tex": "\\theta_1^*,\\ \\theta_2^*,\\ l_5^*", "means": "joint variables, marked with a star (ch. 3, p. 24)" },
+            { "tex": "l_1, \\dots, l_4", "means": "fixed link lengths of the RRT robot (ch. 3, p. 24, figure)" }
+          ] }
       ],
       "practice": [
         { "question": "The RRT robot with l1…l4 = 1, 2, 3, 4 and l5* = 5, at θ1 = 0°, θ2 = 0°: the x of frame 3?", "source": "Ajanović (2020), ch. 3, p. 26, printed", "answer": 12, "unit": "1", "solution": "⁰T₃ = [0 0 1 12; 0 −1 0 0; 1 0 0 3; 0 0 0 1]: x = l3 + l4 + l5 = 3 + 4 + 5 = 12.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 0, "t2": 0, "l5": 5, "out": "x" } },
@@ -130,11 +293,37 @@
       "idea": "The IRB 120's six axes as a DH chain built from the dimensions in its product specification. Set axes 2 and 3 to a row of the specification's working-range table and the chain puts the wrist centre where the table does.",
       "law": "0T6 = 0T1(θ1) 1T2(θ2) … 5T6(θ6)",
       "lawTex": "{}^{0}\\mathbf{T}_{6} = \\prod_{i=1}^{6} {}^{i-1}\\mathbf{T}_{i}(\\theta_i)",
+      "lawWhere": [
+        { "tex": "{}^{0}\\mathbf{T}_{6}", "means": "pose of the tool flange in the base frame (ch. 3, p. 21)" },
+        { "tex": "{}^{i-1}\\mathbf{T}_{i}", "means": "transformation of frame i in frame i−1 (ch. 3, p. 21)" },
+        { "tex": "\\theta_i", "means": "angle of axis i (ABB 2020, p. 32)" },
+        { "tex": "i", "means": "axis index, 1 to 6 (ABB 2020, p. 32)" }
+      ],
       "equations": [
-        { "eq": "(θ, α, a, d): (θ1, −90°, 0, 290), (θ2 − 90°, 0, 270, 0), (θ3, −90°, 70, 0), (θ4, 90°, 0, 302), (θ5, −90°, 0, 0), (θ6, 0, 0, 72)", "tex": "\\begin{array}{c|cccc} i & \\theta_i & \\alpha_i & a_i & d_i \\\\ \\hline 1 & \\theta_1 & -90^\\circ & 0 & 290 \\\\ 2 & \\theta_2 - 90^\\circ & 0 & 270 & 0 \\\\ 3 & \\theta_3 & -90^\\circ & 70 & 0 \\\\ 4 & \\theta_4 & 90^\\circ & 0 & 302 \\\\ 5 & \\theta_5 & -90^\\circ & 0 & 0 \\\\ 6 & \\theta_6 & 0 & 0 & 72 \\end{array}", "note": "The DH table, built here from the dimensions in mm; checked against the working-range table", "ref": "" },
-        { "eq": "290, 270, 70, 302, 72 mm", "tex": "290,\\ 270,\\ 70,\\ 302,\\ 72\\ \\mathrm{mm}", "note": "Base to axis 2, upper arm, step to the forearm, forearm, flange", "ref": "ABB (2020), p. 12" },
-        { "eq": "Axis 1 ±165°, 2 ±110°, 3 +70°…−110°, 4 ±160°, 5 ±120°, 6 ±400°", "tex": "\\theta_1 \\in \\pm165^\\circ,\\ \\theta_2 \\in \\pm110^\\circ,\\ \\theta_3 \\in [-110^\\circ, 70^\\circ],\\ \\theta_4 \\in \\pm160^\\circ,\\ \\theta_5 \\in \\pm120^\\circ,\\ \\theta_6 \\in \\pm400^\\circ", "note": "Working ranges", "ref": "ABB (2020), p. 32" },
-        { "explore": true, "eq": "J = [z × (p6 − pi−1); z] per turning joint", "tex": "\\mathbf{J}_i = \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\times ({}^{0}\\mathbf{t}_6 - {}^{0}\\mathbf{t}_{i-1}) \\\\ {}^{0}\\mathbf{z}_{i-1} \\end{pmatrix}", "note": "The geometric Jacobian of the arm; det J = 0 where it loses a freedom, here when axis 5 is at 0°", "ref": "ch. 4, p. 15" }
+        { "eq": "(θ, α, a, d): (θ1, −90°, 0, 290), (θ2 − 90°, 0, 270, 0), (θ3, −90°, 70, 0), (θ4, 90°, 0, 302), (θ5, −90°, 0, 0), (θ6, 0, 0, 72)", "tex": "\\begin{array}{c|cccc} i & \\theta_i & \\alpha_i & a_i & d_i \\\\ \\hline 1 & \\theta_1 & -90^\\circ & 0 & 290 \\\\ 2 & \\theta_2 - 90^\\circ & 0 & 270 & 0 \\\\ 3 & \\theta_3 & -90^\\circ & 70 & 0 \\\\ 4 & \\theta_4 & 90^\\circ & 0 & 302 \\\\ 5 & \\theta_5 & -90^\\circ & 0 & 0 \\\\ 6 & \\theta_6 & 0 & 0 & 72 \\end{array}", "note": "The DH table, built here from the dimensions in mm; checked against the working-range table", "ref": "" ,
+          "where": [
+            { "tex": "i", "means": "axis index (ABB 2020, p. 32)" },
+            { "tex": "\\theta_i", "means": "joint angle: rotation from x_{i−1} to x_i about z_{i−1} (ch. 3, p. 18)" },
+            { "tex": "\\alpha_i", "means": "twist: rotation from z_{i−1} to z_i about x_i (ch. 3, p. 18)" },
+            { "tex": "a_i", "means": "distance from z_{i−1} to z_i along x_i (ch. 3, p. 18)" },
+            { "tex": "d_i", "means": "offset along z_{i−1} [mm]; values from the dimension drawing (ABB 2020, p. 12)" },
+            { "tex": "\\theta_1, \\dots, \\theta_6", "means": "axis angles 1 to 6 (ABB 2020, p. 32)" }
+          ] },
+        { "eq": "290, 270, 70, 302, 72 mm", "tex": "290,\\ 270,\\ 70,\\ 302,\\ 72\\ \\mathrm{mm}", "note": "Base to axis 2, upper arm, step to the forearm, forearm, flange", "ref": "ABB (2020), p. 12" ,
+          "where": [
+            { "tex": "290,\\ 270,\\ 70,\\ 302,\\ 72\\ \\mathrm{mm}", "means": "lengths in the dimension drawing, base to tool flange; ABB gives them no names (ABB 2020, p. 12)" }
+          ] },
+        { "eq": "Axis 1 ±165°, 2 ±110°, 3 +70°…−110°, 4 ±160°, 5 ±120°, 6 ±400°", "tex": "\\theta_1 \\in \\pm165^\\circ,\\ \\theta_2 \\in \\pm110^\\circ,\\ \\theta_3 \\in [-110^\\circ, 70^\\circ],\\ \\theta_4 \\in \\pm160^\\circ,\\ \\theta_5 \\in \\pm120^\\circ,\\ \\theta_6 \\in \\pm400^\\circ", "note": "Working ranges", "ref": "ABB (2020), p. 32" ,
+          "where": [
+            { "tex": "\\theta_1, \\dots, \\theta_6", "means": "angles of axes 1 to 6; ranges are the working range (ABB 2020, p. 32)" }
+          ] },
+        { "explore": true, "eq": "J = [z × (p6 − pi−1); z] per turning joint", "tex": "\\mathbf{J}_i = \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\times ({}^{0}\\mathbf{t}_6 - {}^{0}\\mathbf{t}_{i-1}) \\\\ {}^{0}\\mathbf{z}_{i-1} \\end{pmatrix}", "note": "The geometric Jacobian of the arm; det J = 0 where it loses a freedom, here when axis 5 is at 0°", "ref": "ch. 4, p. 15" ,
+          "where": [
+            { "tex": "\\mathbf{J}_i", "means": "column i of the Jacobian, for a revolute joint (ch. 4, p. 15)" },
+            { "tex": "{}^{0}\\mathbf{z}_{i-1}", "means": "z axis of frame i−1 in frame 0: ⁰R_{i−1}(0, 0, 1)ᵀ (ch. 4, p. 15, note 2)" },
+            { "tex": "{}^{0}\\mathbf{t}_6", "means": "origin of frame 6 in frame 0, from the forward kinematics (ch. 4, p. 15)" },
+            { "tex": "{}^{0}\\mathbf{t}_{i-1}", "means": "origin of frame i−1 in frame 0, from the forward kinematics (ch. 4, p. 15)" }
+          ] }
       ],
       "practice": [
         { "question": "Axis 2 at 0°, axis 3 at −77°: the wrist centre's height Z?", "source": "ABB (2020), p. 31, row B, printed", "answer": 870, "unit": "mm", "solution": "The forearm stands upright: 290 + 270 + √(70² + 302²) = 290 + 270 + 310 = 870 mm; tan⁻¹(70/302) = 13° is why axis 3 must turn 77°, not 90°.", "compute": { "law": "irbWrist", "axis2": 0, "axis3": -77, "out": "z" } },
@@ -151,13 +340,55 @@
       "idea": "The Jacobian turns joint speeds into the tip's speed. Its columns are what each joint alone does to the tip; where its determinant is zero the arm cannot move its tip one way at all, however fast the joints turn.",
       "law": "v = J(q) q̇",
       "lawTex": "\\begin{pmatrix} \\mathbf{v} \\\\ \\boldsymbol{\\omega} \\end{pmatrix} = \\mathbf{J}(\\mathbf{q})\\,\\dot{\\mathbf{q}}",
+      "lawWhere": [
+        { "tex": "\\mathbf{v}", "means": "linear velocity of the end effector (ch. 4, p. 11)" },
+        { "tex": "\\boldsymbol{\\omega}", "means": "angular velocity of the end effector (ch. 4, p. 11)" },
+        { "tex": "\\mathbf{J}(\\mathbf{q})", "means": "Jacobian matrix (ch. 4, p. 11)" },
+        { "tex": "\\dot{\\mathbf{q}}", "means": "joint velocities (ch. 4, p. 11)" }
+      ],
       "equations": [
-        { "eq": "v = J(q) q̇, q̇ = J⁻¹(q) v", "tex": "\\mathbf{v} = \\mathbf{J}(\\mathbf{q})\\,\\dot{\\mathbf{q}},\\qquad \\dot{\\mathbf{q}} = \\mathbf{J}^{-1}(\\mathbf{q})\\,\\mathbf{v}", "note": "Joint speeds to tip speed and back; the inverse exists only where det J ≠ 0", "ref": "ch. 4, pp. 11–12" },
-        { "eq": "J = ∂(x, y, z, …)/∂(q1 … qn)", "tex": "\\mathbf{J}_v = \\begin{pmatrix} \\partial x/\\partial q_1 & \\cdots & \\partial x/\\partial q_n \\\\ \\partial y/\\partial q_1 & \\cdots & \\partial y/\\partial q_n \\\\ \\partial z/\\partial q_1 & \\cdots & \\partial z/\\partial q_n \\end{pmatrix}", "note": "The linear part by partial derivatives of the forward kinematics", "ref": "ch. 4, p. 11" },
-        { "eq": "Sliding joint: [z; 0]; turning joint: [z × (tn − ti−1); z]", "tex": "\\text{T: } \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\\\ \\mathbf{0} \\end{pmatrix},\\quad \\text{R: } \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\times ({}^{0}\\mathbf{t}_n - {}^{0}\\mathbf{t}_{i-1}) \\\\ {}^{0}\\mathbf{z}_{i-1} \\end{pmatrix}", "note": "The geometric schema, from a DH chain", "ref": "ch. 4, p. 15" },
-        { "eq": "RT robot: ẋ = −(l1 + l2) sin θ1 θ̇1 + cos θ1 l̇2, ẏ = (l1 + l2) cos θ1 θ̇1 + sin θ1 l̇2, ωz = θ̇1", "tex": "\\dot{x} = -(l_1+l_2)\\sin\\theta_1\\,\\dot{\\theta}_1 + \\cos\\theta_1\\,\\dot{l}_2,\\quad \\dot{y} = (l_1+l_2)\\cos\\theta_1\\,\\dot{\\theta}_1 + \\sin\\theta_1\\,\\dot{l}_2,\\quad \\omega_z = \\dot{\\theta}_1", "note": "A turning then a sliding joint", "ref": "ch. 4, p. 18" },
-        { "explore": true, "eq": "J = [−l1 s1 − l2 s12, −l2 s12; l1 c1 + l2 c12, l2 c12]", "tex": "\\mathbf{J}_v = \\begin{pmatrix} -l_1\\sin\\theta_1 - l_2\\sin(\\theta_1+\\theta_2) & -l_2\\sin(\\theta_1+\\theta_2) \\\\ l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2) & l_2\\cos(\\theta_1+\\theta_2) \\end{pmatrix}", "note": "The planar two-link arm", "ref": "ch. 4, p. 20" },
-        { "explore": true, "eq": "det J = l1 l2 sin θ2", "tex": "\\det\\mathbf{J}_v = l_1 l_2 \\sin\\theta_2", "note": "Worked here from the matrix above: zero when the arm is stretched or folded", "ref": "" }
+        { "eq": "v = J(q) q̇, q̇ = J⁻¹(q) v", "tex": "\\mathbf{v} = \\mathbf{J}(\\mathbf{q})\\,\\dot{\\mathbf{q}},\\qquad \\dot{\\mathbf{q}} = \\mathbf{J}^{-1}(\\mathbf{q})\\,\\mathbf{v}", "note": "Joint speeds to tip speed and back; the inverse exists only where det J ≠ 0", "ref": "ch. 4, pp. 11–12" ,
+          "where": [
+            { "tex": "\\mathbf{v}", "means": "linear velocity of the end effector (ch. 4, p. 11)" },
+            { "tex": "\\mathbf{J}(\\mathbf{q})", "means": "Jacobian matrix (ch. 4, p. 11)" },
+            { "tex": "\\dot{\\mathbf{q}}", "means": "joint velocities (ch. 4, p. 11)" },
+            { "tex": "\\mathbf{J}^{-1}(\\mathbf{q})", "means": "inverse Jacobian, where it exists (ch. 4, p. 12)" }
+          ] },
+        { "eq": "J = ∂(x, y, z, …)/∂(q1 … qn)", "tex": "\\mathbf{J}_v = \\begin{pmatrix} \\partial x/\\partial q_1 & \\cdots & \\partial x/\\partial q_n \\\\ \\partial y/\\partial q_1 & \\cdots & \\partial y/\\partial q_n \\\\ \\partial z/\\partial q_1 & \\cdots & \\partial z/\\partial q_n \\end{pmatrix}", "note": "The linear part by partial derivatives of the forward kinematics", "ref": "ch. 4, p. 11" ,
+          "where": [
+            { "tex": "\\mathbf{J}_v", "means": "upper, linear part of the Jacobian (ch. 4, p. 11)" },
+            { "tex": "x,\\ y,\\ z", "means": "position of the end effector (ch. 4, p. 11)" },
+            { "tex": "q_1, \\dots, q_n", "means": "joint variables (ch. 4, p. 11)" },
+            { "tex": "n", "means": "number of joints (ch. 4, pp. 11, 15)" }
+          ] },
+        { "eq": "Sliding joint: [z; 0]; turning joint: [z × (tn − ti−1); z]", "tex": "\\text{T: } \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\\\ \\mathbf{0} \\end{pmatrix},\\quad \\text{R: } \\begin{pmatrix} {}^{0}\\mathbf{z}_{i-1} \\times ({}^{0}\\mathbf{t}_n - {}^{0}\\mathbf{t}_{i-1}) \\\\ {}^{0}\\mathbf{z}_{i-1} \\end{pmatrix}", "note": "The geometric schema, from a DH chain", "ref": "ch. 4, p. 15" ,
+          "where": [
+            { "tex": "\\text{T},\\ \\text{R}", "means": "column for a prismatic (Lineargelenk) and a revolute joint (Rotationsgelenk) (ch. 4, p. 15)" },
+            { "tex": "{}^{0}\\mathbf{z}_{i-1}", "means": "z axis of frame i−1 in frame 0: ⁰R_{i−1}(0, 0, 1)ᵀ (ch. 4, p. 15, note 2)" },
+            { "tex": "{}^{0}\\mathbf{t}_n", "means": "origin of frame n in frame 0, from the forward kinematics (ch. 4, p. 15)" },
+            { "tex": "{}^{0}\\mathbf{t}_{i-1}", "means": "origin of frame i−1 in frame 0, from the forward kinematics (ch. 4, p. 15)" },
+            { "tex": "\\mathbf{0}", "means": "zero vector (ch. 4, p. 15)" }
+          ] },
+        { "eq": "RT robot: ẋ = −(l1 + l2) sin θ1 θ̇1 + cos θ1 l̇2, ẏ = (l1 + l2) cos θ1 θ̇1 + sin θ1 l̇2, ωz = θ̇1", "tex": "\\dot{x} = -(l_1+l_2)\\sin\\theta_1\\,\\dot{\\theta}_1 + \\cos\\theta_1\\,\\dot{l}_2,\\quad \\dot{y} = (l_1+l_2)\\cos\\theta_1\\,\\dot{\\theta}_1 + \\sin\\theta_1\\,\\dot{l}_2,\\quad \\omega_z = \\dot{\\theta}_1", "note": "A turning then a sliding joint", "ref": "ch. 4, p. 18" ,
+          "where": [
+            { "tex": "\\dot{x},\\ \\dot{y}", "means": "speed of the end effector along x₀ and y₀ (ch. 4, pp. 18, 20)" },
+            { "tex": "\\omega_z", "means": "turning rate of the end effector about z₀ (ch. 4, pp. 18, 20)" },
+            { "tex": "\\theta_1,\\ \\dot{\\theta}_1", "means": "angle and rate of the revolute joint (ch. 4, p. 18)" },
+            { "tex": "l_2,\\ \\dot{l}_2", "means": "length and rate of the prismatic joint (ch. 4, p. 18)" },
+            { "tex": "l_1", "means": "fixed link length (ch. 4, p. 18)" }
+          ] },
+        { "explore": true, "eq": "J = [−l1 s1 − l2 s12, −l2 s12; l1 c1 + l2 c12, l2 c12]", "tex": "\\mathbf{J}_v = \\begin{pmatrix} -l_1\\sin\\theta_1 - l_2\\sin(\\theta_1+\\theta_2) & -l_2\\sin(\\theta_1+\\theta_2) \\\\ l_1\\cos\\theta_1 + l_2\\cos(\\theta_1+\\theta_2) & l_2\\cos(\\theta_1+\\theta_2) \\end{pmatrix}", "note": "The planar two-link arm", "ref": "ch. 4, p. 20" ,
+          "where": [
+            { "tex": "\\mathbf{J}_v", "means": "linear part of the Jacobian of the RR arm (ch. 4, p. 20)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "explore": true, "eq": "det J = l1 l2 sin θ2", "tex": "\\det\\mathbf{J}_v = l_1 l_2 \\sin\\theta_2", "note": "Worked here from the matrix above: zero when the arm is stretched or folded", "ref": "" ,
+          "where": [
+            { "tex": "\\det\\mathbf{J}_v", "means": "determinant of the 2 × 2 Jacobian; zero at a singularity (not defined in the source)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "\\theta_2", "means": "elbow angle (ch. 4, p. 20)" }
+          ] }
       ],
       "practice": [
         { "question": "The RT robot with l1 = 1, θ1 = 60°, stroke l2 = 2, turning at θ̇1 = 2 rad/s while the stroke grows at l̇2 = 0.5 per s: the tip's ẋ?", "source": "Worked by hand from ch. 4, p. 18", "answer": -4.946, "unit": "1", "solution": "ẋ = −(1 + 2) sin 60° · 2 + cos 60° · 0.5 = −5.196 + 0.25 = −4.946 per s.", "compute": { "law": "rtVel", "l1": 1, "t1": 60, "l2": 2, "w1": 2, "v2": 0.5, "out": "x" } },
@@ -172,12 +403,43 @@
       "idea": "Given the tip, find the joints. The two-link arm reaches a point in its ring of reach two ways, elbow one side or the other; on the ring's edge one way; outside it not at all. Obstacles and joint ranges decide which to take.",
       "law": "cos θ2 = (x² + y² − l1² − l2²)/(2 l1 l2)",
       "lawTex": "\\cos\\theta_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}",
+      "lawWhere": [
+        { "tex": "\\theta_2", "means": "elbow angle (ch. 5, p. 17)" },
+        { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" },
+        { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" }
+      ],
       "equations": [
-        { "explore": true, "eq": "θ2 = atan2(±√(1 − c2²), c2)", "tex": "\\theta_2 = \\operatorname{atan2}\\!\\left(\\pm\\sqrt{1 - c_2^2},\\; c_2\\right),\\quad c_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}", "note": "Two elbow solutions", "ref": "ch. 5, pp. 16–18" },
-        { "explore": true, "eq": "θ1 = atan2(y, x) − atan2(l2 sin θ2, l1 + l2 cos θ2)", "tex": "\\theta_1 = \\operatorname{atan2}(y, x) - \\operatorname{atan2}(l_2\\sin\\theta_2,\\; l_1 + l_2\\cos\\theta_2)", "note": "The shoulder for each elbow", "ref": "ch. 5, pp. 17–18" },
-        { "explore": true, "eq": "(l1 − l2)² ≤ x² + y² ≤ (l1 + l2)²", "tex": "(l_1 - l_2)^2 \\le x^2 + y^2 \\le (l_1 + l_2)^2", "note": "A solution exists only in the ring of reach", "ref": "ch. 5, p. 17" },
-        { "eq": "θ2 = 180° − arccos((c² − l1² − l2²)/(−2 l1 l2)), θ1 = arctan(y/x) − arccos((l2² − c² − l1²)/(−2 l1 c))", "tex": "\\theta_2 = 180^\\circ - \\arccos\\frac{c^2 - l_1^2 - l_2^2}{-2 l_1 l_2},\\quad \\theta_1 = \\arctan\\frac{y}{x} - \\arccos\\frac{l_2^2 - c^2 - l_1^2}{-2 l_1 c}", "note": "The same by the cosine rule in the triangle l1, l2, c = √(x² + y²)", "ref": "ch. 5, p. 13" },
-        { "eq": "θ1 = atan2(y, x), θ2 = atan2(z − l1, √(x² + y²))", "tex": "\\theta_1 = \\operatorname{atan2}(y, x),\\quad \\theta_2 = \\operatorname{atan2}\\!\\left(z - l_1,\\; \\sqrt{x^2 + y^2}\\right)", "note": "A post turning about its axis with a tilting arm on top: top view, then side view", "ref": "ch. 5, p. 21" }
+        { "explore": true, "eq": "θ2 = atan2(±√(1 − c2²), c2)", "tex": "\\theta_2 = \\operatorname{atan2}\\!\\left(\\pm\\sqrt{1 - c_2^2},\\; c_2\\right),\\quad c_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}", "note": "Two elbow solutions", "ref": "ch. 5, pp. 16–18" ,
+          "where": [
+            { "tex": "\\theta_2", "means": "elbow angle; ± gives elbow up or down (ch. 5, p. 17)" },
+            { "tex": "c_2", "means": "cos θ₂ (ch. 5, p. 17)" },
+            { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "explore": true, "eq": "θ1 = atan2(y, x) − atan2(l2 sin θ2, l1 + l2 cos θ2)", "tex": "\\theta_1 = \\operatorname{atan2}(y, x) - \\operatorname{atan2}(l_2\\sin\\theta_2,\\; l_1 + l_2\\cos\\theta_2)", "note": "The shoulder for each elbow", "ref": "ch. 5, pp. 17–18" ,
+          "where": [
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "explore": true, "eq": "(l1 − l2)² ≤ x² + y² ≤ (l1 + l2)²", "tex": "(l_1 - l_2)^2 \\le x^2 + y^2 \\le (l_1 + l_2)^2", "note": "A solution exists only in the ring of reach", "ref": "ch. 5, p. 17" ,
+          "where": [
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" }
+          ] },
+        { "eq": "θ2 = 180° − arccos((c² − l1² − l2²)/(−2 l1 l2)), θ1 = arctan(y/x) − arccos((l2² − c² − l1²)/(−2 l1 c))", "tex": "\\theta_2 = 180^\\circ - \\arccos\\frac{c^2 - l_1^2 - l_2^2}{-2 l_1 l_2},\\quad \\theta_1 = \\arctan\\frac{y}{x} - \\arccos\\frac{l_2^2 - c^2 - l_1^2}{-2 l_1 c}", "note": "The same by the cosine rule in the triangle l1, l2, c = √(x² + y²)", "ref": "ch. 5, p. 13" ,
+          "where": [
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "c", "means": "distance from the base to the target, √(x² + y²) (ch. 5, p. 13, figure)" },
+            { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "eq": "θ1 = atan2(y, x), θ2 = atan2(z − l1, √(x² + y²))", "tex": "\\theta_1 = \\operatorname{atan2}(y, x),\\quad \\theta_2 = \\operatorname{atan2}\\!\\left(z - l_1,\\; \\sqrt{x^2 + y^2}\\right)", "note": "A post turning about its axis with a tilting arm on top: top view, then side view", "ref": "ch. 5, p. 21" ,
+          "where": [
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "angles of the base rotation and of the arm joint (ch. 5, p. 21)" },
+            { "tex": "x,\\ y,\\ z", "means": "target point of the tool (TCP) (ch. 5, p. 21)" },
+            { "tex": "l_1,\\ l_2", "means": "column height and arm length; the side view labels the leg l₁ − z, the formula uses z − l₁ (ch. 5, p. 21)" }
+          ] }
       ],
       "practice": [
         { "question": "l1 = 3, l2 = 4, tip at (4, 3): θ1 of the solution with θ2 = +90°?", "source": "Ajanović (2020), ch. 5, p. 10, printed", "answer": -16.26, "unit": "°", "solution": "c2 = (25 − 9 − 16)/24 = 0, θ2 = ±90°. For +90°: θ1 = atan2(3, 4) − atan2(4, 3) = 36.87° − 53.13° = −16.26°. The other: θ1 = 90°, θ2 = −90°.", "compute": { "law": "ik2r", "l1": 3, "l2": 4, "x": 4, "y": 3, "sign": 1, "out": "t1" } },
@@ -195,9 +457,26 @@
       "law": "⁰T₃ = ⁰T₁ · ¹T₂ · ²T₃",
       "lawTex": "{}^{0}T_3 = {}^{0}T_1\\,{}^{1}T_2\\,{}^{2}T_3",
       "equations": [
-        { "explore": true, "eq": "ⁱ⁻¹Tᵢ = Rot(z, θᵢ) Trans(z, dᵢ) Trans(x, aᵢ) Rot(x, αᵢ)", "tex": "{}^{i-1}T_i = \\mathrm{Rot}(z,\\theta_i)\\,\\mathrm{Trans}(z,d_i)\\,\\mathrm{Trans}(x,a_i)\\,\\mathrm{Rot}(x,\\alpha_i)", "note": "One DH step, the matrix each row of the table gives", "ref": "ch. 3, pp. 20–21" },
-        { "explore": true, "eq": "θ: θ1*, 90° + θ2*, 0; α: 90°, 90°, 0; a: l3, 0, 0; d: l1 + l2, 0, l4 + l5*", "tex": "\\theta = (\\theta_1^*,\\ 90^\\circ + \\theta_2^*,\\ 0),\\ \\alpha = (90^\\circ, 90^\\circ, 0),\\ a = (l_3, 0, 0),\\ d = (l_1 + l_2,\\ 0,\\ l_4 + l_5^*)", "note": "The RRT robot's DH table", "ref": "ch. 3, p. 24" },
-        { "eq": "⁰T₃ = ⁰T₁ · ¹T₂ · ²T₃", "tex": "{}^{0}T_3 = {}^{0}T_1\\,{}^{1}T_2\\,{}^{2}T_3", "note": "The pose of the TCP: the steps multiplied in order", "ref": "ch. 3, p. 25" }
+        { "explore": true, "eq": "ⁱ⁻¹Tᵢ = Rot(z, θᵢ) Trans(z, dᵢ) Trans(x, aᵢ) Rot(x, αᵢ)", "tex": "{}^{i-1}T_i = \\mathrm{Rot}(z,\\theta_i)\\,\\mathrm{Trans}(z,d_i)\\,\\mathrm{Trans}(x,a_i)\\,\\mathrm{Rot}(x,\\alpha_i)", "note": "One DH step, the matrix each row of the table gives", "ref": "ch. 3, pp. 20–21" ,
+          "where": [
+            { "tex": "{}^{i-1}T_i", "means": "transformation of frame i in frame i−1 (ch. 3, p. 21)" },
+            { "tex": "\\mathrm{Rot},\\ \\mathrm{Trans}", "means": "elementary rotation and translation along z or x (ch. 3, p. 21)" },
+            { "tex": "\\theta_i", "means": "joint angle: rotation from x_{i−1} to x_i about z_{i−1} (ch. 3, p. 18)" },
+            { "tex": "d_i", "means": "offset from x_{i−1} to x_i along z_{i−1} (ch. 3, p. 18)" },
+            { "tex": "a_i", "means": "distance from z_{i−1} to z_i along x_i (ch. 3, p. 18)" },
+            { "tex": "\\alpha_i", "means": "twist: rotation from z_{i−1} to z_i about x_i (ch. 3, p. 18)" }
+          ] },
+        { "explore": true, "eq": "θ: θ1*, 90° + θ2*, 0; α: 90°, 90°, 0; a: l3, 0, 0; d: l1 + l2, 0, l4 + l5*", "tex": "\\theta = (\\theta_1^*,\\ 90^\\circ + \\theta_2^*,\\ 0),\\ \\alpha = (90^\\circ, 90^\\circ, 0),\\ a = (l_3, 0, 0),\\ d = (l_1 + l_2,\\ 0,\\ l_4 + l_5^*)", "note": "The RRT robot's DH table", "ref": "ch. 3, p. 24" ,
+          "where": [
+            { "tex": "\\theta,\\ \\alpha,\\ a,\\ d", "means": "DH parameters of rows 1 to 3 (ch. 3, p. 18)" },
+            { "tex": "\\theta_1^*,\\ \\theta_2^*,\\ l_5^*", "means": "joint variables, marked with a star (ch. 3, p. 24)" },
+            { "tex": "l_1, \\dots, l_4", "means": "fixed link lengths (ch. 3, p. 24, figure)" }
+          ] },
+        { "eq": "⁰T₃ = ⁰T₁ · ¹T₂ · ²T₃", "tex": "{}^{0}T_3 = {}^{0}T_1\\,{}^{1}T_2\\,{}^{2}T_3", "note": "The pose of the TCP: the steps multiplied in order", "ref": "ch. 3, p. 25" ,
+          "where": [
+            { "tex": "{}^{0}T_3", "means": "pose of frame 3 in the base frame (ch. 3, p. 25)" },
+            { "tex": "{}^{0}T_1,\\ {}^{1}T_2,\\ {}^{2}T_3", "means": "transformations of each row of the DH table (ch. 3, pp. 21, 25)" }
+          ] }
       ],
       "practice": [
         { "question": "The RRT robot (l1…l4 = 1…4, l5* = 5) at θ1 = 0°, θ2 = 90°: the x of the TCP?", "source": "Ajanović (2020), ch. 3, p. 26, printed", "answer": 3, "unit": "1", "solution": "⁰T₃ = [−1 0 0 3; 0 −1 0 0; 0 0 1 12; 0 0 0 1]: x = l3 = 3.", "compute": { "law": "rrt", "l": [1, 2, 3, 4], "t1": 0, "t2": 90, "l5": 5, "out": "x" } },
@@ -212,9 +491,24 @@
       "law": "⁰T₆ = ⁰T₁ ¹T₂ ⋯ ⁵T₆",
       "lawTex": "{}^{0}T_6 = {}^{0}T_1\\,{}^{1}T_2 \\cdots {}^{5}T_6",
       "equations": [
-        { "eq": "⁰T₆ = ⁰T₁ ¹T₂ ⋯ ⁵T₆", "tex": "{}^{0}T_6 = {}^{0}T_1\\,{}^{1}T_2 \\cdots {}^{5}T_6", "note": "The flange's pose, the DH steps multiplied in order", "ref": "ch. 3, p. 21" },
-        { "explore": true, "eq": "d = 290, 0, 0, 302, 0, 72 mm; a = 0, 270, 70, 0, 0, 0 mm; α = −90°, 0, −90°, 90°, −90°, 0", "tex": "d = (290, 0, 0, 302, 0, 72),\\ a = (0, 270, 70, 0, 0, 0)\\ \\mathrm{mm},\\ \\alpha = (-90^\\circ, 0, -90^\\circ, 90^\\circ, -90^\\circ, 0)", "note": "This lab's DH table, built from the dimensions; θ2 has a −90° offset", "ref": "ABB p. 12" },
-        { "explore": true, "eq": "wrist centre = flange − 72 mm along its z", "tex": "\\mathbf{p}_\\text{wc} = \\mathbf{p}_6 - 72\\,\\mathbf{z}_6", "note": "The point the working-range table gives", "ref": "ABB pp. 12, 31" }
+        { "eq": "⁰T₆ = ⁰T₁ ¹T₂ ⋯ ⁵T₆", "tex": "{}^{0}T_6 = {}^{0}T_1\\,{}^{1}T_2 \\cdots {}^{5}T_6", "note": "The flange's pose, the DH steps multiplied in order", "ref": "ch. 3, p. 21" ,
+          "where": [
+            { "tex": "{}^{0}T_6", "means": "pose of the tool flange in the base frame (ch. 3, p. 21)" },
+            { "tex": "{}^{i-1}T_i", "means": "transformation of row i of the DH table, here {}^{0}T_1 to {}^{5}T_6 (ch. 3, p. 21)" }
+          ] },
+        { "explore": true, "eq": "d = 290, 0, 0, 302, 0, 72 mm; a = 0, 270, 70, 0, 0, 0 mm; α = −90°, 0, −90°, 90°, −90°, 0", "tex": "d = (290, 0, 0, 302, 0, 72),\\ a = (0, 270, 70, 0, 0, 0)\\ \\mathrm{mm},\\ \\alpha = (-90^\\circ, 0, -90^\\circ, 90^\\circ, -90^\\circ, 0)", "note": "This lab's DH table, built from the dimensions; θ2 has a −90° offset", "ref": "ABB p. 12" ,
+          "where": [
+            { "tex": "d", "means": "offsets along z_{i−1} [mm], from the dimension drawing (ABB 2020, p. 12)" },
+            { "tex": "a", "means": "distances along x_i [mm], from the dimension drawing (ABB 2020, p. 12)" },
+            { "tex": "\\alpha", "means": "twists (ch. 3, p. 18); derived here, ABB gives no DH table (not defined in the source)" }
+          ] },
+        { "explore": true, "eq": "wrist centre = flange − 72 mm along its z", "tex": "\\mathbf{p}_\\text{wc} = \\mathbf{p}_6 - 72\\,\\mathbf{z}_6", "note": "The point the working-range table gives", "ref": "ABB pp. 12, 31" ,
+          "where": [
+            { "tex": "\\mathbf{p}_\\text{wc}", "means": "wrist centre, where axes 4 to 6 meet (not defined in the source)" },
+            { "tex": "\\mathbf{p}_6", "means": "position of the tool flange (not defined in the source)" },
+            { "tex": "\\mathbf{z}_6", "means": "approach direction of the tool flange (not defined in the source)" },
+            { "tex": "72", "means": "distance from wrist centre to flange [mm] (ABB 2020, p. 12)" }
+          ] }
       ],
       "practice": [
         { "question": "The IRB 120 with every axis at 0°: the flange's x?", "source": "The student's notebook forward_kinematics(jupyter).ipynb, printed: 374", "answer": 374, "unit": "mm", "solution": "Wrist centre at 302 mm (ABB p. 31, row A) plus the 72 mm flange along x: 374 mm, at a height of 630 mm.", "compute": { "law": "irbFlange", "q": [0, 0, 0, 0, 0, 0], "out": "x" } },
@@ -228,10 +522,35 @@
       "idea": "Build the two-link arm's Jacobian by the course's schema: each column is the joint's axis crossed with the lever arm to the tip. Then close the elbow and watch det J fall to zero as the two columns line up. Each step shows its Python and MATLAB.",
       "law": "Jᵢ = z_{i−1} × (p − p_{i−1})",
       "lawTex": "J_i = \\mathbf{z}_{i-1} \\times (\\mathbf{p} - \\mathbf{p}_{i-1})",
+      "lawWhere": [
+        { "tex": "J_i", "means": "column i of the linear Jacobian (ch. 4, p. 15)" },
+        { "tex": "\\mathbf{z}_{i-1}", "means": "z axis of frame i−1 in frame 0 (ch. 4, p. 15, note 2)" },
+        { "tex": "\\mathbf{p}", "means": "position of the end effector, ⁰t_n on the slide (ch. 4, p. 15)" },
+        { "tex": "\\mathbf{p}_{i-1}", "means": "origin of frame i−1, ⁰t_{i−1} on the slide (ch. 4, p. 15)" }
+      ],
       "equations": [
-        { "explore": true, "eq": "Jᵢ = z_{i−1} × (p − p_{i−1}) for a turning joint", "tex": "J_{v,i} = {}^{0}R_{i-1}\\begin{pmatrix}0\\\\0\\\\1\\end{pmatrix} \\times ({}^{0}t_n - {}^{0}t_{i-1})", "note": "The schema's column of a turning joint", "ref": "ch. 4, p. 15" },
-        { "explore": true, "eq": "J = [−l1 s1 − l2 s12, −l2 s12; l1 c1 + l2 c12, l2 c12]", "tex": "J = \\begin{pmatrix} -l_1 s_1 - l_2 s_{12} & -l_2 s_{12} \\\\ l_1 c_1 + l_2 c_{12} & l_2 c_{12} \\end{pmatrix}", "note": "The two-link arm's position rows", "ref": "ch. 4, p. 20" },
-        { "explore": true, "eq": "det J = l1 l2 sin θ2", "tex": "\\det J = l_1 l_2 \\sin\\theta_2", "note": "Zero when the arm is stretched or folded", "ref": "" }
+        { "explore": true, "eq": "Jᵢ = z_{i−1} × (p − p_{i−1}) for a turning joint", "tex": "J_{v,i} = {}^{0}R_{i-1}\\begin{pmatrix}0\\\\0\\\\1\\end{pmatrix} \\times ({}^{0}t_n - {}^{0}t_{i-1})", "note": "The schema's column of a turning joint", "ref": "ch. 4, p. 15" ,
+          "where": [
+            { "tex": "J_{v,i}", "means": "linear part of Jacobian column i, revolute joint (ch. 4, p. 15)" },
+            { "tex": "{}^{0}R_{i-1}", "means": "orientation of frame i−1 in frame 0 (ch. 4, p. 15)" },
+            { "tex": "{}^{0}t_n", "means": "origin of frame n in frame 0, from the forward kinematics (ch. 4, p. 15)" },
+            { "tex": "{}^{0}t_{i-1}", "means": "origin of frame i−1 in frame 0, from the forward kinematics (ch. 4, p. 15)" },
+            { "tex": "i", "means": "joint index, starting at 1 (ch. 4, p. 15)" },
+            { "tex": "n", "means": "number of joints (ch. 4, p. 15)" }
+          ] },
+        { "explore": true, "eq": "J = [−l1 s1 − l2 s12, −l2 s12; l1 c1 + l2 c12, l2 c12]", "tex": "J = \\begin{pmatrix} -l_1 s_1 - l_2 s_{12} & -l_2 s_{12} \\\\ l_1 c_1 + l_2 c_{12} & l_2 c_{12} \\end{pmatrix}", "note": "The two-link arm's position rows", "ref": "ch. 4, p. 20" ,
+          "where": [
+            { "tex": "J", "means": "Jacobian of the planar RR arm (ch. 4, p. 20)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "s_1,\\ c_1", "means": "sin θ₁ and cos θ₁; the slides use s and c for sin and cos (ch. 2, p. 50)" },
+            { "tex": "s_{12},\\ c_{12}", "means": "sin(θ₁ + θ₂) and cos(θ₁ + θ₂); the slide writes them out (ch. 4, p. 20)" }
+          ] },
+        { "explore": true, "eq": "det J = l1 l2 sin θ2", "tex": "\\det J = l_1 l_2 \\sin\\theta_2", "note": "Zero when the arm is stretched or folded", "ref": "" ,
+          "where": [
+            { "tex": "\\det J", "means": "determinant of the Jacobian; zero at a singularity (not defined in the source)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "\\theta_2", "means": "elbow angle (ch. 4, p. 20)" }
+          ] }
       ],
       "practice": [
         { "question": "l1 = 5, l2 = 3, θ1 = 20°, θ2 = 10°: det J?", "source": "Worked by hand from ch. 4, p. 20", "answer": 2.605, "unit": "1", "solution": "det J = 15 sin 10° = 2.605: a fifth of its value at 64°, the arm near stretched.", "compute": { "law": "det2r", "l1": 5, "l2": 3, "t1": 20, "t2": 10 } },
@@ -245,10 +564,40 @@
       "idea": "Solve the slides' two-link arm both ways, back a three-link arm off to its wrist, then split the IRB 120 the same way: the wrist centre sets axes 1–3, what is left of the turn sets axes 4–6. Each step shows its Python and MATLAB.",
       "law": "cos θ2 = (x² + y² − l1² − l2²)/(2 l1 l2)",
       "lawTex": "\\cos\\theta_2 = \\frac{x^2 + y^2 - l_1^2 - l_2^2}{2\\,l_1 l_2}",
+      "lawWhere": [
+        { "tex": "\\theta_2", "means": "elbow angle (ch. 5, p. 17)" },
+        { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" },
+        { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" }
+      ],
       "equations": [
-        { "explore": true, "eq": "θ2 = atan2(±√(1 − c2²), c2), θ1 = atan2(y, x) − atan2(l2 sin θ2, l1 + l2 cos θ2)", "tex": "\\theta_2 = \\operatorname{atan2}(\\pm\\sqrt{1 - c_2^2},\\ c_2),\\quad \\theta_1 = \\operatorname{atan2}(y, x) - \\operatorname{atan2}(l_2 \\sin\\theta_2,\\ l_1 + l_2\\cos\\theta_2)", "note": "Both elbows of the two-link arm", "ref": "ch. 5, pp. 17–20" },
-        { "explore": true, "eq": "wrist = TCP − l3 (cos φ, sin φ), θ3 = φ − θ1 − θ2", "tex": "\\mathbf{w} = \\mathbf{p} - l_3 (\\cos\\varphi, \\sin\\varphi),\\quad \\theta_3 = \\varphi - \\theta_1 - \\theta_2", "note": "The three-link arm split at its wrist", "ref": "" },
-        { "explore": true, "eq": "w = p − 72 z₆, q1 = atan2(wy, wx); ³R₆ = ⁰R₃ᵀ R = Rz(q4) Ry(−q5) Rz(q6)", "tex": "\\mathbf{w} = \\mathbf{p} - 72\\,\\mathbf{z}_6,\\ q_1 = \\operatorname{atan2}(w_y, w_x),\\ {}^{3}R_6 = {}^{0}R_3^{\\mathsf T} R = R_z(q_4)R_y(-q_5)R_z(q_6)", "note": "The IRB 120's wrist split, for this lab's DH table", "ref": "" }
+        { "explore": true, "eq": "θ2 = atan2(±√(1 − c2²), c2), θ1 = atan2(y, x) − atan2(l2 sin θ2, l1 + l2 cos θ2)", "tex": "\\theta_2 = \\operatorname{atan2}(\\pm\\sqrt{1 - c_2^2},\\ c_2),\\quad \\theta_1 = \\operatorname{atan2}(y, x) - \\operatorname{atan2}(l_2 \\sin\\theta_2,\\ l_1 + l_2\\cos\\theta_2)", "note": "Both elbows of the two-link arm", "ref": "ch. 5, pp. 17–20" ,
+          "where": [
+            { "tex": "\\theta_1,\\ \\theta_2", "means": "joint angles 1 and 2 (ch. 2, p. 38)" },
+            { "tex": "c_2", "means": "cos θ₂ (ch. 5, p. 17)" },
+            { "tex": "x,\\ y", "means": "target position of the end effector (ch. 5, p. 17)" },
+            { "tex": "l_1,\\ l_2", "means": "lengths of links 1 and 2 (ch. 2, p. 38)" }
+          ] },
+        { "explore": true, "eq": "wrist = TCP − l3 (cos φ, sin φ), θ3 = φ − θ1 − θ2", "tex": "\\mathbf{w} = \\mathbf{p} - l_3 (\\cos\\varphi, \\sin\\varphi),\\quad \\theta_3 = \\varphi - \\theta_1 - \\theta_2", "note": "The three-link arm split at its wrist", "ref": "" ,
+          "where": [
+            { "tex": "\\mathbf{w}", "means": "wrist point of the three-link arm (not defined in the source)" },
+            { "tex": "\\mathbf{p}", "means": "target point (not defined in the source)" },
+            { "tex": "l_3", "means": "length of the third link (not defined in the source)" },
+            { "tex": "\\varphi", "means": "target orientation of the end effector (not defined in the source)" },
+            { "tex": "\\theta_1, \\theta_2, \\theta_3", "means": "joint angles; θ₁, θ₂ as for the RR arm (ch. 5, p. 17)" }
+          ] },
+        { "explore": true, "eq": "w = p − 72 z₆, q1 = atan2(wy, wx); ³R₆ = ⁰R₃ᵀ R = Rz(q4) Ry(−q5) Rz(q6)", "tex": "\\mathbf{w} = \\mathbf{p} - 72\\,\\mathbf{z}_6,\\ q_1 = \\operatorname{atan2}(w_y, w_x),\\ {}^{3}R_6 = {}^{0}R_3^{\\mathsf T} R = R_z(q_4)R_y(-q_5)R_z(q_6)", "note": "The IRB 120's wrist split, for this lab's DH table", "ref": "" ,
+          "where": [
+            { "tex": "\\mathbf{w}", "means": "wrist centre (not defined in the source)" },
+            { "tex": "\\mathbf{p}", "means": "target position of the tool flange (not defined in the source)" },
+            { "tex": "\\mathbf{z}_6", "means": "approach direction of the flange (not defined in the source)" },
+            { "tex": "72", "means": "wrist centre to flange [mm] (ABB 2020, p. 12)" },
+            { "tex": "q_1,\\ q_4,\\ q_5,\\ q_6", "means": "joint angles of axes 1, 4, 5 and 6 (not defined in the source)" },
+            { "tex": "w_x,\\ w_y", "means": "x and y of the wrist centre (not defined in the source)" },
+            { "tex": "{}^{3}R_6", "means": "orientation of the wrist, frame 6 in frame 3 (not defined in the source)" },
+            { "tex": "{}^{0}R_3", "means": "orientation of frame 3 in the base frame, from q₁ to q₃ (not defined in the source)" },
+            { "tex": "R", "means": "target orientation of the flange (not defined in the source)" },
+            { "tex": "R_z,\\ R_y", "means": "elementary rotations (ch. 2, pp. 42–43)" }
+          ] }
       ],
       "practice": [
         { "question": "l1 = 5, l2 = 4, TCP (6 | 5.93): θ1 of the solution with θ2 = −41.05°?", "source": "Ajanović (2020), ch. 5, p. 20, printed as 44.66 + 18.14", "answer": 62.8, "unit": "°", "solution": "θ1 = 44.66° + 18.14° = 62.80°.", "compute": { "law": "ik2r", "l1": 5, "l2": 4, "x": 6, "y": 5.93, "sign": -1, "out": "t1" } },

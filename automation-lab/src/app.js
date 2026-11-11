@@ -3,7 +3,7 @@
 // and next lab as small cards below. The address (#convolution) says which lab is open; none means the overview.
 // Reads the words from data/labs.json; a lab with no words there, or words with no lab, is reported, not skipped.
 import { h, practice, tabs } from "../../kit/ui/kit.js";
-import { math } from "../../kit/ui/math.js";
+import { math, symbolList } from "../../kit/ui/math.js";
 import { examList, examPanel as examPage } from "../../kit/ui/exams.js";
 import { parseSi, examQuestions } from "./core/index.js";
 import { labs } from "./labs/index.js";
@@ -71,12 +71,14 @@ async function start() {
     const body = h("div", { class: "lab" });
     // The lab in tabs, so nothing waits below a long scroll. Explore first: the idea, the main law and the drawing it
     // animates. Equations: the full set, each with what it is and where it comes from. Practise: the course's questions.
+    // Under each equation, what its symbols mean; the main law takes the list of the equation that repeats it.
+    const lawWhere = w.lawWhere ?? (w.equations ?? []).find(e => e.tex === w.lawTex)?.where;
     const items = [["Explore", h("div", {}, h("p", { class: "idea" }, w.idea),
-      h("p", { class: "law" }, w.lawTex ? math(w.lawTex, { display: true }) : w.law),
+      h("div", { class: "law" }, w.lawTex ? math(w.lawTex, { display: true }) : w.law, symbolList(lawWhere)),
       // The equations the drawing plots or its readouts report sit beside the law, so no curve is shown without its equation.
-      ...(w.equations ?? []).filter(e => e.explore).map(e => h("p", { class: "law" }, e.tex ? math(e.tex, { display: true }) : e.eq)), body)],
+      ...(w.equations ?? []).filter(e => e.explore).map(e => h("div", { class: "law" }, e.tex ? math(e.tex, { display: true }) : e.eq, symbolList(e.where))), body)],
       ["Equations", h("div", {}, w.equations?.length ? h("table", { class: "eqs" }, h("tbody", {}, w.equations.map(e => h("tr", {},
-          h("td", { class: "eq" }, e.tex ? math(e.tex, { display: true }) : e.eq), h("td", { class: "note" }, e.note), h("td", { class: "ref" }, e.ref || "derived"))))) : null,
+          h("td", { class: "eq" }, e.tex ? math(e.tex, { display: true }) : e.eq, symbolList(e.where)), h("td", { class: "note" }, e.note), h("td", { class: "ref" }, e.ref || "derived"))))) : null,
         h("p", { class: "source" }, `Source: ${w.lecture}`))]];
     // The Beispiele' questions, then the past exams' tasks of the same kind (kept once, in data/labs.json "exams").
     const fromExams = examQuestions(exams, id);

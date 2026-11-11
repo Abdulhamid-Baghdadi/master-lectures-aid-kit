@@ -22,9 +22,20 @@
       "law": "d = c·t/2",
       "lawTex": "d = \\frac{c\\,t}{2}",
       "equations": [
-        { "eq": "d = c·t/2", "tex": "d = \\frac{c\\,t}{2}", "note": "Distance from the echo time t: out and back, so half the path. The slides state the halving for light in the ToF formula, d = c·φ/(4π·fmod) with φ/(2π·fmod) the round-trip time", "ref": "Slides p. 77 (slide 154); p. 70 (slide 140) in words" },
-        { "eq": "c0 = 331.6 m/s", "tex": "c_0 = 331.6\\,\\mathrm{m/s}", "note": "Speed of sound in air; it depends on temperature, humidity and air pressure", "ref": "Slides p. 9 (slide 17)" },
-        { "eq": "f = 40 kHz … 400 kHz", "tex": "f = 40\\,\\mathrm{kHz} \\ldots 400\\,\\mathrm{kHz}", "note": "Typical ultrasound frequencies, above human hearing", "ref": "Slides p. 9 (slide 17)" }
+        { "eq": "d = c·t/2", "tex": "d = \\frac{c\\,t}{2}", "note": "Distance from the echo time t: out and back, so half the path. The slides state the halving for light in the ToF formula, d = c·φ/(4π·fmod) with φ/(2π·fmod) the round-trip time", "ref": "Slides p. 77 (slide 154); p. 70 (slide 140) in words",
+          "where": [
+            { "tex": "d", "means": "distance to the object [m] (not defined in the source); slide 139 says the distance follows from the travel time and the speed" },
+            { "tex": "c", "means": "propagation speed of the wave [m/s]; slide 17 gives c_0 for sound (p. 9), slide 154 uses c for light (p. 77) without defining it" },
+            { "tex": "t", "means": "echo time, out and back [s] (not defined in the source); slide 139 names the Signallaufzeit in words" }
+          ] },
+        { "eq": "c0 = 331.6 m/s", "tex": "c_0 = 331.6\\,\\mathrm{m/s}", "note": "Speed of sound in air; it depends on temperature, humidity and air pressure", "ref": "Slides p. 9 (slide 17)",
+          "where": [
+            { "tex": "c_0", "means": "speed of sound in air [m/s] (slides p. 9, slide 17)" }
+          ] },
+        { "eq": "f = 40 kHz … 400 kHz", "tex": "f = 40\\,\\mathrm{kHz} \\ldots 400\\,\\mathrm{kHz}", "note": "Typical ultrasound frequencies, above human hearing", "ref": "Slides p. 9 (slide 17)",
+          "where": [
+            { "tex": "f", "means": "frequency of the ultrasound [Hz] (slides p. 9, slide 17)" }
+          ] }
       ],
       "practice": [
         {
@@ -54,9 +65,25 @@
       "idea": "Pixels times bytes per pixel is one image; times images per second, one camera's stream. A single colour camera already sends hundreds of megabits a second through the car.",
       "law": "rate = w·h·bytes·fps·8",
       "lawTex": "R = w\\,h\\,n_\\mathrm{B}\\,f_\\mathrm{img}\\cdot 8",
+      "lawWhere": [
+        { "tex": "R", "means": "data rate [bit/s] (not defined in the source); (slides p. 35, slide 70) gives an example" },
+        { "tex": "w,\\ h", "means": "width and height of the image [pixel] (not defined in the source)" },
+        { "tex": "n_\\mathrm{B}", "means": "bytes per pixel (not defined in the source)" },
+        { "tex": "f_\\mathrm{img}", "means": "images per second [1/s] (not defined in the source)" }
+      ],
       "equations": [
-        { "explore": true, "eq": "size = w·h·nB", "tex": "N = w\\,h\\,n_\\mathrm{B}", "note": "Bytes per image: width × height pixels × bytes per pixel (1 for 8-bit grey, 3 for 8-bit colour)", "ref": "MC2.pdf (MC Teil 1), Frage 2; slides p. 35 (slide 70)" },
-        { "eq": "R = N·fimg·8", "tex": "R = 8\\,N f_\\mathrm{img}", "note": "Bits per second for fimg images per second. The slides' example: 800 × 600 colour, ca. 1.5 MB per image, 25 per second, ca. 290 Mbit/s", "ref": "Slides p. 35 (slide 70)" }
+        { "explore": true, "eq": "size = w·h·nB", "tex": "N = w\\,h\\,n_\\mathrm{B}", "note": "Bytes per image: width × height pixels × bytes per pixel (1 for 8-bit grey, 3 for 8-bit colour)", "ref": "MC2.pdf (MC Teil 1), Frage 2; slides p. 35 (slide 70)",
+          "where": [
+            { "tex": "N", "means": "memory for one image [byte] (not defined in the source); MC2, Frage 2 asks it for a 1024 × 768 grey image" },
+            { "tex": "w,\\ h", "means": "width and height of the image [pixel] (not defined in the source)" },
+            { "tex": "n_\\mathrm{B}", "means": "bytes per pixel, 1 for 8-bit grey and 3 for 8-bit colour (not defined in the source)" }
+          ] },
+        { "eq": "R = N·fimg·8", "tex": "R = 8\\,N f_\\mathrm{img}", "note": "Bits per second for fimg images per second. The slides' example: 800 × 600 colour, ca. 1.5 MB per image, 25 per second, ca. 290 Mbit/s", "ref": "Slides p. 35 (slide 70)",
+          "where": [
+            { "tex": "R", "means": "data rate [bit/s] (not defined in the source); (slides p. 35, slide 70) gives an example" },
+            { "tex": "N", "means": "memory for one image [byte] (not defined in the source)" },
+            { "tex": "f_\\mathrm{img}", "means": "images per second [1/s] (not defined in the source)" }
+          ] }
       ],
       "practice": [
         {
@@ -87,11 +114,38 @@
       "law": "u = cx + fx·xc/zc,  v = cy + fy·yc/zc",
       "lawTex": "\\begin{pmatrix}u\\\\v\\end{pmatrix} = \\begin{pmatrix}c_x\\\\c_y\\end{pmatrix} + \\frac{1}{z_c}\\begin{pmatrix}f_x\\,x_c\\\\f_y\\,y_c\\end{pmatrix}",
       "equations": [
-        { "eq": "u/v = f·x/y over z", "tex": "\\begin{pmatrix}u\\\\v\\end{pmatrix} = \\frac{f}{z}\\begin{pmatrix}x\\\\y\\end{pmatrix}", "note": "The pinhole by the intercept theorem, in the positive position (plane in front of the centre, no mirroring)", "ref": "Slides p. 41 (slide 82)" },
-        { "eq": "u = cx + fx·xc/zc, v = cy + fy·yc/zc", "tex": "\\begin{pmatrix}u\\\\v\\end{pmatrix} = \\begin{pmatrix}c_x\\\\c_y\\end{pmatrix} + \\frac{1}{z_c}\\begin{pmatrix}f_x\\,x_c\\\\f_y\\,y_c\\end{pmatrix}", "note": "Image coordinates in pixels from camera coordinates in metres; fx, fy the focal length in pixels (a rectangular pixel has two), cx, cy the principal point", "ref": "Slides p. 43 (slide 86)" },
-        { "eq": "K = [fx 0 cx; 0 fy cy; 0 0 1]", "tex": "K = \\begin{pmatrix}f_x & 0 & c_x\\\\ 0 & f_y & c_y\\\\ 0 & 0 & 1\\end{pmatrix}", "note": "The calibration matrix", "ref": "Slides p. 44 (slide 87)" },
-        { "eq": "K⁻¹ = [1/fx 0 −cx/fx; 0 1/fy −cy/fy; 0 0 1]", "tex": "K^{-1} = \\begin{pmatrix}\\frac{1}{f_x} & 0 & -\\frac{c_x}{f_x}\\\\ 0 & \\frac{1}{f_y} & -\\frac{c_y}{f_y}\\\\ 0 & 0 & 1\\end{pmatrix}", "note": "Its inverse", "ref": "Slides p. 44 (slide 87)" },
-        { "eq": "(u·zc, v·zc, zc) = K·(xc, yc, zc)", "tex": "\\begin{pmatrix}u\\,z_c\\\\v\\,z_c\\\\z_c\\end{pmatrix} = K \\begin{pmatrix}x_c\\\\y_c\\\\z_c\\end{pmatrix}", "note": "In homogeneous coordinates; back with K⁻¹ only if zc is known, since all points of a ray through the centre give the same (u, v)", "ref": "Slides p. 44 (slide 87)" }
+        { "eq": "u/v = f·x/y over z", "tex": "\\begin{pmatrix}u\\\\v\\end{pmatrix} = \\frac{f}{z}\\begin{pmatrix}x\\\\y\\end{pmatrix}", "note": "The pinhole by the intercept theorem, in the positive position (plane in front of the centre, no mirroring)", "ref": "Slides p. 41 (slide 82)",
+          "where": [
+            { "tex": "u,\\ v", "means": "image coordinates (slides p. 41, slide 82)" },
+            { "tex": "f", "means": "camera constant, the focal length (slides p. 41, slide 82)" },
+            { "tex": "x,\\ y,\\ z", "means": "coordinates of the 3D point; the slide calls them '3D-Bildkoordinaten', they are camera coordinates (slides p. 41, slide 82)" }
+          ] },
+        { "eq": "u = cx + fx·xc/zc, v = cy + fy·yc/zc", "tex": "\\begin{pmatrix}u\\\\v\\end{pmatrix} = \\begin{pmatrix}c_x\\\\c_y\\end{pmatrix} + \\frac{1}{z_c}\\begin{pmatrix}f_x\\,x_c\\\\f_y\\,y_c\\end{pmatrix}", "note": "Image coordinates in pixels from camera coordinates in metres; fx, fy the focal length in pixels (a rectangular pixel has two), cx, cy the principal point", "ref": "Slides p. 43 (slide 86)",
+          "where": [
+            { "tex": "u,\\ v", "means": "image coordinates [pixel] (slides p. 43, slide 86)" },
+            { "tex": "c_x,\\ c_y", "means": "principal point, Bildhauptpunkt [pixel] (slides p. 43, slide 86)" },
+            { "tex": "z_c", "means": "depth, camera coordinate along the optical axis [m] (slides p. 43, slide 86)" },
+            { "tex": "f_x,\\ f_y", "means": "camera constants in u and v, the focal length in pixels [pixel] (slides p. 43, slide 85)" },
+            { "tex": "x_c,\\ y_c", "means": "camera coordinates [m] (slides p. 43, slide 86)" }
+          ] },
+        { "eq": "K = [fx 0 cx; 0 fy cy; 0 0 1]", "tex": "K = \\begin{pmatrix}f_x & 0 & c_x\\\\ 0 & f_y & c_y\\\\ 0 & 0 & 1\\end{pmatrix}", "note": "The calibration matrix", "ref": "Slides p. 44 (slide 87)",
+          "where": [
+            { "tex": "K", "means": "calibration matrix, Kalibriermatrix (slides p. 44, slide 87)" },
+            { "tex": "f_x,\\ f_y", "means": "camera constants in u and v, the focal length in pixels [pixel] (slides p. 43, slide 85)" },
+            { "tex": "c_x,\\ c_y", "means": "principal point, Bildhauptpunkt [pixel] (slides p. 43, slide 86)" }
+          ] },
+        { "eq": "K⁻¹ = [1/fx 0 −cx/fx; 0 1/fy −cy/fy; 0 0 1]", "tex": "K^{-1} = \\begin{pmatrix}\\frac{1}{f_x} & 0 & -\\frac{c_x}{f_x}\\\\ 0 & \\frac{1}{f_y} & -\\frac{c_y}{f_y}\\\\ 0 & 0 & 1\\end{pmatrix}", "note": "Its inverse", "ref": "Slides p. 44 (slide 87)",
+          "where": [
+            { "tex": "K^{-1}", "means": "inverse of the calibration matrix (slides p. 44, slide 87)" },
+            { "tex": "f_x,\\ f_y", "means": "camera constants in u and v, the focal length in pixels [pixel] (slides p. 43, slide 85)" },
+            { "tex": "c_x,\\ c_y", "means": "principal point, Bildhauptpunkt [pixel] (slides p. 43, slide 86)" }
+          ] },
+        { "eq": "(u·zc, v·zc, zc) = K·(xc, yc, zc)", "tex": "\\begin{pmatrix}u\\,z_c\\\\v\\,z_c\\\\z_c\\end{pmatrix} = K \\begin{pmatrix}x_c\\\\y_c\\\\z_c\\end{pmatrix}", "note": "In homogeneous coordinates; back with K⁻¹ only if zc is known, since all points of a ray through the centre give the same (u, v)", "ref": "Slides p. 44 (slide 87)",
+          "where": [
+            { "tex": "u,\\ v", "means": "image coordinates [pixel] (slides p. 43, slide 86)" },
+            { "tex": "x_c,\\ y_c,\\ z_c", "means": "camera coordinates [m] (slides p. 43, slide 86)" },
+            { "tex": "K", "means": "calibration matrix, Kalibriermatrix (slides p. 44, slide 87)" }
+          ] }
       ],
       "practice": [
         {
@@ -121,10 +175,39 @@
       "idea": "The extrinsic parameters, a rotation R and a translation t, carry a point from the world into the camera. Joined with K they make the projection matrix P: one product from world metres to pixels.",
       "law": "xc = R·xw + t,  P = K·(R|t)",
       "lawTex": "\\mathbf{x}_c = R\\,\\mathbf{x}_w + \\mathbf{t},\\quad P = K\\,(R\\,|\\,\\mathbf{t})",
+      "lawWhere": [
+        { "tex": "\\mathbf{x}_c", "means": "camera coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+        { "tex": "R", "means": "rotation from world to camera coordinates, Rᵀ = R⁻¹ (slides p. 45, slide 89)" },
+        { "tex": "\\mathbf{x}_w", "means": "world coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+        { "tex": "\\mathbf{t}", "means": "translation from world to camera coordinates [m] (slides p. 45, slide 89)" },
+        { "tex": "P", "means": "projection matrix (slides p. 46, slide 91)" },
+        { "tex": "K", "means": "calibration matrix, Kalibriermatrix (slides p. 44, slide 87)" }
+      ],
       "equations": [
-        { "eq": "xc = R·xw + t", "tex": "\\mathbf{x}_c = R\\,\\mathbf{x}_w + \\mathbf{t}", "note": "World to camera coordinates, with Rᵀ = R⁻¹", "ref": "Slides p. 45 (slide 89)" },
-        { "eq": "xw = Rᵀ·xc − Rᵀ·t", "tex": "\\mathbf{x}_w = R^\\mathsf{T}\\mathbf{x}_c - R^\\mathsf{T}\\mathbf{t}", "note": "And back", "ref": "Slides p. 45 (slide 89)" },
-        { "eq": "(u·s, v·s, s) = P·(x, y, z, 1), P = K·(R|t)", "tex": "\\begin{pmatrix}u\\,s\\\\v\\,s\\\\s\\end{pmatrix} = P \\begin{pmatrix}x\\\\y\\\\z\\\\1\\end{pmatrix},\\quad P = K\\,(R\\,|\\,\\mathbf{t})", "note": "The projection matrix in homogeneous coordinates; s a scale factor", "ref": "Slides p. 46 (slide 91)" }
+        { "eq": "xc = R·xw + t", "tex": "\\mathbf{x}_c = R\\,\\mathbf{x}_w + \\mathbf{t}", "note": "World to camera coordinates, with Rᵀ = R⁻¹", "ref": "Slides p. 45 (slide 89)",
+          "where": [
+            { "tex": "\\mathbf{x}_c", "means": "camera coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+            { "tex": "R", "means": "rotation from world to camera coordinates, Rᵀ = R⁻¹ (slides p. 45, slide 89)" },
+            { "tex": "\\mathbf{x}_w", "means": "world coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+            { "tex": "\\mathbf{t}", "means": "translation from world to camera coordinates [m] (slides p. 45, slide 89)" }
+          ] },
+        { "eq": "xw = Rᵀ·xc − Rᵀ·t", "tex": "\\mathbf{x}_w = R^\\mathsf{T}\\mathbf{x}_c - R^\\mathsf{T}\\mathbf{t}", "note": "And back", "ref": "Slides p. 45 (slide 89)",
+          "where": [
+            { "tex": "\\mathbf{x}_w", "means": "world coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+            { "tex": "R^\\mathsf{T}", "means": "transpose of R, equal to its inverse (slides p. 45, slide 89)" },
+            { "tex": "\\mathbf{x}_c", "means": "camera coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+            { "tex": "\\mathbf{t}", "means": "translation from world to camera coordinates [m] (slides p. 45, slide 89)" }
+          ] },
+        { "eq": "(u·s, v·s, s) = P·(x, y, z, 1), P = K·(R|t)", "tex": "\\begin{pmatrix}u\\,s\\\\v\\,s\\\\s\\end{pmatrix} = P \\begin{pmatrix}x\\\\y\\\\z\\\\1\\end{pmatrix},\\quad P = K\\,(R\\,|\\,\\mathbf{t})", "note": "The projection matrix in homogeneous coordinates; s a scale factor", "ref": "Slides p. 46 (slide 91)",
+          "where": [
+            { "tex": "u,\\ v", "means": "image coordinates [pixel] (slides p. 46, slide 91)" },
+            { "tex": "s", "means": "scale factor (slides p. 46, slide 91)" },
+            { "tex": "P", "means": "projection matrix (slides p. 46, slide 91)" },
+            { "tex": "x,\\ y,\\ z", "means": "world coordinates of the 3D point [m] (slides p. 45, slide 89)" },
+            { "tex": "K", "means": "calibration matrix, Kalibriermatrix (slides p. 44, slide 87)" },
+            { "tex": "R", "means": "rotation from world to camera coordinates, Rᵀ = R⁻¹ (slides p. 45, slide 89)" },
+            { "tex": "\\mathbf{t}", "means": "translation from world to camera coordinates [m] (slides p. 45, slide 89)" }
+          ] }
       ],
       "practice": [
         {
@@ -154,10 +237,34 @@
       "idea": "A real lens bends straight lines, most of all far from the image centre and with short focal lengths. Five coefficients, k1, k2, k3 radial and p1, p2 tangential, describe it, and calibration finds them.",
       "law": "xd = (1 + k1r² + k2r⁴ + k3r⁶)·xn",
       "lawTex": "\\begin{pmatrix}x_d\\\\y_d\\end{pmatrix} = \\left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6\\right)\\begin{pmatrix}x_n\\\\y_n\\end{pmatrix}",
+      "lawWhere": [
+        { "tex": "x_d,\\ y_d", "means": "distorted coordinates (slides p. 49, slide 97)" },
+        { "tex": "k_1,\\ k_2,\\ k_3", "means": "coefficients of the radial distortion (slides p. 49, slide 97)" },
+        { "tex": "r", "means": "distance from the principal point on the plane z = 1, r = √(x_n² + y_n²) (slides p. 49, slide 97)" },
+        { "tex": "x_n,\\ y_n", "means": "image point projected onto the plane z = 1 of the camera (slides p. 49, slide 97)" }
+      ],
       "equations": [
-        { "eq": "xn = (u − cx)/fx, yn = (v − cy)/fy", "tex": "x_n = \\frac{u - c_x}{f_x},\\quad y_n = \\frac{v - c_y}{f_y}", "note": "The image point projected onto the plane z = 1 of the camera", "ref": "Slides p. 49 (slide 97)" },
-        { "eq": "xd = (1 + k1r² + k2r⁴ + k3r⁶)·xn, r² = xn² + yn²", "tex": "\\begin{pmatrix}x_d\\\\y_d\\end{pmatrix} = \\left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6\\right)\\begin{pmatrix}x_n\\\\y_n\\end{pmatrix},\\quad r = \\sqrt{x_n^2 + y_n^2}", "note": "Radial distortion, coefficients k1, k2, k3", "ref": "Slides p. 49 (slide 97)" },
-        { "eq": "xd = xn + p1·2xnyn + p2(r² + 2xn²), yd = yn + p1(r² + 2yn²) + p2·2xnyn", "tex": "\\begin{pmatrix}x_d\\\\y_d\\end{pmatrix} = \\begin{pmatrix}x_n\\\\y_n\\end{pmatrix} + \\begin{pmatrix}2p_1 x_n y_n + p_2\\left(r^2 + 2x_n^2\\right)\\\\ p_1\\left(r^2 + 2y_n^2\\right) + 2p_2 x_n y_n\\end{pmatrix}", "note": "Tangential distortion, coefficients p1, p2; usually negligibly small. The slides combine both models; the lab adds the tangential shift to the radially scaled point", "ref": "Slides p. 49 (slide 98)" }
+        { "eq": "xn = (u − cx)/fx, yn = (v − cy)/fy", "tex": "x_n = \\frac{u - c_x}{f_x},\\quad y_n = \\frac{v - c_y}{f_y}", "note": "The image point projected onto the plane z = 1 of the camera", "ref": "Slides p. 49 (slide 97)",
+          "where": [
+            { "tex": "x_n,\\ y_n", "means": "image point projected onto the plane z = 1 of the camera (slides p. 49, slide 97)" },
+            { "tex": "u,\\ v", "means": "image coordinates [pixel] (slides p. 43, slide 86)" },
+            { "tex": "c_x,\\ c_y", "means": "principal point, Bildhauptpunkt [pixel] (slides p. 43, slide 86)" },
+            { "tex": "f_x,\\ f_y", "means": "camera constants in u and v, the focal length in pixels [pixel] (slides p. 43, slide 85)" }
+          ] },
+        { "eq": "xd = (1 + k1r² + k2r⁴ + k3r⁶)·xn, r² = xn² + yn²", "tex": "\\begin{pmatrix}x_d\\\\y_d\\end{pmatrix} = \\left(1 + k_1 r^2 + k_2 r^4 + k_3 r^6\\right)\\begin{pmatrix}x_n\\\\y_n\\end{pmatrix},\\quad r = \\sqrt{x_n^2 + y_n^2}", "note": "Radial distortion, coefficients k1, k2, k3", "ref": "Slides p. 49 (slide 97)",
+          "where": [
+            { "tex": "x_d,\\ y_d", "means": "distorted coordinates (slides p. 49, slide 97)" },
+            { "tex": "k_1,\\ k_2,\\ k_3", "means": "coefficients of the radial distortion (slides p. 49, slide 97)" },
+            { "tex": "r", "means": "distance from the principal point on the plane z = 1, r = √(x_n² + y_n²) (slides p. 49, slide 97)" },
+            { "tex": "x_n,\\ y_n", "means": "image point projected onto the plane z = 1 of the camera (slides p. 49, slide 97)" }
+          ] },
+        { "eq": "xd = xn + p1·2xnyn + p2(r² + 2xn²), yd = yn + p1(r² + 2yn²) + p2·2xnyn", "tex": "\\begin{pmatrix}x_d\\\\y_d\\end{pmatrix} = \\begin{pmatrix}x_n\\\\y_n\\end{pmatrix} + \\begin{pmatrix}2p_1 x_n y_n + p_2\\left(r^2 + 2x_n^2\\right)\\\\ p_1\\left(r^2 + 2y_n^2\\right) + 2p_2 x_n y_n\\end{pmatrix}", "note": "Tangential distortion, coefficients p1, p2; usually negligibly small. The slides combine both models; the lab adds the tangential shift to the radially scaled point", "ref": "Slides p. 49 (slide 98)",
+          "where": [
+            { "tex": "x_d,\\ y_d", "means": "distorted coordinates (slides p. 49, slide 98)" },
+            { "tex": "x_n,\\ y_n", "means": "image point projected onto the plane z = 1 of the camera (slides p. 49, slide 97)" },
+            { "tex": "p_1,\\ p_2", "means": "coefficients of the tangential distortion (slides p. 49, slide 98)" },
+            { "tex": "r", "means": "distance from the principal point on the plane z = 1, r = √(x_n² + y_n²) (slides p. 49, slide 98)" }
+          ] }
       ],
       "practice": [
         {
@@ -188,13 +295,48 @@
       "law": "I = (R + G + B)/3,  S = 1 − min(R,G,B)/I",
       "lawTex": "I = \\frac{R+G+B}{3},\\quad S = 1 - \\frac{\\min(R,G,B)}{I}",
       "equations": [
-        { "explore": true, "eq": "H = 1/(2π)·arccos(((R−G)+(R−B))/(2√((R−G)²+(R−B)(G−B)))); H = 1 − H if B > G", "tex": "H = \\frac{1}{2\\pi}\\arccos\\frac{(R-G)+(R-B)}{2\\sqrt{(R-G)^2+(R-B)(G-B)}},\\quad H \\to 1-H \\text{ if } B>G", "note": "HSI hue as a fraction of a turn; undefined when S = 0 or undefined", "ref": "Slides p. 63 (slide 126)" },
-        { "eq": "I = (R+G+B)/3, S = 1 − min(R,G,B)/I", "tex": "I = \\frac{R+G+B}{3},\\quad S = 1 - \\frac{\\min(R,G,B)}{I}", "note": "HSI intensity and saturation; S undefined when I = 0", "ref": "Slides p. 63 (slide 126)" },
-        { "eq": "V = max, Δ = V − min, S = Δ/V", "tex": "V = \\max(R,G,B),\\quad \\Delta = V - \\min(R,G,B),\\quad S = \\frac{\\Delta}{V}", "note": "HSV value and saturation", "ref": "Slides p. 64 (slide 128)" },
-        { "explore": true, "eq": "H = (G−B)/(6Δ) | ((B−R)/Δ + 2)/6 | ((R−G)/Δ + 4)/6, +1 if < 0", "tex": "H = \\begin{cases}\\frac{1}{6}\\frac{G-B}{\\Delta} & R = V\\\\ \\frac{1}{6}\\left(\\frac{B-R}{\\Delta}+2\\right) & G = V\\\\ \\frac{1}{6}\\left(\\frac{R-G}{\\Delta}+4\\right) & B = V\\end{cases}", "note": "HSV hue, by which channel is largest; 1 added when negative. Much faster than HSI", "ref": "Slides p. 64 (slide 128)" },
-        { "explore": true, "eq": "Y = 0.299R + 0.587G + 0.114B", "tex": "Y = 0.299\\,R + 0.587\\,G + 0.114\\,B", "note": "Grey with more weight on green; or I = (R+G+B)/3 with all alike", "ref": "Slides p. 65 (slide 130)" },
-        { "eq": "R = R(u,v), G = ½(G(u+1,v) + G(u,v+1)), B = B(u+1,v+1)", "tex": "R = R_{u,v},\\quad G = \\tfrac{1}{2}\\left(G_{u+1,v} + G_{u,v+1}\\right),\\quad B = B_{u+1,v+1}", "note": "The primary Bayer pattern turned into colour, one 2 × 2 cell", "ref": "Slides p. 58 (slide 116)" },
-        { "eq": "R = YE − ½(G+G), G = ½(G+G), B = CY − ½(G+G)", "tex": "R = YE - \\tfrac{1}{2}(G + G'),\\quad G = \\tfrac{1}{2}(G + G'),\\quad B = CY - \\tfrac{1}{2}(G + G')", "note": "The complementary pattern, with CY = G + B and YE = R + G", "ref": "Slides p. 59 (slide 117); p. 57 (slide 114)" }
+        { "explore": true, "eq": "H = 1/(2π)·arccos(((R−G)+(R−B))/(2√((R−G)²+(R−B)(G−B)))); H = 1 − H if B > G", "tex": "H = \\frac{1}{2\\pi}\\arccos\\frac{(R-G)+(R-B)}{2\\sqrt{(R-G)^2+(R-B)(G-B)}},\\quad H \\to 1-H \\text{ if } B>G", "note": "HSI hue as a fraction of a turn; undefined when S = 0 or undefined", "ref": "Slides p. 63 (slide 126)",
+          "where": [
+            { "tex": "H", "means": "hue, Farbton, as a fraction of a turn (slides p. 63, slide 126)" },
+            { "tex": "R,\\ G,\\ B", "means": "red, green and blue components, 0 to 1 in the normalised RGB cube (slides p. 63, slide 125)" }
+          ] },
+        { "eq": "I = (R+G+B)/3, S = 1 − min(R,G,B)/I", "tex": "I = \\frac{R+G+B}{3},\\quad S = 1 - \\frac{\\min(R,G,B)}{I}", "note": "HSI intensity and saturation; S undefined when I = 0", "ref": "Slides p. 63 (slide 126)",
+          "where": [
+            { "tex": "I", "means": "intensity (slides p. 63, slide 126)" },
+            { "tex": "R,\\ G,\\ B", "means": "red, green and blue components, 0 to 1 in the normalised RGB cube (slides p. 63, slide 125)" },
+            { "tex": "S", "means": "saturation, how far the colour is mixed with white light (slides p. 63, slide 126)" }
+          ] },
+        { "eq": "V = max, Δ = V − min, S = Δ/V", "tex": "V = \\max(R,G,B),\\quad \\Delta = V - \\min(R,G,B),\\quad S = \\frac{\\Delta}{V}", "note": "HSV value and saturation", "ref": "Slides p. 64 (slide 128)",
+          "where": [
+            { "tex": "V", "means": "value, the monochrome part, max(R, G, B) (slides p. 64, slide 128)" },
+            { "tex": "\\Delta", "means": "V − min(R, G, B), DELTA on the slide (slides p. 64, slide 128)" },
+            { "tex": "S", "means": "saturation, how far the colour is mixed with white light (slides p. 63, slide 126)" },
+            { "tex": "R,\\ G,\\ B", "means": "red, green and blue components, 0 to 1 in the normalised RGB cube (slides p. 63, slide 125)" }
+          ] },
+        { "explore": true, "eq": "H = (G−B)/(6Δ) | ((B−R)/Δ + 2)/6 | ((R−G)/Δ + 4)/6, +1 if < 0", "tex": "H = \\begin{cases}\\frac{1}{6}\\frac{G-B}{\\Delta} & R = V\\\\ \\frac{1}{6}\\left(\\frac{B-R}{\\Delta}+2\\right) & G = V\\\\ \\frac{1}{6}\\left(\\frac{R-G}{\\Delta}+4\\right) & B = V\\end{cases}", "note": "HSV hue, by which channel is largest; 1 added when negative. Much faster than HSI", "ref": "Slides p. 64 (slide 128)",
+          "where": [
+            { "tex": "H", "means": "hue, Farbton, as a fraction of a turn (slides p. 63, slide 126)" },
+            { "tex": "R,\\ G,\\ B", "means": "red, green and blue components, 0 to 1 in the normalised RGB cube (slides p. 63, slide 125)" },
+            { "tex": "\\Delta", "means": "V − min(R, G, B), DELTA on the slide (slides p. 64, slide 128)" }
+          ] },
+        { "explore": true, "eq": "Y = 0.299R + 0.587G + 0.114B", "tex": "Y = 0.299\\,R + 0.587\\,G + 0.114\\,B", "note": "Grey with more weight on green; or I = (R+G+B)/3 with all alike", "ref": "Slides p. 65 (slide 130)",
+          "where": [
+            { "tex": "Y", "means": "grey value with more weight on green (slides p. 65, slide 130)" },
+            { "tex": "R,\\ G,\\ B", "means": "red, green and blue components, 0 to 1 in the normalised RGB cube (slides p. 63, slide 125)" }
+          ] },
+        { "eq": "R = R(u,v), G = ½(G(u+1,v) + G(u,v+1)), B = B(u+1,v+1)", "tex": "R = R_{u,v},\\quad G = \\tfrac{1}{2}\\left(G_{u+1,v} + G_{u,v+1}\\right),\\quad B = B_{u+1,v+1}", "note": "The primary Bayer pattern turned into colour, one 2 × 2 cell", "ref": "Slides p. 58 (slide 116)",
+          "where": [
+            { "tex": "R,\\ G,\\ B", "means": "colour of the 2 × 2 cell at (u, v) (slides p. 58, slide 116)" },
+            { "tex": "R_{u,v},\\ G_{u+1,v},\\ G_{u,v+1},\\ B_{u+1,v+1}", "means": "filtered values of the pixels of the cell (slides p. 58, slide 116)" },
+            { "tex": "u,\\ v", "means": "image coordinates: u horizontal, v vertical (slides p. 58, slide 116)" }
+          ] },
+        { "eq": "R = YE − ½(G+G), G = ½(G+G), B = CY − ½(G+G)", "tex": "R = YE - \\tfrac{1}{2}(G + G'),\\quad G = \\tfrac{1}{2}(G + G'),\\quad B = CY - \\tfrac{1}{2}(G + G')", "note": "The complementary pattern, with CY = G + B and YE = R + G", "ref": "Slides p. 59 (slide 117); p. 57 (slide 114)",
+          "where": [
+            { "tex": "R,\\ B", "means": "red and blue of the cell (slides p. 59, slide 117)" },
+            { "tex": "YE", "means": "yellow, YE = R + G (slides p. 57, slide 114)" },
+            { "tex": "CY", "means": "cyan, CY = G + B (slides p. 57, slide 114)" },
+            { "tex": "G,\\ G'", "means": "the two green pixels of the cell, G(u, v + 1) and G(u + 1, v + 1) on the slide (slides p. 59, slide 117)" }
+          ] }
       ],
       "practice": [
         {
@@ -234,9 +376,25 @@
       "law": "d = c·φ/(4π·fmod)",
       "lawTex": "d = \\frac{c\\,\\varphi}{4\\pi f_\\mathrm{mod}}",
       "equations": [
-        { "explore": true, "eq": "φ = arctan((A1 − A3)/(A2 − A4))", "tex": "\\varphi = \\arctan\\frac{A_1 - A_3}{A_2 - A_4}", "note": "Phase from four samples of the returned light; the lab takes the signs of both differences into account, so φ covers a full turn", "ref": "Slides p. 77 (slide 154)" },
-        { "eq": "d = c·φ/(4π·fmod)", "tex": "d = \\frac{c\\,\\varphi}{4\\pi f_\\mathrm{mod}}", "note": "Distance from the phase", "ref": "Slides p. 77 (slide 154)" },
-        { "explore": true, "eq": "dmax = λmod/2, λmod = c/fmod", "tex": "d_\\mathrm{max} = \\frac{\\lambda_\\mathrm{mod}}{2},\\quad \\lambda_\\mathrm{mod} = \\frac{c}{f_\\mathrm{mod}}", "note": "The unambiguous range. The slide's example, λmod = 15 m at fmod = 20 kHz, holds for 20 MHz; λmod = c/fmod is worked here from that pair", "ref": "Slides p. 78 (slide 156)" }
+        { "explore": true, "eq": "φ = arctan((A1 − A3)/(A2 − A4))", "tex": "\\varphi = \\arctan\\frac{A_1 - A_3}{A_2 - A_4}", "note": "Phase from four samples of the returned light; the lab takes the signs of both differences into account, so φ covers a full turn", "ref": "Slides p. 77 (slide 154)",
+          "where": [
+            { "tex": "\\varphi", "means": "phase of the returned modulated light, 'Signal Phase φ: distance' in the figure [rad] (slides p. 77, slide 154)" },
+            { "tex": "A_1,\\ A_2,\\ A_3,\\ A_4", "means": "four samples of the autocorrelation function of the returned light, shown in the figure only (slides p. 77, slide 154)" }
+          ] },
+        { "eq": "d = c·φ/(4π·fmod)", "tex": "d = \\frac{c\\,\\varphi}{4\\pi f_\\mathrm{mod}}", "note": "Distance from the phase", "ref": "Slides p. 77 (slide 154)",
+          "where": [
+            { "tex": "d", "means": "distance [m] (slides p. 77, slide 154)" },
+            { "tex": "c", "means": "speed of light [m/s] (not defined in the source); slide 154 uses it in the ToF distance" },
+            { "tex": "\\varphi", "means": "phase of the returned modulated light, 'Signal Phase φ: distance' in the figure [rad] (slides p. 77, slide 154)" },
+            { "tex": "f_\\mathrm{mod}", "means": "modulation frequency of the emitted light [Hz] (slides p. 77, slide 154); named only by use" }
+          ] },
+        { "explore": true, "eq": "dmax = λmod/2, λmod = c/fmod", "tex": "d_\\mathrm{max} = \\frac{\\lambda_\\mathrm{mod}}{2},\\quad \\lambda_\\mathrm{mod} = \\frac{c}{f_\\mathrm{mod}}", "note": "The unambiguous range. The slide's example, λmod = 15 m at fmod = 20 kHz, holds for 20 MHz; λmod = c/fmod is worked here from that pair", "ref": "Slides p. 78 (slide 156)",
+          "where": [
+            { "tex": "d_\\mathrm{max}", "means": "largest unambiguous distance [m] (slides p. 78, slide 156)" },
+            { "tex": "\\lambda_\\mathrm{mod}", "means": "wavelength of the modulation [m] (slides p. 78, slide 156); the slide's 15 m at 20 kHz should read 20 MHz, as the figure of slide 154 has it" },
+            { "tex": "c", "means": "speed of light [m/s] (not defined in the source); slide 154 uses it in the ToF distance" },
+            { "tex": "f_\\mathrm{mod}", "means": "modulation frequency [Hz] (slides p. 78, slide 156)" }
+          ] }
       ],
       "practice": [
         {
@@ -276,12 +434,48 @@
       "law": "zc = b·f/d",
       "lawTex": "z_c = \\frac{b\\,f}{d}",
       "equations": [
-        { "eq": "zc = b·f/d", "tex": "z_c = \\frac{b\\,f}{d}", "note": "Depth from the baseline b, focal length f and disparity d (f and d in the same unit, e.g. pixels)", "ref": "Slides p. 86 (slide 171)" },
-        { "eq": "z ∼ 1/d", "tex": "z \\sim \\frac{1}{d}", "note": "So the depth resolution worsens with distance", "ref": "Slides p. 85 (slide 169)" },
-        { "eq": "(xc, yc, zc) = K⁻¹·(u·zc, v·zc, zc)", "tex": "\\begin{pmatrix}x_c\\\\y_c\\\\z_c\\end{pmatrix} = K^{-1}\\begin{pmatrix}u\\,z_c\\\\v\\,z_c\\\\z_c\\end{pmatrix}", "note": "The other two coordinates once zc is known", "ref": "Slides p. 86 (slide 171)" },
-        { "explore": true, "eq": "Δz = b·f/(d − 1) − b·f/d", "tex": "\\Delta z = \\frac{b\\,f}{d-1} - \\frac{b\\,f}{d} \\approx \\frac{z^2}{b\\,f}", "note": "The depth one pixel of disparity spans, worked from zc = b·f/d", "ref": "" },
-        { "explore": true, "eq": "FOV = 2·arctan(n·p/(2f))", "tex": "\\mathrm{FOV} = 2\\arctan\\frac{n\\,p}{2f}", "note": "Field of view across n pixels of pitch p, worked from the pinhole; it reproduces the table's FOVh and FOVv", "ref": "" },
-        { "eq": "DBR = B/(2·Z·tan(HFOV/2)), band = HRes·DBR = B·F/Z", "tex": "\\mathrm{DBR} = \\frac{B}{2Z\\tan(\\mathrm{HFOV}/2)},\\quad n_\\mathrm{band} = \\frac{B\\,F}{Z}", "note": "The invalid depth band at the left edge of a stereo module, seen by the left camera only", "ref": "Intel (2018), Manual.pdf p. 57, section 4.7" }
+        { "eq": "zc = b·f/d", "tex": "z_c = \\frac{b\\,f}{d}", "note": "Depth from the baseline b, focal length f and disparity d (f and d in the same unit, e.g. pixels)", "ref": "Slides p. 86 (slide 171)",
+          "where": [
+            { "tex": "z_c", "means": "depth, distance of the point from the camera [m] (slides p. 86, slide 171)" },
+            { "tex": "b", "means": "baseline, the distance between the optical axes of the left and right camera [m] (slides p. 84, slide 168)" },
+            { "tex": "f", "means": "focal length, Brennweite, in the unit of d [pixel] (slides p. 86, slide 171)" },
+            { "tex": "d", "means": "disparity, the horizontal difference of a corresponding point in the left and right image [pixel] (slides p. 85, slide 169)" }
+          ] },
+        { "eq": "z ∼ 1/d", "tex": "z \\sim \\frac{1}{d}", "note": "So the depth resolution worsens with distance", "ref": "Slides p. 85 (slide 169)",
+          "where": [
+            { "tex": "z", "means": "distance of the point from the camera (slides p. 85, slide 169)" },
+            { "tex": "d", "means": "disparity, the horizontal difference of a corresponding point in the left and right image [pixel] (slides p. 85, slide 169)" }
+          ] },
+        { "eq": "(xc, yc, zc) = K⁻¹·(u·zc, v·zc, zc)", "tex": "\\begin{pmatrix}x_c\\\\y_c\\\\z_c\\end{pmatrix} = K^{-1}\\begin{pmatrix}u\\,z_c\\\\v\\,z_c\\\\z_c\\end{pmatrix}", "note": "The other two coordinates once zc is known", "ref": "Slides p. 86 (slide 171)",
+          "where": [
+            { "tex": "x_c,\\ y_c,\\ z_c", "means": "camera coordinates [m] (slides p. 43, slide 86)" },
+            { "tex": "K^{-1}", "means": "inverse of the calibration matrix (slides p. 44, slide 87)" },
+            { "tex": "u,\\ v", "means": "image coordinates [pixel] (slides p. 86, slide 171)" }
+          ] },
+        { "explore": true, "eq": "Δz = b·f/(d − 1) − b·f/d", "tex": "\\Delta z = \\frac{b\\,f}{d-1} - \\frac{b\\,f}{d} \\approx \\frac{z^2}{b\\,f}", "note": "The depth one pixel of disparity spans, worked from zc = b·f/d", "ref": "",
+          "where": [
+            { "tex": "\\Delta z", "means": "depth spanned by one pixel of disparity [m] (not defined in the source); worked here" },
+            { "tex": "b", "means": "baseline, the distance between the optical axes of the left and right camera [m] (slides p. 84, slide 168)" },
+            { "tex": "f", "means": "focal length, Brennweite, in the unit of d [pixel] (slides p. 86, slide 171)" },
+            { "tex": "d", "means": "disparity, the horizontal difference of a corresponding point in the left and right image [pixel] (slides p. 85, slide 169)" },
+            { "tex": "z", "means": "depth [m] (slides p. 86, slide 171)" }
+          ] },
+        { "explore": true, "eq": "FOV = 2·arctan(n·p/(2f))", "tex": "\\mathrm{FOV} = 2\\arctan\\frac{n\\,p}{2f}", "note": "Field of view across n pixels of pitch p, worked from the pinhole; it reproduces the table's FOVh and FOVv", "ref": "",
+          "where": [
+            { "tex": "\\mathrm{FOV}", "means": "field of view, Field-of-View [°] (slides p. 87, slide 173)" },
+            { "tex": "n", "means": "number of pixels across the sensor (not defined in the source); the table of slide 173 gives 1024 × 768" },
+            { "tex": "p", "means": "pixel pitch, Pixelgröße [m] (slides p. 87, slide 173); the table states 6 µm, but its depths need 7.68 µm" },
+            { "tex": "f", "means": "focal length [m] (slides p. 87, slide 173)" }
+          ] },
+        { "eq": "DBR = B/(2·Z·tan(HFOV/2)), band = HRes·DBR = B·F/Z", "tex": "\\mathrm{DBR} = \\frac{B}{2Z\\tan(\\mathrm{HFOV}/2)},\\quad n_\\mathrm{band} = \\frac{B\\,F}{Z}", "note": "The invalid depth band at the left edge of a stereo module, seen by the left camera only", "ref": "Intel (2018), Manual.pdf p. 57, section 4.7",
+          "where": [
+            { "tex": "\\mathrm{DBR}", "means": "ratio of the invalid depth band to the whole horizontal image (Intel 2018, Manual.pdf p. 57)" },
+            { "tex": "B", "means": "baseline [mm] (Intel 2018, p. 57)" },
+            { "tex": "Z", "means": "distance [mm] (Intel 2018, p. 57)" },
+            { "tex": "\\mathrm{HFOV}", "means": "horizontal depth field of view [°] (Intel 2018, p. 57)" },
+            { "tex": "n_\\mathrm{band}", "means": "width of the invalid depth band [pixel] (Intel 2018, p. 57)" },
+            { "tex": "F", "means": "focal length [pixel] (Intel 2018, p. 57; the pixel unit from DBR = B·F/(Z·HRes) there)" }
+          ] }
       ],
       "practice": [
         {
@@ -339,9 +533,26 @@
       "law": "c_SAD = Σ|I1 − I2|",
       "lawTex": "c_\\mathrm{SAD}(I_1, I_2) = \\sum_u \\sum_v \\left|I_1(u,v) - I_2(u,v)\\right|",
       "equations": [
-        { "explore": true, "eq": "c_SSD = ΣΣ(I1 − I2)²", "tex": "c_\\mathrm{SSD}(I_1, I_2) = \\sum_u \\sum_v \\left(I_1(u,v) - I_2(u,v)\\right)^2", "note": "Sum of squared differences; the smaller, the better the match", "ref": "Slides p. 87 (slide 174)" },
-        { "eq": "c_SAD = ΣΣ|I1 − I2|", "tex": "c_\\mathrm{SAD}(I_1, I_2) = \\sum_u \\sum_v \\left|I_1(u,v) - I_2(u,v)\\right|", "note": "Sum of absolute differences; the smaller, the better", "ref": "Slides p. 87 (slide 174)" },
-        { "explore": true, "eq": "d* = argmin over d of c(L(x), R(x − d))", "tex": "d^* = \\arg\\min_d \\; c\\big(L(x),\\, R(x-d)\\big)", "note": "The disparity chosen, searched along one row because rectified images put corresponding points on the same row", "ref": "" }
+        { "explore": true, "eq": "c_SSD = ΣΣ(I1 − I2)²", "tex": "c_\\mathrm{SSD}(I_1, I_2) = \\sum_u \\sum_v \\left(I_1(u,v) - I_2(u,v)\\right)^2", "note": "Sum of squared differences; the smaller, the better the match", "ref": "Slides p. 87 (slide 174)",
+          "where": [
+            { "tex": "c_\\mathrm{SSD}", "means": "sum of squared differences: the smaller, the better the match (slides p. 87, slide 174)" },
+            { "tex": "I_1,\\ I_2", "means": "the two image patches compared (slides p. 87, slide 174)" },
+            { "tex": "u,\\ v", "means": "pixel coordinates within the patches (not defined in the source); slide 116 names u horizontal, v vertical" }
+          ] },
+        { "eq": "c_SAD = ΣΣ|I1 − I2|", "tex": "c_\\mathrm{SAD}(I_1, I_2) = \\sum_u \\sum_v \\left|I_1(u,v) - I_2(u,v)\\right|", "note": "Sum of absolute differences; the smaller, the better", "ref": "Slides p. 87 (slide 174)",
+          "where": [
+            { "tex": "c_\\mathrm{SAD}", "means": "sum of absolute differences: the smaller, the better the match (slides p. 87, slide 174)" },
+            { "tex": "I_1,\\ I_2", "means": "the two image patches compared (slides p. 87, slide 174)" },
+            { "tex": "u,\\ v", "means": "pixel coordinates within the patches (not defined in the source); slide 116 names u horizontal, v vertical" }
+          ] },
+        { "explore": true, "eq": "d* = argmin over d of c(L(x), R(x − d))", "tex": "d^* = \\arg\\min_d \\; c\\big(L(x),\\, R(x-d)\\big)", "note": "The disparity chosen, searched along one row because rectified images put corresponding points on the same row", "ref": "",
+          "where": [
+            { "tex": "d^*", "means": "disparity chosen (not defined in the source)" },
+            { "tex": "d", "means": "candidate disparity [pixel] (slides p. 85, slide 169)" },
+            { "tex": "c", "means": "similarity measure, Ähnlichkeitsmaß, such as c_SAD (slides p. 87, slide 174)" },
+            { "tex": "L,\\ R", "means": "left and right image (not defined in the source)" },
+            { "tex": "x", "means": "pixel position along the row (not defined in the source)" }
+          ] }
       ],
       "practice": [
         {

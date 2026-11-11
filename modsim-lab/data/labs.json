@@ -22,11 +22,69 @@
       "lecture": "Puhwein (2021a), example 1, VO pp. 2, 7–9",
       "law": "m ẍ + c ẋ + k x = F₁(t)",
       "lawTex": "m\\ddot{x} + c\\dot{x} + kx = F_1(t)",
+      "lawWhere": [
+        { "tex": "m", "means": "mass [kg] (VO p. 7; m₁ in the figure)" },
+        { "tex": "x,\\ \\dot{x},\\ \\ddot{x}", "means": "displacement [m], velocity [m/s], acceleration [m/s²] (VO p. 7)" },
+        { "tex": "c", "means": "damping constant [N·s/m] (VO p. 7)" },
+        { "tex": "k", "means": "spring stiffness [N/m] (VO p. 7)" },
+        { "tex": "F_1(t)", "means": "external force F₀₁ cos(Ω₁t + φ₁) [N] (VO p. 7)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "ẍ = F₁/m − (c/m)(ẋ − ẋ₀) − (k/m)(x − x₀)", "tex": "\\ddot{x} = \\frac{F_1}{m} - \\frac{c}{m}(\\dot{x} - \\dot{x}_0) - \\frac{k}{m}(x - x_0)", "note": "The DGL in the form for Simulink; the time plot integrates it with x₀ = ẋ₀ = 0", "ref": "VO p. 7", "explore": true },
-        { "eq": "ω₀ = √(k/m), f₀ = ω₀/2π, T₀ = 1/f₀", "tex": "\\omega_0 = \\sqrt{k/m}, \\quad f_0 = \\frac{\\omega_0}{2\\pi}, \\quad T_0 = \\frac{1}{f_0}", "note": "Natural frequency of the undamped linear system", "ref": "VO pp. 7–8" },
-        { "eq": "ω_D = √(ω₀² − (c/2m)²)", "tex": "\\omega_D = \\sqrt{\\omega_0^2 - \\left(\\frac{c}{2m}\\right)^2}", "note": "Damped natural frequency", "ref": "VO p. 8" },
-        { "eq": "ẋ = [0 1; −k/m −c/m] x + [0; 1/m] u", "tex": "\\dot{\\mathbf{x}} = \\begin{bmatrix} 0 & 1 \\\\ -k/m & -c/m \\end{bmatrix}\\mathbf{x} + \\begin{bmatrix} 0 \\\\ 1/m \\end{bmatrix} u", "note": "State space, x₁ = x, x₂ = ẋ, u = F₁", "ref": "VO p. 8" }
+        {
+          "eq": "ẍ = F₁/m − (c/m)(ẋ − ẋ₀) − (k/m)(x − x₀)",
+          "tex": "\\ddot{x} = \\frac{F_1}{m} - \\frac{c}{m}(\\dot{x} - \\dot{x}_0) - \\frac{k}{m}(x - x_0)",
+          "note": "The DGL in the form for Simulink; the time plot integrates it with x₀ = ẋ₀ = 0",
+          "ref": "VO p. 7",
+          "explore": true,
+          "where": [
+            { "tex": "\\ddot{x}", "means": "acceleration [m/s²] (VO p. 7)" },
+            { "tex": "x,\\ \\dot{x}", "means": "displacement [m] and velocity [m/s] of the mass (VO p. 7)" },
+            { "tex": "F_1", "means": "external force F₀₁ cos(Ω₁t + φ₁) [N] (VO p. 7)" },
+            { "tex": "m", "means": "mass [kg] (VO p. 7; m₁ in the figure, m in the equations)" },
+            { "tex": "c", "means": "damping constant [N·s/m] (VO p. 7)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (VO p. 7)" },
+            { "tex": "x_0,\\ \\dot{x}_0", "means": "position [m] and velocity [m/s] of the spring and damper end, in F_k = k(x − x₀) (VO p. 7)" }
+          ]
+        },
+        {
+          "eq": "ω₀ = √(k/m), f₀ = ω₀/2π, T₀ = 1/f₀",
+          "tex": "\\omega_0 = \\sqrt{k/m}, \\quad f_0 = \\frac{\\omega_0}{2\\pi}, \\quad T_0 = \\frac{1}{f_0}",
+          "note": "Natural frequency of the undamped linear system",
+          "ref": "VO pp. 7–8",
+          "where": [
+            { "tex": "\\omega_0", "means": "natural angular frequency of the undamped linear system [rad/s] (VO p. 7)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (VO p. 7)" },
+            { "tex": "m", "means": "mass [kg] (VO p. 7)" },
+            { "tex": "f_0", "means": "natural frequency [Hz] (VO p. 8)" },
+            { "tex": "T_0", "means": "period [s] (VO p. 8)" }
+          ]
+        },
+        {
+          "eq": "ω_D = √(ω₀² − (c/2m)²)",
+          "tex": "\\omega_D = \\sqrt{\\omega_0^2 - \\left(\\frac{c}{2m}\\right)^2}",
+          "note": "Damped natural frequency",
+          "ref": "VO p. 8",
+          "where": [
+            { "tex": "\\omega_D", "means": "natural angular frequency of the damped linear system [rad/s] (VO p. 8)" },
+            { "tex": "\\omega_0", "means": "undamped natural angular frequency [rad/s] (VO p. 7)" },
+            { "tex": "c", "means": "damping constant [N·s/m] (VO p. 7)" },
+            { "tex": "m", "means": "mass [kg] (VO p. 7)" }
+          ]
+        },
+        {
+          "eq": "ẋ = [0 1; −k/m −c/m] x + [0; 1/m] u",
+          "tex": "\\dot{\\mathbf{x}} = \\begin{bmatrix} 0 & 1 \\\\ -k/m & -c/m \\end{bmatrix}\\mathbf{x} + \\begin{bmatrix} 0 \\\\ 1/m \\end{bmatrix} u",
+          "note": "State space, x₁ = x, x₂ = ẋ, u = F₁",
+          "ref": "VO p. 8",
+          "where": [
+            { "tex": "\\mathbf{x},\\ \\dot{\\mathbf{x}}", "means": "state vector (x₁ = x, x₂ = ẋ) and its time derivative (VO p. 8)" },
+            { "tex": "u", "means": "input u(t) = F₁(t) [N] (VO p. 8)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (VO p. 7)" },
+            { "tex": "c", "means": "damping constant [N·s/m] (VO p. 7)" },
+            { "tex": "m", "means": "mass [kg] (VO p. 7)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "m = 2 kg, k = 800 N/m: what is ω₀?", "source": "VO p. 7: ω₀ = √(k/m); values chosen here", "answer": 20, "unit": "rad/s", "compute": { "law": "w0", "m": 2, "k": 800, "c": 0 }, "solution": "√(800/2) = √400 = 20 rad/s." },
@@ -40,12 +98,86 @@
       "lecture": "Puhwein (2021a), example 2, VO pp. 2, 10–18; Wagg and Neild (2015) for the stability chart",
       "law": "m L₁² φ̈ + c_D φ̇ + k_D φ + m g L₁ sin φ = −M₁(t)",
       "lawTex": "mL_1^2\\ddot{\\varphi} + c_D\\dot{\\varphi} + k_D\\varphi + mgL_1\\sin\\varphi = -M_1(t)",
+      "lawWhere": [
+        { "tex": "m", "means": "point mass [kg] (VO p. 10)" },
+        { "tex": "L_1", "means": "rod length [m] (VO p. 10)" },
+        { "tex": "\\varphi,\\ \\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "angle from the downward vertical [rad] and its rates (VO p. 10)" },
+        { "tex": "c_D", "means": "torsion damper [N·m·s/rad] (VO p. 10)" },
+        { "tex": "k_D", "means": "torsion spring [N·m/rad] (VO p. 10)" },
+        { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 10; no value given)" },
+        { "tex": "M_1(t)", "means": "drive moment at the pivot M̂₁ cos(Ω₁t + φ₁) [N·m] (VO p. 10)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "d/dt ∂L/∂q̇ − ∂L/∂q + ∂D/∂q̇ = Q", "tex": "\\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial \\dot{q}_k} - \\frac{\\partial L}{\\partial q_k} + \\frac{\\partial D}{\\partial \\dot{q}_k} = Q_k^{(nk)}", "note": "Lagrange's equations of the 2nd kind with a dissipation function, L = K − V", "ref": "VO p. 11" },
-        { "eq": "φ̈ = [−M₁ − m g L₁ sin φ − k_D φ − c_D φ̇]/(m L₁²)", "tex": "\\ddot{\\varphi} = \\frac{1}{mL_1^2}\\left[-M_1 - mgL_1\\sin\\varphi - k_D\\varphi - c_D\\dot{\\varphi}\\right]", "note": "The nonlinear model the swing plots", "ref": "VO pp. 10, 13", "explore": true },
-        { "eq": "φ̈ + c_D/(mL₁²) φ̇ + (g/L₁ + k_D/(mL₁²)) φ = −M₁/(mL₁²)", "tex": "\\ddot{\\varphi} + \\frac{c_D}{mL_1^2}\\dot{\\varphi} + \\left(\\frac{g}{L_1} + \\frac{k_D}{mL_1^2}\\right)\\varphi = -\\frac{M_1}{mL_1^2}", "note": "Linearised with sin φ ≈ φ: the faint pendulum", "ref": "VO p. 11", "explore": true },
-        { "eq": "ω₀ = √(g/L₁), T₀ = 2π√(L₁/g)", "tex": "\\omega_0 = \\sqrt{g/L_1}, \\quad T_0 = 2\\pi\\sqrt{L_1/g}", "note": "Small swings without spring", "ref": "VO p. 11" },
-        { "eq": "J = [0 1; −ω² cos x₁ −δ]", "tex": "D_x f = \\begin{bmatrix} 0 & 1 \\\\ -\\omega^2\\cos x_1 & -\\delta \\end{bmatrix}", "note": "Jacobian; at 2nπ stable spirals (light damping), at (2n+1)π saddles", "ref": "VO pp. 17–18" }
+        {
+          "eq": "d/dt ∂L/∂q̇ − ∂L/∂q + ∂D/∂q̇ = Q",
+          "tex": "\\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial \\dot{q}_k} - \\frac{\\partial L}{\\partial q_k} + \\frac{\\partial D}{\\partial \\dot{q}_k} = Q_k^{(nk)}",
+          "note": "Lagrange's equations of the 2nd kind with a dissipation function, L = K − V",
+          "ref": "VO p. 11",
+          "where": [
+            { "tex": "L", "means": "Lagrange function L = K − V [J] (VO p. 11)" },
+            { "tex": "q_k,\\ \\dot{q}_k", "means": "k-th generalised coordinate and its velocity (VO p. 11)" },
+            { "tex": "D", "means": "quasi damper potential (dissipation function) [W] (VO p. 11)" },
+            { "tex": "Q_k^{(nk)}", "means": "non-conservative generalised force for q_k (VO p. 11; from virtual work, pp. 12–13)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        },
+        {
+          "eq": "φ̈ = [−M₁ − m g L₁ sin φ − k_D φ − c_D φ̇]/(m L₁²)",
+          "tex": "\\ddot{\\varphi} = \\frac{1}{mL_1^2}\\left[-M_1 - mgL_1\\sin\\varphi - k_D\\varphi - c_D\\dot{\\varphi}\\right]",
+          "note": "The nonlinear model the swing plots",
+          "ref": "VO pp. 10, 13",
+          "explore": true,
+          "where": [
+            { "tex": "\\varphi,\\ \\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "angle from the downward vertical [rad] and its rates (VO p. 10)" },
+            { "tex": "m", "means": "point mass [kg] (VO p. 10)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 10)" },
+            { "tex": "M_1", "means": "drive moment at the pivot M̂₁ cos(Ω₁t + φ₁) [N·m] (VO p. 10)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 10; no value given)" },
+            { "tex": "k_D", "means": "torsion spring (Drehfeder) [N·m/rad] (VO p. 10)" },
+            { "tex": "c_D", "means": "torsion damper (Torsionsdämpfer) [N·m·s/rad] (VO p. 10; its moment printed c_D Δẋ for Δφ̇)" }
+          ]
+        },
+        {
+          "eq": "φ̈ + c_D/(mL₁²) φ̇ + (g/L₁ + k_D/(mL₁²)) φ = −M₁/(mL₁²)",
+          "tex": "\\ddot{\\varphi} + \\frac{c_D}{mL_1^2}\\dot{\\varphi} + \\left(\\frac{g}{L_1} + \\frac{k_D}{mL_1^2}\\right)\\varphi = -\\frac{M_1}{mL_1^2}",
+          "note": "Linearised with sin φ ≈ φ: the faint pendulum",
+          "ref": "VO p. 11",
+          "explore": true,
+          "where": [
+            { "tex": "\\varphi,\\ \\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "angle from the downward vertical [rad] and its rates; sin φ ≈ φ (VO pp. 10–11)" },
+            { "tex": "c_D", "means": "torsion damper [N·m·s/rad] (VO p. 10)" },
+            { "tex": "m", "means": "point mass [kg] (VO p. 10)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 10)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 10; no value given)" },
+            { "tex": "k_D", "means": "torsion spring [N·m/rad] (VO p. 10)" },
+            { "tex": "M_1", "means": "drive moment at the pivot [N·m] (VO p. 10)" }
+          ]
+        },
+        {
+          "eq": "ω₀ = √(g/L₁), T₀ = 2π√(L₁/g)",
+          "tex": "\\omega_0 = \\sqrt{g/L_1}, \\quad T_0 = 2\\pi\\sqrt{L_1/g}",
+          "note": "Small swings without spring",
+          "ref": "VO p. 11",
+          "where": [
+            { "tex": "\\omega_0", "means": "natural angular frequency without spring and damper [rad/s] (VO p. 11)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 10; no value given)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 10)" },
+            { "tex": "T_0", "means": "period of small swings [s] (not defined in the source for the pendulum; as T₀ = 1/f₀ on VO p. 8)" }
+          ]
+        },
+        {
+          "eq": "J = [0 1; −ω² cos x₁ −δ]",
+          "tex": "D_x f = \\begin{bmatrix} 0 & 1 \\\\ -\\omega^2\\cos x_1 & -\\delta \\end{bmatrix}",
+          "note": "Jacobian; at 2nπ stable spirals (light damping), at (2n+1)π saddles",
+          "ref": "VO pp. 17–18",
+          "where": [
+            { "tex": "D_x f", "means": "Jacobian of f = (f₁, f₂) with respect to (x₁, x₂) (VO p. 17)" },
+            { "tex": "\\omega", "means": "natural angular frequency √(g/L₁) [rad/s] (VO p. 17)" },
+            { "tex": "x_1", "means": "deflection angle θ [rad] (VO p. 17)" },
+            { "tex": "\\delta", "means": "damping constant [1/s] (VO p. 17; no unit given)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "L₁ = 1 m, g = 9.80665 m/s²: how long is one small swing, T₀?", "source": "VO p. 11: ω₀ = √(g/L₁)", "answer": 2.0064, "unit": "s", "compute": { "law": "pendelT0", "m": 1, "L1": 1 }, "solution": "2π√(1/9.80665) = 2.006 s." }
@@ -59,11 +191,85 @@
       "law": "(m₁L₁²/3 + (3/2)m₂L₁²) φ̈₁ = (m₁/2 + m₂) g L₁ cos φ₁ − k(S − l₀) dS/dφ₁",
       "lawTex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2L_1^2\\right)\\ddot{\\varphi}_1 = \\left(\\frac{m_1}{2} + m_2\\right)gL_1\\cos\\varphi_1 - k(S - l_0)\\frac{\\mathrm{d}S}{\\mathrm{d}\\varphi_1}",
       "equations": [
-        { "eq": "S(φ₁) = √({L₁[1 − cos φ₁]}² + [L₂ + L₁ sin φ₁]²)", "tex": "S(\\varphi_1) = \\sqrt{\\{L_1[1 - \\cos\\varphi_1]\\}^2 + [L_2 + L_1\\sin\\varphi_1]^2}", "note": "Spring length; the sheet writes 0.25 for L₂", "ref": "VO p. 20" },
-        { "eq": "K = ½[(m₁L₁²/3)φ̇₁² + m₂(L₁φ̇₁)² + (m₂r²/2)(L₁φ̇₁/r)²]", "tex": "K = \\frac{1}{2}\\left[\\frac{m_1L_1^2}{3}\\dot{\\varphi}_1^2 + m_2(L_1\\dot{\\varphi}_1)^2 + \\frac{m_2r^2}{2}\\left(\\frac{L_1}{r}\\dot{\\varphi}_1\\right)^2\\right]", "note": "Kinetic energy of rod and rolling disc", "ref": "VO p. 22" },
-        { "eq": "V = −m₁g(L₁/2) sin φ₁ − m₂gL₁ sin φ₁ + ½k(S − l₀)²", "tex": "V = -m_1g\\frac{L_1}{2}\\sin\\varphi_1 - m_2gL_1\\sin\\varphi_1 + \\frac{1}{2}k(S - l_0)^2", "note": "Gravity and spring", "ref": "VO p. 23" },
-        { "eq": "(m₁L₁²/3 + (3/2)m₂L₁²) φ̈₁ = (m₁/2 + m₂) g L₁ cos φ₁ − k(S − l₀) dS/dφ₁", "tex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2L_1^2\\right)\\ddot{\\varphi}_1 = \\left(\\frac{m_1}{2} + m_2\\right)gL_1\\cos\\varphi_1 - k(S - l_0)\\frac{\\mathrm{d}S}{\\mathrm{d}\\varphi_1}", "note": "The lab's equation, from K and V of pp. 22–23; the sheet prints (3/2)m₂r and a spring moment without L₁ (README)", "ref": "", "explore": true },
-        { "eq": "(m₁L₁²/3 + (3/2)m₂r) φ̈₁ − (m₂ + m₁/2) g L₁ cos φ₁ + k(S − l₀)(2 sin φ₁ + cos φ₁)/(4S) = 0", "tex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2r\\right)\\ddot{\\varphi}_1 - \\left(m_2 + \\frac{m_1}{2}\\right)gL_1\\cos\\varphi_1 + k(S - l_0)\\frac{2\\sin\\varphi_1 + \\cos\\varphi_1}{4S} = 0", "note": "The sheet's printed equation, run faint beside the lab's", "ref": "VO pp. 21, 23", "explore": true }
+        {
+          "eq": "S(φ₁) = √({L₁[1 − cos φ₁]}² + [L₂ + L₁ sin φ₁]²)",
+          "tex": "S(\\varphi_1) = \\sqrt{\\{L_1[1 - \\cos\\varphi_1]\\}^2 + [L_2 + L_1\\sin\\varphi_1]^2}",
+          "note": "Spring length; the sheet writes 0.25 for L₂",
+          "ref": "VO p. 20",
+          "where": [
+            { "tex": "S(\\varphi_1)", "means": "spring length [m] (VO pp. 19–20)" },
+            { "tex": "\\varphi_1", "means": "rod angle from the horizontal x axis, positive downward [rad] (VO p. 19)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 19)" },
+            { "tex": "L_2", "means": "height of the spring anchor above the x axis [m] (VO p. 19; p. 20 writes 0.25 in its place)" }
+          ]
+        },
+        {
+          "eq": "K = ½[(m₁L₁²/3)φ̇₁² + m₂(L₁φ̇₁)² + (m₂r²/2)(L₁φ̇₁/r)²]",
+          "tex": "K = \\frac{1}{2}\\left[\\frac{m_1L_1^2}{3}\\dot{\\varphi}_1^2 + m_2(L_1\\dot{\\varphi}_1)^2 + \\frac{m_2r^2}{2}\\left(\\frac{L_1}{r}\\dot{\\varphi}_1\\right)^2\\right]",
+          "note": "Kinetic energy of rod and rolling disc",
+          "ref": "VO p. 22",
+          "where": [
+            { "tex": "K", "means": "kinetic energy [J] (VO pp. 11, 22)" },
+            { "tex": "m_1", "means": "rod mass [kg] (VO p. 19)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 19)" },
+            { "tex": "\\dot{\\varphi}_1", "means": "rod angular velocity [rad/s] (VO p. 22)" },
+            { "tex": "m_2", "means": "roller mass [kg] (VO p. 19)" },
+            { "tex": "r", "means": "roller radius [m] (VO p. 19)" }
+          ]
+        },
+        {
+          "eq": "V = −m₁g(L₁/2) sin φ₁ − m₂gL₁ sin φ₁ + ½k(S − l₀)²",
+          "tex": "V = -m_1g\\frac{L_1}{2}\\sin\\varphi_1 - m_2gL_1\\sin\\varphi_1 + \\frac{1}{2}k(S - l_0)^2",
+          "note": "Gravity and spring",
+          "ref": "VO p. 23",
+          "where": [
+            { "tex": "V", "means": "potential energy [J] (VO pp. 11, 23)" },
+            { "tex": "m_1", "means": "rod mass [kg] (VO p. 19)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 19; no value given)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 19)" },
+            { "tex": "\\varphi_1", "means": "rod angle from the x axis [rad] (VO p. 19)" },
+            { "tex": "m_2", "means": "roller mass [kg] (VO p. 19)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (VO p. 19)" },
+            { "tex": "S", "means": "spring length S(φ₁) [m] (VO p. 20)" },
+            { "tex": "l_0", "means": "unstretched spring length [m] (VO p. 20)" }
+          ]
+        },
+        {
+          "eq": "(m₁L₁²/3 + (3/2)m₂L₁²) φ̈₁ = (m₁/2 + m₂) g L₁ cos φ₁ − k(S − l₀) dS/dφ₁",
+          "tex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2L_1^2\\right)\\ddot{\\varphi}_1 = \\left(\\frac{m_1}{2} + m_2\\right)gL_1\\cos\\varphi_1 - k(S - l_0)\\frac{\\mathrm{d}S}{\\mathrm{d}\\varphi_1}",
+          "note": "The lab's equation, from K and V of pp. 22–23; the sheet prints (3/2)m₂r and a spring moment without L₁ (README)",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_1", "means": "rod mass [kg] (VO p. 19)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 19)" },
+            { "tex": "m_2", "means": "roller mass [kg] (VO p. 19)" },
+            { "tex": "\\varphi_1,\\ \\ddot{\\varphi}_1", "means": "rod angle from the x axis [rad] and its angular acceleration [rad/s²] (VO p. 19)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 19; no value given)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (VO p. 19)" },
+            { "tex": "S", "means": "spring length S(φ₁) [m] (VO p. 20)" },
+            { "tex": "l_0", "means": "unstretched spring length [m] (VO p. 20)" },
+            { "tex": "\\frac{\\mathrm{d}S}{\\mathrm{d}\\varphi_1}", "means": "change of spring length with rod angle [m/rad] (not defined in the source; its (2 sin φ₁ + cos φ₁)/(4S) lacks the lever L₁, VO pp. 21, 23)" }
+          ]
+        },
+        {
+          "eq": "(m₁L₁²/3 + (3/2)m₂r) φ̈₁ − (m₂ + m₁/2) g L₁ cos φ₁ + k(S − l₀)(2 sin φ₁ + cos φ₁)/(4S) = 0",
+          "tex": "\\left(\\frac{m_1L_1^2}{3} + \\frac{3}{2}m_2r\\right)\\ddot{\\varphi}_1 - \\left(m_2 + \\frac{m_1}{2}\\right)gL_1\\cos\\varphi_1 + k(S - l_0)\\frac{2\\sin\\varphi_1 + \\cos\\varphi_1}{4S} = 0",
+          "note": "The sheet's printed equation, run faint beside the lab's",
+          "ref": "VO pp. 21, 23",
+          "explore": true,
+          "where": [
+            { "tex": "m_1", "means": "rod mass [kg] (VO p. 19)" },
+            { "tex": "L_1", "means": "rod length [m] (VO p. 19)" },
+            { "tex": "m_2", "means": "roller mass [kg] (VO p. 19)" },
+            { "tex": "r", "means": "roller radius [m] (VO p. 19); the printed (3/2)m₂r is not an inertia (kg·m), it should be (3/2)m₂L₁² (VO p. 21)" },
+            { "tex": "\\varphi_1,\\ \\ddot{\\varphi}_1", "means": "rod angle [rad] and angular acceleration [rad/s²] (VO p. 19)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 19; no value given)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (VO p. 19)" },
+            { "tex": "S", "means": "spring length S(φ₁) [m] (VO p. 20)" },
+            { "tex": "l_0", "means": "unstretched spring length [m] (VO p. 20)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's starting values (m₁ = 1 kg, m₂ = 0.5 kg, k = 200 N/m, l₀ = 0.25 m, L₁ = 0.5 m, L₂ = 0.25 m), at what angle φ₁ does the rod rest?", "source": "worked here: the moment of the lab's equation set to zero", "answer": 5.6224, "unit": "°", "compute": { "law": "rolleRest", "m1": 1, "m2": 0.5, "r": 0.1, "L1": 0.5, "L2": 0.25, "k": 200, "l0": 0.25 }, "solution": "(m₁/2 + m₂) g L₁ cos φ₁ = k(S − l₀) dS/dφ₁ at φ₁ ≈ 5.6°." }
@@ -76,12 +282,84 @@
       "lecture": "Puhwein (2021a), example 5, VO pp. 4, 27–31; values from the TM3 note, pp. 1–2",
       "law": "M ẍ + C ẋ + K x = F",
       "lawTex": "M\\ddot{\\mathbf{x}} + C\\dot{\\mathbf{x}} + K\\mathbf{x} = \\mathbf{F}",
+      "lawWhere": [
+        { "tex": "M", "means": "mass matrix [kg] (VO p. 28)" },
+        { "tex": "C", "means": "damping matrix [N·s/m] (VO p. 28)" },
+        { "tex": "K", "means": "stiffness matrix [N/m] (VO p. 28)" },
+        { "tex": "\\mathbf{x},\\ \\dot{\\mathbf{x}},\\ \\ddot{\\mathbf{x}}", "means": "displacements (x₁, x₂)ᵀ [m] and their rates (VO p. 28)" },
+        { "tex": "\\mathbf{F}", "means": "forces (F₁(t), F₂(t))ᵀ [N] (VO p. 28)" }
+      ],
       "equations": [
-        { "eq": "ẍ₁ = (1/m₁)[F₁ − c₁ẋ₁ − k₁x₁ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁)], ẍ₂ = (1/m₂)[F₂ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁)]", "tex": "\\ddot{x}_1 = \\frac{1}{m_1}[F_1 - c_1\\dot{x}_1 - k_1x_1 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1)], \\; \\ddot{x}_2 = \\frac{1}{m_2}[F_2 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1)]", "note": "The form for Simulink (x₀ = ẋ₀ = 0); the driven run integrates it", "ref": "VO p. 28", "explore": true },
-        { "eq": "M = [m₁ 0; 0 m₂], C = [c₁+c₂ −c₂; −c₂ c₂], K = [k₁+k₂ −k₂; −k₂ k₂]", "tex": "M = \\begin{bmatrix} m_1 & 0 \\\\ 0 & m_2 \\end{bmatrix}, \\; C = \\begin{bmatrix} c_1+c_2 & -c_2 \\\\ -c_2 & c_2 \\end{bmatrix}, \\; K = \\begin{bmatrix} k_1+k_2 & -k_2 \\\\ -k_2 & k_2 \\end{bmatrix}", "note": "Mass, damping and stiffness matrices", "ref": "VO p. 28" },
-        { "eq": "det(K − λM) = 0, λ = ω₀ᵢ²", "tex": "\\det(K - \\lambda M) = 0, \\quad \\lambda = \\omega_{0i}^2", "note": "The eigenvalue problem; the modes step animates its eigenvectors", "ref": "VO p. 28", "explore": true },
-        { "eq": "λ₁,₂ = tr/2 ∓ √((tr/2)² − det), of M⁻¹K", "tex": "\\lambda_{1,2} = \\frac{\\operatorname{tr}}{2} \\mp \\sqrt{\\left(\\frac{\\operatorname{tr}}{2}\\right)^2 - \\det}", "note": "The same λ from trace and determinant of M⁻¹K", "ref": "", "explore": true },
-        { "eq": "(K − ω²M + jωC) X = F̂", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\hat{\\mathbf{F}}", "note": "Frequency response, plotted as |x₁/F₁| like the TM3 note's bode", "ref": "TM3 note p. 1", "explore": true }
+        {
+          "eq": "ẍ₁ = (1/m₁)[F₁ − c₁ẋ₁ − k₁x₁ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁)], ẍ₂ = (1/m₂)[F₂ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁)]",
+          "tex": "\\ddot{x}_1 = \\frac{1}{m_1}[F_1 - c_1\\dot{x}_1 - k_1x_1 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1)], \\; \\ddot{x}_2 = \\frac{1}{m_2}[F_2 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1)]",
+          "note": "The form for Simulink (x₀ = ẋ₀ = 0); the driven run integrates it",
+          "ref": "VO p. 28",
+          "explore": true,
+          "where": [
+            { "tex": "\\ddot{x}_1,\\ \\ddot{x}_2", "means": "accelerations of the masses [m/s²] (VO p. 27)" },
+            { "tex": "m_1,\\ m_2", "means": "masses [kg] (VO p. 27)" },
+            { "tex": "F_1,\\ F_2", "means": "forces F̂ᵢ cos(Ωᵢt + φᵢ) [N] (VO p. 27; the top figure writes F₀₁, F₀₂)" },
+            { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (VO p. 27)" },
+            { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (VO p. 27)" },
+            { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2", "means": "displacements [m] and velocities [m/s] of the masses (VO p. 27)" }
+          ]
+        },
+        {
+          "eq": "M = [m₁ 0; 0 m₂], C = [c₁+c₂ −c₂; −c₂ c₂], K = [k₁+k₂ −k₂; −k₂ k₂]",
+          "tex": "M = \\begin{bmatrix} m_1 & 0 \\\\ 0 & m_2 \\end{bmatrix}, \\; C = \\begin{bmatrix} c_1+c_2 & -c_2 \\\\ -c_2 & c_2 \\end{bmatrix}, \\; K = \\begin{bmatrix} k_1+k_2 & -k_2 \\\\ -k_2 & k_2 \\end{bmatrix}",
+          "note": "Mass, damping and stiffness matrices",
+          "ref": "VO p. 28",
+          "where": [
+            { "tex": "M", "means": "mass matrix [kg] (VO p. 28)" },
+            { "tex": "C", "means": "damping matrix [N·s/m] (VO p. 28)" },
+            { "tex": "K", "means": "stiffness matrix [N/m] (VO p. 28)" },
+            { "tex": "m_1,\\ m_2", "means": "masses [kg] (VO p. 27)" },
+            { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (VO p. 27)" },
+            { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (VO p. 27)" }
+          ]
+        },
+        {
+          "eq": "det(K − λM) = 0, λ = ω₀ᵢ²",
+          "tex": "\\det(K - \\lambda M) = 0, \\quad \\lambda = \\omega_{0i}^2",
+          "note": "The eigenvalue problem; the modes step animates its eigenvectors",
+          "ref": "VO p. 28",
+          "explore": true,
+          "where": [
+            { "tex": "K", "means": "stiffness matrix [N/m] (VO p. 28)" },
+            { "tex": "M", "means": "mass matrix [kg] (VO p. 28)" },
+            { "tex": "\\lambda", "means": "eigenvalue [1/s²] (VO p. 28; printed |K − λM| Φ = 0, and its rule \"stable if all Re(λ) < 0\" cannot hold for λ = ω²)" },
+            { "tex": "\\omega_{0i}", "means": "i-th natural angular frequency [rad/s] (VO p. 28)" }
+          ]
+        },
+        {
+          "eq": "λ₁,₂ = tr/2 ∓ √((tr/2)² − det), of M⁻¹K",
+          "tex": "\\lambda_{1,2} = \\frac{\\operatorname{tr}}{2} \\mp \\sqrt{\\left(\\frac{\\operatorname{tr}}{2}\\right)^2 - \\det}",
+          "note": "The same λ from trace and determinant of M⁻¹K",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "\\lambda_{1,2}", "means": "the two eigenvalues ω₀₁², ω₀₂² [1/s²] (VO p. 28)" },
+            { "tex": "\\operatorname{tr}", "means": "trace of M⁻¹K, the sum of its main diagonal [1/s²] (trace defined VO p. 30; its use here is the lab's)" },
+            { "tex": "\\det", "means": "determinant of M⁻¹K [1/s⁴] (not defined in the source)" }
+          ]
+        },
+        {
+          "eq": "(K − ω²M + jωC) X = F̂",
+          "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\hat{\\mathbf{F}}",
+          "note": "Frequency response, plotted as |x₁/F₁| like the TM3 note's bode",
+          "ref": "TM3 note p. 1",
+          "explore": true,
+          "where": [
+            { "tex": "K", "means": "stiffness matrix [N/m] (VO p. 28)" },
+            { "tex": "M", "means": "mass matrix [kg] (VO p. 28)" },
+            { "tex": "C", "means": "damping matrix [N·s/m] (VO p. 28)" },
+            { "tex": "\\omega", "means": "excitation angular frequency [rad/s] (not defined in the source)" },
+            { "tex": "\\mathrm{j}", "means": "imaginary unit (not defined in the source)" },
+            { "tex": "\\hat{\\mathbf{x}}", "means": "complex amplitudes of x₁ and x₂ [m] (not defined in the source)" },
+            { "tex": "\\hat{\\mathbf{F}}", "means": "complex amplitudes of the forces F₁, F₂ [N] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "m₁ = m₂ = 1 kg, k₁ = 2000 N/m, k₂ = 750 N/m: what is the first eigenfrequency f₀₁?", "source": "TM3 note p. 2: f0_1 = 3.5588", "answer": 3.5588, "unit": "Hz", "compute": { "law": "twoMassF", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 0 }, "solution": "λ from det(K − λM) = 0: 500 and 3000 s⁻²; √500/2π = 3.559 Hz." },
@@ -96,12 +374,81 @@
       "lecture": "Puhwein (2021a), example 6, VO pp. 4, 32–40, after Fotiu (2018a, 2018b)",
       "law": "(8/3)φ̈₁ + φ̈₂ cos(φ₂−φ₁) − φ̇₂² sin(φ₂−φ₁) + 3(g/L₁) sin φ₁ = 0",
       "lawTex": "\\frac{8}{3}\\ddot{\\varphi}_1 + \\ddot{\\varphi}_2\\cos(\\varphi_2-\\varphi_1) - \\dot{\\varphi}_2^2\\sin(\\varphi_2-\\varphi_1) + 3\\frac{g}{L_1}\\sin\\varphi_1 = 0",
+      "lawWhere": [
+        { "tex": "\\ddot{\\varphi}_1,\\ \\ddot{\\varphi}_2", "means": "angular accelerations of rods 1 and 2 [rad/s²] (VO p. 33)" },
+        { "tex": "\\varphi_1,\\ \\varphi_2", "means": "rod angles from the vertical [rad] (VO p. 32)" },
+        { "tex": "\\dot{\\varphi}_2", "means": "angular velocity of rod 2 [rad/s] (VO p. 33)" },
+        { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 32; no value given)" },
+        { "tex": "L_1", "means": "length of each rod [m] (VO p. 32)" }
+      ],
       "equations": [
-        { "eq": "(2/3)φ̈₂ + φ̈₁ cos(φ₂−φ₁) + φ̇₁² sin(φ₂−φ₁) + (g/L₁) sin φ₂ = 0", "tex": "\\frac{2}{3}\\ddot{\\varphi}_2 + \\ddot{\\varphi}_1\\cos(\\varphi_2-\\varphi_1) + \\dot{\\varphi}_1^2\\sin(\\varphi_2-\\varphi_1) + \\frac{g}{L_1}\\sin\\varphi_2 = 0", "note": "The second equation; with the first, the chaos step integrates both", "ref": "VO p. 33", "explore": true },
-        { "eq": "K = (mL₁²/6)[4φ̇₁² + φ̇₂² + 3φ̇₁φ̇₂ cos(φ₂ − φ₁)]", "tex": "K = \\frac{mL_1^2}{6}\\left[4\\dot{\\varphi}_1^2 + \\dot{\\varphi}_2^2 + 3\\dot{\\varphi}_1\\dot{\\varphi}_2\\cos(\\varphi_2-\\varphi_1)\\right]", "note": "Kinetic energy; the energy step plots K + V", "ref": "VO p. 37", "explore": true },
-        { "eq": "V_g = −(mgL₁/2) cos φ₁ − mgL₁[cos φ₁ + ½ cos φ₂]", "tex": "V_g = -\\frac{mgL_1}{2}\\cos\\varphi_1 - mgL_1\\left[\\cos\\varphi_1 + \\frac{1}{2}\\cos\\varphi_2\\right]", "note": "Potential energy of gravity", "ref": "VO p. 37", "explore": true },
-        { "eq": "V_F = ½k_D(φ₂ − φ₁)², D = ½c_D(φ̇₂ − φ̇₁)²", "tex": "V_F = \\frac{1}{2}k_D(\\varphi_2-\\varphi_1)^2, \\quad D = \\frac{1}{2}c_D(\\dot{\\varphi}_2-\\dot{\\varphi}_1)^2", "note": "Torsion spring and damper at A; in the equations divided by mL₁²/2 they enter as 2k_D/(mL₁²) and 2c_D/(mL₁²)", "ref": "VO p. 37" },
-        { "eq": "M̃ = [8/3 1; 1 2/3], K̃ = (g/L₁)[3 0; 0 1]", "tex": "\\tilde{M} = \\begin{bmatrix} 8/3 & 1 \\\\ 1 & 2/3 \\end{bmatrix}, \\quad \\tilde{K} = \\frac{g}{L_1}\\begin{bmatrix} 3 & 0 \\\\ 0 & 1 \\end{bmatrix}", "note": "Linearised at φ₁ = φ₂ = 0, whose eigenmodes the last step shows", "ref": "VO p. 34", "explore": true }
+        {
+          "eq": "(2/3)φ̈₂ + φ̈₁ cos(φ₂−φ₁) + φ̇₁² sin(φ₂−φ₁) + (g/L₁) sin φ₂ = 0",
+          "tex": "\\frac{2}{3}\\ddot{\\varphi}_2 + \\ddot{\\varphi}_1\\cos(\\varphi_2-\\varphi_1) + \\dot{\\varphi}_1^2\\sin(\\varphi_2-\\varphi_1) + \\frac{g}{L_1}\\sin\\varphi_2 = 0",
+          "note": "The second equation; with the first, the chaos step integrates both",
+          "ref": "VO p. 33",
+          "explore": true,
+          "where": [
+            { "tex": "\\varphi_1,\\ \\varphi_2", "means": "angles of rods 1 and 2 from the vertical [rad] (VO p. 32)" },
+            { "tex": "\\dot{\\varphi}_1,\\ \\ddot{\\varphi}_1,\\ \\ddot{\\varphi}_2", "means": "angular velocity [rad/s] and accelerations [rad/s²] (VO p. 33)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 32; no value given)" },
+            { "tex": "L_1", "means": "length of each rod [m] (VO p. 32)" }
+          ]
+        },
+        {
+          "eq": "K = (mL₁²/6)[4φ̇₁² + φ̇₂² + 3φ̇₁φ̇₂ cos(φ₂ − φ₁)]",
+          "tex": "K = \\frac{mL_1^2}{6}\\left[4\\dot{\\varphi}_1^2 + \\dot{\\varphi}_2^2 + 3\\dot{\\varphi}_1\\dot{\\varphi}_2\\cos(\\varphi_2-\\varphi_1)\\right]",
+          "note": "Kinetic energy; the energy step plots K + V",
+          "ref": "VO p. 37",
+          "explore": true,
+          "where": [
+            { "tex": "K", "means": "kinetic energy [J] (VO p. 36)" },
+            { "tex": "m", "means": "mass of each rod [kg] (VO p. 32)" },
+            { "tex": "L_1", "means": "length of each rod [m] (VO p. 32)" },
+            { "tex": "\\dot{\\varphi}_1,\\ \\dot{\\varphi}_2", "means": "angular velocities of the rods [rad/s] (VO p. 36)" },
+            { "tex": "\\varphi_1,\\ \\varphi_2", "means": "rod angles from the vertical [rad] (VO p. 32)" }
+          ]
+        },
+        {
+          "eq": "V_g = −(mgL₁/2) cos φ₁ − mgL₁[cos φ₁ + ½ cos φ₂]",
+          "tex": "V_g = -\\frac{mgL_1}{2}\\cos\\varphi_1 - mgL_1\\left[\\cos\\varphi_1 + \\frac{1}{2}\\cos\\varphi_2\\right]",
+          "note": "Potential energy of gravity",
+          "ref": "VO p. 37",
+          "explore": true,
+          "where": [
+            { "tex": "V_g", "means": "potential energy of gravity [J] (VO p. 37)" },
+            { "tex": "m", "means": "mass of each rod [kg] (VO p. 32)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 32; no value given)" },
+            { "tex": "L_1", "means": "length of each rod [m] (VO p. 32)" },
+            { "tex": "\\varphi_1,\\ \\varphi_2", "means": "rod angles from the vertical [rad] (VO p. 32)" }
+          ]
+        },
+        {
+          "eq": "V_F = ½k_D(φ₂ − φ₁)², D = ½c_D(φ̇₂ − φ̇₁)²",
+          "tex": "V_F = \\frac{1}{2}k_D(\\varphi_2-\\varphi_1)^2, \\quad D = \\frac{1}{2}c_D(\\dot{\\varphi}_2-\\dot{\\varphi}_1)^2",
+          "note": "Torsion spring and damper at A; in the equations divided by mL₁²/2 they enter as 2k_D/(mL₁²) and 2c_D/(mL₁²)",
+          "ref": "VO p. 37",
+          "where": [
+            { "tex": "V_F", "means": "potential energy of the torsion spring [J] (VO p. 37)" },
+            { "tex": "k_D", "means": "torsion spring between the rods at A [N·m/rad] (VO p. 37)" },
+            { "tex": "\\varphi_1,\\ \\varphi_2,\\ \\dot{\\varphi}_1,\\ \\dot{\\varphi}_2", "means": "rod angles [rad] and angular velocities [rad/s] (VO p. 32)" },
+            { "tex": "D", "means": "quasi damper potential (dissipation function) [W] (VO p. 37)" },
+            { "tex": "c_D", "means": "torsion damper between the rods at A [N·m·s/rad] (VO p. 37)" }
+          ]
+        },
+        {
+          "eq": "M̃ = [8/3 1; 1 2/3], K̃ = (g/L₁)[3 0; 0 1]",
+          "tex": "\\tilde{M} = \\begin{bmatrix} 8/3 & 1 \\\\ 1 & 2/3 \\end{bmatrix}, \\quad \\tilde{K} = \\frac{g}{L_1}\\begin{bmatrix} 3 & 0 \\\\ 0 & 1 \\end{bmatrix}",
+          "note": "Linearised at φ₁ = φ₂ = 0, whose eigenmodes the last step shows",
+          "ref": "VO p. 34",
+          "explore": true,
+          "where": [
+            { "tex": "\\tilde{M}", "means": "inertia matrix of the linearised equations, divided by mL₁²/2 [–] (VO p. 34; the tilde is the lab's)" },
+            { "tex": "\\tilde{K}", "means": "stiffness matrix of the linearised equations, divided alike [1/s²] (VO p. 34; multiplied by mL₁² the source prints 3gmL₁² for 3gmL₁)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, VO p. 32; no value given)" },
+            { "tex": "L_1", "means": "length of each rod [m] (VO p. 32)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "L₁ = 1 m, no spring: what is the lower linear eigenfrequency ω₁?", "source": "worked here from VO p. 34's linearised equations: det(K̃ − λM̃) = 0", "answer": 2.6797, "unit": "rad/s", "compute": { "law": "doppelOmega", "m": 1, "L1": 1, "mode": 0 }, "solution": "With g/L₁ = 9.807: (7/9)λ² − (14/3)(g/L₁)λ + 3(g/L₁)² = 0 gives λ = 7.181, ω = 2.680 rad/s." }
@@ -114,10 +461,56 @@
       "lecture": "Puhwein (2021a), example 4, VO pp. 3, 25–26, after Nemecek (2014)",
       "law": "L q̈ + R q̇ + q/C = u(t)",
       "lawTex": "L\\ddot{q} + R\\dot{q} + \\frac{q}{C} = u(t)",
+      "lawWhere": [
+        { "tex": "L", "means": "inductance [H] (VO p. 25)" },
+        { "tex": "q,\\ \\dot{q},\\ \\ddot{q}", "means": "charge [C], current q̇ = i [A] and its rate [A/s] (VO p. 25)" },
+        { "tex": "R", "means": "resistance [Ω] (VO p. 25)" },
+        { "tex": "C", "means": "capacitance [F] (VO p. 25)" },
+        { "tex": "u(t)", "means": "input voltage [V] (VO p. 25)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "q̈ = (1/L)[u − (1/C)q − R q̇]", "tex": "\\ddot{q} = \\frac{1}{L}\\left[u - \\frac{1}{C}q - R\\dot{q}\\right]", "note": "The form for Simulink; the energy step integrates it", "ref": "VO p. 25", "explore": true },
-        { "eq": "ω₀ = 1/√(LC)", "tex": "\\omega_0 = \\frac{1}{\\sqrt{LC}}", "note": "Natural angular frequency", "ref": "VO p. 26" },
-        { "eq": "½Li², q²/(2C), ∫Ri² dt", "tex": "\\frac{1}{2}Li^2, \\quad \\frac{q^2}{2C}, \\quad \\int R i^2\\,\\mathrm{d}t", "note": "Energy in the coil, in the capacitor, and turned to heat: the bars", "ref": "", "explore": true }
+        {
+          "eq": "q̈ = (1/L)[u − (1/C)q − R q̇]",
+          "tex": "\\ddot{q} = \\frac{1}{L}\\left[u - \\frac{1}{C}q - R\\dot{q}\\right]",
+          "note": "The form for Simulink; the energy step integrates it",
+          "ref": "VO p. 25",
+          "explore": true,
+          "where": [
+            { "tex": "q,\\ \\ddot{q}", "means": "charge [C] and its second derivative [A/s] (VO p. 25)" },
+            { "tex": "\\dot{q}", "means": "current i = q̇ [A] (VO p. 25)" },
+            { "tex": "L", "means": "inductance [H] (VO p. 25)" },
+            { "tex": "u", "means": "input voltage u(t) [V] (VO p. 25)" },
+            { "tex": "C", "means": "capacitance [F] (VO p. 25)" },
+            { "tex": "R", "means": "resistance [Ω] (VO p. 25)" }
+          ]
+        },
+        {
+          "eq": "ω₀ = 1/√(LC)",
+          "tex": "\\omega_0 = \\frac{1}{\\sqrt{LC}}",
+          "note": "Natural angular frequency",
+          "ref": "VO p. 26",
+          "where": [
+            { "tex": "\\omega_0", "means": "natural angular frequency [rad/s] (VO p. 26)" },
+            { "tex": "L", "means": "inductance [H] (VO p. 25)" },
+            { "tex": "C", "means": "capacitance [F] (VO p. 25)" }
+          ]
+        },
+        {
+          "eq": "½Li², q²/(2C), ∫Ri² dt",
+          "tex": "\\frac{1}{2}Li^2, \\quad \\frac{q^2}{2C}, \\quad \\int R i^2\\,\\mathrm{d}t",
+          "note": "Energy in the coil, in the capacitor, and turned to heat: the bars",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "L", "means": "inductance [H] (VO p. 25)" },
+            { "tex": "i", "means": "current [A] (VO p. 25)" },
+            { "tex": "q", "means": "charge [C] (VO p. 25)" },
+            { "tex": "C", "means": "capacitance [F] (VO p. 25)" },
+            { "tex": "R", "means": "resistance [Ω] (VO p. 25)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "L = 0.1 H, C = 1 mF: what is ω₀?", "source": "VO p. 26: ω₀ = 1/√(LC)", "answer": 100, "unit": "rad/s", "compute": { "law": "rlcW0", "R": 10, "L": 0.1, "C": 0.001 }, "solution": "1/√(10⁻⁴) = 100 rad/s." }
@@ -130,10 +523,73 @@
       "lecture": "Puhwein (2021a), example 7, VO pp. 5, 41–42",
       "law": "u_A = R_A i_A + L_A di_A/dt + k_M ω,  J φ̈ + c_L φ̇ = k_T i_A",
       "lawTex": "u_A = R_A i_A + L_A\\frac{\\mathrm{d}i_A}{\\mathrm{d}t} + k_M\\omega, \\quad J\\ddot{\\varphi} + c_L\\dot{\\varphi} = k_T i_A",
+      "lawWhere": [
+        { "tex": "u_A", "means": "armature voltage [V] (VO p. 41)" },
+        { "tex": "R_A", "means": "armature resistance [Ω] (VO p. 41)" },
+        { "tex": "i_A", "means": "armature current [A] (VO p. 41)" },
+        { "tex": "L_A", "means": "armature inductance [H] (VO p. 41)" },
+        { "tex": "k_M", "means": "machine constant of the induced voltage u_M = k_M ω [V·s/rad] (VO p. 41)" },
+        { "tex": "\\omega", "means": "shaft angular velocity ω = φ̇ [rad/s] (VO p. 41)" },
+        { "tex": "J", "means": "load inertia [kg·m²] (VO p. 41)" },
+        { "tex": "\\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "shaft angular velocity ω [rad/s] and acceleration [rad/s²] (VO p. 41)" },
+        { "tex": "c_L", "means": "bearing damping [N·m·s/rad] (VO p. 41)" },
+        { "tex": "k_T", "means": "machine constant of the motor torque M_A = k_T i_A [N·m/A] (VO p. 41)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "di_A/dt = (1/L_A)[u_A − R_A i_A − k_M ω], φ̈ = (1/J)[k_T i_A − c_L ω − M_L]", "tex": "\\frac{\\mathrm{d}i_A}{\\mathrm{d}t} = \\frac{1}{L_A}[u_A - R_A i_A - k_M\\omega], \\quad \\ddot{\\varphi} = \\frac{1}{J}[k_T i_A - c_L\\omega - M_L]", "note": "The form for Simulink; M_L the Simulink model's load torque, not in the sheet's ODE", "ref": "VO p. 42", "explore": true },
-        { "eq": "ω∞ = (k_T u_A − R_A M_L)/(R_A c_L + k_M k_T)", "tex": "\\omega_\\infty = \\frac{k_T u_A - R_A M_L}{R_A c_L + k_M k_T}", "note": "Speed at rest, from both equations with the derivatives zero", "ref": "", "explore": true },
-        { "eq": "u_A i_A = R_A i_A² + k_T i_A ω + d/dt(½L_A i_A²)", "tex": "u_A i_A = R_A i_A^2 + k_T i_A\\omega + \\frac{\\mathrm{d}}{\\mathrm{d}t}\\left(\\frac{1}{2}L_A i_A^2\\right)", "note": "Power balance of the circuit (k_M = k_T in SI units): the bars", "ref": "", "explore": true }
+        {
+          "eq": "di_A/dt = (1/L_A)[u_A − R_A i_A − k_M ω], φ̈ = (1/J)[k_T i_A − c_L ω − M_L]",
+          "tex": "\\frac{\\mathrm{d}i_A}{\\mathrm{d}t} = \\frac{1}{L_A}[u_A - R_A i_A - k_M\\omega], \\quad \\ddot{\\varphi} = \\frac{1}{J}[k_T i_A - c_L\\omega - M_L]",
+          "note": "The form for Simulink; M_L the Simulink model's load torque, not in the sheet's ODE",
+          "ref": "VO p. 42",
+          "explore": true,
+          "where": [
+            { "tex": "\\frac{\\mathrm{d}i_A}{\\mathrm{d}t}", "means": "rate of the armature current [A/s] (VO p. 42)" },
+            { "tex": "L_A", "means": "armature inductance [H] (VO p. 41)" },
+            { "tex": "u_A", "means": "armature voltage [V] (VO p. 41)" },
+            { "tex": "R_A", "means": "armature resistance [Ω] (VO p. 41)" },
+            { "tex": "i_A", "means": "armature current [A] (VO p. 41)" },
+            { "tex": "k_M", "means": "machine constant of the induced voltage u_M = k_M ω [V·s/rad] (VO p. 41)" },
+            { "tex": "\\omega", "means": "shaft angular velocity ω = φ̇ [rad/s] (VO p. 41)" },
+            { "tex": "\\ddot{\\varphi}", "means": "shaft angular acceleration [rad/s²] (VO p. 42)" },
+            { "tex": "J", "means": "load inertia [kg·m²] (VO p. 41)" },
+            { "tex": "k_T", "means": "machine constant of the motor torque M_A = k_T i_A [N·m/A] (VO p. 41)" },
+            { "tex": "c_L", "means": "bearing damping [N·m·s/rad] (VO p. 41)" },
+            { "tex": "M_L", "means": "load torque [N·m] (not in the source's ODE; its Simulink model on VO p. 42 adds a load torque of 10)" }
+          ]
+        },
+        {
+          "eq": "ω∞ = (k_T u_A − R_A M_L)/(R_A c_L + k_M k_T)",
+          "tex": "\\omega_\\infty = \\frac{k_T u_A - R_A M_L}{R_A c_L + k_M k_T}",
+          "note": "Speed at rest, from both equations with the derivatives zero",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "\\omega_\\infty", "means": "steady-state shaft speed [rad/s] (not defined in the source)" },
+            { "tex": "k_T", "means": "machine constant of the motor torque M_A = k_T i_A [N·m/A] (VO p. 41)" },
+            { "tex": "u_A", "means": "armature voltage [V] (VO p. 41)" },
+            { "tex": "R_A", "means": "armature resistance [Ω] (VO p. 41)" },
+            { "tex": "M_L", "means": "load torque [N·m] (not in the source's ODE; its Simulink model on VO p. 42 adds a load torque of 10)" },
+            { "tex": "c_L", "means": "bearing damping [N·m·s/rad] (VO p. 41)" },
+            { "tex": "k_M", "means": "machine constant of the induced voltage u_M = k_M ω [V·s/rad] (VO p. 41)" }
+          ]
+        },
+        {
+          "eq": "u_A i_A = R_A i_A² + k_T i_A ω + d/dt(½L_A i_A²)",
+          "tex": "u_A i_A = R_A i_A^2 + k_T i_A\\omega + \\frac{\\mathrm{d}}{\\mathrm{d}t}\\left(\\frac{1}{2}L_A i_A^2\\right)",
+          "note": "Power balance of the circuit (k_M = k_T in SI units): the bars",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "u_A", "means": "armature voltage [V] (VO p. 41)" },
+            { "tex": "i_A", "means": "armature current [A] (VO p. 41)" },
+            { "tex": "R_A", "means": "armature resistance [Ω] (VO p. 41)" },
+            { "tex": "k_T", "means": "machine constant of the motor torque M_A = k_T i_A [N·m/A] (VO p. 41)" },
+            { "tex": "\\omega", "means": "shaft angular velocity ω = φ̇ [rad/s] (VO p. 41)" },
+            { "tex": "L_A", "means": "armature inductance [H] (VO p. 41)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "u_A = 12 V, R_A = 1 Ω, k_M = k_T = 0.05, c_L = 10⁻³ N·m·s/rad, no load: what speed ω does the motor reach?", "source": "worked here from VO p. 42 with the derivatives zero", "answer": 171.43, "unit": "rad/s", "compute": { "law": "motorW", "RA": 1, "LA": 0.5, "kM": 0.05, "kT": 0.05, "J": 0.01, "cL": 0.001, "uA": 12, "ML": 0 }, "solution": "0.05·12/(1·0.001 + 0.05·0.05) = 0.6/0.0035 = 171.4 rad/s." }
@@ -146,10 +602,67 @@
       "lecture": "Puhwein (2021a), example 8, VO pp. 5, 43–45, after Nemecek (2014)",
       "law": "U_S = R_S i_S + L_S di_S/dt,  m_S ẍ + d_S ẋ + k_S x = h_S i_S",
       "lawTex": "U_S = R_S i_S + L_S\\frac{\\mathrm{d}i_S}{\\mathrm{d}t}, \\quad m_S\\ddot{x} + d_S\\dot{x} + k_S x = h_S i_S",
+      "lawWhere": [
+        { "tex": "U_S", "means": "supply voltage [V] (VO p. 43)" },
+        { "tex": "R_S", "means": "coil resistance [Ω] (VO p. 43)" },
+        { "tex": "i_S", "means": "coil current [A] (VO p. 43)" },
+        { "tex": "L_S", "means": "coil inductance [H] (VO p. 43)" },
+        { "tex": "m_S", "means": "moving mass [kg] (VO p. 43)" },
+        { "tex": "x,\\ \\dot{x},\\ \\ddot{x}", "means": "displacement [m], velocity, acceleration of the moving mass (VO p. 43)" },
+        { "tex": "d_S", "means": "damper [N·s/m] (VO p. 43)" },
+        { "tex": "k_S", "means": "spring stiffness [N/m] (VO p. 43)" },
+        { "tex": "h_S", "means": "shaker constant, force per current F_S = h_S i_S [N/A] (VO p. 43)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "G_Ux(s) = 1/(R_S + sL_S) · h_S/(m_S s² + d_S s + k_S)", "tex": "G_{Ux}(s) = \\frac{1}{R_S + sL_S}\\cdot\\frac{h_S}{m_S s^2 + d_S s + k_S}", "note": "Displacement over voltage", "ref": "VO p. 43" },
-        { "eq": "A = [−R_S/L_S 0 0; 0 0 1; h_S/m_S −k_S/m_S −d_S/m_S]", "tex": "A = \\begin{bmatrix} -R_S/L_S & 0 & 0 \\\\ 0 & 0 & 1 \\\\ h_S/m_S & -k_S/m_S & -d_S/m_S \\end{bmatrix}", "note": "State space (i_S, x, v), back-EMF left out: the uncoupled current", "ref": "VO p. 44", "explore": true },
-        { "eq": "L_S di_S/dt = U_S − R_S i_S − h_S ẋ", "tex": "L_S\\frac{\\mathrm{d}i_S}{\\mathrm{d}t} = U_S - R_S i_S - h_S\\dot{x}", "note": "With the back-EMF: the coupled current", "ref": "", "explore": true }
+        {
+          "eq": "G_Ux(s) = 1/(R_S + sL_S) · h_S/(m_S s² + d_S s + k_S)",
+          "tex": "G_{Ux}(s) = \\frac{1}{R_S + sL_S}\\cdot\\frac{h_S}{m_S s^2 + d_S s + k_S}",
+          "note": "Displacement over voltage",
+          "ref": "VO p. 43",
+          "where": [
+            { "tex": "G_{Ux}(s)", "means": "transfer function x/U_S [m/V] (VO p. 43; p. 44 gives the s² form, which is G_Ua, the same name)" },
+            { "tex": "s", "means": "Laplace variable [1/s] (not defined in the source)" },
+            { "tex": "R_S", "means": "coil resistance [Ω] (VO p. 43)" },
+            { "tex": "L_S", "means": "coil inductance [H] (VO p. 43)" },
+            { "tex": "h_S", "means": "shaker constant, force per current F_S = h_S i_S [N/A] (VO p. 43)" },
+            { "tex": "m_S", "means": "moving mass [kg] (VO p. 43)" },
+            { "tex": "d_S", "means": "damper [N·s/m] (VO p. 43)" },
+            { "tex": "k_S", "means": "spring stiffness [N/m] (VO p. 43)" }
+          ]
+        },
+        {
+          "eq": "A = [−R_S/L_S 0 0; 0 0 1; h_S/m_S −k_S/m_S −d_S/m_S]",
+          "tex": "A = \\begin{bmatrix} -R_S/L_S & 0 & 0 \\\\ 0 & 0 & 1 \\\\ h_S/m_S & -k_S/m_S & -d_S/m_S \\end{bmatrix}",
+          "note": "State space (i_S, x, v), back-EMF left out: the uncoupled current",
+          "ref": "VO p. 44",
+          "explore": true,
+          "where": [
+            { "tex": "A", "means": "system matrix of the state (i_S, x, v), back-EMF left out (VO p. 44)" },
+            { "tex": "R_S", "means": "coil resistance [Ω] (VO p. 43)" },
+            { "tex": "L_S", "means": "coil inductance [H] (VO p. 43)" },
+            { "tex": "h_S", "means": "shaker constant, force per current F_S = h_S i_S [N/A] (VO p. 43)" },
+            { "tex": "m_S", "means": "moving mass [kg] (VO p. 43)" },
+            { "tex": "k_S", "means": "spring stiffness [N/m] (VO p. 43)" },
+            { "tex": "d_S", "means": "damper [N·s/m] (VO p. 43)" }
+          ]
+        },
+        {
+          "eq": "L_S di_S/dt = U_S − R_S i_S − h_S ẋ",
+          "tex": "L_S\\frac{\\mathrm{d}i_S}{\\mathrm{d}t} = U_S - R_S i_S - h_S\\dot{x}",
+          "note": "With the back-EMF: the coupled current",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "L_S", "means": "coil inductance [H] (VO p. 43)" },
+            { "tex": "i_S", "means": "coil current [A] (VO p. 43)" },
+            { "tex": "U_S", "means": "supply voltage [V] (VO p. 43)" },
+            { "tex": "R_S", "means": "coil resistance [Ω] (VO p. 43)" },
+            { "tex": "h_S", "means": "shaker constant, force per current F_S = h_S i_S [N/A] (VO p. 43)" },
+            { "tex": "\\dot{x}", "means": "velocity of the moving mass [m/s]; h_S ẋ is the back-EMF the source neglects (VO p. 43)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "U_S = 4 V, R_S = 4 Ω, h_S = 5 N/A, k_S = 2000 N/m: how far does the plate move at rest, in metres?", "source": "worked here from VO p. 43 with the derivatives zero", "answer": 0.0025, "unit": "m", "compute": { "law": "shakerX", "RS": 4, "LS": 0.5, "hS": 5, "mS": 0.5, "kS": 2000, "dS": 4, "US": 4 }, "solution": "i = 1 A, F = 5 N, x = 5/2000 = 2.5 mm." }
@@ -162,10 +675,66 @@
       "lecture": "Puhwein (2021b), task 2, p. 1; the group's report (Baghdadi, Keck and Maurer 2021) for the values",
       "law": "m_ges ÿ − m_s l₁(θ̈ sin θ + θ̇² cos θ) + c ẏ + k y − m_ges g = F₁",
       "lawTex": "m_{ges}\\ddot{y} - m_s l_1(\\ddot{\\theta}\\sin\\theta + \\dot{\\theta}^2\\cos\\theta) + c\\dot{y} + ky - m_{ges}g = F_1",
+      "lawWhere": [
+        { "tex": "m_{ges}", "means": "total mass m₁ + m₂ + m₃ [kg] (group report eq. 11; not on the task sheet)" },
+        { "tex": "y,\\ \\dot{y},\\ \\ddot{y}", "means": "downward displacement of block m₂ [m] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "m_s", "means": "first moment of the pendulum per length, m₁/2 + m₃ [kg] (group report eq. 10; not on the task sheet)" },
+        { "tex": "l_1", "means": "rod length [m] (task sheet p. 1)" },
+        { "tex": "\\theta,\\ \\dot{\\theta},\\ \\ddot{\\theta}", "means": "rod angle from the downward vertical [rad] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "c", "means": "damping coefficient [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+        { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+        { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+        { "tex": "F_1", "means": "force on block m₂ F₀₁ cos(Ω₁t + φ₁) [N] (task sheet p. 1)" }
+      ],
       "equations": [
-        { "eq": "I θ̈ − m_s l₁ ÿ sin θ + m_s g l₁ sin θ + c_T θ̇ + k_T θ = M₁", "tex": "I\\ddot{\\theta} - m_s l_1\\ddot{y}\\sin\\theta + m_s g l_1\\sin\\theta + c_T\\dot{\\theta} + k_T\\theta = M_1", "note": "The pendulum's equation; with the block's, the motion step integrates both. m_s = m₁/2 + m₃, I = l₁²(m₁/3 + m₃)", "ref": "", "explore": true },
-        { "eq": "y* = m_ges g/k", "tex": "y^* = \\frac{m_{ges}g}{k}", "note": "Rest position of the block", "ref": "" },
-        { "eq": "M = [m_ges 0; 0 I], K = [k 0; 0 m_s g l₁ + k_T]", "tex": "M = \\begin{bmatrix} m_{ges} & 0 \\\\ 0 & I \\end{bmatrix}, \\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_s g l_1 + k_T \\end{bmatrix}", "note": "Linearised at the rest: block and pendulum uncoupled, the modes step", "ref": "", "explore": true }
+        {
+          "eq": "I θ̈ − m_s l₁ ÿ sin θ + m_s g l₁ sin θ + c_T θ̇ + k_T θ = M₁",
+          "tex": "I\\ddot{\\theta} - m_s l_1\\ddot{y}\\sin\\theta + m_s g l_1\\sin\\theta + c_T\\dot{\\theta} + k_T\\theta = M_1",
+          "note": "The pendulum's equation; with the block's, the motion step integrates both. m_s = m₁/2 + m₃, I = l₁²(m₁/3 + m₃)",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "I", "means": "inertia of rod and end mass about the pin, l₁²(m₁/3 + m₃) [kg·m²] (not defined in the source)" },
+            { "tex": "\\theta,\\ \\dot{\\theta},\\ \\ddot{\\theta}", "means": "rod angle from the downward vertical [rad] and its rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "m_s", "means": "first moment of the pendulum per length, m₁/2 + m₃ [kg] (group report eq. 10; not on the task sheet)" },
+            { "tex": "l_1", "means": "rod length [m] (task sheet p. 1)" },
+            { "tex": "\\ddot{y}", "means": "acceleration of block m₂ [m/s²] (not defined in the source)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+            { "tex": "c_T", "means": "rotary damper at the pin [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "k_T", "means": "torsion spring at the pin [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "M_1", "means": "moment at the pin M₀₁ cos(Ω₁t + φ₁) [N·m] (task sheet p. 1)" }
+          ]
+        },
+        {
+          "eq": "y* = m_ges g/k",
+          "tex": "y^* = \\frac{m_{ges}g}{k}",
+          "note": "Rest position of the block",
+          "ref": "",
+          "where": [
+            { "tex": "y^*", "means": "rest position of the block [m] (group report p. 8)" },
+            { "tex": "m_{ges}", "means": "total mass m₁ + m₂ + m₃ [kg] (group report eq. 11; not on the task sheet)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" }
+          ]
+        },
+        {
+          "eq": "M = [m_ges 0; 0 I], K = [k 0; 0 m_s g l₁ + k_T]",
+          "tex": "M = \\begin{bmatrix} m_{ges} & 0 \\\\ 0 & I \\end{bmatrix}, \\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_s g l_1 + k_T \\end{bmatrix}",
+          "note": "Linearised at the rest: block and pendulum uncoupled, the modes step",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "M", "means": "mass matrix of the linearised equations [kg, kg·m²] (not defined in the source)" },
+            { "tex": "K", "means": "stiffness matrix of the linearised equations [N/m, N·m/rad] (not defined in the source)" },
+            { "tex": "m_{ges}", "means": "total mass m₁ + m₂ + m₃ [kg] (group report eq. 11; not on the task sheet)" },
+            { "tex": "I", "means": "inertia of rod and end mass about the pin, l₁²(m₁/3 + m₃) [kg·m²] (not defined in the source)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "m_s", "means": "first moment of the pendulum per length, m₁/2 + m₃ [kg] (group report eq. 10; not on the task sheet)" },
+            { "tex": "l_1", "means": "rod length [m] (task sheet p. 1)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+            { "tex": "k_T", "means": "torsion spring at the pin [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 1)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the group's values (m₁ = m₂ = m₃ = 0.1 kg, k = 10 N/m), how far below the relaxed spring does the block rest?", "source": "worked here; the group's report p. 8 gives y = m_ges g/k", "answer": 0.2942, "unit": "m", "compute": { "law": "cartRest", "dir": "vertical", "m1": 0.1, "m2": 0.1, "m3": 0.1, "l1": 0.2, "k": 10, "c": 10, "kT": 40, "cT": 0.4 }, "solution": "0.3·9.80665/10 = 0.294 m." },
@@ -179,9 +748,53 @@
       "lecture": "Puhwein (2021b), task 3, p. 2",
       "law": "m_ges ẍ + m_s l₁(θ̈ cos θ − θ̇² sin θ) + c ẋ + k x = F₁",
       "lawTex": "m_{ges}\\ddot{x} + m_s l_1(\\ddot{\\theta}\\cos\\theta - \\dot{\\theta}^2\\sin\\theta) + c\\dot{x} + kx = F_1",
+      "lawWhere": [
+        { "tex": "m_{ges}", "means": "total mass m₁ + m₂ + m₃ [kg] (group report eq. 11; not on the task sheet)" },
+        { "tex": "x,\\ \\dot{x},\\ \\ddot{x}", "means": "horizontal displacement of block m₂ [m] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "m_s", "means": "first moment of the pendulum per length, m₁/2 + m₃ [kg] (group report eq. 10; not on the task sheet)" },
+        { "tex": "l_1", "means": "rod length [m] (task sheet p. 2)" },
+        { "tex": "\\theta,\\ \\dot{\\theta},\\ \\ddot{\\theta}", "means": "rod angle from the downward vertical [rad] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "c", "means": "damping coefficient [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+        { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+        { "tex": "F_1", "means": "force on block m₂ F₀₁ cos(Ω₁t + φ₁) [N] (task sheet p. 2)" }
+      ],
       "equations": [
-        { "eq": "I θ̈ + m_s l₁ ẍ cos θ + m_s g l₁ sin θ + c_T θ̇ + k_T θ = M₁", "tex": "I\\ddot{\\theta} + m_s l_1\\ddot{x}\\cos\\theta + m_s g l_1\\sin\\theta + c_T\\dot{\\theta} + k_T\\theta = M_1", "note": "The pendulum's equation; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "M = [m_ges m_s l₁; m_s l₁ I], K = [k 0; 0 m_s g l₁ + k_T]", "tex": "M = \\begin{bmatrix} m_{ges} & m_s l_1 \\\\ m_s l_1 & I \\end{bmatrix}, \\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_s g l_1 + k_T \\end{bmatrix}", "note": "Linearised at x = 0, θ = 0: coupled through M", "ref": "", "explore": true }
+        {
+          "eq": "I θ̈ + m_s l₁ ẍ cos θ + m_s g l₁ sin θ + c_T θ̇ + k_T θ = M₁",
+          "tex": "I\\ddot{\\theta} + m_s l_1\\ddot{x}\\cos\\theta + m_s g l_1\\sin\\theta + c_T\\dot{\\theta} + k_T\\theta = M_1",
+          "note": "The pendulum's equation; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "I", "means": "inertia of rod and end mass about the pin, l₁²(m₁/3 + m₃) [kg·m²] (not defined in the source)" },
+            { "tex": "\\theta,\\ \\dot{\\theta},\\ \\ddot{\\theta}", "means": "rod angle from the downward vertical [rad] and its rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "m_s", "means": "first moment of the pendulum per length, m₁/2 + m₃ [kg] (group report eq. 10; not on the task sheet)" },
+            { "tex": "l_1", "means": "rod length [m] (task sheet p. 2)" },
+            { "tex": "\\ddot{x}", "means": "acceleration of block m₂ [m/s²] (not defined in the source)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 2; no value given)" },
+            { "tex": "c_T", "means": "rotary damper at the pin [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+            { "tex": "k_T", "means": "torsion spring at the pin [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+            { "tex": "M_1", "means": "moment at the pin M₀₁ cos(Ω₁t + φ₁) [N·m] (task sheet p. 2)" }
+          ]
+        },
+        {
+          "eq": "M = [m_ges m_s l₁; m_s l₁ I], K = [k 0; 0 m_s g l₁ + k_T]",
+          "tex": "M = \\begin{bmatrix} m_{ges} & m_s l_1 \\\\ m_s l_1 & I \\end{bmatrix}, \\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_s g l_1 + k_T \\end{bmatrix}",
+          "note": "Linearised at x = 0, θ = 0: coupled through M",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "M", "means": "mass matrix of the linearised equations [kg, kg·m²] (not defined in the source)" },
+            { "tex": "K", "means": "stiffness matrix of the linearised equations [N/m, N·m/rad] (not defined in the source)" },
+            { "tex": "m_{ges}", "means": "total mass m₁ + m₂ + m₃ [kg] (group report eq. 11; not on the task sheet)" },
+            { "tex": "I", "means": "inertia of rod and end mass about the pin, l₁²(m₁/3 + m₃) [kg·m²] (not defined in the source)" },
+            { "tex": "m_s", "means": "first moment of the pendulum per length, m₁/2 + m₃ [kg] (group report eq. 10; not on the task sheet)" },
+            { "tex": "l_1", "means": "rod length [m] (task sheet p. 2)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 2; no value given)" },
+            { "tex": "k_T", "means": "torsion spring at the pin [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 2)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's starting values (masses 0.1 kg, l₁ = 0.2 m, k = 10 N/m, k_T = 0.1 N·m/rad), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0", "answer": 0.80619, "unit": "Hz", "compute": { "law": "cartF", "dir": "horizontal", "m1": 0.1, "m2": 0.1, "m3": 0.1, "l1": 0.2, "k": 10, "c": 1, "kT": 0.1, "cT": 0.01, "mode": 0 }, "solution": "From M = [0.3 0.03; 0.03 0.00533] and K = [10 0; 0 0.394]: λ₁ = 25.66 s⁻², f = 0.806 Hz." }
@@ -194,10 +807,58 @@
       "lecture": "Puhwein (2021b), task 5, p. 3",
       "law": "m₁ẍ₁ + c₁(ẋ₁ − ẇ) + k₁(x₁ − w) − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = 0",
       "lawTex": "m_1\\ddot{x}_1 + c_1(\\dot{x}_1 - \\dot{w}) + k_1(x_1 - w) - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = 0",
+      "lawWhere": [
+        { "tex": "m_1", "means": "masses (m₁ wheel, m₂ body) [kg] (task sheet p. 3)" },
+        { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2,\\ \\ddot{x}_1", "means": "upward displacements [m] of m₁, m₂ and their rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+        { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+        { "tex": "w,\\ \\dot{w}", "means": "path excitation of the road [m] and its rate [m/s] (task sheet p. 3)" }
+      ],
       "equations": [
-        { "eq": "m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = 0", "tex": "m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = 0", "note": "The body; with the wheel's, the response step integrates both", "ref": "", "explore": true },
-        { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The road, as the sheet writes it", "ref": "task sheet p. 3", "explore": true },
-        { "eq": "(K − ω²M + jωC) X = [k₁ + jωc₁; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\begin{bmatrix} k_1 + \\mathrm{j}\\omega c_1 \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |x₂/ŵ₀| plotted", "ref": "", "explore": true }
+        {
+          "eq": "m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = 0",
+          "tex": "m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = 0",
+          "note": "The body; with the wheel's, the response step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "masses (m₁ wheel, m₂ body) [kg] (task sheet p. 3)" },
+            { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2,\\ \\ddot{x}_2", "means": "upward displacements [m] of m₁, m₂ and their rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 3)" }
+          ]
+        },
+        {
+          "eq": "w(t) = ŵ₀ cos(Ωt)",
+          "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)",
+          "note": "The road, from the sheet with the phase φ = 0",
+          "ref": "task sheet p. 3",
+          "explore": true,
+          "where": [
+            { "tex": "w(t)", "means": "path excitation [m] (task sheet p. 3); the sheet writes ŵ₀ cos(Ωt + φ), the lab takes φ = 0" },
+            { "tex": "\\hat{w}_0", "means": "amplitude [m] (task sheet p. 3)" },
+            { "tex": "\\Omega", "means": "excitation angular frequency [rad/s] (task sheet p. 3)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        },
+        {
+          "eq": "(K − ω²M + jωC) X = [k₁ + jωc₁; 0] ŵ₀",
+          "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\begin{bmatrix} k_1 + \\mathrm{j}\\omega c_1 \\\\ 0 \\end{bmatrix}\\hat{w}_0",
+          "note": "The transmissibility |x₂/ŵ₀| plotted",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "K", "means": "stiffness matrix [N/m] (not defined in the source)" },
+            { "tex": "M", "means": "mass matrix [kg] (not defined in the source)" },
+            { "tex": "C", "means": "damping matrix [N·s/m] (not defined in the source)" },
+            { "tex": "\\omega", "means": "excitation angular frequency [rad/s] (not defined in the source)" },
+            { "tex": "\\mathrm{j}", "means": "imaginary unit (not defined in the source)" },
+            { "tex": "\\hat{\\mathbf{x}}", "means": "complex amplitudes of x₁ and x₂ [m] (not defined in the source)" },
+            { "tex": "k_1", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "c_1", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "\\hat{w}_0", "means": "amplitude of the path excitation [m] (task sheet p. 3)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "Wheel 40 kg, body 300 kg, tyre 200 kN/m, suspension 20 kN/m: what is the body's (lower) eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 1.2383, "unit": "Hz", "compute": { "law": "chainF", "m1": 40, "m2": 300, "k1": 200000, "k2": 20000, "c1": 100, "c2": 1500, "mode": 0 }, "solution": "λ₁ = 60.5 s⁻², √60.5/2π = 1.24 Hz (the wheel hops at 11.8 Hz)." }
@@ -210,11 +871,75 @@
       "lecture": "Puhwein (2021b), task 6, p. 3",
       "law": "J₁φ̈₁ + c_T1(φ̇₁ − ẇ) + k_T1(φ₁ − w) − c_T2(φ̇₂ − φ̇₁) − k_T2(φ₂ − φ₁) = M₁",
       "lawTex": "J_1\\ddot{\\varphi}_1 + c_{T1}(\\dot{\\varphi}_1 - \\dot{w}) + k_{T1}(\\varphi_1 - w) - c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) - k_{T2}(\\varphi_2 - \\varphi_1) = M_1",
+      "lawWhere": [
+        { "tex": "J_1", "means": "mass moments of inertia of the discs [kg·m²] (task sheet p. 3)" },
+        { "tex": "\\ddot{\\varphi}_1", "means": "angular acceleration of disc 1 [rad/s²] (not defined in the source)" },
+        { "tex": "\\varphi_1,\\ \\varphi_2,\\ \\dot{\\varphi}_1,\\ \\dot{\\varphi}_2", "means": "disc angles [rad] and angular velocities [rad/s] (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "c_{T1},\\ c_{T2}", "means": "torsion damping coefficients [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+        { "tex": "k_{T1},\\ k_{T2}", "means": "torsion spring stiffnesses [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+        { "tex": "w,\\ \\dot{w}", "means": "angle of the shaft end [rad] and its rate, the path excitation (task sheet p. 3)" },
+        { "tex": "M_1", "means": "moment on J₁ M₀₁ cos(Ω₁t + φ₁) [N·m] (task sheet p. 3)" }
+      ],
       "equations": [
-        { "eq": "J₂φ̈₂ + c_T2(φ̇₂ − φ̇₁) + k_T2(φ₂ − φ₁) = M₂", "tex": "J_2\\ddot{\\varphi}_2 + c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) + k_{T2}(\\varphi_2 - \\varphi_1) = M_2", "note": "The second disc; the response step integrates both, driven by w, M₁ and M₂", "ref": "", "explore": true },
-        { "eq": "M₁(t) = M₀₁ cos(Ω₁t), M₂(t) = M₀₂ cos(Ω₂t)", "tex": "M_1(t) = M_{01}\\cos(\\Omega_1 t),\\; M_2(t) = M_{02}\\cos(\\Omega_2 t)", "note": "The torques on J₁ and J₂, as drawn, each at its own frequency (phases φ₁, φ₂ taken 0)", "ref": "task sheet p. 3", "explore": true },
-        { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The shaft end's angle, as the sheet writes it", "ref": "task sheet p. 3", "explore": true },
-        { "eq": "(K − ω²M + jωC) X = [k_T1 + jωc_T1; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\boldsymbol{\\varphi}} = \\begin{bmatrix} k_{T1} + \\mathrm{j}\\omega c_{T1} \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |φ₂/ŵ₀| plotted", "ref": "", "explore": true }
+        {
+          "eq": "J₂φ̈₂ + c_T2(φ̇₂ − φ̇₁) + k_T2(φ₂ − φ₁) = M₂",
+          "tex": "J_2\\ddot{\\varphi}_2 + c_{T2}(\\dot{\\varphi}_2 - \\dot{\\varphi}_1) + k_{T2}(\\varphi_2 - \\varphi_1) = M_2",
+          "note": "The second disc; the response step integrates both, driven by w, M₁ and M₂",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "J_2", "means": "mass moments of inertia of the discs [kg·m²] (task sheet p. 3)" },
+            { "tex": "\\ddot{\\varphi}_2", "means": "angular acceleration of disc 2 [rad/s²] (not defined in the source)" },
+            { "tex": "\\varphi_1,\\ \\varphi_2,\\ \\dot{\\varphi}_1,\\ \\dot{\\varphi}_2", "means": "disc angles [rad] and angular velocities [rad/s] (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "c_{T2}", "means": "torsion damping coefficients [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "k_{T2}", "means": "torsion spring stiffnesses [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "M_2", "means": "moment on J₂ M₀₂ cos(Ω₂t + φ₂) [N·m] (task sheet p. 3)" }
+          ]
+        },
+        {
+          "eq": "M₁(t) = M₀₁ cos(Ω₁t), M₂(t) = M₀₂ cos(Ω₂t)",
+          "tex": "M_1(t) = M_{01}\\cos(\\Omega_1 t),\\; M_2(t) = M_{02}\\cos(\\Omega_2 t)",
+          "note": "The torques on J₁ and J₂, as drawn, each at its own frequency (phases φ₁, φ₂ taken 0)",
+          "ref": "task sheet p. 3",
+          "explore": true,
+          "where": [
+            { "tex": "M_1(t),\\ M_2(t)", "means": "moments on J₁ and J₂ [N·m] (task sheet p. 3); the lab takes the phases φ₁, φ₂ as 0" },
+            { "tex": "M_{01},\\ M_{02}", "means": "moment amplitudes [N·m] (task sheet p. 3)" },
+            { "tex": "\\Omega_1,\\ \\Omega_2", "means": "excitation angular frequencies [rad/s] (task sheet p. 3)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        },
+        {
+          "eq": "w(t) = ŵ₀ cos(Ωt)",
+          "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)",
+          "note": "The shaft end's angle, from the sheet with the phase φ = 0",
+          "ref": "task sheet p. 3",
+          "explore": true,
+          "where": [
+            { "tex": "w(t)", "means": "angle of the shaft end [rad] (task sheet p. 3); the sheet writes ŵ₀ cos(Ωt + φ), the lab takes φ = 0" },
+            { "tex": "\\hat{w}_0", "means": "amplitude [rad] (task sheet p. 3)" },
+            { "tex": "\\Omega", "means": "excitation angular frequency [rad/s] (task sheet p. 3)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        },
+        {
+          "eq": "(K − ω²M + jωC) X = [k_T1 + jωc_T1; 0] ŵ₀",
+          "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\boldsymbol{\\varphi}} = \\begin{bmatrix} k_{T1} + \\mathrm{j}\\omega c_{T1} \\\\ 0 \\end{bmatrix}\\hat{w}_0",
+          "note": "The transmissibility |φ₂/ŵ₀| plotted",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "K", "means": "stiffness matrix [N·m/rad] (not defined in the source)" },
+            { "tex": "M", "means": "inertia matrix [kg·m²] (not defined in the source)" },
+            { "tex": "C", "means": "damping matrix [N·m·s/rad] (not defined in the source)" },
+            { "tex": "\\omega", "means": "excitation angular frequency [rad/s] (not defined in the source)" },
+            { "tex": "\\mathrm{j}", "means": "imaginary unit (not defined in the source)" },
+            { "tex": "\\hat{\\boldsymbol{\\varphi}}", "means": "complex amplitudes of φ₁ and φ₂ [rad] (not defined in the source)" },
+            { "tex": "k_{T1}", "means": "torsion spring stiffnesses [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "c_{T1}", "means": "torsion damping coefficients [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 3)" },
+            { "tex": "\\hat{w}_0", "means": "amplitude of the shaft end's angle [rad] (task sheet p. 3)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "J₁ = 0.02, J₂ = 0.05 kg·m², k_T1 = 50, k_T2 = 80 N·m/rad: what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 3.6581, "unit": "Hz", "compute": { "law": "chainF", "m1": 0.02, "m2": 0.05, "k1": 50, "k2": 80, "c1": 0.02, "c2": 0.02, "mode": 0 }, "solution": "λ₁ = 528 s⁻², f = 3.66 Hz." }
@@ -227,10 +952,58 @@
       "lecture": "Puhwein (2021b), task 7, p. 4",
       "law": "m₁ẍ₁ + c₁(ẋ₁ − ẇ) + k₁(x₁ − w) − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = 0",
       "lawTex": "m_1\\ddot{x}_1 + c_1(\\dot{x}_1 - \\dot{w}) + k_1(x_1 - w) - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = 0",
+      "lawWhere": [
+        { "tex": "m_1", "means": "masses (m₁ upper, m₂ lower) [kg] (task sheet p. 4)" },
+        { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2,\\ \\ddot{x}_1", "means": "downward displacements [m] of m₁, m₂ and their rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+        { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+        { "tex": "w,\\ \\dot{w}", "means": "path excitation of the suspension point [m] and its rate [m/s] (task sheet p. 4)" }
+      ],
       "equations": [
-        { "eq": "m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = 0", "tex": "m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = 0", "note": "The lower mass; the response step integrates both", "ref": "", "explore": true },
-        { "eq": "w(t) = ŵ₀ cos(Ωt)", "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)", "note": "The suspension point, as the sheet writes it", "ref": "task sheet p. 4", "explore": true },
-        { "eq": "(K − ω²M + jωC) X = [k₁ + jωc₁; 0] ŵ₀", "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\begin{bmatrix} k_1 + \\mathrm{j}\\omega c_1 \\\\ 0 \\end{bmatrix}\\hat{w}_0", "note": "The transmissibility |x₂/ŵ₀| plotted", "ref": "", "explore": true }
+        {
+          "eq": "m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = 0",
+          "tex": "m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = 0",
+          "note": "The lower mass; the response step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "masses (m₁ upper, m₂ lower) [kg] (task sheet p. 4)" },
+            { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2,\\ \\ddot{x}_2", "means": "downward displacements [m] of m₁, m₂ and their rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" }
+          ]
+        },
+        {
+          "eq": "w(t) = ŵ₀ cos(Ωt)",
+          "tex": "w(t) = \\hat{w}_0\\cos(\\Omega t)",
+          "note": "The suspension point, from the sheet with the phase φ = 0",
+          "ref": "task sheet p. 4",
+          "explore": true,
+          "where": [
+            { "tex": "w(t)", "means": "path excitation [m] (task sheet p. 4); the sheet writes ŵ₀ cos(Ωt + φ), the lab takes φ = 0" },
+            { "tex": "\\hat{w}_0", "means": "amplitude [m] (task sheet p. 4)" },
+            { "tex": "\\Omega", "means": "excitation angular frequency [rad/s] (task sheet p. 4)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        },
+        {
+          "eq": "(K − ω²M + jωC) X = [k₁ + jωc₁; 0] ŵ₀",
+          "tex": "(K - \\omega^2 M + \\mathrm{j}\\omega C)\\,\\hat{\\mathbf{x}} = \\begin{bmatrix} k_1 + \\mathrm{j}\\omega c_1 \\\\ 0 \\end{bmatrix}\\hat{w}_0",
+          "note": "The transmissibility |x₂/ŵ₀| plotted",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "K", "means": "stiffness matrix [N/m] (not defined in the source)" },
+            { "tex": "M", "means": "mass matrix [kg] (not defined in the source)" },
+            { "tex": "C", "means": "damping matrix [N·s/m] (not defined in the source)" },
+            { "tex": "\\omega", "means": "excitation angular frequency [rad/s] (not defined in the source)" },
+            { "tex": "\\mathrm{j}", "means": "imaginary unit (not defined in the source)" },
+            { "tex": "\\hat{\\mathbf{x}}", "means": "complex amplitudes of x₁ and x₂ [m] (not defined in the source)" },
+            { "tex": "k_1", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "c_1", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "\\hat{w}_0", "means": "amplitude of the path excitation [m] (task sheet p. 4)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the TM3 note's masses and springs (1 kg, 1 kg, 2000 N/m, 750 N/m), what is the higher eigenfrequency of the hanging chain?", "source": "worked here; the same K and M as the TM3 note p. 1, so its f0_2 = 8.7173 Hz", "answer": 8.7173, "unit": "Hz", "compute": { "law": "chainF", "m1": 1, "m2": 1, "k1": 2000, "k2": 750, "c1": 1.6, "c2": 0.2, "mode": 1 }, "solution": "The same matrices as the lying two-mass oscillator: gravity only shifts the rest." }
@@ -243,9 +1016,51 @@
       "lecture": "Puhwein (2021b), task 1, p. 1",
       "law": "m₁r̈ − m₁rφ̇² − m₁g cos φ + k(r − l₀) + c ṙ = 0",
       "lawTex": "m_1\\ddot{r} - m_1 r\\dot{\\varphi}^2 - m_1 g\\cos\\varphi + k(r - l_0) + c\\dot{r} = 0",
+      "lawWhere": [
+        { "tex": "m_1", "means": "block mass [kg] (task sheet p. 1)" },
+        { "tex": "r,\\ \\dot{r},\\ \\ddot{r}", "means": "distance pivot to block centre [m] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "\\varphi,\\ \\dot{\\varphi}", "means": "swing angle from the downward vertical [rad] and its rate (not defined in the source)" },
+        { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+        { "tex": "k", "means": "stiffness of the spring in the rod [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+        { "tex": "l_0", "means": "unstretched length of the rod spring [m] (not defined in the source)" },
+        { "tex": "c", "means": "damping coefficient of the rod damper [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" }
+      ],
       "equations": [
-        { "eq": "(m₁r² + J₁)φ̈ + 2m₁rṙφ̇ + m₁g r sin φ + k_T φ + c_T φ̇ = M₁", "tex": "(m_1 r^2 + J_1)\\ddot{\\varphi} + 2m_1 r\\dot{r}\\dot{\\varphi} + m_1 g r\\sin\\varphi + k_T\\varphi + c_T\\dot{\\varphi} = M_1", "note": "The swing; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "ω_r = √(k/m₁), ω_φ = √((m₁g r* + k_T)/(m₁r*² + J₁)), r* = l₀ + m₁g/k", "tex": "\\omega_r = \\sqrt{k/m_1},\\quad \\omega_\\varphi = \\sqrt{\\frac{m_1 g r^* + k_T}{m_1 r^{*2} + J_1}},\\quad r^* = l_0 + \\frac{m_1 g}{k}", "note": "Linear at rest the two part", "ref": "", "explore": true }
+        {
+          "eq": "(m₁r² + J₁)φ̈ + 2m₁rṙφ̇ + m₁g r sin φ + k_T φ + c_T φ̇ = M₁",
+          "tex": "(m_1 r^2 + J_1)\\ddot{\\varphi} + 2m_1 r\\dot{r}\\dot{\\varphi} + m_1 g r\\sin\\varphi + k_T\\varphi + c_T\\dot{\\varphi} = M_1",
+          "note": "The swing; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_1", "means": "block mass [kg] (task sheet p. 1)" },
+            { "tex": "r,\\ \\dot{r}", "means": "distance pivot to block centre [m] and its rate (not defined in the source)" },
+            { "tex": "J_1", "means": "block inertia about its centre [kg·m²] (not defined in the source)" },
+            { "tex": "\\varphi,\\ \\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "swing angle [rad] and its rates (not defined in the source)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+            { "tex": "k_T", "means": "torsion spring at the pivot [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "c_T", "means": "rotary damper at the pivot [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "M_1", "means": "moment at the pivot M₀₁ cos(Ω₁t + φ₁) [N·m] (task sheet p. 1)" }
+          ]
+        },
+        {
+          "eq": "ω_r = √(k/m₁), ω_φ = √((m₁g r* + k_T)/(m₁r*² + J₁)), r* = l₀ + m₁g/k",
+          "tex": "\\omega_r = \\sqrt{k/m_1},\\quad \\omega_\\varphi = \\sqrt{\\frac{m_1 g r^* + k_T}{m_1 r^{*2} + J_1}},\\quad r^* = l_0 + \\frac{m_1 g}{k}",
+          "note": "Linear at rest the two part",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "\\omega_r", "means": "natural angular frequency of the bounce [rad/s] (not defined in the source)" },
+            { "tex": "\\omega_\\varphi", "means": "natural angular frequency of the swing [rad/s] (not defined in the source)" },
+            { "tex": "k", "means": "stiffness of the spring in the rod [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "m_1", "means": "block mass [kg] (task sheet p. 1)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 1; no value given)" },
+            { "tex": "r^*", "means": "rest length of the rod [m] (not defined in the source)" },
+            { "tex": "k_T", "means": "torsion spring at the pivot [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 1)" },
+            { "tex": "J_1", "means": "block inertia about its centre [kg·m²] (not defined in the source)" },
+            { "tex": "l_0", "means": "unstretched length of the rod spring [m] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's example values (m₁ = 1 kg, a 0.10 m × 0.06 m block, l₀ = 0.5 m, k = 200 N/m, k_T = 0), at what frequency does the pendulum swing at small angles?", "source": "worked here: ω_φ² = m₁g r*/(m₁r*² + J₁); example values", "answer": 0.67138, "unit": "Hz", "compute": { "law": "elasticF", "m1": 1, "J1": 0.0011333333, "l0": 0.5, "k": 200, "kT": 0, "mode": 0 }, "solution": "r* = 0.5 + 9.80665/200 = 0.549 m; ω² = 9.80665·0.549/(0.549² + 0.00113) = 17.79 s⁻², f = 0.671 Hz. The spring bounces at √200/2π = 2.25 Hz." }
@@ -258,9 +1073,43 @@
       "lecture": "Puhwein (2021b), task 4, p. 2",
       "law": "(m₁+m₃+m₄)ÿ₁ + c₁ẏ₁ + k₁y₁ − c₂(ẏ₂−ẏ₁) − k₂(y₂−y₁) = −(m₃/2 + m₄)l₃Ω² cos Ωt",
       "lawTex": "(m_1+m_3+m_4)\\ddot{y}_1 + c_1\\dot{y}_1 + k_1 y_1 - c_2(\\dot{y}_2-\\dot{y}_1) - k_2(y_2-y_1) = -(m_3/2 + m_4)l_3\\Omega^2\\cos\\Omega t",
+      "lawWhere": [
+        { "tex": "m_1", "means": "lower block mass [kg] (task sheet p. 2)" },
+        { "tex": "m_3", "means": "rod mass [kg] (task sheet p. 2)" },
+        { "tex": "m_4", "means": "unbalance mass [kg] (task sheet p. 2)" },
+        { "tex": "l_3", "means": "rod length [m] (task sheet p. 2)" },
+        { "tex": "y_1,\\ y_2,\\ \\dot{y}_1,\\ \\dot{y}_2,\\ \\ddot{y}_1", "means": "upward displacements of m₁, m₂ [m] and their rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+        { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+        { "tex": "\\Omega", "means": "drive angular speed Ω(t), read as prescribed and constant [rad/s] (task sheet p. 2)" },
+        { "tex": "t", "means": "time [s] (not defined in the source)" }
+      ],
       "equations": [
-        { "eq": "m₂ÿ₂ + c₂(ẏ₂ − ẏ₁) + k₂(y₂ − y₁) = 0", "tex": "m_2\\ddot{y}_2 + c_2(\\dot{y}_2 - \\dot{y}_1) + k_2(y_2 - y_1) = 0", "note": "The upper mass; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "β(t) = Ωt", "tex": "\\beta(t) = \\Omega t", "note": "The rod's angle, driven: Ω(t) read as a prescribed speed", "ref": "", "explore": true }
+        {
+          "eq": "m₂ÿ₂ + c₂(ẏ₂ − ẏ₁) + k₂(y₂ − y₁) = 0",
+          "tex": "m_2\\ddot{y}_2 + c_2(\\dot{y}_2 - \\dot{y}_1) + k_2(y_2 - y_1) = 0",
+          "note": "The upper mass; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "upper block mass [kg] (task sheet p. 2)" },
+            { "tex": "y_1,\\ y_2,\\ \\dot{y}_1,\\ \\dot{y}_2,\\ \\ddot{y}_2", "means": "upward displacements of m₁, m₂ [m] and their rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "c_2", "means": "damping coefficient [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" },
+            { "tex": "k_2", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 2)" }
+          ]
+        },
+        {
+          "eq": "β(t) = Ωt",
+          "tex": "\\beta(t) = \\Omega t",
+          "note": "The rod's angle, driven: Ω(t) read as a prescribed speed",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "\\beta(t)", "means": "rod angle [rad] (not defined in the source)" },
+            { "tex": "\\Omega", "means": "drive angular speed Ω(t), read as prescribed and constant [rad/s] (task sheet p. 2)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's example values (m₁ = 2 kg, m₂ = 1 kg, m₃ = 0.1 kg, m₄ = 0.05 kg, k₁ = 2000 N/m, k₂ = 750 N/m), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0 with M = diag(m₁+m₃+m₄, m₂); example values", "answer": 3.33346, "unit": "Hz", "compute": { "law": "unbalanceF", "m1": 2, "m2": 1, "m3": 0.1, "m4": 0.05, "l3": 0.1, "k1": 2000, "k2": 750, "mode": 0 }, "solution": "M = diag(2.15, 1), K = [2750 −750; −750 750]: λ₁ = 438.7 s⁻², f = 3.33 Hz (and 6.35 Hz)." }
@@ -273,9 +1122,59 @@
       "lecture": "Puhwein (2021b), task 8, p. 4",
       "law": "J₁φ̈₁ + 2g l₁(m₁+m₃) sin φ₁ + k_T φ₁ + c_T φ̇₁ + [k(S − b) + cṠ] ∂S/∂φ₁ = M₁",
       "lawTex": "J_1\\ddot{\\varphi}_1 + 2g l_1(m_1+m_3)\\sin\\varphi_1 + k_T\\varphi_1 + c_T\\dot{\\varphi}_1 + [k(S - b) + c\\dot{S}]\\,\\partial S/\\partial\\varphi_1 = M_1",
+      "lawWhere": [
+        { "tex": "J_1", "means": "inertia of rod 1 with its end mass about the pivot, (8/3)m₁l1² + 4m₃l1² [kg·m²] (not defined in the source)" },
+        { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 4; no value given)" },
+        { "tex": "l_1", "means": "length of each of rod 1's two segments [m] (task sheet p. 4); the sheet labels the rod twice" },
+        { "tex": "m_1", "means": "mass of each segment of rod 1 [kg] (task sheet p. 4)" },
+        { "tex": "m_3", "means": "end mass of rod 1 [kg] (task sheet p. 4)" },
+        { "tex": "\\varphi_1,\\ \\dot{\\varphi}_1,\\ \\ddot{\\varphi}_1", "means": "angle of rod 1 from the downward vertical [rad] and its rates (not defined in the source)" },
+        { "tex": "k_T", "means": "torsion spring at each pivot [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+        { "tex": "c_T", "means": "rotary damper at each pivot [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+        { "tex": "k", "means": "coupling spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+        { "tex": "c", "means": "coupling damper [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+        { "tex": "S,\\ \\dot{S}", "means": "length of the coupling spring [m] and its rate (not defined in the source)" },
+        { "tex": "b", "means": "distance between the pivots, the spring length at rest [m] (not defined in the source)" },
+        { "tex": "\\partial S/\\partial\\varphi_1", "means": "change of spring length with φ₁ [m/rad] (not defined in the source)" },
+        { "tex": "M_1", "means": "moment at pivot 1 M̂₀1 cos(Ω1t + φ1) [N·m] (task sheet p. 4)" }
+      ],
       "equations": [
-        { "eq": "J₂φ̈₂ + 2g l₂(m₂+m₄) sin φ₂ + k_T φ₂ + c_T φ̇₂ + [k(S − b) + cṠ] ∂S/∂φ₂ = M₂", "tex": "J_2\\ddot{\\varphi}_2 + 2g l_2(m_2+m_4)\\sin\\varphi_2 + k_T\\varphi_2 + c_T\\dot{\\varphi}_2 + [k(S - b) + c\\dot{S}]\\,\\partial S/\\partial\\varphi_2 = M_2", "note": "The second pendulum; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "S = √[(b + l₂ sin φ₂ − l₁ sin φ₁)² + (l₁ cos φ₁ − l₂ cos φ₂)²]", "tex": "S = \\sqrt{(b + l_2\\sin\\varphi_2 - l_1\\sin\\varphi_1)^2 + (l_1\\cos\\varphi_1 - l_2\\cos\\varphi_2)^2}", "note": "The spring's length, exact", "ref": "", "explore": true }
+        {
+          "eq": "J₂φ̈₂ + 2g l₂(m₂+m₄) sin φ₂ + k_T φ₂ + c_T φ̇₂ + [k(S − b) + cṠ] ∂S/∂φ₂ = M₂",
+          "tex": "J_2\\ddot{\\varphi}_2 + 2g l_2(m_2+m_4)\\sin\\varphi_2 + k_T\\varphi_2 + c_T\\dot{\\varphi}_2 + [k(S - b) + c\\dot{S}]\\,\\partial S/\\partial\\varphi_2 = M_2",
+          "note": "The second pendulum; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "J_2", "means": "inertia of rod 2 with its end mass about the pivot, (8/3)m₂l2² + 4m₄l2² [kg·m²] (not defined in the source)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 4; no value given)" },
+            { "tex": "l_2", "means": "length of each of rod 2's two segments [m] (task sheet p. 4); the sheet labels the rod twice" },
+            { "tex": "m_2", "means": "mass of each segment of rod 2 [kg] (task sheet p. 4)" },
+            { "tex": "m_4", "means": "end mass of rod 2 [kg] (task sheet p. 4)" },
+            { "tex": "\\varphi_2,\\ \\dot{\\varphi}_2,\\ \\ddot{\\varphi}_2", "means": "angle of rod 2 from the downward vertical [rad] and its rates (not defined in the source)" },
+            { "tex": "k_T", "means": "torsion spring at each pivot [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "c_T", "means": "rotary damper at each pivot [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "k", "means": "coupling spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "c", "means": "coupling damper [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 4)" },
+            { "tex": "S,\\ \\dot{S}", "means": "length of the coupling spring [m] and its rate (not defined in the source)" },
+            { "tex": "b", "means": "distance between the pivots, the spring length at rest [m] (not defined in the source)" },
+            { "tex": "\\partial S/\\partial\\varphi_2", "means": "change of spring length with φ₂ [m/rad] (not defined in the source)" },
+            { "tex": "M_2", "means": "moment at pivot 2 M̂₀2 cos(Ω2t + φ2) [N·m] (task sheet p. 4)" }
+          ]
+        },
+        {
+          "eq": "S = √[(b + l₂ sin φ₂ − l₁ sin φ₁)² + (l₁ cos φ₁ − l₂ cos φ₂)²]",
+          "tex": "S = \\sqrt{(b + l_2\\sin\\varphi_2 - l_1\\sin\\varphi_1)^2 + (l_1\\cos\\varphi_1 - l_2\\cos\\varphi_2)^2}",
+          "note": "The spring's length, exact",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "S", "means": "length of the coupling spring [m] (not defined in the source)" },
+            { "tex": "b", "means": "distance between the pivots, the spring length at rest [m] (not defined in the source)" },
+            { "tex": "l_1,\\ l_2", "means": "segment lengths of rods 1 and 2 [m] (task sheet p. 4)" },
+            { "tex": "\\varphi_1,\\ \\varphi_2", "means": "rod angles from the downward vertical [rad] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's example values (segments 0.05 kg and 0.25 m, end masses 0.5 kg, k = 20 N/m, k_T = 0), at what frequency do the pendulums swing against each other?", "source": "worked here: ω₂ = √((G + 2k l₁²)/J); example values", "answer": 0.99362, "unit": "Hz", "compute": { "law": "coupledF", "m1": 0.05, "l1": 0.25, "m2": 0.05, "l2": 0.25, "m3": 0.5, "m4": 0.5, "b": 0.4, "k": 20, "kT": 0, "mode": 1 }, "solution": "J = (8/3)·0.05·0.0625 + 4·0.5·0.0625 = 0.1333 kg·m², G = 2·9.80665·0.25·0.55 = 2.697 N·m: in phase √(G/J) = 0.716 Hz; against each other √((G + 2·20·0.0625)/J) = 0.994 Hz." }
@@ -288,9 +1187,44 @@
       "lecture": "Puhwein (2021b), task 9, p. 5",
       "law": "(3/2)m₁ẍ₁ + c₁ẋ₁ + k₁x₁ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = M₁/r₁",
       "lawTex": "\\tfrac{3}{2}m_1\\ddot{x}_1 + c_1\\dot{x}_1 + k_1 x_1 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = M_1/r_1",
+      "lawWhere": [
+        { "tex": "m_1", "means": "mass of disc 1 [kg] (task sheet p. 5)" },
+        { "tex": "\\ddot{x}_1", "means": "acceleration of axle 1 [m/s²] (not defined in the source)" },
+        { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+        { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+        { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2", "means": "axle positions of discs 1 and 2 [m] and their rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "M_1", "means": "moment on disc 1 [N·m] (task sheet p. 5)" },
+        { "tex": "r_1", "means": "radius of disc 1 [m] (not given on the task sheet, p. 5)" }
+      ],
       "equations": [
-        { "eq": "(3/2)m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = F₁", "tex": "\\tfrac{3}{2}m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = F_1", "note": "Disc 2; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "M₁(t) = M₀₁ cos(Ωt), F₁(t) = F₀₁ cos(Ωt)", "tex": "M_1(t) = M_{01}\\cos(\\Omega t),\\quad F_1(t) = F_{01}\\cos(\\Omega t)", "note": "The drive, as the sheet writes it", "ref": "task sheet p. 5", "explore": true }
+        {
+          "eq": "(3/2)m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = F₁",
+          "tex": "\\tfrac{3}{2}m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = F_1",
+          "note": "Disc 2; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "mass of disc 2 [kg] (task sheet p. 5)" },
+            { "tex": "\\ddot{x}_2", "means": "acceleration of axle 2 [m/s²] (not defined in the source)" },
+            { "tex": "c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+            { "tex": "k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+            { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2", "means": "axle positions of discs 1 and 2 [m] and their rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "F_1", "means": "force on the axle of disc 2 [N] (task sheet p. 5)" }
+          ]
+        },
+        {
+          "eq": "M₁(t) = M₀₁ cos(Ωt), F₁(t) = F₀₁ cos(Ωt)",
+          "tex": "M_1(t) = M_{01}\\cos(\\Omega t),\\quad F_1(t) = F_{01}\\cos(\\Omega t)",
+          "note": "The drive, as the sheet writes it",
+          "ref": "task sheet p. 5",
+          "explore": true,
+          "where": [
+            { "tex": "M_1(t),\\ F_1(t)", "means": "moment on disc 1 [N·m] and force on axle 2 [N] (task sheet p. 5)" },
+            { "tex": "M_{01},\\ F_{01}", "means": "their amplitudes [N·m], [N] (task sheet p. 5)" },
+            { "tex": "\\Omega", "means": "excitation angular frequency [rad/s] (task sheet p. 5)" },
+            { "tex": "t", "means": "time [s] (not defined in the source)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's example values (discs 2 kg and 1 kg, k₁ = 400 N/m, k₂ = 300 N/m), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0 with M = diag(3/2 m₁, 3/2 m₂); example values", "answer": 1.37157, "unit": "Hz", "compute": { "law": "discsF", "m1": 2, "m2": 1, "r1": 0.1, "k1": 400, "k2": 300, "mode": 0 }, "solution": "M = diag(3, 1.5), K = [700 −300; −300 300]: λ₁ = 74.27 s⁻², f = 1.37 Hz." }
@@ -303,9 +1237,43 @@
       "lecture": "Puhwein (2021b), task 10, p. 5",
       "law": "(3/2)m₁ẍ₁ + 4c₁ẋ₁ + 4k₁x₁ − c₂(ẋ₂ − ẋ₁) − k₂(x₂ − x₁) = M₁/r₁",
       "lawTex": "\\tfrac{3}{2}m_1\\ddot{x}_1 + 4c_1\\dot{x}_1 + 4k_1 x_1 - c_2(\\dot{x}_2 - \\dot{x}_1) - k_2(x_2 - x_1) = M_1/r_1",
+      "lawWhere": [
+        { "tex": "m_1", "means": "mass of disc 1 [kg] (task sheet p. 5)" },
+        { "tex": "\\ddot{x}_1", "means": "acceleration of axle 1 [m/s²] (not defined in the source)" },
+        { "tex": "c_1,\\ c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+        { "tex": "k_1,\\ k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+        { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2", "means": "axle positions of discs 1 and 2 [m] and their rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "M_1", "means": "moment on disc 1 [N·m] (task sheet p. 5)" },
+        { "tex": "r_1", "means": "radius of disc 1 [m] (not given on the task sheet, p. 5)" }
+      ],
       "equations": [
-        { "eq": "(3/2)m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = F₁", "tex": "\\tfrac{3}{2}m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = F_1", "note": "Disc 2; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "V₁ = ½k₁(2x₁)²", "tex": "V_1 = \\tfrac{1}{2}k_1(2x_1)^2", "note": "The top of a rolling rim moves 2x₁ (first order)", "ref": "", "explore": true }
+        {
+          "eq": "(3/2)m₂ẍ₂ + c₂(ẋ₂ − ẋ₁) + k₂(x₂ − x₁) = F₁",
+          "tex": "\\tfrac{3}{2}m_2\\ddot{x}_2 + c_2(\\dot{x}_2 - \\dot{x}_1) + k_2(x_2 - x_1) = F_1",
+          "note": "Disc 2; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "mass of disc 2 [kg] (task sheet p. 5)" },
+            { "tex": "\\ddot{x}_2", "means": "acceleration of axle 2 [m/s²] (not defined in the source)" },
+            { "tex": "c_2", "means": "damping coefficients [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+            { "tex": "k_2", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+            { "tex": "x_1,\\ x_2,\\ \\dot{x}_1,\\ \\dot{x}_2", "means": "axle positions of discs 1 and 2 [m] and their rates (not defined in the source): the sheet draws no coordinate" },
+            { "tex": "F_1", "means": "force on the axle of disc 2 [N] (task sheet p. 5)" }
+          ]
+        },
+        {
+          "eq": "V₁ = ½k₁(2x₁)²",
+          "tex": "V_1 = \\tfrac{1}{2}k_1(2x_1)^2",
+          "note": "The top of a rolling rim moves 2x₁ (first order)",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "V_1", "means": "potential energy of the wall spring [J] (not defined in the source)" },
+            { "tex": "k_1", "means": "spring stiffnesses [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 5)" },
+            { "tex": "x_1", "means": "axle position of disc 1 [m] (not defined in the source); the rim top moves 2x₁" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With task 9's example values but the wall spring at the top of the rim, what is the lower eigenfrequency?", "source": "worked here: K₁₁ = 4k₁ + k₂; example values", "answer": 2.00011, "unit": "Hz", "compute": { "law": "discsF", "m1": 2, "m2": 1, "r1": 0.1, "k1": 400, "k2": 300, "top": true, "mode": 0 }, "solution": "K = [1900 −300; −300 300], M = diag(3, 1.5): λ₁ = 157.9 s⁻², f = 2.00 Hz." }
@@ -318,9 +1286,49 @@
       "lecture": "Puhwein (2021b), task 11, p. 6",
       "law": "(3/2 m₁ + m₂)ẍ + m₂l(φ̈ cos φ − φ̇² sin φ) + 4cẋ + 4kx = F₁ + M₁/r",
       "lawTex": "(\\tfrac{3}{2}m_1 + m_2)\\ddot{x} + m_2 l(\\ddot{\\varphi}\\cos\\varphi - \\dot{\\varphi}^2\\sin\\varphi) + 4c\\dot{x} + 4kx = F_1 + M_1/r",
+      "lawWhere": [
+        { "tex": "m_1", "means": "disc mass [kg] (task sheet p. 6)" },
+        { "tex": "m_2", "means": "bob mass [kg] (task sheet p. 6)" },
+        { "tex": "x,\\ \\dot{x},\\ \\ddot{x}", "means": "axle position of the disc [m] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "l", "means": "rod length [m] (not labelled on the task sheet, p. 6)" },
+        { "tex": "\\varphi,\\ \\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "pendulum angle from the downward vertical [rad] and its rates (not defined in the source)" },
+        { "tex": "c", "means": "damping coefficient [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 6)" },
+        { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 6)" },
+        { "tex": "F_1", "means": "force on the disc axle F₀₁ cos(Ωt) [N] (task sheet p. 6)" },
+        { "tex": "M_1", "means": "moment on the disc M₀₁ cos(Ωt) [N·m] (task sheet p. 6)" },
+        { "tex": "r", "means": "disc radius [m] (not given on the task sheet, p. 6)" }
+      ],
       "equations": [
-        { "eq": "m₂l²φ̈ + m₂lẍ cos φ + m₂g l sin φ = 0", "tex": "m_2 l^2\\ddot{\\varphi} + m_2 l\\ddot{x}\\cos\\varphi + m_2 g l\\sin\\varphi = 0", "note": "The pendulum; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "M = [3/2 m₁ + m₂  m₂l; m₂l  m₂l²], K = [4k 0; 0 m₂g l]", "tex": "M = \\begin{bmatrix} \\tfrac{3}{2}m_1 + m_2 & m_2 l \\\\ m_2 l & m_2 l^2 \\end{bmatrix},\\quad K = \\begin{bmatrix} 4k & 0 \\\\ 0 & m_2 g l \\end{bmatrix}", "note": "Linear at rest: coupled through M", "ref": "", "explore": true }
+        {
+          "eq": "m₂l²φ̈ + m₂lẍ cos φ + m₂g l sin φ = 0",
+          "tex": "m_2 l^2\\ddot{\\varphi} + m_2 l\\ddot{x}\\cos\\varphi + m_2 g l\\sin\\varphi = 0",
+          "note": "The pendulum; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "bob mass [kg] (task sheet p. 6)" },
+            { "tex": "l", "means": "rod length [m] (not labelled on the task sheet, p. 6)" },
+            { "tex": "\\varphi,\\ \\ddot{\\varphi}", "means": "pendulum angle from the downward vertical [rad] and its rates (not defined in the source)" },
+            { "tex": "\\ddot{x}", "means": "acceleration of the disc axle [m/s²] (not defined in the source)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 6; no value given)" }
+          ]
+        },
+        {
+          "eq": "M = [3/2 m₁ + m₂  m₂l; m₂l  m₂l²], K = [4k 0; 0 m₂g l]",
+          "tex": "M = \\begin{bmatrix} \\tfrac{3}{2}m_1 + m_2 & m_2 l \\\\ m_2 l & m_2 l^2 \\end{bmatrix},\\quad K = \\begin{bmatrix} 4k & 0 \\\\ 0 & m_2 g l \\end{bmatrix}",
+          "note": "Linear at rest: coupled through M",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "M", "means": "mass matrix of the linearised equations [kg, kg·m, kg·m²] (not defined in the source)" },
+            { "tex": "K", "means": "stiffness matrix of the linearised equations [N/m, N·m] (not defined in the source)" },
+            { "tex": "m_1", "means": "disc mass [kg] (task sheet p. 6)" },
+            { "tex": "m_2", "means": "bob mass [kg] (task sheet p. 6)" },
+            { "tex": "l", "means": "rod length [m] (not labelled on the task sheet, p. 6)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 6)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 6; no value given)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's example values (disc 1 kg, bob 0.5 kg, l = 0.4 m, k = 100 N/m held at the top of the rim), what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 0.77512, "unit": "Hz", "compute": { "law": "rollerF", "m1": 1, "m2": 0.5, "r": 0.1, "l": 0.4, "k": 100, "top": true, "mode": 0 }, "solution": "M = [2 0.2; 0.2 0.08], K = [400 0; 0 1.961]: λ₁ = 23.72 s⁻², f = 0.775 Hz." }
@@ -333,9 +1341,49 @@
       "lecture": "Puhwein (2021b), task 12, p. 6",
       "law": "(3/2 m₁ + m₂)ẍ + m₂l(φ̈ cos φ − φ̇² sin φ) + cẋ + kx = F₁ + M₁/r",
       "lawTex": "(\\tfrac{3}{2}m_1 + m_2)\\ddot{x} + m_2 l(\\ddot{\\varphi}\\cos\\varphi - \\dot{\\varphi}^2\\sin\\varphi) + c\\dot{x} + kx = F_1 + M_1/r",
+      "lawWhere": [
+        { "tex": "m_1", "means": "disc mass [kg] (task sheet p. 6)" },
+        { "tex": "m_2", "means": "bob mass [kg] (task sheet p. 6)" },
+        { "tex": "x,\\ \\dot{x},\\ \\ddot{x}", "means": "axle position of the disc [m] and its rates (not defined in the source): the sheet draws no coordinate" },
+        { "tex": "l", "means": "rod length [m] (not labelled on the task sheet, p. 6)" },
+        { "tex": "\\varphi,\\ \\dot{\\varphi},\\ \\ddot{\\varphi}", "means": "pendulum angle from the downward vertical [rad] and its rates (not defined in the source)" },
+        { "tex": "c", "means": "damping coefficient [N·s/m] (not defined in the source: the task sheet draws it unlabelled, p. 6)" },
+        { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 6)" },
+        { "tex": "F_1", "means": "force on the disc axle F₀₁ cos(Ωt) [N] (task sheet p. 6)" },
+        { "tex": "M_1", "means": "moment on the disc M₀₁ cos(Ωt) [N·m] (task sheet p. 6)" },
+        { "tex": "r", "means": "disc radius [m] (not given on the task sheet, p. 6)" }
+      ],
       "equations": [
-        { "eq": "m₂l²φ̈ + m₂lẍ cos φ + m₂g l sin φ = 0", "tex": "m_2 l^2\\ddot{\\varphi} + m_2 l\\ddot{x}\\cos\\varphi + m_2 g l\\sin\\varphi = 0", "note": "The pendulum; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "M = [3/2 m₁ + m₂  m₂l; m₂l  m₂l²], K = [k 0; 0 m₂g l]", "tex": "M = \\begin{bmatrix} \\tfrac{3}{2}m_1 + m_2 & m_2 l \\\\ m_2 l & m_2 l^2 \\end{bmatrix},\\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_2 g l \\end{bmatrix}", "note": "Linear at rest: coupled through M", "ref": "", "explore": true }
+        {
+          "eq": "m₂l²φ̈ + m₂lẍ cos φ + m₂g l sin φ = 0",
+          "tex": "m_2 l^2\\ddot{\\varphi} + m_2 l\\ddot{x}\\cos\\varphi + m_2 g l\\sin\\varphi = 0",
+          "note": "The pendulum; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "m_2", "means": "bob mass [kg] (task sheet p. 6)" },
+            { "tex": "l", "means": "rod length [m] (not labelled on the task sheet, p. 6)" },
+            { "tex": "\\varphi,\\ \\ddot{\\varphi}", "means": "pendulum angle from the downward vertical [rad] and its rates (not defined in the source)" },
+            { "tex": "\\ddot{x}", "means": "acceleration of the disc axle [m/s²] (not defined in the source)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 6; no value given)" }
+          ]
+        },
+        {
+          "eq": "M = [3/2 m₁ + m₂  m₂l; m₂l  m₂l²], K = [k 0; 0 m₂g l]",
+          "tex": "M = \\begin{bmatrix} \\tfrac{3}{2}m_1 + m_2 & m_2 l \\\\ m_2 l & m_2 l^2 \\end{bmatrix},\\quad K = \\begin{bmatrix} k & 0 \\\\ 0 & m_2 g l \\end{bmatrix}",
+          "note": "Linear at rest: coupled through M",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "M", "means": "mass matrix of the linearised equations [kg, kg·m, kg·m²] (not defined in the source)" },
+            { "tex": "K", "means": "stiffness matrix of the linearised equations [N/m, N·m] (not defined in the source)" },
+            { "tex": "m_1", "means": "disc mass [kg] (task sheet p. 6)" },
+            { "tex": "m_2", "means": "bob mass [kg] (task sheet p. 6)" },
+            { "tex": "l", "means": "rod length [m] (not labelled on the task sheet, p. 6)" },
+            { "tex": "k", "means": "spring stiffness [N/m] (not defined in the source: the task sheet draws it unlabelled, p. 6)" },
+            { "tex": "g", "means": "gravitational acceleration [m/s²] (drawn as an arrow, task sheet p. 6; no value given)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With task 11's example values but the spring at axle height, what is the lower eigenfrequency?", "source": "worked here: det(K − λM) = 0; example values", "answer": 0.72601, "unit": "Hz", "compute": { "law": "rollerF", "m1": 1, "m2": 0.5, "r": 0.1, "l": 0.4, "k": 100, "top": false, "mode": 0 }, "solution": "K = [100 0; 0 1.961]: λ₁ = 20.81 s⁻², f = 0.726 Hz." }
@@ -348,9 +1396,49 @@
       "lecture": "Puhwein (2021b), task 13, p. 7",
       "law": "a₁₁φ̈₁ + b cos(φ₂−φ₁)φ̈₂ − b φ̇₂² sin(φ₂−φ₁) + G₁ sin φ₁ + k₁φ₁ − k₂(φ₂−φ₁) + c₁φ̇₁ − c₂(φ̇₂−φ̇₁) = M₁ − M₂",
       "lawTex": "a_{11}\\ddot{\\varphi}_1 + b\\cos(\\varphi_2-\\varphi_1)\\ddot{\\varphi}_2 - b\\dot{\\varphi}_2^2\\sin(\\varphi_2-\\varphi_1) + G_1\\sin\\varphi_1 + k_1\\varphi_1 - k_2(\\varphi_2-\\varphi_1) + c_1\\dot{\\varphi}_1 - c_2(\\dot{\\varphi}_2-\\dot{\\varphi}_1) = M_1 - M_2",
+      "lawWhere": [
+        { "tex": "a_{11}", "means": "inertia of the arm about the base [kg·m²] (not defined in the source)" },
+        { "tex": "b", "means": "coupling inertia (m₂/2 + m₄)l₁l₂ [kg·m²] (not defined in the source)" },
+        { "tex": "\\varphi_1,\\ \\varphi_2,\\ \\dot{\\varphi}_1,\\ \\dot{\\varphi}_2", "means": "absolute link angles from the downward vertical [rad] and their rates (not defined in the source)" },
+        { "tex": "\\ddot{\\varphi}_1,\\ \\ddot{\\varphi}_2", "means": "angular accelerations [rad/s²] (not defined in the source)" },
+        { "tex": "G_1", "means": "gravity moment coefficient (m₁/2 + m₂ + m₃ + m₄) g l₁ [N·m] (not defined in the source)" },
+        { "tex": "k_1,\\ k_2", "means": "joint torsion springs, base and elbow [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 7)" },
+        { "tex": "c_1,\\ c_2", "means": "joint rotary dampers [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 7)" },
+        { "tex": "M_1,\\ M_2", "means": "joint moments at base and elbow, M₀ᵢ cos(Ωᵢt + φᵢ) [N·m] (task sheet p. 7)" }
+      ],
       "equations": [
-        { "eq": "a₂₂φ̈₂ + b cos(φ₂−φ₁)φ̈₁ + b φ̇₁² sin(φ₂−φ₁) + G₂ sin φ₂ + k₂(φ₂−φ₁) + c₂(φ̇₂−φ̇₁) = M₂", "tex": "a_{22}\\ddot{\\varphi}_2 + b\\cos(\\varphi_2-\\varphi_1)\\ddot{\\varphi}_1 + b\\dot{\\varphi}_1^2\\sin(\\varphi_2-\\varphi_1) + G_2\\sin\\varphi_2 + k_2(\\varphi_2-\\varphi_1) + c_2(\\dot{\\varphi}_2-\\dot{\\varphi}_1) = M_2", "note": "Link 2; the motion step integrates both", "ref": "", "explore": true },
-        { "eq": "a₁₁ = m₁l₁²/3 + (m₂+m₃+m₄)l₁², a₂₂ = m₂l₂²/3 + m₄l₂², b = (m₂/2 + m₄)l₁l₂", "tex": "a_{11} = \\tfrac{1}{3}m_1 l_1^2 + (m_2+m_3+m_4)l_1^2,\\quad a_{22} = \\tfrac{1}{3}m_2 l_2^2 + m_4 l_2^2,\\quad b = (\\tfrac{1}{2}m_2 + m_4)l_1 l_2", "note": "The inertias from T", "ref": "", "explore": true }
+        {
+          "eq": "a₂₂φ̈₂ + b cos(φ₂−φ₁)φ̈₁ + b φ̇₁² sin(φ₂−φ₁) + G₂ sin φ₂ + k₂(φ₂−φ₁) + c₂(φ̇₂−φ̇₁) = M₂",
+          "tex": "a_{22}\\ddot{\\varphi}_2 + b\\cos(\\varphi_2-\\varphi_1)\\ddot{\\varphi}_1 + b\\dot{\\varphi}_1^2\\sin(\\varphi_2-\\varphi_1) + G_2\\sin\\varphi_2 + k_2(\\varphi_2-\\varphi_1) + c_2(\\dot{\\varphi}_2-\\dot{\\varphi}_1) = M_2",
+          "note": "Link 2; the motion step integrates both",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "a_{22}", "means": "inertia of link 2 and load about the elbow [kg·m²] (not defined in the source)" },
+            { "tex": "b", "means": "coupling inertia (m₂/2 + m₄)l₁l₂ [kg·m²] (not defined in the source)" },
+            { "tex": "\\varphi_1,\\ \\varphi_2,\\ \\dot{\\varphi}_1,\\ \\dot{\\varphi}_2", "means": "absolute link angles from the downward vertical [rad] and their rates (not defined in the source)" },
+            { "tex": "\\ddot{\\varphi}_1,\\ \\ddot{\\varphi}_2", "means": "angular accelerations [rad/s²] (not defined in the source)" },
+            { "tex": "G_2", "means": "gravity moment coefficient (m₂/2 + m₄) g l₂ [N·m] (not defined in the source)" },
+            { "tex": "k_2", "means": "joint torsion springs, base and elbow [N·m/rad] (not defined in the source: the task sheet draws it unlabelled, p. 7)" },
+            { "tex": "c_2", "means": "joint rotary dampers [N·m·s/rad] (not defined in the source: the task sheet draws it unlabelled, p. 7)" },
+            { "tex": "M_2", "means": "joint moments at base and elbow, M₀ᵢ cos(Ωᵢt + φᵢ) [N·m] (task sheet p. 7)" }
+          ]
+        },
+        {
+          "eq": "a₁₁ = m₁l₁²/3 + (m₂+m₃+m₄)l₁², a₂₂ = m₂l₂²/3 + m₄l₂², b = (m₂/2 + m₄)l₁l₂",
+          "tex": "a_{11} = \\tfrac{1}{3}m_1 l_1^2 + (m_2+m_3+m_4)l_1^2,\\quad a_{22} = \\tfrac{1}{3}m_2 l_2^2 + m_4 l_2^2,\\quad b = (\\tfrac{1}{2}m_2 + m_4)l_1 l_2",
+          "note": "The inertias from T",
+          "ref": "",
+          "explore": true,
+          "where": [
+            { "tex": "a_{11},\\ a_{22}", "means": "inertias about base and elbow [kg·m²] (not defined in the source)" },
+            { "tex": "b", "means": "coupling inertia (m₂/2 + m₄)l₁l₂ [kg·m²] (not defined in the source)" },
+            { "tex": "m_1,\\ m_2", "means": "link masses [kg] (task sheet p. 7)" },
+            { "tex": "m_3", "means": "elbow mass [kg] (task sheet p. 7)" },
+            { "tex": "m_4", "means": "end mass [kg] (task sheet p. 7)" },
+            { "tex": "l_1,\\ l_2", "means": "link lengths [m] (task sheet p. 7)" }
+          ]
+        }
       ],
       "practice": [
         { "question": "With the lab's example values (links 1 kg × 0.5 m and 0.6 kg × 0.4 m, elbow 0.5 kg, load 0.2 kg, no joint springs), what is the lower eigenfrequency hanging at rest?", "source": "worked here: det(K − λM) = 0; example values", "answer": 0.62701, "unit": "Hz", "compute": { "law": "robotF", "m1": 1, "l1": 0.5, "m2": 0.6, "l2": 0.4, "m3": 0.5, "m4": 0.2, "k1": 0, "k2": 0, "mode": 0 }, "solution": "a₁₁ = 0.4083, a₂₂ = 0.064, b = 0.1, G₁ = 8.826, G₂ = 1.961: λ₁ = 15.52 s⁻², f = 0.627 Hz." }

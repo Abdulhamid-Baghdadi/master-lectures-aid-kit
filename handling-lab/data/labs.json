@@ -154,13 +154,22 @@
           "eq": "F = 3(n − 1) − 2g1 − g2",
           "tex": "F = 3(n-1) - 2g_1 - g_2",
           "note": "Plane and spherical mechanisms (b = 3): n links with the frame, g1 joints with one freedom, g2 with two",
-          "ref": "ch. 4, p. 23 (Blatt 27); ch. 3, p. 28"
+          "ref": "ch. 4, p. 23 (Blatt 27); ch. 3, p. 28",
+          "where": [
+            { "tex": "F", "means": "degree of freedom of the mechanism, Getriebefreiheitsgrad (ch. 4, p. 23)" },
+            { "tex": "n", "means": "number of links, frame included (ch. 4, p. 23: Anzahl der Getriebeglieder)" },
+            { "tex": "g_1", "means": "number of joints with one freedom, f = 1 (ch. 4, p. 23)" },
+            { "tex": "g_2", "means": "number of joints with two freedoms, f = 2 (ch. 4, p. 23)" }
+          ]
         },
         {
           "eq": "F = number of drives > 0",
           "tex": "F = \\text{number of drives} > 0",
           "note": "Constrained motion (Zwanglauf); F = 0 a determinate structure, F < 0 an indeterminate one",
-          "ref": "ch. 4, p. 23"
+          "ref": "ch. 4, p. 23",
+          "where": [
+            { "tex": "F", "means": "degree of freedom; equal to the number of drives gives constrained motion, Zwanglauf (ch. 4, p. 23)" }
+          ]
         }
       ],
       "practice": [
@@ -201,18 +210,33 @@
       "idea": "If the shortest and longest links together are shorter than the other two, some link can turn fully; which mechanism you get depends on where the shortest link sits.",
       "law": "lmin + lmax < l′ + l″: rotating",
       "lawTex": "l_{\\min} + l_{\\max} < l' + l''",
+      "lawWhere": [
+        { "tex": "l_{\\min}", "means": "length of the shortest link (ch. 4, p. 26)" },
+        { "tex": "l_{\\max}", "means": "length of the longest link (ch. 4, p. 26)" },
+        { "tex": "l',\\ l''", "means": "lengths of the two other links (ch. 4, p. 26: die beiden übrigen Glieder)" }
+      ],
       "equations": [
         {
           "eq": "lmin + lmax < l′ + l″ rotating; = change point; > rocking",
           "tex": "l_{\\min} + l_{\\max} \\lesseqqgtr l' + l''",
           "note": "Four-hinge chain (4D): umlaufend, durchschlagend, nicht umlaufend",
-          "ref": "ch. 4, p. 26 (Blatt 30)"
+          "ref": "ch. 4, p. 26 (Blatt 30)",
+          "where": [
+            { "tex": "l_{\\min}", "means": "length of the shortest link (ch. 4, p. 26)" },
+            { "tex": "l_{\\max}", "means": "length of the longest link (ch. 4, p. 26)" },
+            { "tex": "l',\\ l''", "means": "lengths of the two other links (ch. 4, p. 26: die beiden übrigen Glieder)" },
+            { "tex": "\\lesseqqgtr", "means": "less: rotating (umlaufend); equal: change-point (durchschlagend); greater: rocking only (ch. 4, p. 26)" }
+          ]
         },
         {
           "eq": "e < lmax − lmin rotating",
           "tex": "e < l_{\\max} - l_{\\min}",
           "note": "Slider-crank chain with offset e, crank and coupler the two links",
-          "ref": "ch. 3, p. 81"
+          "ref": "ch. 3, p. 81",
+          "where": [
+            { "tex": "e", "means": "offset of the slider axis from the crank pivot (ch. 3, p. 81: e = 0 zentrisch) (not defined in the source)" },
+            { "tex": "l_{\\max},\\ l_{\\min}", "means": "lengths of the longest and shortest link (ch. 3, p. 81) (not defined in the source)" }
+          ]
         }
       ],
       "practice": [
@@ -253,18 +277,32 @@
       "idea": "The coupler pushes the rocker well only when it meets it near a right angle; the smallest such angle over a turn tells you whether the mechanism runs smoothly.",
       "law": "μ = acute angle between coupler and rocker at B, μ ≤ 90°",
       "lawTex": "\\mu = \\angle(AB, B_0B), \\quad \\mu \\le 90^\\circ",
+      "lawWhere": [
+        { "tex": "\\mu", "means": "transmission angle: the acute angle between the absolute and relative path tangents at the output link's force point [°] (ch. 4, p. 38)" },
+        { "tex": "AB,\\ B_0B", "means": "coupler AB and rocker B0B, meeting at B (not defined in the source)" }
+      ],
       "equations": [
         {
           "eq": "μ ≤ 90°, the acute angle between absolute and relative path tangents at B",
           "tex": "\\mu \\le 90^\\circ",
           "note": "Definition; the least values lie where crank and frame are folded or stretched",
-          "ref": "ch. 4, p. 38 (Blatt 43)"
+          "ref": "ch. 4, p. 38 (Blatt 43)",
+          "where": [
+            { "tex": "\\mu", "means": "transmission angle: the acute angle between the absolute and relative path tangents at the output link's force point [°] (ch. 4, p. 38)" }
+          ]
         },
         {
           "eq": "cos γ = (l² + c² − AB0²)/(2lc), μ = min(γ, 180° − γ)",
           "tex": "\\cos\\gamma = \\frac{l^2 + c^2 - \\overline{AB_0}^{\\,2}}{2lc}, \\quad \\mu = \\min(\\gamma, 180^\\circ - \\gamma)",
           "note": "The cosine rule in triangle A B B0, worked from the definition; the course draws it",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "\\gamma", "means": "angle between coupler and rocker at B, worked here [°]" },
+            { "tex": "l", "means": "coupler length AB (not defined in the source)" },
+            { "tex": "c", "means": "rocker length B0B (not defined in the source)" },
+            { "tex": "\\overline{AB_0}", "means": "distance from the crank pin A to the rocker pivot B0 (not defined in the source)" },
+            { "tex": "\\mu", "means": "transmission angle: the acute angle between the absolute and relative path tangents at the output link's force point [°] (ch. 4, p. 38)" }
+          ]
         }
       ],
       "practice": [],
@@ -276,18 +314,33 @@
       "idea": "Every two links of a mechanism turn, for a moment, about a common pole; the pole of crank and rocker tells you how fast the rocker turns for a turn of the crank.",
       "law": "z = n(n − 1)/2; ω3/ω1 = A0P13/B0P13",
       "lawTex": "z = \\frac{n(n-1)}{2}, \\qquad \\frac{\\omega_3}{\\omega_1} = \\frac{\\overline{A_0P_{13}}}{\\overline{B_0P_{13}}}",
+      "lawWhere": [
+        { "tex": "z", "means": "number of poles (instant centres) of the mechanism (not defined in the source)" },
+        { "tex": "n", "means": "number of links (not defined in the source)" },
+        { "tex": "\\omega_1,\\ \\omega_3", "means": "angular speeds of crank (link 1) and rocker (link 3) [rad/s] (ch. 4, p. 47: ω)" },
+        { "tex": "\\overline{A_0P_{13}},\\ \\overline{B_0P_{13}}", "means": "distances from the pivots A0 and B0 to the relative pole P13 (not defined in the source)" }
+      ],
       "equations": [
         {
           "eq": "z = n(n − 1)/2",
           "tex": "z = \\binom{n}{2} = \\frac{n(n-1)}{2}",
           "note": "The number of poles of n links",
-          "ref": "ch. 4, p. 47 (Blatt 52)"
+          "ref": "ch. 4, p. 47 (Blatt 52)",
+          "where": [
+            { "tex": "z", "means": "number of poles (not defined in the source)" },
+            { "tex": "n", "means": "number of links (not defined in the source)" },
+            { "tex": "\\binom{n}{2}", "means": "number of pairs of links, each pair with one pole (not defined in the source)" }
+          ]
         },
         {
           "eq": "ω3/ω1 = A0P13/B0P13",
           "tex": "\\omega_1\\,\\overline{A_0P_{13}} = \\omega_3\\,\\overline{B_0P_{13}}",
           "note": "P13 has the same speed as a point of crank and of rocker; worked from the pole's definition",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "\\omega_1,\\ \\omega_3", "means": "angular speeds of crank and rocker [rad/s] (ch. 4, p. 47: v = r ω)" },
+            { "tex": "\\overline{A_0P_{13}},\\ \\overline{B_0P_{13}}", "means": "distances from A0 and B0 to the pole P13 (not defined in the source)" }
+          ]
         }
       ],
       "practice": [
@@ -312,26 +365,44 @@
       "idea": "Say where the rocker should stop at each end of its swing, and the crank and coupler follow, because at the dead centres crank and coupler lie in one line.",
       "law": "|A0Ba| = l + r, |A0Bi| = l − r",
       "lawTex": "\\overline{A_0B_a} = l + r, \\qquad \\overline{A_0B_i} = l - r",
+      "lawWhere": [
+        { "tex": "\\overline{A_0B_a},\\ \\overline{A_0B_i}", "means": "distance from the crank pivot A0 to B in the outer (a) and inner (i) dead-centre position (ch. 4, p. 102, figure)" },
+        { "tex": "l", "means": "coupler length (not defined in the source)" },
+        { "tex": "r", "means": "crank length (not defined in the source)" }
+      ],
       "equations": [
         {
           "eq": "φ0, ψ0 measured in the same sense from the inner to the outer dead centre",
           "tex": "\\varphi_0,\\ \\psi_0",
           "note": "The course's construction: angles φ0/2 and ψ0/2 at A0B0 give the pole P, circles ka, kb carry Aa, Ba",
-          "ref": "ch. 4, pp. 97–102"
+          "ref": "ch. 4, pp. 97–102",
+          "where": [
+            { "tex": "\\varphi_0", "means": "crank angle between the inner and the outer dead-centre position (ch. 4, p. 97)" },
+            { "tex": "\\psi_0", "means": "rocker swing between the two dead-centre positions (ch. 4, p. 97: Schwingwinkel)" }
+          ]
         },
         {
           "eq": "r = (|A0Ba| − |A0Bi|)/2, l = (|A0Ba| + |A0Bi|)/2",
           "tex": "r = \\tfrac12(\\overline{A_0B_a} - \\overline{A_0B_i}), \\quad l = \\tfrac12(\\overline{A_0B_a} + \\overline{A_0B_i})",
           "note": "From the stretched and folded positions",
           "ref": "",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "r", "means": "crank length (not defined in the source)" },
+            { "tex": "l", "means": "coupler length (not defined in the source)" },
+            { "tex": "\\overline{A_0B_a},\\ \\overline{A_0B_i}", "means": "A0 to B in the outer and inner dead-centre position (ch. 4, p. 102)" }
+          ]
         },
         {
           "eq": "time ratio = φ0 : (360° − φ0)",
           "tex": "\\frac{t_{\\text{work}}}{t_{\\text{return}}} = \\frac{\\varphi_0}{360^\\circ - \\varphi_0}",
           "note": "At constant crank speed",
           "ref": "",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "t_{\\text{work}},\\ t_{\\text{return}}", "means": "time of the working and the return stroke [s] (not defined in the source)" },
+            { "tex": "\\varphi_0", "means": "crank angle between the dead-centre positions (ch. 4, p. 97)" }
+          ]
         }
       ],
       "practice": [
@@ -360,7 +431,11 @@
           "eq": "P12 where the bisectors of A1A2 and B1B2 meet; φ12 halved by them",
           "tex": "P_{12} = a_{12} \\cap b_{12}",
           "note": "The turn φ12 about P12 is directed",
-          "ref": "ch. 4, p. 68"
+          "ref": "ch. 4, p. 68",
+          "where": [
+            { "tex": "P_{12}", "means": "pole of the move from position 1 to 2: the intersection of the perpendicular bisectors (ch. 4, p. 68)" },
+            { "tex": "a_{12},\\ b_{12}", "means": "perpendicular bisectors of A1A2 and B1B2 (ch. 4, p. 68 names them x12, y12 for X1X2, Y1Y2)" }
+          ]
         }
       ],
       "practice": [
@@ -425,18 +500,34 @@
       "idea": "A point on the coupler draws a curve, and two more four-bars draw exactly the same curve: if one linkage sits badly, a cognate may fit.",
       "law": "Roberts–Chebyshev: three four-bars, one coupler curve",
       "lawTex": "F_0 = A_0 + k\\,(B_0 - A_0), \\quad k = \\frac{C - A}{B - A}",
+      "lawWhere": [
+        { "tex": "F_0", "means": "third fixed pivot of the cognate four-bar (not defined in the source)" },
+        { "tex": "A_0,\\ B_0", "means": "fixed pivots of the given four-bar (not defined in the source)" },
+        { "tex": "k", "means": "complex ratio fixing C on the coupler, worked here" },
+        { "tex": "A,\\ B,\\ C", "means": "coupler joints A, B and the tracing point C, as points of the plane (not defined in the source)" }
+      ],
       "equations": [
         {
           "eq": "Every coupler curve of A0ABB0 is also drawn by A0A′F′F0 and B0B′FF0",
           "tex": "k_C(A_0ABB_0) = k_C(A_0A'F'F_0) = k_C(B_0B'FF_0)",
           "note": "Roberts–Chebyshev theorem",
-          "ref": "ch. 4, p. 113"
+          "ref": "ch. 4, p. 113",
+          "where": [
+            { "tex": "k_C", "means": "coupler curve traced by point C (not defined in the source)" },
+            { "tex": "A_0ABB_0", "means": "the given four-bar (ch. 4, p. 113: Koppel AB)" },
+            { "tex": "A_0A'F'F_0,\\ B_0B'FF_0", "means": "the two cognate four-bars that trace the same curve (ch. 4, p. 113: Roberts–Chebyshev) (not defined in the source)" }
+          ]
         },
         {
           "eq": "F0 = A0 + k(B0 − A0)",
           "tex": "F_0 = A_0 + k\\,(B_0 - A_0)",
           "note": "The third pivot: A0B0F0 similar to ABC; k a complex ratio",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "F_0", "means": "third fixed pivot (not defined in the source)" },
+            { "tex": "A_0,\\ B_0", "means": "fixed pivots of the given four-bar (not defined in the source)" },
+            { "tex": "k", "means": "complex ratio (C − A)/(B − A), worked here" }
+          ]
         }
       ],
       "practice": [],
@@ -448,45 +539,90 @@
       "idea": "A normalised law f(z) says how the output moves over its stroke; four numbers taken from it, Cv, Ca, Cj and CM, scale its peak speed, acceleration, jerk and torque.",
       "law": "y = yH·f(x/xP); max|y′| = Cv·yH/xP",
       "lawTex": "y = y_H\\,f\\!\\left(\\frac{x}{x_P}\\right), \\qquad \\max|y'| = C_v\\,\\frac{y_H}{x_P}",
+      "lawWhere": [
+        { "tex": "y", "means": "output motion (ch. 5, p. 23)" },
+        { "tex": "y_H", "means": "stroke of the output (ch. 5, p. 23) (not defined in the source)" },
+        { "tex": "f", "means": "normalised motion law, from (0,0) to (1,1) (ch. 5, p. 23)" },
+        { "tex": "x", "means": "drive angle (ch. 5, p. 21)" },
+        { "tex": "x_P", "means": "drive angle of the rising (P) section (ch. 5, p. 23) (not defined in the source)" },
+        { "tex": "y'", "means": "first derivative of y over x (ch. 5, p. 21)" },
+        { "tex": "C_v", "means": "velocity characteristic, max |f′(z)| (ch. 5, p. 30: Geschwindigkeitskennwert)" }
+      ],
       "equations": [
         {
           "eq": "y = yH·f(z), z = x/xP",
           "tex": "y = y_H\\,f(z), \\quad z = x/x_P",
           "note": "Normalised law, rising",
-          "ref": "ch. 5, p. 23 (Blatt 25)"
+          "ref": "ch. 5, p. 23 (Blatt 25)",
+          "where": [
+            { "tex": "y", "means": "output motion (ch. 5, p. 23)" },
+            { "tex": "y_H", "means": "stroke (ch. 5, p. 23) (not defined in the source)" },
+            { "tex": "f(z)", "means": "normalised motion law (ch. 5, p. 23)" },
+            { "tex": "z", "means": "normalised drive angle, x/xP (ch. 5, p. 23)" },
+            { "tex": "x", "means": "drive angle (ch. 5, p. 21)" },
+            { "tex": "x_P", "means": "drive angle of the rising section (ch. 5, p. 23) (not defined in the source)" }
+          ]
         },
         {
           "eq": "ẏ = y′ẋ, ÿ = y″ẋ² + y′ẍ",
           "tex": "\\dot y = y'\\dot x, \\quad \\ddot y = y''\\dot x^2 + y'\\ddot x",
           "note": "From the drive angle to time",
           "ref": "ch. 5, p. 21 (Blatt 23)",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "\\dot y,\\ \\ddot y", "means": "output velocity and acceleration over time (ch. 5, p. 21)" },
+            { "tex": "y',\\ y''", "means": "first and second derivative of y over the drive angle x (ch. 5, p. 21)" },
+            { "tex": "\\dot x,\\ \\ddot x", "means": "drive angular speed and acceleration (ch. 5, p. 21)" }
+          ]
         },
         {
           "eq": "Cv = max|f′|, Ca = max|f″|, Cj = max|f‴|, CM = max|f′f″|",
           "tex": "C_v = \\max|f'|,\\ C_a = \\max|f''|,\\ C_j = \\max|f'''|,\\ C_M = \\max|f'f''|",
           "note": "Characteristic values",
           "ref": "ch. 5, p. 30 (Blatt 32)",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "C_v", "means": "velocity characteristic (ch. 5, p. 30)" },
+            { "tex": "C_a", "means": "acceleration characteristic (ch. 5, p. 30)" },
+            { "tex": "C_j", "means": "jerk characteristic, Ruckkennwert (ch. 5, p. 30)" },
+            { "tex": "C_M", "means": "torque characteristic, max |f′f″|, sets the inertia torque (ch. 5, p. 30)" },
+            { "tex": "f',\\ f'',\\ f'''", "means": "derivatives of the normalised law over z (ch. 5, p. 30)" }
+          ]
         },
         {
           "eq": "max|y″| = Ca·yH/xP²",
           "tex": "\\max|y''| = C_a\\,\\frac{y_H}{x_P^2}",
           "note": "Peak acceleration over the drive angle",
           "ref": "ch. 5, p. 30 (Blatt 32)",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "y''", "means": "second derivative of y over the drive angle (ch. 5, p. 30)" },
+            { "tex": "C_a", "means": "acceleration characteristic (ch. 5, p. 30)" },
+            { "tex": "y_H", "means": "stroke (ch. 5, p. 30 writes yi) (not defined in the source)" },
+            { "tex": "x_P", "means": "drive angle of the section (ch. 5, p. 30 writes xi) (not defined in the source)" }
+          ]
         },
         {
           "eq": "f = a1z + a2z² + a3z³ + a4z⁴ + a5z⁵",
           "tex": "\\begin{aligned} a_3 &= 10f(1) - 6f'(0) - 4f'(1) - \\tfrac32 f''(0) + \\tfrac12 f''(1)\\\\ a_4 &= -15f(1) + 8f'(0) + 7f'(1) + \\tfrac32 f''(0) - f''(1)\\\\ a_5 &= 6f(1) - 3[f'(0) + f'(1)] - \\tfrac12[f''(0) - f''(1)] \\end{aligned}",
           "note": "5th-order polynomial from boundary values; a1 = f′(0), a2 = f″(0)/2",
-          "ref": "ch. 5, pp. 34–35 (Blatt 36–37)"
+          "ref": "ch. 5, pp. 34–35 (Blatt 36–37)",
+          "where": [
+            { "tex": "a_3,\\ a_4,\\ a_5", "means": "coefficients of the 5th-degree polynomial f(z) = a1z + … + a5z⁵ (ch. 5, pp. 34–35)" },
+            { "tex": "f(1)", "means": "value of the law at the section's end (ch. 5, p. 35)" },
+            { "tex": "f'(0),\\ f'(1)", "means": "slope at start and end (ch. 5, p. 35)" },
+            { "tex": "f''(0),\\ f''(1)", "means": "curvature at start and end (ch. 5, p. 35)" }
+          ]
         },
         {
           "eq": "f = 35z⁴ − 84z⁵ + 70z⁶ − 20z⁷",
           "tex": "f(z) = 35z^4 - 84z^5 + 70z^6 - 20z^7",
           "note": "7th power",
-          "ref": "ch. 5, p. 32 (Blatt 34)"
+          "ref": "ch. 5, p. 32 (Blatt 34)",
+          "where": [
+            { "tex": "f(z)", "means": "7th-power motion law, rest to rest (ch. 5, p. 32)" },
+            { "tex": "z", "means": "normalised drive angle (ch. 5, p. 23)" }
+          ]
         }
       ],
       "practice": [
@@ -553,31 +689,63 @@
       "idea": "Wrap a motion law round a circle and you have a cam; a small base circle makes it compact but the follower is pushed sideways, and a big roller cannot follow a tight curve.",
       "law": "rR ≤ 0.7·ρmin; vBmax = sH·Cv/φP·ω",
       "lawTex": "r_R \\le 0.7\\,\\rho_{\\min}, \\qquad v_{B\\max} = \\frac{s_H\\,C_v}{\\varphi_P}\\,\\omega",
+      "lawWhere": [
+        { "tex": "r_R", "means": "roller radius (ch. 6, p. 41)" },
+        { "tex": "\\rho_{\\min}", "means": "least radius of curvature of the roller-centre path, RMB (ch. 6, p. 42)" },
+        { "tex": "v_{B\\max}", "means": "peak follower speed (ch. 6, p. 36)" },
+        { "tex": "s_H", "means": "stroke of the follower (ch. 6, p. 36, figure) (not defined in the source)" },
+        { "tex": "C_v", "means": "velocity characteristic of the motion law (ch. 5, p. 30)" },
+        { "tex": "\\varphi_P", "means": "cam angle of the rising section (ch. 6, p. 36) (not defined in the source)" },
+        { "tex": "\\omega", "means": "cam angular speed [rad/s] (ch. 6, p. 35: ω21)" }
+      ],
       "equations": [
         {
           "eq": "vBmax = sH·Cv/φP",
           "tex": "v_{B\\max} = \\frac{s_H\\,C_v}{\\varphi_P}",
           "note": "Peak follower speed per unit drive speed (Flocke method)",
-          "ref": "ch. 6, p. 35"
+          "ref": "ch. 6, p. 36 (Blatt 50)",
+          "where": [
+            { "tex": "v_{B\\max}", "means": "peak follower speed per unit cam speed (ch. 6, p. 36, Blatt 50: Abtriebsschieber)" },
+            { "tex": "s_H", "means": "stroke of the follower (ch. 6, p. 36) (not defined in the source)" },
+            { "tex": "C_v", "means": "velocity characteristic (ch. 5, p. 30)" },
+            { "tex": "\\varphi_P", "means": "cam angle of the rising section (ch. 6, p. 36) (not defined in the source)" }
+          ]
         },
         {
           "eq": "ρA = ρB ± rR",
           "tex": "\\rho_A = \\rho_B \\pm r_R",
           "note": "Working profile from the pitch curve: + inner, − outer cam",
-          "ref": "ch. 6, p. 41"
+          "ref": "ch. 6, p. 41",
+          "where": [
+            { "tex": "\\rho_A", "means": "radius of curvature of the working profile, Arbeitskurve (ch. 6, p. 41)" },
+            { "tex": "\\rho_B", "means": "radius of curvature of the roller-centre path, RMB (ch. 6, p. 41)" },
+            { "tex": "r_R", "means": "roller radius; + inner, − outer cam (ch. 6, p. 41)" }
+          ]
         },
         {
           "eq": "rR ≤ 0.7·ρmin B",
           "tex": "r_R \\le 0.7\\,\\rho_{\\min B}",
           "note": "Advice; rR = ρmin gives a point, more loses lift",
-          "ref": "ch. 6, p. 42"
+          "ref": "ch. 6, p. 42",
+          "where": [
+            { "tex": "r_R", "means": "roller radius (ch. 6, p. 42)" },
+            { "tex": "\\rho_{\\min B}", "means": "least radius of curvature of the RMB on its convex flank (ch. 6, p. 42)" }
+          ]
         },
         {
           "eq": "tan α = s′/(rG + rR + s), μ = 90° − |α|",
           "tex": "\\tan\\alpha = \\frac{s'}{r_G + r_R + s}, \\quad \\mu = 90^\\circ - |\\alpha|",
           "note": "Centred translating roller follower, worked from the definition of μ",
           "ref": "",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "\\alpha", "means": "pressure angle, worked here [°]" },
+            { "tex": "s'", "means": "slope of the lift over cam angle (not defined in the source)" },
+            { "tex": "r_G", "means": "base-circle radius (ch. 6, p. 35: rG) (not defined in the source)" },
+            { "tex": "r_R", "means": "roller radius (ch. 6, p. 41)" },
+            { "tex": "s", "means": "lift of the follower (not defined in the source)" },
+            { "tex": "\\mu", "means": "transmission angle: the acute angle between the absolute and relative path tangents at the output link's force point [°] (ch. 4, p. 38)" }
+          ]
         }
       ],
       "practice": [
@@ -604,25 +772,45 @@
       "idea": "A cam turning steadily moves a round table on one station at a time and holds it still in between; the number of stations sets the step and, with the cam's threads, the rollers.",
       "law": "φS = 360°/n; nR = 360°·ga/φS",
       "lawTex": "\\varphi_S = \\frac{360^\\circ}{n}, \\qquad n_R = \\frac{360^\\circ\\,g_a}{\\varphi_S}",
+      "lawWhere": [
+        { "tex": "\\varphi_S", "means": "step angle at the output (ch. 6, p. 16: Schrittwinkel)" },
+        { "tex": "n", "means": "number of stations on the table (ch. 6, p. 16)" },
+        { "tex": "n_R", "means": "number of cam rollers (ch. 6, p. 16)" },
+        { "tex": "g_a", "means": "number of threads of the cam, Gängigkeit (ch. 6, p. 16)" }
+      ],
       "equations": [
         {
           "eq": "φS = 2π/n",
           "tex": "\\varphi_S = \\frac{2\\pi}{n}",
           "note": "Step angle at the output, n stations",
-          "ref": "ch. 6, p. 16"
+          "ref": "ch. 6, p. 16",
+          "where": [
+            { "tex": "\\varphi_S", "means": "step angle at the output [rad] (ch. 6, p. 16)" },
+            { "tex": "n", "means": "number of stations on the table (ch. 6, p. 16)" }
+          ]
         },
         {
           "eq": "nR = 360°·ga/φS",
           "tex": "n_R = \\frac{360^\\circ\\,g_a}{\\varphi_S}",
           "note": "Rollers per plane, ga the cam's threads (Gängigkeit)",
-          "ref": "ch. 6, p. 16"
+          "ref": "ch. 6, p. 16",
+          "where": [
+            { "tex": "n_R", "means": "number of cam rollers (ch. 6, p. 16)" },
+            { "tex": "g_a", "means": "Gängigkeit, the cam's threads (ch. 6, p. 16)" },
+            { "tex": "\\varphi_S", "means": "step angle (ch. 6, p. 16)" }
+          ]
         },
         {
           "eq": "L = (360° − φ)·(π/180)·rRolle",
           "tex": "L = (360^\\circ - \\varphi)\\,\\frac{\\pi}{180^\\circ}\\,r_{\\text{Rolle}}",
           "note": "Friction-wheel feed length",
-          "ref": "ch. 2, p. 29 (Blatt 29)",
-          "explore": true
+          "ref": "ch. 2, p. 26 (Blatt 29)",
+          "explore": true,
+          "where": [
+            { "tex": "L", "means": "feed length per turn (ch. 2, p. 26, Blatt 29: Vorschublänge)" },
+            { "tex": "\\varphi", "means": "angle in which the upper roller is lifted and no friction acts [°] (ch. 2, p. 26)" },
+            { "tex": "r_{\\text{Rolle}}", "means": "roller radius (ch. 2, p. 26) (not defined in the source)" }
+          ]
         }
       ],
       "practice": [
@@ -654,7 +842,7 @@
         },
         {
           "question": "A feed roller of radius 20 mm has a flat of 90°. How far does it feed per turn?",
-          "source": "Worked by hand from ch. 2, p. 29",
+          "source": "Worked by hand from ch. 2, p. 26",
           "answer": 94.2,
           "unit": "mm",
           "tolerance": 0.005,
@@ -674,26 +862,57 @@
       "idea": "A suction cup is held by the air outside pressing harder than the air inside; the force grows with the cup's area and the vacuum, and the safety factor takes a share for shocks and wear.",
       "law": "F = (po − pu)·A·n3·η·z/S",
       "lawTex": "F = \\frac{(p_o - p_u)\\,A\\,n_3\\,\\eta\\,z}{S}",
+      "lawWhere": [
+        { "tex": "F", "means": "payload: weight of the gripped object [N] (ch. 3, p. 62)" },
+        { "tex": "p_o", "means": "atmospheric, height-dependent air pressure (ch. 3, p. 62)" },
+        { "tex": "p_u", "means": "pressure in the sealed suction chamber (ch. 3, p. 62)" },
+        { "tex": "A", "means": "theoretical suction-cup area (ch. 3, p. 62)" },
+        { "tex": "n_3", "means": "deformation factor, 0.9 to 0.6 (ch. 3, p. 62)" },
+        { "tex": "\\eta", "means": "efficiency of the system, leakage included (ch. 3, p. 62)" },
+        { "tex": "z", "means": "number of suction cups (ch. 3, p. 62)" },
+        { "tex": "S", "means": "safety against dropping, 2 to 3 (ch. 3, p. 62)" }
+      ],
       "equations": [
         {
           "eq": "F = (po − pu)·A·n3·η·z·S⁻¹",
           "tex": "F = (p_o - p_u)\\,A\\,n_3\\,\\eta\\,z\\,S^{-1}",
           "note": "n3 deformation factor 0.9 to 0.6, η efficiency, z cups, S safety 2 to 3",
-          "ref": "ch. 3, p. 62"
+          "ref": "ch. 3, p. 62",
+          "where": [
+            { "tex": "F", "means": "payload: weight of the gripped object [N] (ch. 3, p. 62)" },
+            { "tex": "p_o", "means": "atmospheric, height-dependent air pressure (ch. 3, p. 62)" },
+            { "tex": "p_u", "means": "pressure in the sealed suction chamber (ch. 3, p. 62)" },
+            { "tex": "A", "means": "theoretical suction-cup area (ch. 3, p. 62)" },
+            { "tex": "n_3", "means": "deformation factor, 0.9 to 0.6 (ch. 3, p. 62)" },
+            { "tex": "\\eta", "means": "efficiency of the system, leakage included (ch. 3, p. 62)" },
+            { "tex": "z", "means": "number of suction cups (ch. 3, p. 62)" },
+            { "tex": "S^{-1}", "means": "inverse of the safety S, 2 to 3 (ch. 3, p. 62)" }
+          ]
         },
         {
           "eq": "po falls 12.5 mbar per 100 m from 1013 mbar",
           "tex": "p_o(h) = 1013\\,\\text{mbar} - 12.5\\,\\text{mbar}\\cdot\\frac{h}{100\\,\\text{m}}",
           "note": "Outside air with height",
           "ref": "ch. 3, p. 60",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "p_o(h)", "means": "air pressure at height h: 1013 mbar at sea level, 12.5 mbar less per 100 m (ch. 3, p. 60)" },
+            { "tex": "h", "means": "geographic height above sea level [m] (ch. 3, p. 60)" }
+          ]
         },
         {
           "eq": "Fh = A·B²/(2μ0)·(1 − 1/μr)",
           "tex": "F_h = \\frac{A\\,B^2}{2\\mu_0}\\left(1 - \\frac{1}{\\mu_r}\\right)",
           "note": "Magnet holding force; B in tesla (the slide prints henry)",
           "ref": "ch. 3, p. 69",
-          "explore": true
+          "explore": true,
+          "where": [
+            { "tex": "F_h", "means": "holding force [N] (ch. 3, p. 69)" },
+            { "tex": "A", "means": "magnet area in contact with the workpiece (ch. 3, p. 69 gives cm², which does not fit F_h in N with μ0 in SI; m² is needed)" },
+            { "tex": "B", "means": "magnetic flux density [T] (ch. 3, p. 69 gives henry, wrongly)" },
+            { "tex": "\\mu_0", "means": "absolute permeability, the magnetic constant [H/m] (ch. 3, p. 69)" },
+            { "tex": "\\mu_r", "means": "relative permeability, > 1 for ferromagnetic materials (ch. 3, p. 69)" }
+          ]
         }
       ],
       "practice": [

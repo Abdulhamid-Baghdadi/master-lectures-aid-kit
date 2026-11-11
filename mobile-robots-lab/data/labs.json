@@ -29,36 +29,75 @@
       "idea": "Hold a belief over every place the robot could be. Moving blurs it, a reading sharpens it: Bayes' rule in every cell, normalised so it sums to one.",
       "law": "bel(xt) = η·p(zt|xt)·Σ p(xt|ut, xt−1)·bel(xt−1)",
       "lawTex": "\\mathrm{bel}(x_t) = \\eta\\, p(z_t \\mid x_t) \\sum_{x_{t-1}} p(x_t \\mid u_t, x_{t-1})\\, \\mathrm{bel}(x_{t-1})",
+      "lawWhere": [
+        { "tex": "\\mathrm{bel}(x_t)", "means": "belief after correction with the measurement (Basics.pdf, p. 20)" },
+        { "tex": "\\eta", "means": "normaliser that makes the belief sum to 1 (Basics.pdf, p. 7)" },
+        { "tex": "p(z_t \\mid x_t)", "means": "measurement model (Gaussianfilters.pdf, p. 8)" },
+        { "tex": "\\sum_{x_{t-1}}", "means": "sum over all states of the previous slot; an integral for continuous states (Basics.pdf, p. 9)" },
+        { "tex": "p(x_t \\mid u_t, x_{t-1})", "means": "motion model: probability of the new state given command and old state (Gaussianfilters.pdf, p. 6)" },
+        { "tex": "\\mathrm{bel}(x_{t-1})", "means": "belief of the previous time slot (Basics.pdf, p. 20)" }
+      ],
       "equations": [
         {
           "eq": "p(a|b) = p(b|a)·p(a) / p(b)",
           "tex": "p(a \\mid b) = \\frac{p(b \\mid a)\\, p(a)}{p(b)}",
           "note": "Bayes' rule",
-          "ref": "Basics.pdf, p. 9, eq. 5; MuS1_Cheatsheet.pdf, p. 2, eq. 4"
+          "ref": "Basics.pdf, p. 9, eq. 5; MuS1_Cheatsheet.pdf, p. 2, eq. 4",
+          "where": [
+            { "tex": "p(a \\mid b)", "means": "probability of a given b (Basics.pdf, p. 9, eq. 4)" },
+            { "tex": "a,\\ b", "means": "values of the random variables A and B, e.g. a door's state (Basics.pdf, p. 9)" },
+            { "tex": "p(a)", "means": "prior probability of a (Basics.pdf, p. 9)" },
+            { "tex": "p(b)", "means": "probability of b; the normaliser (Basics.pdf, p. 9, eq. 5)" }
+          ]
         },
         {
           "eq": "p(d|s) = p(s|d)p(d) / (p(s|d)p(d) + p(s|¬d)p(¬d))",
           "tex": "p(d \\mid s) = \\frac{p(s \\mid d)\\, p(d)}{p(s \\mid d)\\, p(d) + p(s \\mid \\neg d)\\, p(\\neg d)}",
           "note": "The door estimated from one sensor reading",
-          "ref": "Basics.pdf, p. 10"
+          "ref": "Basics.pdf, p. 10",
+          "where": [
+            { "tex": "d", "means": "door open (door = T) (Basics.pdf, p. 10)" },
+            { "tex": "s", "means": "sensor reports open (sensor = T) (Basics.pdf, p. 10, footnote 4)" },
+            { "tex": "\\neg d", "means": "door not open (Basics.pdf, p. 10)" },
+            { "tex": "p(s \\mid d)", "means": "calibrated sensor model, from many measurements (Basics.pdf, p. 10)" },
+            { "tex": "p(d)", "means": "prior that the door is open (Basics.pdf, p. 10)" }
+          ]
         },
         {
           "eq": "bel̄(xt) = Σ p(xt|ut, xt−1)·bel(xt−1)",
           "tex": "\\overline{\\mathrm{bel}}(x_t) = \\sum_{x_{t-1}} p(x_t \\mid u_t, x_{t-1})\\, \\mathrm{bel}(x_{t-1})",
           "note": "Prediction: the motion model; the integral becomes a sum for countable states (p. 9)",
-          "ref": "Basics.pdf, p. 21, line 3 (after Thrun et al. 2006)"
+          "ref": "Basics.pdf, p. 21, line 3 (after Thrun et al. 2006)",
+          "where": [
+            { "tex": "\\overline{\\mathrm{bel}}(x_t)", "means": "predicted belief, before the measurement (Basics.pdf, p. 20)" },
+            { "tex": "\\sum_{x_{t-1}}", "means": "sum over all states of the previous slot; an integral for continuous states (Basics.pdf, p. 9)" },
+            { "tex": "p(x_t \\mid u_t, x_{t-1})", "means": "motion model: probability of the new state given command and old state (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "\\mathrm{bel}(x_{t-1})", "means": "belief of the previous time slot (Basics.pdf, p. 20)" }
+          ]
         },
         {
           "eq": "bel(xt) = η·p(zt|xt)·bel̄(xt)",
           "tex": "\\mathrm{bel}(x_t) = \\eta\\, p(z_t \\mid x_t)\\, \\overline{\\mathrm{bel}}(x_t)",
           "note": "Correction: the sensor model; η normalises",
-          "ref": "Basics.pdf, p. 21, line 4; p. 7, eq. 2"
+          "ref": "Basics.pdf, p. 21, line 4; p. 7, eq. 2",
+          "where": [
+            { "tex": "\\mathrm{bel}(x_t)", "means": "belief after correction with the measurement (Basics.pdf, p. 20)" },
+            { "tex": "\\eta", "means": "normaliser that makes the belief sum to 1 (Basics.pdf, p. 7)" },
+            { "tex": "p(z_t \\mid x_t)", "means": "measurement model (Gaussianfilters.pdf, p. 8)" },
+            { "tex": "\\overline{\\mathrm{bel}}(x_t)", "means": "predicted belief, before the measurement (Basics.pdf, p. 20)" }
+          ]
         },
         {
           "eq": "p(xt|u1:t, z1:t) = p(xt|ut, zt)",
           "tex": "p(x_t \\mid u_{1:t}, z_{1:t}) = p(x_t \\mid u_t, z_t)",
           "note": "Markov assumption: everything needed is in the last state",
-          "ref": "MuS1_Cheatsheet.pdf, p. 2, eq. 8; Basics.pdf, p. 13"
+          "ref": "MuS1_Cheatsheet.pdf, p. 2, eq. 8; Basics.pdf, p. 13",
+          "where": [
+            { "tex": "u_{1:t},\\ z_{1:t}", "means": "all commands and measurements from slot 1 to t (Basics.pdf, p. 5)" },
+            { "tex": "x_t", "means": "robot state at time slot t, e.g. pose (x, y, θ) (Basics.pdf, p. 5)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" },
+            { "tex": "z_t", "means": "measurement in time slot t (Basics.pdf, p. 5)" }
+          ]
         }
       ],
       "practice": [
@@ -94,40 +133,86 @@
           "eq": "μ̄t = At·μt−1 + Bt·ut",
           "tex": "\\bar\\mu_t = A_t\\,\\mu_{t-1} + B_t\\,u_t",
           "note": "Prediction of the mean (the slide's p. 6 writes Axt−1 − But; eq. 2 on p. 7 and the algorithm have +)",
-          "ref": "Gaussianfilters.pdf, p. 7, eq. 2; p. 11, line 2"
+          "ref": "Gaussianfilters.pdf, p. 7, eq. 2; p. 11, line 2",
+          "where": [
+            { "tex": "\\bar\\mu_t", "means": "predicted mean; the bar marks a prediction (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "A_t", "means": "state transition matrix: the robot's motion (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "\\mu_{t-1}", "means": "mean of the previous belief (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "B_t", "means": "control matrix: how the command acts on the state (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" }
+          ]
         },
         {
           "explore": true,
           "eq": "Σ̄t = At·Σt−1·Atᵀ + Rt",
           "tex": "\\bar\\Sigma_t = A_t\\,\\Sigma_{t-1} A_t^{\\mathsf T} + R_t",
           "note": "Prediction of the covariance: the + R makes it grow",
-          "ref": "Gaussianfilters.pdf, p. 11, line 3"
+          "ref": "Gaussianfilters.pdf, p. 11, line 3",
+          "where": [
+            { "tex": "\\bar\\Sigma_t", "means": "predicted covariance (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "A_t", "means": "state transition matrix: the robot's motion (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "\\Sigma_{t-1}", "means": "covariance of the previous belief (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "^{\\mathsf T}", "means": "transpose (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "R_t", "means": "covariance of the motion (process) noise (Gaussianfilters.pdf, p. 6)" }
+          ]
         },
         {
           "eq": "Kt = Σ̄t·Cᵀ(C·Σ̄t·Cᵀ + Q)⁻¹",
           "tex": "K_t = \\bar\\Sigma_t C_t^{\\mathsf T} \\left(C_t \\bar\\Sigma_t C_t^{\\mathsf T} + Q_t\\right)^{-1}",
           "note": "The Kalman gain: a large sensor noise Q makes it small",
-          "ref": "Gaussianfilters.pdf, p. 12, line 4"
+          "ref": "Gaussianfilters.pdf, p. 12, line 4",
+          "where": [
+            { "tex": "K_t", "means": "Kalman gain (Gaussianfilters.pdf, p. 12)" },
+            { "tex": "\\bar\\Sigma_t", "means": "predicted covariance (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "C_t", "means": "measurement matrix: maps the state to an expected measurement (Gaussianfilters.pdf, p. 8)" },
+            { "tex": "^{\\mathsf T}", "means": "transpose (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "Q_t", "means": "covariance of the measurement noise (Gaussianfilters.pdf, p. 8)" }
+          ]
         },
         {
           "explore": true,
           "eq": "μt = μ̄t + Kt(zt − Ct·μ̄t)",
           "tex": "\\mu_t = \\bar\\mu_t + K_t\\,(z_t - C_t\\,\\bar\\mu_t)",
           "note": "Correction of the mean by the innovation",
-          "ref": "Gaussianfilters.pdf, p. 13, line 5"
+          "ref": "Gaussianfilters.pdf, p. 13, line 5",
+          "where": [
+            { "tex": "\\mu_t", "means": "corrected mean (Gaussianfilters.pdf, p. 13)" },
+            { "tex": "\\bar\\mu_t", "means": "predicted mean; the bar marks a prediction (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "K_t", "means": "Kalman gain (Gaussianfilters.pdf, p. 12)" },
+            { "tex": "z_t", "means": "measurement in time slot t (Basics.pdf, p. 5)" },
+            { "tex": "C_t", "means": "measurement matrix: maps the state to an expected measurement (Gaussianfilters.pdf, p. 8)" }
+          ]
         },
         {
           "explore": true,
           "eq": "Σt = (I − Kt·Ct)·Σ̄t",
           "tex": "\\Sigma_t = (I - K_t C_t)\\,\\bar\\Sigma_t",
           "note": "Correction of the covariance",
-          "ref": "Gaussianfilters.pdf, p. 13, line 6"
+          "ref": "Gaussianfilters.pdf, p. 13, line 6",
+          "where": [
+            { "tex": "\\Sigma_t", "means": "corrected covariance (Gaussianfilters.pdf, p. 13)" },
+            { "tex": "I", "means": "identity matrix (not defined in the source)" },
+            { "tex": "K_t", "means": "Kalman gain (Gaussianfilters.pdf, p. 12)" },
+            { "tex": "C_t", "means": "measurement matrix: maps the state to an expected measurement (Gaussianfilters.pdf, p. 8)" },
+            { "tex": "\\bar\\Sigma_t", "means": "predicted covariance (Gaussianfilters.pdf, p. 11)" }
+          ]
         },
         {
           "eq": "xt = A·xt−1 + B·ut + εt, zt = C·xt + δt",
           "tex": "x_t = A x_{t-1} + B u_t + \\varepsilon_t,\\quad z_t = C x_t + \\delta_t",
           "note": "εt ∼ N(0, R) the process noise, δt ∼ N(0, Q) the sensor noise",
-          "ref": "Gaussianfilters.pdf, p. 6 and p. 8"
+          "ref": "Gaussianfilters.pdf, p. 6 and p. 8",
+          "where": [
+            { "tex": "x_t", "means": "robot state at time slot t, e.g. pose (x, y, θ) (Basics.pdf, p. 5)" },
+            { "tex": "A", "means": "state transition matrix (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "x_{t-1}", "means": "robot state one time slot earlier (Basics.pdf, p. 5)" },
+            { "tex": "B", "means": "control matrix (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" },
+            { "tex": "\\varepsilon_t", "means": "motion noise, ε_t ~ N(0, R) (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "z_t", "means": "measurement in time slot t (Basics.pdf, p. 5)" },
+            { "tex": "C", "means": "measurement matrix (Gaussianfilters.pdf, p. 8)" },
+            { "tex": "\\delta_t", "means": "measurement noise, δ_t ~ N(0, Q) (Gaussianfilters.pdf, p. 8)" }
+          ]
         }
       ],
       "practice": [
@@ -167,38 +252,73 @@
       "idea": "Count the turns of the two wheels of a differential drive and the robot's step follows: half their sum gives the distance, their difference over the track gives the turn.",
       "law": "δd = (Δφl + Δφr)·r/2, δθ = (Δφr − Δφl)·r/b",
       "lawTex": "\\delta_d = \\frac{(\\Delta\\varphi_l + \\Delta\\varphi_r)\\,r}{2},\\qquad \\delta_\\theta = \\frac{(\\Delta\\varphi_r - \\Delta\\varphi_l)\\,r}{b}",
+      "lawWhere": [
+        { "tex": "\\delta_d", "means": "distance driven in one step [m] (EKF.pdf, p. 3, footnote 1)" },
+        { "tex": "\\delta_\\theta", "means": "change of heading in one step [rad] (EKF.pdf, p. 3, footnote 1)" },
+        { "tex": "\\Delta\\varphi_l,\\ \\Delta\\varphi_r", "means": "rotation of the left and right wheel [rad] (EKF.pdf, p. 3, footnote 1)" },
+        { "tex": "r", "means": "wheel radius [m]; EKF.pdf, p. 3 uses it (not defined in the source)" },
+        { "tex": "b", "means": "distance between the wheels [m]; EKF.pdf, p. 3 uses it (not defined in the source)" }
+      ],
       "equations": [
         {
           "eq": "δd = (Δφl + Δφr)·r/2",
           "tex": "\\delta_d = \\frac{(\\Delta\\varphi_l + \\Delta\\varphi_r)\\,r}{2}",
           "note": "Distance of one step, r the wheel radius",
-          "ref": "EKF.pdf, p. 3, footnote 1"
+          "ref": "EKF.pdf, p. 3, footnote 1",
+          "where": [
+            { "tex": "\\delta_d", "means": "distance driven in one step [m] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\Delta\\varphi_l,\\ \\Delta\\varphi_r", "means": "rotation of the left and right wheel [rad] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "r", "means": "wheel radius [m]; EKF.pdf, p. 3 uses it (not defined in the source)" }
+          ]
         },
         {
           "eq": "δθ = (Δφr − Δφl)·r/b",
           "tex": "\\delta_\\theta = \\frac{(\\Delta\\varphi_r - \\Delta\\varphi_l)\\,r}{b}",
           "note": "Turn of one step, b the track width (baseline)",
-          "ref": "EKF.pdf, p. 3, footnote 1"
+          "ref": "EKF.pdf, p. 3, footnote 1",
+          "where": [
+            { "tex": "\\delta_\\theta", "means": "change of heading in one step [rad] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\Delta\\varphi_l,\\ \\Delta\\varphi_r", "means": "rotation of the left and right wheel [rad] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "r", "means": "wheel radius [m]; EKF.pdf, p. 3 uses it (not defined in the source)" },
+            { "tex": "b", "means": "distance between the wheels [m]; EKF.pdf, p. 3 uses it (not defined in the source)" }
+          ]
         },
         {
           "explore": true,
           "eq": "(X, Y, θ)t = (X, Y, θ)t−1 + (δd·cos(θt−1 + δθ), δd·sin(θt−1 + δθ), δθ)",
           "tex": "\\begin{pmatrix} X_t \\\\ Y_t \\\\ \\theta_t \\end{pmatrix} = \\begin{pmatrix} X_{t-1} \\\\ Y_{t-1} \\\\ \\theta_{t-1} \\end{pmatrix} + \\begin{pmatrix} \\delta_d \\cos(\\theta_{t-1} + \\delta_\\theta) \\\\ \\delta_d \\sin(\\theta_{t-1} + \\delta_\\theta) \\\\ \\delta_\\theta \\end{pmatrix}",
           "note": "The pose moved by one step: not linear in θ, hence the EKF",
-          "ref": "EKF.pdf, p. 3, eq. 1"
+          "ref": "EKF.pdf, p. 3, eq. 1",
+          "where": [
+            { "tex": "X_t,\\ Y_t", "means": "robot position at time t [m] (EKF.pdf, p. 3, eq. 1)" },
+            { "tex": "\\theta_t", "means": "robot heading at time t [rad] (EKF.pdf, p. 3, eq. 1)" },
+            { "tex": "X_{t-1},\\ Y_{t-1},\\ \\theta_{t-1}", "means": "pose one step earlier (EKF.pdf, p. 3, eq. 1)" },
+            { "tex": "\\delta_d", "means": "distance driven in one step [m] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\delta_\\theta", "means": "change of heading in one step [rad] (EKF.pdf, p. 3, footnote 1)" }
+          ]
         },
         {
           "eq": "ICR = (x − L·sin θ, y + L·cos θ)",
           "tex": "\\mathrm{ICR} = \\begin{pmatrix} x - L \\sin\\theta \\\\ y + L \\cos\\theta \\end{pmatrix}",
           "note": "The instantaneous centre of rotation, L from the robot's centre",
-          "ref": "MR_Kinematik.pdf, p. 24, eq. 15"
+          "ref": "MR_Kinematik.pdf, p. 24, eq. 15",
+          "where": [
+            { "tex": "\\mathrm{ICR}", "means": "instantaneous centre of rotation, a 2D point (MR_Kinematik.pdf, p. 24)" },
+            { "tex": "x,\\ y,\\ \\theta", "means": "robot pose ξ (MR_Kinematik.pdf, p. 24)" },
+            { "tex": "L", "means": "distance from the ICR to the robot's centre [m] (MR_Kinematik.pdf, p. 24)" }
+          ]
         },
         {
           "explore": true,
           "eq": "L = δd/δθ",
           "tex": "L = \\frac{\\delta_d}{\\delta_\\theta}",
           "note": "Turning radius, speed over turn rate; worked here, not on the slides",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "L", "means": "distance from the ICR to the robot's centre [m] (MR_Kinematik.pdf, p. 24)" },
+            { "tex": "\\delta_d", "means": "distance driven in one step [m] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\delta_\\theta", "means": "change of heading in one step [rad] (EKF.pdf, p. 3, footnote 1)" }
+          ]
         }
       ],
       "practice": [
@@ -238,38 +358,88 @@
       "idea": "The motion bends, a Gaussian cannot: the EKF linearises the motion at the mean with its Jacobian and gets an ellipse, while sampled poses spread into a curved cloud.",
       "law": "Σ̄t = Gt·Σt−1·Gtᵀ + Rt",
       "lawTex": "\\bar\\Sigma_t = G_t\\,\\Sigma_{t-1} G_t^{\\mathsf T} + R_t",
+      "lawWhere": [
+        { "tex": "\\bar\\Sigma_t", "means": "predicted covariance (Gaussianfilters.pdf, p. 11)" },
+        { "tex": "G_t", "means": "Jacobian of g at the previous mean (EKF.pdf, pp. 8–9)" },
+        { "tex": "\\Sigma_{t-1}", "means": "covariance of the previous belief (Gaussianfilters.pdf, p. 11)" },
+        { "tex": "^{\\mathsf T}", "means": "transpose (Gaussianfilters.pdf, p. 11)" },
+        { "tex": "R_t", "means": "covariance of the motion (process) noise (Gaussianfilters.pdf, p. 6)" }
+      ],
       "equations": [
         {
           "eq": "xt = g(ut, xt−1) + εt, zt = h(xt) + δt",
           "tex": "x_t = g(u_t, x_{t-1}) + \\varepsilon_t,\\quad z_t = h(x_t) + \\delta_t",
           "note": "A and B replaced by g(.), C by h(.)",
-          "ref": "EKF.pdf, p. 6"
+          "ref": "EKF.pdf, p. 6",
+          "where": [
+            { "tex": "x_t", "means": "robot state at time slot t, e.g. pose (x, y, θ) (Basics.pdf, p. 5)" },
+            { "tex": "g", "means": "known nonlinear motion function g(.), replaces A and B (EKF.pdf, p. 6)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" },
+            { "tex": "x_{t-1}", "means": "robot state one time slot earlier (Basics.pdf, p. 5)" },
+            { "tex": "\\varepsilon_t", "means": "motion noise, ε_t ~ N(0, R) (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "z_t", "means": "measurement in time slot t (Basics.pdf, p. 5)" },
+            { "tex": "h", "means": "known nonlinear measurement function h(.), replaces C (EKF.pdf, p. 6)" },
+            { "tex": "\\delta_t", "means": "measurement noise, δ_t ~ N(0, Q) (Gaussianfilters.pdf, p. 8)" }
+          ]
         },
         {
           "eq": "g(ut, xt−1) ≈ g(ut, μt−1) + Gt(xt−1 − μt−1)",
           "tex": "g(u_t, x_{t-1}) \\approx g(u_t, \\mu_{t-1}) + G_t\\,(x_{t-1} - \\mu_{t-1})",
           "note": "First-order Taylor series at the mean; Gt the Jacobian",
-          "ref": "EKF.pdf, p. 8, eqs. 4–5; p. 9"
+          "ref": "EKF.pdf, p. 8, eqs. 4–5; p. 9",
+          "where": [
+            { "tex": "g", "means": "known nonlinear motion function g(.), replaces A and B (EKF.pdf, p. 6)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" },
+            { "tex": "x_{t-1}", "means": "robot state one time slot earlier (Basics.pdf, p. 5)" },
+            { "tex": "\\mu_{t-1}", "means": "mean of the previous belief (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "G_t", "means": "Jacobian of g at the previous mean (EKF.pdf, pp. 8–9)" }
+          ]
         },
         {
           "explore": true,
           "eq": "μ̄t = g(ut, μt−1), Σ̄t = Gt·Σt−1·Gtᵀ + Rt",
           "tex": "\\bar\\mu_t = g(u_t, \\mu_{t-1}),\\quad \\bar\\Sigma_t = G_t\\,\\Sigma_{t-1} G_t^{\\mathsf T} + R_t",
           "note": "The EKF's prediction",
-          "ref": "EKF.pdf, p. 12 (after Thrun et al. 2006)"
+          "ref": "EKF.pdf, p. 12 (after Thrun et al. 2006)",
+          "where": [
+            { "tex": "\\bar\\mu_t", "means": "predicted mean; the bar marks a prediction (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "g", "means": "known nonlinear motion function g(.), replaces A and B (EKF.pdf, p. 6)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" },
+            { "tex": "\\mu_{t-1}", "means": "mean of the previous belief (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "\\bar\\Sigma_t", "means": "predicted covariance (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "G_t", "means": "Jacobian of g at the previous mean (EKF.pdf, pp. 8–9)" },
+            { "tex": "\\Sigma_{t-1}", "means": "covariance of the previous belief (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "^{\\mathsf T}", "means": "transpose (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "R_t", "means": "covariance of the motion (process) noise (Gaussianfilters.pdf, p. 6)" }
+          ]
         },
         {
           "explore": true,
           "eq": "G = [1, 0, −δd·sin(θ + δθ); 0, 1, δd·cos(θ + δθ); 0, 0, 1]",
           "tex": "G_t = \\begin{pmatrix} 1 & 0 & -\\delta_d \\sin(\\theta + \\delta_\\theta) \\\\ 0 & 1 & \\delta_d \\cos(\\theta + \\delta_\\theta) \\\\ 0 & 0 & 1 \\end{pmatrix}",
           "note": "The Jacobian of the odometry step, worked here from EKF.pdf, p. 3, eq. 1",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "G_t", "means": "Jacobian of g at the previous mean (EKF.pdf, pp. 8–9)" },
+            { "tex": "\\delta_d", "means": "distance driven in one step [m] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\delta_\\theta", "means": "change of heading in one step [rad] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\theta", "means": "heading of the previous mean [rad] (EKF.pdf, p. 3)" }
+          ]
         },
         {
           "eq": "R = V·diag(σd², σθ²)·Vᵀ, V = ∂g/∂(δd, δθ)",
           "tex": "R_t = V_t \\begin{pmatrix} \\sigma_d^2 & 0 \\\\ 0 & \\sigma_\\theta^2 \\end{pmatrix} V_t^{\\mathsf T},\\quad V_t = \\frac{\\partial g}{\\partial(\\delta_d, \\delta_\\theta)}",
           "note": "The noise of δd and δθ carried into x, y, θ; worked here so the EKF and the samples share one noise",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "R_t", "means": "covariance of the motion (process) noise (Gaussianfilters.pdf, p. 6)" },
+            { "tex": "V_t", "means": "Jacobian of g with respect to the odometry (δ_d, δ_θ); Thrun's V_t (EKFLoc.pdf, p. 10 shows the algorithm, V_t not explained) (not defined in the source)" },
+            { "tex": "\\sigma_d^2,\\ \\sigma_\\theta^2", "means": "variances of the driven distance and of the heading change (not defined in the source)" },
+            { "tex": "^{\\mathsf T}", "means": "transpose (Gaussianfilters.pdf, p. 11)" },
+            { "tex": "g", "means": "known nonlinear motion function g(.), replaces A and B (EKF.pdf, p. 6)" },
+            { "tex": "\\delta_d", "means": "distance driven in one step [m] (EKF.pdf, p. 3, footnote 1)" },
+            { "tex": "\\delta_\\theta", "means": "change of heading in one step [rad] (EKF.pdf, p. 3, footnote 1)" }
+          ]
         }
       ],
       "practice": [
@@ -305,33 +475,67 @@
           "eq": "E[f] = ∫ f(z)·p(z)/q(z)·q(z) dz ≈ (1/L)·Σ rl·f(z(l))",
           "tex": "E[f] = \\int f(z)\\,\\frac{p(z)}{q(z)}\\,q(z)\\,dz \\approx \\frac{1}{L} \\sum_{l} r_l\\, f\\left(z^{(l)}\\right)",
           "note": "Sampling from a proposal q and weighting by rl = p/q",
-          "ref": "MCMC.pdf, p. 13, eqs. 2–3"
+          "ref": "MCMC.pdf, p. 13, eqs. 2–3",
+          "where": [
+            { "tex": "E[f]", "means": "expected value of the function f (MCMC.pdf, p. 12, eq. 1)" },
+            { "tex": "f", "means": "function whose expectation is sought (MCMC.pdf, p. 12)" },
+            { "tex": "z", "means": "random variable; not a measurement here (MCMC.pdf, p. 12, footnote 3)" },
+            { "tex": "p(z)", "means": "target distribution, unknown (MCMC.pdf, p. 13)" },
+            { "tex": "q(z)", "means": "proposal distribution we can sample from (MCMC.pdf, p. 13)" },
+            { "tex": "L", "means": "number of samples; the slide sums l = 0 to L but divides by L (MCMC.pdf, p. 13, eq. 3)" },
+            { "tex": "l", "means": "sample index (MCMC.pdf, p. 13)" },
+            { "tex": "r_l", "means": "importance weight p(z^(l))/q(z^(l)) (MCMC.pdf, p. 13)" },
+            { "tex": "z^{(l)}", "means": "sample l drawn from q (MCMC.pdf, p. 13)" }
+          ]
         },
         {
           "explore": true,
           "eq": "xt[m] ∼ p(xt | ut, xt−1[m])",
           "tex": "x_t^{[m]} \\sim p\\left(x_t \\mid u_t, x_{t-1}^{[m]}\\right)",
           "note": "Prediction: sample each particle's move from the motion model",
-          "ref": "MCMC.pdf, p. 15; p. 18, line 4"
+          "ref": "MCMC.pdf, p. 15; p. 18, line 4",
+          "where": [
+            { "tex": "x_t^{[m]}", "means": "particle m: one sampled state hypothesis (MCMC.pdf, p. 15)" },
+            { "tex": "x_{t-1}^{[m]}", "means": "particle m of the previous set (MCMC.pdf, p. 15)" },
+            { "tex": "u_t", "means": "command (motion input) in time slot t, e.g. 0.1 m/s in X (Basics.pdf, p. 5)" },
+            { "tex": "p(x_t \\mid u_t, x_{t-1})", "means": "motion model: probability of the new state given command and old state (Gaussianfilters.pdf, p. 6)" }
+          ]
         },
         {
           "eq": "wt[m] = p(zt | xt[m])",
           "tex": "w_t^{[m]} = p\\left(z_t \\mid x_t^{[m]}\\right)",
           "note": "Weight by the sensor model",
-          "ref": "MCMC.pdf, p. 15; p. 18, line 5"
+          "ref": "MCMC.pdf, p. 15; p. 18, line 5",
+          "where": [
+            { "tex": "w_t^{[m]}", "means": "importance weight of particle m (MCMC.pdf, p. 15)" },
+            { "tex": "z_t", "means": "measurement in time slot t (Basics.pdf, p. 5)" },
+            { "tex": "x_t^{[m]}", "means": "particle m: one sampled state hypothesis (MCMC.pdf, p. 15)" }
+          ]
         },
         {
           "explore": true,
           "eq": "draw i with probability ∝ wt[i], with replacement, M times",
           "tex": "P(\\text{draw } i) = \\frac{w_t^{[i]}}{\\sum_m w_t^{[m]}}",
           "note": "Resampling, the correction step",
-          "ref": "MCMC.pdf, p. 16; p. 18, lines 8–11"
+          "ref": "MCMC.pdf, p. 16; p. 18, lines 8–11",
+          "where": [
+            { "tex": "P(\\text{draw } i)", "means": "probability of drawing particle i in re-sampling (MCMC.pdf, p. 16)" },
+            { "tex": "w_t^{[i]}", "means": "weight of particle i (MCMC.pdf, p. 15)" },
+            { "tex": "w_t^{[m]}", "means": "importance weight of particle m (MCMC.pdf, p. 15)" },
+            { "tex": "m", "means": "particle index, 1 to M (MCMC.pdf, p. 15)" }
+          ]
         },
         {
           "eq": "p(z|x) ∝ exp(−(z − ẑ)²/(2σ²))",
           "tex": "p(z \\mid x) \\propto \\exp\\left(-\\frac{(z - \\hat z)^2}{2\\sigma^2}\\right)",
           "note": "A normal distribution as sensor model, ẑ the reading the particle expects",
-          "ref": "MCMC.pdf, p. 19; Basics.pdf, p. 14, eq. 9 in one dimension"
+          "ref": "MCMC.pdf, p. 19; Basics.pdf, p. 14, eq. 9 in one dimension",
+          "where": [
+            { "tex": "p(z \\mid x)", "means": "measurement model evaluated for a particle (MCMC.pdf, p. 19)" },
+            { "tex": "z", "means": "measurement (MCMC.pdf, p. 19)" },
+            { "tex": "\\hat z", "means": "measurement the particle's state predicts (not defined in the source)" },
+            { "tex": "\\sigma", "means": "standard deviation of the measurement noise (Basics.pdf, p. 14, eq. 9)" }
+          ]
         }
       ],
       "practice": [
@@ -367,25 +571,47 @@
           "eq": "g(i, j) = Σk,l I(i + k, j + l)·h(k, l)",
           "tex": "g(i, j) = \\sum_{k,l} I(i + k,\\, j + l)\\, h(k, l)",
           "note": "The kernel slid over the image (the slide calls it convolution; written this way it is a correlation, the same for symmetric kernels)",
-          "ref": "1_Entrauschen.pdf, p. 6, eq. 1"
+          "ref": "1_Entrauschen.pdf, p. 6, eq. 1",
+          "where": [
+            { "tex": "g(i, j)", "means": "new output image at pixel (i, j) (1_Entrauschen.pdf, p. 6)" },
+            { "tex": "I", "means": "input image (1_Entrauschen.pdf, p. 6)" },
+            { "tex": "h(k, l)", "means": "kernel (1_Entrauschen.pdf, p. 6)" },
+            { "tex": "i,\\ j", "means": "pixel position (not defined in the source)" },
+            { "tex": "k,\\ l", "means": "offsets within the kernel; a double sum (1_Entrauschen.pdf, p. 6)" }
+          ]
         },
         {
           "eq": "K = 1/(Kw·Kh)·[1 … 1; …; 1 … 1]",
           "tex": "K = \\frac{1}{K_w K_h} \\begin{pmatrix} 1 & \\cdots & 1 \\\\ \\vdots & & \\vdots \\\\ 1 & \\cdots & 1 \\end{pmatrix}",
           "note": "The normalised box filter",
-          "ref": "1_Entrauschen.pdf, p. 7, eq. 2"
+          "ref": "1_Entrauschen.pdf, p. 7, eq. 2",
+          "where": [
+            { "tex": "K", "means": "normalised box filter kernel (1_Entrauschen.pdf, p. 7)" },
+            { "tex": "K_w", "means": "kernel width [pixels] (1_Entrauschen.pdf, p. 7)" },
+            { "tex": "K_h", "means": "kernel height [pixels] (1_Entrauschen.pdf, p. 7)" }
+          ]
         },
         {
           "eq": "p̃ = p(n+1)/2 for n odd, (pn/2 + p1+n/2)/2 for n even",
           "tex": "\\tilde p = \\begin{cases} p_{(n+1)/2} & n \\text{ odd} \\\\ \\tfrac12\\left(p_{n/2} + p_{1+n/2}\\right) & n \\text{ even} \\end{cases}",
           "note": "The median of the sorted window",
-          "ref": "1_Entrauschen.pdf, p. 8, eq. 3"
+          "ref": "1_Entrauschen.pdf, p. 8, eq. 3",
+          "where": [
+            { "tex": "\\tilde p", "means": "median of the search window (1_Entrauschen.pdf, p. 8)" },
+            { "tex": "p_1, \\dots, p_n", "means": "pixels of the window, sorted (1_Entrauschen.pdf, p. 8)" },
+            { "tex": "n", "means": "number of pixels in the window (1_Entrauschen.pdf, p. 8)" }
+          ]
         },
         {
           "eq": "h(k, l) ∝ exp(−(k² + l²)/(2σ²))",
           "tex": "h(k, l) \\propto \\exp\\left(-\\frac{k^2 + l^2}{2\\sigma^2}\\right)",
           "note": "The Gaussian filter, a box weighted by the Gauss bell, normalised to sum to one",
-          "ref": "1_Entrauschen.pdf, p. 9; the bell from Basics.pdf, p. 14, eq. 9"
+          "ref": "1_Entrauschen.pdf, p. 9; the bell from Basics.pdf, p. 14, eq. 9",
+          "where": [
+            { "tex": "h(k, l)", "means": "Gaussian kernel weight at offset (k, l) (1_Entrauschen.pdf, p. 9)" },
+            { "tex": "k,\\ l", "means": "offsets from the kernel centre (not defined in the source)" },
+            { "tex": "\\sigma", "means": "standard deviation of the bell (Basics.pdf, p. 14, eq. 9)" }
+          ]
         }
       ],
       "practice": [
@@ -431,25 +657,44 @@
           "eq": "class(p) = 255 if p ≥ TH, else 0",
           "tex": "\\mathrm{class}(p_{r,c}) = \\begin{cases} 255 & p_{r,c} \\ge T_H \\\\ 0 & \\text{else} \\end{cases}",
           "note": "A fixed threshold",
-          "ref": "2_Segmentation.pdf, p. 12, eq. 4; p. 6, eq. 2"
+          "ref": "2_Segmentation.pdf, p. 12, eq. 4; p. 6, eq. 2",
+          "where": [
+            { "tex": "p_{r,c}", "means": "pixel value at row r, column c (2_Segmentation.pdf, pp. 6, 12)" },
+            { "tex": "T_H", "means": "threshold (2_Segmentation.pdf, p. 6)" }
+          ]
         },
         {
           "eq": "IExGreen = 2·Ig − Ir − Ib",
           "tex": "I_{\\mathrm{ExGreen}} = 2 I_g - I_r - I_b",
           "note": "The excess colour index; p. 11 uses 2Ib − Ir − Ig for blue",
-          "ref": "2_Segmentation.pdf, p. 10, eq. 3; p. 11"
+          "ref": "2_Segmentation.pdf, p. 10, eq. 3; p. 11",
+          "where": [
+            { "tex": "I_{\\mathrm{ExGreen}}", "means": "excess green index (2_Segmentation.pdf, p. 10, eq. 3)" },
+            { "tex": "I_r,\\ I_g,\\ I_b", "means": "red, green and blue channel (2_Segmentation.pdf, p. 10)" }
+          ]
         },
         {
           "eq": "J(TH) = (μ1 − μ2)²/(σ1² + σ2²)",
           "tex": "J(T_H) = \\frac{(\\mu_1 - \\mu_2)^2}{\\sigma_1^2 + \\sigma_2^2}",
           "note": "The criterion the slide gives for Otsu's method (Fisher's discriminant); the best TH maximises it",
-          "ref": "2_Segmentation.pdf, p. 14, eq. 5"
+          "ref": "2_Segmentation.pdf, p. 14, eq. 5",
+          "where": [
+            { "tex": "J(T_H)", "means": "separation criterion to maximise over T_H (2_Segmentation.pdf, p. 14)" },
+            { "tex": "\\mu_1,\\ \\mu_2", "means": "mean pixel value of class 1 and 2 (2_Segmentation.pdf, p. 14)" },
+            { "tex": "\\sigma_1^2,\\ \\sigma_2^2", "means": "variance of class 1 and 2 (2_Segmentation.pdf, p. 14)" },
+            { "tex": "T_H", "means": "threshold, tried over 0–255 (2_Segmentation.pdf, p. 15)" }
+          ]
         },
         {
           "eq": "pj ∈ C1 if pj ≤ TH, C2 if pj > TH",
           "tex": "p_j \\in \\begin{cases} C_1 & p_j \\le T_H \\\\ C_2 & p_j > T_H \\end{cases}",
           "note": "The two classes, TH tried from 0 to 255",
-          "ref": "2_Segmentation.pdf, p. 15, eq. 6"
+          "ref": "2_Segmentation.pdf, p. 15, eq. 6",
+          "where": [
+            { "tex": "p_j", "means": "pixel j (2_Segmentation.pdf, p. 15)" },
+            { "tex": "C_1,\\ C_2", "means": "the two classes of pixel values (2_Segmentation.pdf, p. 14)" },
+            { "tex": "T_H", "means": "threshold (2_Segmentation.pdf, p. 15)" }
+          ]
         }
       ],
       "practice": [
@@ -480,39 +725,75 @@
       "idea": "Turn red, green and blue into a hue angle, a saturation and a brightness, and a colour is found by its hue alone, whatever the lighting does to the three channels.",
       "law": "H = 60°·(4 + (Ir − Ig)/Δ) if Cmax = Ib",
       "lawTex": "H = \\begin{cases} 60^\\circ\\,\\frac{I_g - I_b}{\\Delta} & C_{\\max} = I_r \\\\ 60^\\circ\\left(2 + \\frac{I_b - I_r}{\\Delta}\\right) & C_{\\max} = I_g \\\\ 60^\\circ\\left(4 + \\frac{I_r - I_g}{\\Delta}\\right) & C_{\\max} = I_b \\end{cases}",
+      "lawWhere": [
+        { "tex": "H", "means": "hue: angle on the colour circle [°], 0° = red (2_Segmentation.pdf, p. 25)" },
+        { "tex": "I_r,\\ I_g,\\ I_b", "means": "red, green and blue channel of the pixel, normalised to 0–1 (2_Segmentation.pdf, p. 23)" },
+        { "tex": "\\Delta", "means": "C_max − C_min (2_Segmentation.pdf, p. 24, eq. 10)" },
+        { "tex": "C_{\\max}", "means": "largest of the three channels (2_Segmentation.pdf, p. 24, eq. 8)" }
+      ],
       "equations": [
         {
           "eq": "Cmax = max(Ir, Ig, Ib), Cmin = min(…), Δ = Cmax − Cmin",
           "tex": "C_{\\max} = \\max(I_r, I_g, I_b),\\quad C_{\\min} = \\min(I_r, I_g, I_b),\\quad \\Delta = C_{\\max} - C_{\\min}",
           "note": "The extremes",
-          "ref": "2_Segmentation.pdf, p. 24, eqs. 8–10"
+          "ref": "2_Segmentation.pdf, p. 24, eqs. 8–10",
+          "where": [
+            { "tex": "C_{\\max}", "means": "largest of the three channels (2_Segmentation.pdf, p. 24, eq. 8)" },
+            { "tex": "C_{\\min}", "means": "smallest of the three channels (2_Segmentation.pdf, p. 24, eq. 9)" },
+            { "tex": "I_r,\\ I_g,\\ I_b", "means": "red, green and blue channel of the pixel, normalised to 0–1 (2_Segmentation.pdf, p. 23)" },
+            { "tex": "\\Delta", "means": "C_max − C_min (2_Segmentation.pdf, p. 24, eq. 10)" }
+          ]
         },
         {
           "eq": "H = 0 if Δ = 0; 60°·(Ig − Ib)/Δ if Cmax = Ir; 60°·(2 + (Ib − Ir)/Δ) if Cmax = Ig; 60°·(4 + (Ir − Ig)/Δ) if Cmax = Ib",
           "tex": "H = \\begin{cases} 0 & \\Delta = 0 \\\\ 60^\\circ\\,\\frac{I_g - I_b}{\\Delta} & C_{\\max} = I_r \\\\ 60^\\circ\\left(2 + \\frac{I_b - I_r}{\\Delta}\\right) & C_{\\max} = I_g \\\\ 60^\\circ\\left(4 + \\frac{I_r - I_g}{\\Delta}\\right) & C_{\\max} = I_b \\end{cases}",
           "note": "Hue, then brought into 0°–360°",
-          "ref": "2_Segmentation.pdf, p. 25, eq. 11"
+          "ref": "2_Segmentation.pdf, p. 25, eq. 11",
+          "where": [
+            { "tex": "H", "means": "hue: angle on the colour circle [°], 0° = red (2_Segmentation.pdf, p. 25)" },
+            { "tex": "I_r,\\ I_g,\\ I_b", "means": "red, green and blue channel of the pixel, normalised to 0–1 (2_Segmentation.pdf, p. 23)" },
+            { "tex": "\\Delta", "means": "C_max − C_min (2_Segmentation.pdf, p. 24, eq. 10)" },
+            { "tex": "C_{\\max}", "means": "largest of the three channels (2_Segmentation.pdf, p. 24, eq. 8)" }
+          ]
         },
         {
           "explore": true,
           "eq": "S = Δ/Cmax (0 if Cmax = 0), V = Cmax",
           "tex": "S = \\frac{\\Delta}{C_{\\max}},\\quad V = C_{\\max}",
           "note": "Saturation and value",
-          "ref": "2_Segmentation.pdf, p. 26, eqs. 12–13"
+          "ref": "2_Segmentation.pdf, p. 26, eqs. 12–13",
+          "where": [
+            { "tex": "S", "means": "saturation; 0 when C_max = 0 (2_Segmentation.pdf, p. 26, eq. 12)" },
+            { "tex": "V", "means": "value (brightness); p. 22 calls it “Hue” by mistake (2_Segmentation.pdf, p. 26, eq. 13)" },
+            { "tex": "\\Delta", "means": "C_max − C_min (2_Segmentation.pdf, p. 24, eq. 10)" },
+            { "tex": "C_{\\max}", "means": "largest of the three channels (2_Segmentation.pdf, p. 24, eq. 8)" }
+          ]
         },
         {
           "explore": true,
           "eq": "h = ⌊H/60°⌋, f = H/60° − h, p = V(1 − S), q = V(1 − Sf), t = V(1 − S(1 − f))",
           "tex": "h = \\left\\lfloor \\frac{H}{60^\\circ} \\right\\rfloor,\\ f = \\frac{H}{60^\\circ} - h,\\ p = V(1 - S),\\ q = V(1 - Sf),\\ t = V(1 - S(1 - f))",
           "note": "Back to RGB: the sector and the helper values",
-          "ref": "2_Segmentation.pdf, pp. 29–30, eqs. 14–18"
+          "ref": "2_Segmentation.pdf, pp. 29–30, eqs. 14–18",
+          "where": [
+            { "tex": "h", "means": "sector of the hue, H/60° rounded down (2_Segmentation.pdf, p. 29, eq. 14)" },
+            { "tex": "f", "means": "remainder within the sector (2_Segmentation.pdf, p. 29, eq. 15)" },
+            { "tex": "p,\\ q,\\ t", "means": "helper values: white share and left/right shares (2_Segmentation.pdf, p. 30, eqs. 16–18)" },
+            { "tex": "H", "means": "hue: angle on the colour circle [°], 0° = red (2_Segmentation.pdf, p. 25)" },
+            { "tex": "S,\\ V", "means": "saturation and value (2_Segmentation.pdf, p. 26)" }
+          ]
         },
         {
           "explore": true,
           "eq": "(R, G, B) = (V, t, p), (q, V, p), (p, V, t), (p, q, V), (t, p, V), (V, p, q) for h = 0 … 5",
           "tex": "(R, G, B) = (V,t,p),\\ (q,V,p),\\ (p,V,t),\\ (p,q,V),\\ (t,p,V),\\ (V,p,q)",
           "note": "For h = 0 to 5; the slide prints (q, V, t) for h = 2, a slip: R must be p there",
-          "ref": "2_Segmentation.pdf, p. 31, eq. 19 (corrected)"
+          "ref": "2_Segmentation.pdf, p. 31, eq. 19 (corrected)",
+          "where": [
+            { "tex": "(R, G, B)", "means": "red, green, blue of the pixel, one triple per sector h = 0 to 5 (2_Segmentation.pdf, p. 31, eq. 19)" },
+            { "tex": "V", "means": "value (2_Segmentation.pdf, p. 26)" },
+            { "tex": "p,\\ q,\\ t", "means": "helper values (2_Segmentation.pdf, p. 30); the slide's row for h = 2 has q in place of p" }
+          ]
         }
       ],
       "practice": [
@@ -552,42 +833,74 @@
       "idea": "An edge is where the grey value changes fast. Sobel kernels measure the change in x and y; Canny smooths first, thins each edge to one pixel and keeps weak edges only when they join strong ones.",
       "law": "|∇f| = √(fx² + fy²), Gx = Kx ∗ I, Gy = Ky ∗ I",
       "lawTex": "|\\nabla f(x, y)| = \\sqrt{(f'_x)^2 + (f'_y)^2}",
+      "lawWhere": [
+        { "tex": "|\\nabla f(x, y)|", "means": "magnitude of the gradient (4.Edges.pdf, p. 7, eq. 2)" },
+        { "tex": "f'_x,\\ f'_y", "means": "partial derivatives of the image along x and y (4.Edges.pdf, p. 7, eq. 1)" }
+      ],
       "equations": [
         {
           "eq": "∇f(x, y) = (∂f/∂x, ∂f/∂y) = (fx, fy)",
           "tex": "\\nabla f(x, y) = \\begin{pmatrix} \\partial f / \\partial x \\\\ \\partial f / \\partial y \\end{pmatrix} = \\begin{pmatrix} f'_x \\\\ f'_y \\end{pmatrix}",
           "note": "The image gradient",
-          "ref": "4.Edges.pdf, p. 7, eq. 1"
+          "ref": "4.Edges.pdf, p. 7, eq. 1",
+          "where": [
+            { "tex": "\\nabla f(x, y)", "means": "gradient of the image (4.Edges.pdf, p. 7, eq. 1)" },
+            { "tex": "f(x, y)", "means": "grey-value image (4.Edges.pdf, p. 7)" },
+            { "tex": "\\partial f / \\partial x,\\ \\partial f / \\partial y", "means": "partial derivatives along x and y (4.Edges.pdf, p. 7)" },
+            { "tex": "f'_x,\\ f'_y", "means": "partial derivatives of the image along x and y (4.Edges.pdf, p. 7, eq. 1)" }
+          ]
         },
         {
           "eq": "|∇f| = √(fx² + fy²), θ = atan2(fy, fx)",
           "tex": "|\\nabla f| = \\sqrt{(f'_x)^2 + (f'_y)^2},\\quad \\theta = \\operatorname{atan2}(f'_y, f'_x)",
           "note": "Size and direction; the slide writes atan2(fx, fy), the lab measures θ from the x axis",
-          "ref": "4.Edges.pdf, p. 7, eqs. 2–3"
+          "ref": "4.Edges.pdf, p. 7, eqs. 2–3",
+          "where": [
+            { "tex": "|\\nabla f|", "means": "gradient magnitude (4.Edges.pdf, p. 7, eq. 2)" },
+            { "tex": "f'_x,\\ f'_y", "means": "partial derivatives of the image along x and y (4.Edges.pdf, p. 7, eq. 1)" },
+            { "tex": "\\theta", "means": "gradient direction; the slide writes atan2(f_x, f_y) (4.Edges.pdf, p. 7, eq. 3)" }
+          ]
         },
         {
           "eq": "∂f/∂x ≈ f(x + 1) − f(x − 1)",
           "tex": "\\frac{\\partial f}{\\partial x} \\approx f(x + 1) - f(x - 1)",
           "note": "The central difference, one pixel the smallest step",
-          "ref": "4.Edges.pdf, p. 8"
+          "ref": "4.Edges.pdf, p. 8",
+          "where": [
+            { "tex": "f(x)", "means": "grey value at position x (4.Edges.pdf, p. 8)" },
+            { "tex": "x", "means": "pixel position along one row (4.Edges.pdf, p. 8)" }
+          ]
         },
         {
           "eq": "Kx = [−1 0 1; −2 0 2; −1 0 1], Ky = [−1 −2 −1; 0 0 0; 1 2 1]",
           "tex": "K_x = \\begin{pmatrix} -1 & 0 & 1 \\\\ -2 & 0 & 2 \\\\ -1 & 0 & 1 \\end{pmatrix},\\quad K_y = \\begin{pmatrix} -1 & -2 & -1 \\\\ 0 & 0 & 0 \\\\ 1 & 2 & 1 \\end{pmatrix}",
           "note": "The Sobel kernels; Gx = Kx ∗ I, Gy = Ky ∗ I",
-          "ref": "4.Edges.pdf, p. 9, eq. 5"
+          "ref": "4.Edges.pdf, p. 9, eq. 5",
+          "where": [
+            { "tex": "K_x,\\ K_y", "means": "Sobel kernels for the x and y derivative (4.Edges.pdf, p. 9, eq. 5)" }
+          ]
         },
         {
           "eq": "G := (G − min)/(max − min)·255",
           "tex": "G_{x/y}(r, c) := \\frac{G_{x/y}(r, c) - \\min}{\\max - \\min} \\cdot 255",
           "note": "Scaling a gradient image to show it: a gradient of 0 becomes mid grey",
-          "ref": "4.Edges.pdf, p. 9, eq. 6"
+          "ref": "4.Edges.pdf, p. 9, eq. 6",
+          "where": [
+            { "tex": "G_{x/y}(r, c)", "means": "gradient image G_x or G_y at row r, column c, G_x = K_x ∗ I (4.Edges.pdf, p. 9)" },
+            { "tex": "\\min,\\ \\max", "means": "smallest and largest value in G_x or G_y (4.Edges.pdf, p. 9)" }
+          ]
         },
         {
           "eq": "Ismoothed = Kgauss ∗ I",
           "tex": "I_{\\mathrm{smoothed}} = K_{\\mathrm{gauss}} * I",
           "note": "Canny's first step, then Sobel, non-maximum suppression (p. 13) and two thresholds (p. 14)",
-          "ref": "4.Edges.pdf, pp. 11–14, eq. 7"
+          "ref": "4.Edges.pdf, pp. 11–14, eq. 7",
+          "where": [
+            { "tex": "I_{\\mathrm{smoothed}}", "means": "smoothed image (4.Edges.pdf, p. 12, eq. 7)" },
+            { "tex": "K_{\\mathrm{gauss}}", "means": "Gaussian kernel (4.Edges.pdf, p. 12)" },
+            { "tex": "*", "means": "discrete convolution (1_Entrauschen.pdf, p. 6)" },
+            { "tex": "I", "means": "input image (1_Entrauschen.pdf, p. 6)" }
+          ]
         }
       ],
       "practice": [
@@ -618,37 +931,68 @@
       "idea": "A convolution layer slides the same small kernels over the whole image, adds a bias, and passes the result through ReLU and pooling: few weights, shared everywhere. Count them, and the output's size, the way the network summary does.",
       "law": "weights = ((m·n·d) + 1)·k",
       "lawTex": "\\#\\text{weights} = \\left((m \\cdot n \\cdot d) + 1\\right) \\cdot k",
+      "lawWhere": [
+        { "tex": "\\#\\text{weights}", "means": "number of trainable parameters of a convolution layer (10_MuS2_CNN.pdf, p. 7)" },
+        { "tex": "m", "means": "width of the kernel (10_MuS2_CNN.pdf, p. 7)" },
+        { "tex": "n", "means": "height of the kernel; the same slide also uses n for nodes per layer (10_MuS2_CNN.pdf, p. 7)" },
+        { "tex": "d", "means": "depth of the previous layer (10_MuS2_CNN.pdf, p. 7)" },
+        { "tex": "k", "means": "number of kernels (filters) in the layer (not defined in the source)" }
+      ],
       "equations": [
         {
           "eq": "conv: ((m·n·d) + 1)·k",
           "tex": "\\left((m \\cdot n \\cdot d) + 1\\right) \\cdot k",
           "note": "Weights of a convolution layer: m × n kernel, d the depth before, k kernels (k is not named on the slide)",
-          "ref": "10_MuS2_CNN.pdf, p. 7"
+          "ref": "10_MuS2_CNN.pdf, p. 7",
+          "where": [
+            { "tex": "m", "means": "width of the kernel (10_MuS2_CNN.pdf, p. 7)" },
+            { "tex": "n", "means": "height of the kernel; the same slide also uses n for nodes per layer (10_MuS2_CNN.pdf, p. 7)" },
+            { "tex": "d", "means": "depth of the previous layer (10_MuS2_CNN.pdf, p. 7)" },
+            { "tex": "k", "means": "number of kernels (filters) in the layer (not defined in the source)" }
+          ]
         },
         {
           "eq": "dense: (nL−1 + 1)·nL",
           "tex": "(n_{L-1} + 1) \\cdot n_L",
           "note": "Weights of a dense layer, one bias per node; the slide prints nL−1·nL + 1",
-          "ref": "10_MuS2_CNN.pdf, p. 7 (corrected)"
+          "ref": "10_MuS2_CNN.pdf, p. 7 (corrected)",
+          "where": [
+            { "tex": "n_{L-1},\\ n_L", "means": "number of nodes in the previous and in this layer (10_MuS2_CNN.pdf, p. 7)" }
+          ]
         },
         {
           "explore": true,
           "eq": "out = ⌊(n + 2p − m)/s⌋ + 1",
           "tex": "n_{\\text{out}} = \\left\\lfloor \\frac{n + 2p - m}{s} \\right\\rfloor + 1",
           "note": "Output size along one axis, p the padding and s the stride; worked here and checked against the shapes printed on p. 10",
-          "ref": ""
+          "ref": "",
+          "where": [
+            { "tex": "n_{\\text{out}}", "means": "output width of a convolution (not defined in the source)" },
+            { "tex": "n", "means": "input width (not defined in the source)" },
+            { "tex": "p", "means": "padding on each side [pixels]; padding is named on p. 9 (not defined in the source)" },
+            { "tex": "m", "means": "kernel width (10_MuS2_CNN.pdf, p. 7)" },
+            { "tex": "s", "means": "stride (not defined in the source)" }
+          ]
         },
         {
           "eq": "ReLU(x) = max(0, x)",
           "tex": "\\mathrm{ReLU}(x) = \\max(0, x)",
           "note": "An activation, which makes the stack of linear maps non-linear",
-          "ref": "10_MuS2_CNN.pdf, p. 9"
+          "ref": "10_MuS2_CNN.pdf, p. 9",
+          "where": [
+            { "tex": "x", "means": "input of the activation (10_MuS2_CNN.pdf, p. 9) (not defined in the source)" }
+          ]
         },
         {
           "eq": "wni := wni − gni·lr",
           "tex": "w_{ni} := w_{ni} - g_{ni} \\cdot lr",
           "note": "A step of stochastic gradient descent, g the gradient, lr the learning rate",
-          "ref": "10_MuS2_CNN.pdf, p. 17"
+          "ref": "10_MuS2_CNN.pdf, p. 17",
+          "where": [
+            { "tex": "w_{ni}", "means": "weight at layer n and node i (10_MuS2_CNN.pdf, p. 17)" },
+            { "tex": "g_{ni}", "means": "gradient at layer n and node i (10_MuS2_CNN.pdf, p. 17)" },
+            { "tex": "lr", "means": "learning rate (10_MuS2_CNN.pdf, p. 17)" }
+          ]
         }
       ],
       "practice": [
@@ -702,26 +1046,53 @@
           "eq": "Z = B·f/D",
           "tex": "Z = \\frac{B \\cdot f}{D}",
           "note": "Depth from disparity D, B the baseline, f the focal length; similar triangles",
-          "ref": "11_Pose-Estimation.pdf, p. 10, eq. 3; p. 16"
+          "ref": "11_Pose-Estimation.pdf, p. 10, eq. 3; p. 16",
+          "where": [
+            { "tex": "Z", "means": "distance to the point [m] (11_Pose-Estimation.pdf, p. 8)" },
+            { "tex": "B", "means": "baseline: distance between the cameras [m] (11_Pose-Estimation.pdf, p. 8)" },
+            { "tex": "f", "means": "focal length (11_Pose-Estimation.pdf, p. 8)" },
+            { "tex": "D", "means": "disparity, D = x + x′ from the image edges (11_Pose-Estimation.pdf, p. 10)" }
+          ]
         },
         {
           "explore": true,
           "eq": "u = fx·xc/zc + cx, v = fy·yc/zc + cy",
           "tex": "\\begin{pmatrix} u \\\\ v \\end{pmatrix} = \\begin{pmatrix} c_x \\\\ c_y \\end{pmatrix} + \\frac{1}{z_c} \\begin{pmatrix} f_x\\, x_c \\\\ f_y\\, y_c \\end{pmatrix}",
           "note": "The pinhole camera with the chip's offset",
-          "ref": "11_Pose-Estimation.pdf, p. 23, eqs. 5–6"
+          "ref": "11_Pose-Estimation.pdf, p. 23, eqs. 5–6",
+          "where": [
+            { "tex": "u,\\ v", "means": "pixel coordinates of the projected point (11_Pose-Estimation.pdf, pp. 22–23)" },
+            { "tex": "c_x,\\ c_y", "means": "chip offset: principal point (11_Pose-Estimation.pdf, p. 23)" },
+            { "tex": "f_x,\\ f_y", "means": "focal lengths in pixels, from calibration (11_Pose-Estimation.pdf, pp. 22–23)" },
+            { "tex": "x_c,\\ y_c", "means": "point in camera coordinates (11_Pose-Estimation.pdf, p. 23)" },
+            { "tex": "z_c", "means": "depth of the point in camera coordinates; the slide's legend calls it the distance from projection centre to chip (11_Pose-Estimation.pdf, p. 23)" }
+          ]
         },
         {
           "eq": "s·(u, v, 1)ᵀ = K·[R | t]·(X, Y, Z, 1)ᵀ",
           "tex": "s \\begin{pmatrix} u \\\\ v \\\\ 1 \\end{pmatrix} = K \\left[\\, R \\mid t \\,\\right] \\begin{pmatrix} X \\\\ Y \\\\ Z \\\\ 1 \\end{pmatrix}",
           "note": "Projection with the pose of the object in the camera's frame, the unknown of pose estimation",
-          "ref": "11_Pose-Estimation.pdf, p. 24, eq. 7"
+          "ref": "11_Pose-Estimation.pdf, p. 24, eq. 7",
+          "where": [
+            { "tex": "s", "means": "scale factor for the ambiguity of depth (11_Pose-Estimation.pdf, p. 23)" },
+            { "tex": "u,\\ v", "means": "pixel coordinates (11_Pose-Estimation.pdf, p. 23)" },
+            { "tex": "K", "means": "camera matrix of f_x, f_y, c_x, c_y (11_Pose-Estimation.pdf, pp. 23–24)" },
+            { "tex": "R", "means": "rotation of the object frame relative to the camera (11_Pose-Estimation.pdf, p. 24)" },
+            { "tex": "t", "means": "translation of the object frame relative to the camera (11_Pose-Estimation.pdf, p. 24)" },
+            { "tex": "X,\\ Y,\\ Z", "means": "point in object coordinates (11_Pose-Estimation.pdf, p. 24)" }
+          ]
         },
         {
           "eq": "width in image / f = real width / Z",
           "tex": "\\frac{\\text{width}_{\\text{image}}}{f} = \\frac{\\text{width}_{\\text{real}}}{Z}",
           "note": "A flat object parallel to the chip",
-          "ref": "11_Pose-Estimation.pdf, p. 28, eq. 12"
+          "ref": "11_Pose-Estimation.pdf, p. 28, eq. 12",
+          "where": [
+            { "tex": "\\text{width}_{\\text{image}}", "means": "width of the object on the chip (11_Pose-Estimation.pdf, p. 28)" },
+            { "tex": "\\text{width}_{\\text{real}}", "means": "real width of the object (11_Pose-Estimation.pdf, p. 28)" },
+            { "tex": "f", "means": "focal length (11_Pose-Estimation.pdf, p. 28)" },
+            { "tex": "Z", "means": "distance to the flat object (11_Pose-Estimation.pdf, p. 28)" }
+          ]
         }
       ],
       "practice": [
@@ -766,14 +1137,27 @@
           "eq": "Θ = (XᵀX)⁻¹XᵀY",
           "tex": "\\Theta = (X^{\\mathsf T} X)^{-1} X^{\\mathsf T} Y",
           "note": "Least squares, here for a line y = kx + d; in pose estimation the direct linear transform",
-          "ref": "11_Pose-Estimation.pdf, p. 34, eq. 15"
+          "ref": "11_Pose-Estimation.pdf, p. 34, eq. 15",
+          "where": [
+            { "tex": "\\Theta", "means": "parameters estimated by linear regression (11_Pose-Estimation.pdf, p. 34, eq. 15)" },
+            { "tex": "X", "means": "matrix of inputs, one row per point (11_Pose-Estimation.pdf, p. 34)" },
+            { "tex": "Y", "means": "matrix of outputs, one row per point (11_Pose-Estimation.pdf, p. 34)" },
+            { "tex": "^{\\mathsf T}", "means": "transpose (11_Pose-Estimation.pdf, p. 34)" }
+          ]
         },
         {
           "explore": true,
           "eq": "per cycle: 2 random points, fit, count inliers within ε, stop when inliers/n > τ",
           "tex": "\\frac{\\#\\{\\,i : |y_i - (k x_i + d)| \\le \\varepsilon\\,\\}}{n} > \\tau \\;\\Rightarrow\\; \\text{stop}",
           "note": "The RANSAC loop for a line; after the stop or N cycles, refit with all inliers",
-          "ref": "11_Pose-Estimation.pdf, pp. 36–38"
+          "ref": "11_Pose-Estimation.pdf, pp. 36–38",
+          "where": [
+            { "tex": "x_i,\\ y_i", "means": "sample point i (not defined in the source)" },
+            { "tex": "k,\\ d", "means": "slope and offset of the line model; the slide writes the model y = kx + t but names the parameters k, d (11_Pose-Estimation.pdf, p. 38)" },
+            { "tex": "\\varepsilon", "means": "tolerance for an inlier (11_Pose-Estimation.pdf, p. 38)" },
+            { "tex": "n", "means": "number of samples (11_Pose-Estimation.pdf, p. 38, “#Samples”)" },
+            { "tex": "\\tau", "means": "consensus threshold on the inlier fraction (11_Pose-Estimation.pdf, pp. 37–38)" }
+          ]
         }
       ],
       "practice": [

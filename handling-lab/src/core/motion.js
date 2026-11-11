@@ -108,6 +108,6 @@ export function indexStep(law, phiS, beta) {
   };
 }
 
-/** The friction-wheel feed (ch. 2, p. 29, Blatt 29): feed length L = (360° − φ)·(π/180)·rRolle, φ the roller's flat
+/** The friction-wheel feed (ch. 2, p. 26, Blatt 29): feed length L = (360° − φ)·(π/180)·rRolle, φ the roller's flat
  *  (unused) angle. */
 export const feedLength = (phiDeg, rRoll) => (360 - phiDeg) * Math.PI / 180 * rRoll;

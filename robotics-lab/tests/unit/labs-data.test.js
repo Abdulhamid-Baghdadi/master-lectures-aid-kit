@@ -3,6 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { typeset } from "../../../kit/ui/math.js";
 import { solve, isRight } from "../../src/core/index.js";
 
 const data = JSON.parse(readFileSync(new URL("../../data/labs.json", import.meta.url), "utf8"));
@@ -32,3 +33,15 @@ for (const lab of data.labs) {
     });
   }
 }
+
+test("every equation and main law has a symbol list whose entries have tex and meaning and typeset (slides, 11 Nov 2026)", () => {
+  for (const w of data.labs) {
+    for (const e of w.equations ?? []) assert.ok(e.where?.length, `${w.id}: ${e.tex} has no symbol list`);
+    if (w.lawTex) assert.ok(w.lawWhere ?? (w.equations ?? []).find(e => e.tex === w.lawTex)?.where, `${w.id}: the main law has no symbol list`);
+    for (const list of [w.lawWhere, ...(w.equations ?? []).map(e => e.where)].filter(Boolean)) for (const s of list) {
+      assert.ok(s.tex && s.means, `${w.id}: a where entry lacks tex or means`);
+      const { error } = typeset(s.tex);
+      assert.equal(error, "", `${w.id}: ${s.tex} does not typeset`);
+    }
+  }
+});

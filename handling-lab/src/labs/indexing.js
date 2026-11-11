@@ -1,6 +1,6 @@
 // The indexing cam (Kurvenschrittgetriebe, Berger 2021, ch. 6, pp. 16–21): a turning cam moves a table on by a step
 // φS = 360°/n during part of its turn and holds it still for the rest; rollers per plane nR = 360°·ga/φS. Below it, the
-// friction-wheel feed of ch. 2, p. 29.
+// friction-wheel feed of ch. 2, p. 26 (Blatt 29).
 import { LAWS, indexing, indexStep, feedLength } from "../core/index.js";
 import { h, slider, readout, choice } from "../../../kit/ui/kit.js";
 import { lineChart } from "../../../kit/ui/chart.js";
@@ -31,7 +31,7 @@ export default {
       choice("Law of the step", Object.entries(LAWS).map(([k, l]) => [k, l.name.split(",")[0]]), key, v => { key = v; update(); }),
       rS.el, rN.el,
       h("p", { class: "hint" }, "Ch. 6, p. 19 works an example: two stations and a two-thread cam, φS = 180° and nR = 360·2/180 = 4. The course uses 1 to 8 (12) stations, step angles from 360° down to 45° (30°); for small steps the cam takes more threads. The step itself is a rest-in-rest motion law, as in the motion-laws lab: the table rests while the cam turns through 360° − β."),
-      h("h3", {}, "Friction-wheel feed (ch. 2, p. 29)"),
+      h("h3", {}, "Friction-wheel feed (ch. 2, p. 26 (Blatt 29))"),
       slider({ label: "Flat of the roller φ", unit: "°", min: 0, max: 300, value: phi, step: 1, format: v => `${v}°`, onInput: v => { phi = v; update(); } }).el,
       slider({ label: "Roller radius r", unit: "mm", min: 5, max: 80, value: r, step: 1, format: v => `${v} mm`, onInput: v => { r = v; update(); } }).el,
       rL.el)));

@@ -287,3 +287,19 @@ robots and vision (MUS, MUS2), applied sensors (ASENS) and FEM (CAE).
 - Task 6 changed: the figure drives J₁ and J₂ with M₁(t), M₂(t) at their own Ω₁, Ω₂ besides w(t); the lab had w(t)
   alone. New `torsion2` (chain2 with per-torque frequencies), values M₀₁, M₀₂, Ω₁, Ω₂ (example values), sliders, MATLAB
   and Python snippets; failing test first in `tasks.test.js`, Octave row updated. README notes added. Nothing committed.
+
+## 11 Nov 2026: what each symbol means
+
+You asked for a list under every equation saying what each symbol means, the symbol typeset as in the equation (in
+the library labs and both lecture kits). `kit/ui/math.js` gained `symbolList` (the same file as the library's and the
+Bachelor kit's); `kit/style.css` styles `.where`. In each lab: `where` on every equation, `lawWhere` where no equation
+repeats the main law, shown under the law, the Explore equations and in the Equations tab; one test per lab checks
+every entry has a meaning and typesets. Definitions from the lecture notes and solution sheets, with pages; symbols
+they never define say "(not defined in the source)".
+
+- All seven labs done (automation 38 equations, fem 40, handling 30, mobile robots 61, modsim 64, robotics 55,
+  sensors 33). Every suite passes; every lab checked in the browser (lists shown, nothing fails to typeset).
+- Fixed on the way, each checked against the page: handling indexing ref ch. 2 p. 26 (was p. 29), cam ref ch. 6 p. 36
+  (was p. 35); modsim tasks 5–7 notes now say the sheet's phase φ is taken as 0.
+- SOURCE-ERRORS.md: 18 new confirmed slips (section "Confirmed in the symbol pass, 11 Nov 2026"); two reported ones
+  were not errors and are left out. Nothing committed.
