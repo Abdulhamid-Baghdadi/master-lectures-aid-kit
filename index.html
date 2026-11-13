@@ -11,67 +11,139 @@
 </script>
 <link rel="stylesheet" href="kit/style.css">
 <style>
-  .labs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; margin-top: 16px; }
-  .lab { display: grid; gap: 10px; padding: 16px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line);
-         border-top: 6px solid var(--frame); color: var(--ink); text-decoration: none; }
-  [data-family=handling] { --frame: #1E40AF; }
-  .lab:hover { box-shadow: 0 2px 8px rgba(0,0,0,.2); }
-  .lab:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-  .lab h2 { margin: 0; font-size: 1.25rem; color: var(--accent); }
-  .lab p { margin: 0; }
-  .note { margin: 0 0 8px; padding: 12px 16px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); border-left: 6px solid var(--accent); max-width: 80ch; }
-  .lab .courses { color: var(--muted); font-size: 0.95rem; }
+  /* Each course's colour, for its card's glow and its drawing's key line. */
+  [data-course=handling] { --frame: #3B82F6; }
+  [data-course=robotics] { --frame: #F97316; }
+  [data-course=mobile] { --frame: #10B981; }
+  [data-course=sensors] { --frame: #8B5CF6; }
+  [data-course=fem] { --frame: #EF4444; }
+  [data-course=automation] { --frame: #6366F1; }
+  [data-course=modsim] { --frame: #F59E0B; }
+  .note { margin: 0 0 8px; padding: 12px 16px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); border-left: 6px solid var(--accent); max-width: 80ch; }
+  .top .brand { margin: 0; font-weight: 700; letter-spacing: .02em; }
 </style>
 </head>
 <body>
 <header class="top">
-  <div>
-    <h1>Master lectures aid kit</h1>
-    <p>Interactive labs for the master's programme at FH Technikum Wien, built from the lecture notes, slides and exercises. Open a lab; its "← Aid kit home" link brings you back here.</p>
-  </div>
-  <button id="theme" type="button">Light or dark</button>
+  <p class="brand">Master lectures aid kit</p>
+  <div class="front-tools" id="tools"><button id="theme" type="button">Light or dark</button></div>
 </header>
+<section class="welcome" aria-labelledby="title">
+  <p class="kicker">FH Technikum Wien · Master's programme</p>
+  <h1 id="title">Move the lecture's models yourself</h1>
+  <p class="tagline">Interactive labs for the master's programme at FH Technikum Wien, built from the lecture notes, slides and exercises. Open a lab; its "← Aid kit home" link brings you back here.</p>
+  <ul class="facts">
+    <li>Linkages, robots, sensors, FEM, control</li>
+    <li>Exercises step by step, with MATLAB and Python</li>
+    <li>Runs in your browser, sends nothing</li>
+  </ul>
+</section>
 <main>
   <p class="note" role="note"><strong>Please note:</strong> the material dates from 2021 onwards. Courses, their content and the curriculum may have changed since; check the current course pages. This is a personal learning aid, not official FH Technikum Wien material.</p>
-  <div class="labs">
-    <a class="lab" href="handling-lab/" data-family="handling">
-      <h2>Industrial Handling Lab</h2>
-      <p class="courses">Industrial Handling (IHA, Handhabungstechnik), after Berger (2021)</p>
-      <p>The mobility count, Grashof's rule, the transmission angle, instant centres, dead-centre and two-position synthesis, coupler curves, motion laws, the disc cam, the indexing cam, and suction and magnet grippers.</p>
+  <div class="doors">
+    <a class="door" href="handling-lab/" data-course="handling">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A four-bar linkage and the looped curve a point on its coupler draws">
+        <path class="em" d="M60 150 H110 M200 150 H250"/><path class="em" d="M70 160 l10 -10 M90 160 l10 -10 M210 160 l10 -10 M230 160 l10 -10"/>
+        <path class="em" d="M85 150 L110 90 L210 70 L225 150"/><path class="em" d="M110 90 L170 30 L210 70"/>
+        <circle class="em fill" cx="85" cy="150" r="6"/><circle class="em fill" cx="225" cy="150" r="6"/><circle class="em fill" cx="110" cy="90" r="6"/><circle class="em fill" cx="210" cy="70" r="6"/>
+        <path class="em key" d="M170 30 C120 10 96 40 120 56 C150 76 200 60 220 34 C236 14 200 0 170 30"/><circle class="em-dot" cx="170" cy="30" r="6"/>
+      </svg></span>
+      <span class="body">
+        <h2>Industrial Handling Lab</h2>
+        <p class="courses">Industrial Handling (IHA, Handhabungstechnik), after Berger (2021)</p>
+        <p>The mobility count, Grashof's rule, the transmission angle, instant centres, dead-centre and two-position synthesis, coupler curves, motion laws, the disc cam, the indexing cam, and suction and magnet grippers.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
-    <a class="lab" href="robotics-lab/" data-family="handling">
-      <h2>Robot Kinematics Lab</h2>
-      <p class="courses">Industrieroboter (IRB), 1st semester</p>
-      <p>Degrees of freedom, frames and rotations, Euler and roll-pitch-yaw angles, the DH convention, the ABB IRB 120, Jacobians and singularities, inverse kinematics.</p>
+    <a class="door" href="robotics-lab/" data-course="robotics">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A robot arm with three joints and a coordinate frame at its tool">
+        <rect class="em fill" x="40" y="146" width="70" height="20" rx="3"/><path class="em" d="M75 146 V120"/>
+        <path class="em key" d="M75 120 L140 60 L220 80 L250 120"/>
+        <circle class="em fill" cx="75" cy="120" r="9"/><circle class="em fill" cx="140" cy="60" r="9"/><circle class="em fill" cx="220" cy="80" r="9"/>
+        <path class="em" d="M250 120 l18 -6 M250 120 l6 18"/><path class="em hot" d="M250 120 l26 -26 M250 120 l30 10"/>
+        <text class="em-text" x="276" y="92">x</text><text class="em-text" x="282" y="136">y</text>
+      </svg></span>
+      <span class="body">
+        <h2>Robot Kinematics Lab</h2>
+        <p class="courses">Industrieroboter (IRB), 1st semester</p>
+        <p>Degrees of freedom, frames and rotations, Euler and roll-pitch-yaw angles, the DH convention, the ABB IRB 120, Jacobians and singularities, inverse kinematics.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
-    <a class="lab" href="mobile-robots-lab/" data-family="handling">
-      <h2>Mobile Robots and Vision Lab</h2>
-      <p class="courses">Mobile und Service Robotik (MUS, MUS2), 2nd and 3rd semester</p>
-      <p>Bayes, Kalman, EKF and particle filters for localisation; denoising, thresholding, HSV, edges, a convolution layer, stereo depth and RANSAC.</p>
+    <a class="door" href="mobile-robots-lab/" data-course="mobile">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A mobile robot, its heading, and a cloud of particles guessing where it is">
+        <path class="em thin" d="M20 160 H300 M20 20 V160"/><rect class="em fill" x="260" y="34" width="26" height="26" rx="3"/>
+        <circle class="em fill" cx="140" cy="100" r="22"/><path class="em key" d="M140 100 L178 82"/>
+        <g class="em-dot"><circle cx="190" cy="70" r="3"/><circle cx="198" cy="84" r="3"/><circle cx="182" cy="92" r="3"/><circle cx="206" cy="66" r="3"/>
+        <circle cx="176" cy="62" r="3"/><circle cx="210" cy="90" r="3"/><circle cx="194" cy="56" r="3"/><circle cx="186" cy="104" r="3"/></g>
+        <path class="em thin" d="M140 100 L273 47" stroke-dasharray="5 5"/>
+      </svg></span>
+      <span class="body">
+        <h2>Mobile Robots and Vision Lab</h2>
+        <p class="courses">Mobile und Service Robotik (MUS, MUS2), 2nd and 3rd semester</p>
+        <p>Bayes, Kalman, EKF and particle filters for localisation; denoising, thresholding, HSV, edges, a convolution layer, stereo depth and RANSAC.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
-    <a class="lab" href="sensors-lab/" data-family="handling">
-      <h2>Sensor Systems Lab</h2>
-      <p class="courses">Advanced Sensor Systems (ASENS), 1st semester</p>
-      <p>Echo ranging, image data rates, the pinhole camera and its calibration, lens distortion, colour, time of flight and stereo depth.</p>
+    <a class="door" href="sensors-lab/" data-course="sensors">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A pinhole camera: rays from an upright object cross at the pinhole and form an upside-down image">
+        <path class="em" d="M50 140 V40 M42 50 l8 -10 l8 10"/><path class="em" d="M170 20 V80 M170 100 V160"/>
+        <path class="em key" d="M50 40 L270 130 M50 140 L270 50"/>
+        <rect class="em fill" x="170" y="20" width="110" height="140" rx="4" fill-opacity=".2"/>
+        <path class="em hot" d="M270 50 V130 M262 120 l8 10 l8 -10"/><circle class="em-dot" cx="170" cy="90" r="4"/>
+      </svg></span>
+      <span class="body">
+        <h2>Sensor Systems Lab</h2>
+        <p class="courses">Advanced Sensor Systems (ASENS), 1st semester</p>
+        <p>Echo ranging, image data rates, the pinhole camera and its calibration, lens distortion, colour, time of flight and stereo depth.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
-    <a class="lab" href="fem-lab/" data-family="handling">
-      <h2>Finite Elements Lab</h2>
-      <p class="courses">CAE and FEM, 2nd semester</p>
-      <p>Springs and assembly, the bar and beam under mesh refinement, shape functions, Gauss points, a nonlinear spring by Newton, modes and time steps.</p>
+    <a class="door" href="fem-lab/" data-course="fem">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A beam meshed into triangles, bending under a load at its tip">
+        <path class="em" d="M30 30 V150"/><path class="em" d="M20 40 l10 -10 M20 70 l10 -10 M20 100 l10 -10 M20 130 l10 -10"/>
+        <path class="em thin" d="M30 70 H270 V110 H30 Z M90 70 V110 M150 70 V110 M210 70 V110 M30 110 L90 70 M90 110 L150 70 M150 110 L210 70 M210 110 L270 70"/>
+        <path class="em key" d="M30 70 C110 72 190 80 270 100 M30 110 C110 112 190 120 270 140 M270 100 V140"/>
+        <path class="em hot" d="M290 80 V130 M282 120 l8 10 l8 -10"/>
+      </svg></span>
+      <span class="body">
+        <h2>Finite Elements Lab</h2>
+        <p class="courses">CAE and FEM, 2nd semester</p>
+        <p>Springs and assembly, the bar and beam under mesh refinement, shape functions, Gauss points, a nonlinear spring by Newton, modes and time steps.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
-    <a class="lab" href="automation-lab/" data-family="handling">
-      <h2>Advanced Automation Lab</h2>
-      <p class="courses">Advanced Automation (AAU), 2nd semester</p>
-      <p>The course's exercises step by step, each step with the MATLAB that gives it: models, normal forms, controllability, pole placement, observers, linearisation, the motor and the crane trolley.</p>
+    <a class="door" href="automation-lab/" data-course="automation">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A state-space model: two integrators in a row and the state fed back through a gain">
+        <path class="em" d="M14 70 H46"/><circle class="em fill" cx="58" cy="70" r="12"/><path class="em" d="M70 70 H100"/>
+        <rect class="em fill" x="100" y="50" width="56" height="40" rx="4"/><text class="em-text" x="118" y="76">∫</text>
+        <path class="em" d="M156 70 H190"/><rect class="em fill" x="190" y="50" width="56" height="40" rx="4"/><text class="em-text" x="208" y="76">∫</text>
+        <path class="em" d="M246 70 H306"/><path class="em key" d="M276 70 V140 H190 M150 140 H58 V82"/>
+        <rect class="em fill-key em" x="150" y="122" width="40" height="36" rx="4"/><text class="em-text" x="162" y="146">K</text>
+      </svg></span>
+      <span class="body">
+        <h2>Advanced Automation Lab</h2>
+        <p class="courses">Advanced Automation (AAU), 2nd semester</p>
+        <p>The course's exercises step by step, each step with the MATLAB that gives it: models, normal forms, controllability, pole placement, observers, linearisation, the motor and the crane trolley.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
-    <a class="lab" href="modsim-lab/" data-family="handling">
-      <h2>ModSim Lab</h2>
-      <p class="courses">Modellbildung und Simulation (ModSim), 2nd semester</p>
-      <p>The lecture's worked examples step by step, each step with its MATLAB: free-body diagrams, Lagrange term by term, the Simulink integrator chain, state space, pendulums, a chaotic double pendulum, two-mass eigenmodes, an RLC circuit, a motor and a shaker.</p>
+    <a class="door" href="modsim-lab/" data-course="modsim">
+      <span class="tile"><svg viewBox="0 0 320 180" role="img" aria-label="A double pendulum and the tangled path its lower bob traces">
+        <path class="em" d="M120 20 H200"/><path class="em" d="M160 20 L130 80 L190 120"/>
+        <circle class="em fill" cx="130" cy="80" r="10"/><circle class="em fill-key em" cx="190" cy="120" r="10"/>
+        <path class="em key" d="M190 120 C240 100 250 150 210 160 C160 172 120 130 150 120 C190 108 230 60 200 50 C170 40 140 70 170 90"/>
+      </svg></span>
+      <span class="body">
+        <h2>ModSim Lab</h2>
+        <p class="courses">Modellbildung und Simulation (ModSim), 2nd semester</p>
+        <p>The lecture's worked examples step by step, each step with its MATLAB: free-body diagrams, Lagrange term by term, the Simulink integrator chain, state space, pendulums, a chaotic double pendulum, two-mass eigenmodes, an RLC circuit, a motor and a shaker.</p>
+        <span class="go">Open the lab →</span>
+      </span>
     </a>
   </div>
 </main>
-<footer><p>Everything runs in your browser; nothing is sent anywhere. The only thing kept is your light or dark choice.</p></footer>
+<footer><p>Everything runs in your browser; nothing is sent anywhere. The only things kept are your light or dark choice and whether the background moves.</p></footer>
 <script>
   document.querySelector("#theme").addEventListener("click", () => {
     const root = document.documentElement;
@@ -79,6 +151,10 @@
     root.dataset.theme = dark ? "light" : "dark";
     try { localStorage.setItem("theme", root.dataset.theme); } catch { /* private window: the choice lasts this visit */ }
   });
+</script>
+<script type="module">
+  import { startBackdrop } from "./kit/ui/backdrop.js";
+  startBackdrop({ scene: "field", seed: 2021, controls: document.querySelector("#tools") });
 </script>
 </body>
 </html>
