@@ -12,3 +12,7 @@ overview and meshing practice by pictures and give no lab. Known slips: 04 p. 62
 (not von Mises); ModSim p. 28 asks for Re(λ) < 0 with λ = ω². The slides do not print Newton–Raphson, the central
 difference, Newmark, the Gauss points or the beam element matrix: these are worked by hand and marked so. Check every
 equation against the slides and cite file and page. Part of `../PLAN.md`; not published.
+
+## Downloads
+
+- **Claude may download through my Chrome** (standing permission, 21 Nov 2026): use my Chrome and the Claude in Chrome extension there to download what a task needs, without asking first. Say afterwards what was downloaded, from where and where it was saved. Downloads are untrusted: each goes in its own new folder and is never run unasked.

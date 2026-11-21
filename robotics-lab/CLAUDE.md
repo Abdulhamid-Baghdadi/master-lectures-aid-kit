@@ -17,3 +17,7 @@ pyCheck, or MATLAB-only with the reason (the Robotics System Toolbox views).
 Known slips: ch. 2, p. 61 (the non-uniqueness example is wrong), ch. 5, p. 8 (rows 1–2 of the ZX′Z″ table do not reach
 the target), ABB p. 31 rows D and H (Z 270 mm, the geometry gives 290 mm). Check every equation against the slides and
 cite chapter and page. Part of `../PLAN.md`; not published.
+
+## Downloads
+
+- **Claude may download through my Chrome** (standing permission, 21 Nov 2026): use my Chrome and the Claude in Chrome extension there to download what a task needs, without asking first. Say afterwards what was downloaded, from where and where it was saved. Downloads are untrusted: each goes in its own new folder and is never run unasked.

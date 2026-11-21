@@ -10,3 +10,7 @@ them from the page images before citing them. Known slips in the sources: Übung
 (should be 5.236 s⁻¹); ch. 3, p. 69 gives B in henry (should be tesla). Not in the course, so not here: the Geneva
 wheel and vibratory-feeder equations. Check every equation against the notes and cite chapter and page. Part of
 `../PLAN.md`; not published.
+
+## Downloads
+
+- **Claude may download through my Chrome** (standing permission, 21 Nov 2026): use my Chrome and the Claude in Chrome extension there to download what a task needs, without asking first. Say afterwards what was downloaded, from where and where it was saved. Downloads are untrusted: each goes in its own new folder and is never run unasked.

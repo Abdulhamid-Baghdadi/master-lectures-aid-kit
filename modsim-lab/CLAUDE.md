@@ -18,3 +18,7 @@ Every view also returns `python` (src/labs/python.js; sympy, solve_ivp, scipy.li
 python-control.readthedocs.io page and in the installed Python before showing it; Simulink and Simscape views stay
 comments in Python.
 Part of `../PLAN.md`; not published.
+
+## Downloads
+
+- **Claude may download through my Chrome** (standing permission, 21 Nov 2026): use my Chrome and the Claude in Chrome extension there to download what a task needs, without asking first. Say afterwards what was downloaded, from where and where it was saved. Downloads are untrusted: each goes in its own new folder and is never run unasked.

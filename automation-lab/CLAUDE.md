@@ -15,3 +15,7 @@ layer and numpy) and a `pyCheck`, run by `tests/unit/python-run.test.js`: check 
 python-control.readthedocs.io page and in the installed Python first, and cite file and page for every value. The
 MATLAB runs in GNU Octave in `tests/unit/matlab-run.test.js` (kit/tests/octave-run.js): a new view needs a row there,
 MATLAB expressions for its pyCheck or a MATLAB-only reason; never change correct MATLAB to suit Octave. Part of `../PLAN.md`; not published.
+
+## Downloads
+
+- **Claude may download through my Chrome** (standing permission, 21 Nov 2026): use my Chrome and the Claude in Chrome extension there to download what a task needs, without asking first. Say afterwards what was downloaded, from where and where it was saved. Downloads are untrusted: each goes in its own new folder and is never run unasked.

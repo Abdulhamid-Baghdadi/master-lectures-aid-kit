@@ -12,3 +12,7 @@ equations are images: render the page (`pdftoppm -r 110 -png -f N -l N`) and rea
 sources: see README.md. Not yet used: GraphicalModels.pdf, MuS1_SS2018_PR_SLAM.pdf, and MUS2's Hough, contours,
 features, classification and PCA sets (5–9). Check every equation against the slides and cite file and page. Part of
 `../PLAN.md`; not published.
+
+## Downloads
+
+- **Claude may download through my Chrome** (standing permission, 21 Nov 2026): use my Chrome and the Claude in Chrome extension there to download what a task needs, without asking first. Say afterwards what was downloaded, from where and where it was saved. Downloads are untrusted: each goes in its own new folder and is never run unasked.
